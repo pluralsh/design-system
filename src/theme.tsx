@@ -617,6 +617,15 @@ export default mergeTheme(defaultTheme, {
       },
     ],
   },
+  Modal: {
+    Root: [
+      {
+        backgroundColor: 'fill-one',
+        border: '1px solid border',
+        filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+      },
+    ],
+  },
   Radio: {
     Root: [
       ({ checked }: any) => ({
