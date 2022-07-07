@@ -95,6 +95,8 @@ ref: Ref<any>
                 icon={<StatusOkIcon />}
                 height={26}
                 marginHorizontal="xxsmall"
+                backgroundColor="fill-two"
+                borderColor="border-fill-two"
               >
                 <Span fontWeight={600}>Installed</Span>
               </Chip>
