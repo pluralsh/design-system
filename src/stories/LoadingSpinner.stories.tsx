@@ -1,4 +1,4 @@
-import LoadingSpinner from '../components/LoadingSpinner'
+import LoadingSpinner, { LoadingSpinnerProps } from '../components/LoadingSpinner'
 
 export default {
   title: 'LoadingSpinner',
@@ -6,13 +6,15 @@ export default {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function Template(args: any) {
+function Template(args: LoadingSpinnerProps) {
   return (
-    <LoadingSpinner />
+    <LoadingSpinner {...args} />
   )
 }
 
 export const Primary = Template.bind({})
 
 Primary.args = {
+  show: true,
+  spinnerDelay: 200,
 }
