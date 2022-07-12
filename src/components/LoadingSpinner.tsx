@@ -1,32 +1,44 @@
-import { Div, Flex, H1, Img, Span } from 'honorable'
+import { Div, Flex, FlexProps, H1, Img, ImgProps, Span } from 'honorable'
 import type { DivProps } from 'honorable'
-import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
 import { keyframes } from '@emotion/react'
+import styled from '@emotion/styled'
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { CSSTransition } from 'react-transition-group'
 
-import { usePrevious } from '..'
+import useResizeObserver from '../hooks/useResizeObserver'
+
+export type LoadingSpinnerProps = DivProps & {
+  paused?: boolean;
+  show: boolean;
+  spinnerWidth?: number;
+  spinnerDelay?: number;
+  centered?: boolean;
+  animateTransitions?: boolean;
+}
+
+type ScrollingBGImageProps = ImgProps & { height: number }
 
 const bgKeyframes = keyframes`
-0% {
-  transform: translateX(0);
-}
-
-100% {
-  transform: translate(calc(-200% / 3));
-}
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translate(calc(-200% / 3));
+  }
 `
 
 const commonAnimStyles = {
   animationDuration: '3s',
   animationTimingFunction: 'linear',
   animationIterationCount: 'infinite',
-}
-
-export type LoadingSpinnerProps = DivProps & {
-    paused?: boolean
-    show: boolean
-    spinnerWidth?: number
-    spinnerDelay?: number
 }
 
 const logoEnterStyles = {
@@ -64,14 +76,161 @@ const exitStyles = {
     opacity: 0,
   },
   '&.exit-active': {
-    transition: 'all 0.3s ease-in',
+    transition: 'all 0.1s ease-in',
   },
 }
 
+/* 
+    A bunch of nasty calcs to get the spinner optically centered across
+    different viewport heights. Once the vh goes beyond --clampMin, the 
+    spinner gets shifted up proportional to vh until it reaches --clampMax.
+    Units are kinda weird because calc() won't allow a value with units
+    as a denominator.
+*/
+const CenteringWrapperBase = styled(WrapperBase)`
+  --clampMin: 250;
+  --clampMax: 1000;
+  --initialShift: 7px;
+  --shiftMultiplier: -13;
+  --shiftRatio: calc(
+    (${({ areaHeight }) => areaHeight} - (var(--clampMin) * 1px)) /
+      (var(--clampMax) - var(--clampMin))
+  );
+  --clampedShiftRatio: calc(max(0px, min(1px, var(--shiftRatio))));
+  --translateAmt: calc(
+    (var(--initialShift) + (var(--shiftMultiplier) * var(--clampedShiftRatio)))
+  );
+  transform: translateY(var(--translateAmt));
+`
+
+function ScrollingBGImageBase({ height, ...props }: ScrollingBGImageProps) {
+  const styles = {
+    background: 'url(/page-load-spinner/page-load-spinner-bg.png)',
+    backgroundSize: '100% auto',
+    backgroundRepeat: 'repeat-y',
+    height,
+    width: height * 6,
+    ':nth-child(2n)': {
+      transform: 'rotate(180deg)',
+    },
+  }
+
+  return (
+    <Div
+      {...styles}
+      {...props}
+    />
+  )
+}
+
+const ScrollingBGImage = styled(ScrollingBGImageBase)`
+  @supports (aspect-ratio: 6 / 1) {
+    height: 100%;
+    width: auto;
+    aspect-ratio: 6 / 1;
+  }
+`
+
+function WrapperBase(props: FlexProps) {
+  return (
+    <Flex
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      overflow="hidden"
+      width="auto"
+      {...props}
+    />
+  )
+}
+
+function CenteringWrapper({ children, ...props }: FlexProps) {
+  const [top, setTop] = useState<number | null>(null)
+  const [windowHeight, setWindowHeight] = useState<number | null>(
+    window.innerHeight
+  )
+  const ref = useRef<HTMLDivElement>()
+
+  const onSizeChange = useCallback(() => {
+    const nextTop = ref.current.getBoundingClientRect().top
+    if (nextTop !== top) {
+      setTop(nextTop)
+    }
+    if (window.innerHeight !== windowHeight) {
+      setWindowHeight(window.innerHeight - nextTop)
+    }
+  }, [top, windowHeight])
+
+  useResizeObserver(ref, onSizeChange)
+  useLayoutEffect(() => {
+    window.addEventListener('resize', onSizeChange)
+    window.addEventListener('scroll', onSizeChange)
+
+    return () => {
+      window.removeEventListener('resize', onSizeChange)
+      window.removeEventListener('scroll', onSizeChange)
+    }
+  })
+
+  const wrapperHeight = useMemo(
+    () =>
+      `${
+        top === null || windowHeight === null ? '100vh' : windowHeight - top
+      }px`,
+    [top, windowHeight]
+  )
+
+  return (
+    <Flex
+      position="absolute"
+      className="centering"
+      ref={ref}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      overflow="hidden"
+      paddingHorizontal="small"
+      width="100%"
+      height={wrapperHeight}
+      {...props}
+    >
+      <CenteringWrapperBase areaHeight={wrapperHeight}>
+        {children}
+      </CenteringWrapperBase>
+    </Flex>
+  )
+}
+
+const Wrapper = forwardRef<HTMLDivElement, DivProps>(
+  ({ centered, children, ...props }, ref) => (
+    <Div
+      ref={ref}
+      {...exitStyles}
+      {...props}
+    >
+      {centered ? (
+        <CenteringWrapper>{children}</CenteringWrapper>
+      ) : (
+        <WrapperBase>{children}</WrapperBase>
+      )}
+    </Div>
+  )
+)
+
 const LoadingSpinner = forwardRef<HTMLDivElement, LoadingSpinnerProps>(
-  ({ show, paused, spinnerWidth = 96, spinnerDelay = 200, ...props }, ref) => {
+  (
+    {
+      show,
+      paused,
+      spinnerWidth = 96,
+      spinnerDelay = 200,
+      centered = false,
+      animateTransitions = true,
+      ...props
+    },
+    ref
+  ) => {
     const [delayFinished, setDelayFinished] = useState(false)
-    const previousShow = usePrevious(show)
     const [tickCount, setTickCount] = useState(0)
 
     if (!show && delayFinished) {
@@ -80,14 +239,11 @@ const LoadingSpinner = forwardRef<HTMLDivElement, LoadingSpinnerProps>(
 
     useEffect(() => {
       if (show) {
-        console.log('setTimeout')
         const timeoutId = setTimeout(() => {
-          console.log('DELAY DONE')
           setDelayFinished(true)
         }, spinnerDelay)
 
         return () => {
-          console.log('clearTimeout')
           clearTimeout(timeoutId)
         }
       }
@@ -104,51 +260,44 @@ const LoadingSpinner = forwardRef<HTMLDivElement, LoadingSpinnerProps>(
     return (
       <CSSTransition
         in={delayFinished && show}
-        timeout={700}
+        appear
+        timeout={animateTransitions ? 400 : 0}
         unmountOnExit
       >
-        <Flex
-          direction="column"
-          alignItems="center"
-          justifyItems="center"
-          {...exitStyles}
+        <Wrapper
+          ref={ref}
+          centered={centered}
+          className="wrapper"
           {...props}
         >
           <Div
-            ref={ref}
             mask="url(/logos/plural-logomark-only-white.svg) 0 0 / contain no-repeat"
+            background="url(/logos/plural-logomark-only-white.svg)"
+            backgroundSize="contain"
+            overflow="hidden"
             width={spinnerWidth}
-            height={spinnerWidth}
+            height="auto"
             position="relative"
             {...logoEnterStyles}
           >
+            <Img
+              display="block"
+              width="100%"
+              visibility="hidden"
+              src="/logos/plural-logomark-only-white.svg"
+            />
             <Flex
               flexWrap="nowrap"
               height="100%"
               position="absolute"
+              top="0"
               animationName={bgKeyframes}
               animationPlayState={paused ? 'paused' : 'running'}
               {...commonAnimStyles}
             >
-              <Img
-                display="block"
-                height="100%"
-                objectFit="contain"
-                src="/design-system/loading-spinner-bg.png"
-              />
-              <Img
-                display="block"
-                height="100%"
-                objectFit="contain"
-                src="/design-system/loading-spinner-bg.png"
-                transform="rotate(180deg)"
-              />
-              <Img
-                display="block"
-                height="100%"
-                objectFit="contain"
-                src="/design-system/loading-spinner-bg.png"
-              />
+              <ScrollingBGImage height={spinnerWidth} />
+              <ScrollingBGImage height={spinnerWidth} />
+              <ScrollingBGImage height={spinnerWidth} />
             </Flex>
           </Div>
           <H1
@@ -164,8 +313,7 @@ const LoadingSpinner = forwardRef<HTMLDivElement, LoadingSpinnerProps>(
             <Span opacity={tickCount >= 2 ? 1 : 0}>.</Span>
             <Span opacity={tickCount >= 3 ? 1 : 0}>.</Span>
           </H1>
-        
-        </Flex>
+        </Wrapper>
       </CSSTransition>
     )
   }
