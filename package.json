@@ -10,10 +10,10 @@
   "scripts": {
     "start": "start-storybook -p 6006 -s public",
     "build:storybook": "build-storybook -s public",
-    "lint": "eslint src --ext ts,tsx,js,jsx",
-    "clean": "rimraf storybook-static dist",
     "build": "npx tsc --declaration",
-    "prepublishOnly": "npm run clean && npm run build"
+    "clean": "rimraf storybook-static dist",
+    "lint": "eslint src --ext ts,tsx,js,jsx",
+    "fix": "eslint src --ext ts,tsx,js,jsx --fix"
   },
   "dependencies": {
     "prop-types": "15.8.1",
