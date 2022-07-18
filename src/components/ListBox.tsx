@@ -4,8 +4,25 @@ import { Item } from '@react-stately/collections'
 import { useFocusRing } from '@react-aria/focus'
 import { mergeProps } from '@react-aria/utils'
 import { useRef } from 'react'
+import { Menu, MenuItem, MenuProps } from 'honorable'
 
-type ListBoxProps = any;
+type ListBoxProps = MenuProps;
+
+type Renderer = (
+  props: HTMLAttributes<HTMLElement>,
+  ref: RefObject<any>,
+  state: TabListState<any>
+) => JSX.Element;
+
+type MakeOptional<Type, Key extends keyof Type> = Omit<Type, Key> &
+  Partial<Pick<Type, Key>>;
+
+type TabListItemProps = ComponentPropsWithRef<typeof Tab> &
+  MakeOptional<ItemProps<void>, 'children'> & {
+    renderer?: Renderer;
+  };
+
+const TabListItem = Item as (props: TabListItemProps) => JSX.Element
 
 function ListBox(props:ListBoxProps) {
   // Create state based on the incoming props
@@ -16,28 +33,21 @@ function ListBox(props:ListBoxProps) {
   const { listBoxProps, labelProps } = useListBox(props, state, ref)
 
   return (
-    <>
-      <div {...labelProps}>{props.label}</div>
-      <ul
-        {...listBoxProps}
-        ref={ref}
-        style={{
-          padding: 0,
-          margin: '5px 0',
-          listStyle: 'none',
-          border: '1px solid gray',
-          maxWidth: 250,
-        }}
-      >
-        {[...state.collection].map(item => (
-          <Option
-            key={item.key}
-            item={item}
-            state={state}
-          />
-        ))}
-      </ul>
-    </>
+
+    <Menu
+      {...listBoxProps}
+      ref={ref}
+      {...props}
+
+    >
+      {[...state.collection].map(item => (
+        <Option
+          key={item.key}
+          item={item}
+          state={state}
+        />
+      ))}
+    </Menu>
   )
 }
 
@@ -57,18 +67,14 @@ function Option({ item, state }:any) {
   const { isFocusVisible, focusProps } = useFocusRing()
 
   return (
-    <li
+    <MenuItem
       {...mergeProps(optionProps, focusProps)}
       ref={ref}
-      style={{
-        background: isSelected ? 'blueviolet' : 'transparent',
-        color: isSelected ? 'white' : null,
-        padding: '2px 5px',
-        outline: isFocusVisible ? '2px solid orange' : 'none',
-      }}
+      _hover={{ backgroundColor: 'fill-one-hover' }}
+      backgroundColor={isSelected ? 'red' : 'none'}
     >
       {item.rendered}
-    </li>
+    </MenuItem>
   )
 }
 
