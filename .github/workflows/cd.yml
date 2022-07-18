@@ -45,9 +45,9 @@ jobs:
           [ ! -d "node_modules" ] && yarn install --immutable
       - run: git config --global user.email "dherault@gmail.com" && git config --global user.name "David Hérault"
       # TODO: include tests here
-      - run: yarn config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+      - run: npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: yarn clean && yarn build
-      - run: yarn version minor && yarn publish
+      - run: npm version minor && npm publish
       - run: git pull && git push
