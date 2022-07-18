@@ -1,6 +1,13 @@
 name: CI
 on: pull_request
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run lint
   preview:
     name: Create preview
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
