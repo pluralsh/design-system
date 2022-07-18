@@ -8,30 +8,16 @@
     "src/**/*"
   ],
   "scripts": {
-    "start": "npm run storybook",
-    "start:watch": "npm run storybook",
-    "storybook": "start-storybook -p 6006 -s public",
+    "start": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "lint": "eslint src --ext ts,tsx,js,jsx",
     "clean": "rimraf storybook-static dist",
     "build": "npx tsc --declaration",
     "prepublishOnly": "npm run clean && npm run build"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "dependencies": {
-    "prop-types": "^15.8.1",
-    "resize-observer-polyfill": "^1.5.1"
+    "prop-types": "15.8.1",
+    "resize-observer-polyfill": "1.5.1"
   },
   "devDependencies": {
     "@babel/core": "7.18.6",
