@@ -144,6 +144,11 @@ const spacers = {
 export default mergeTheme(defaultTheme, {
   name: 'Plural',
   mode: 'dark',
+  breakpoints: {
+    // We'll add mobile breakpoints later
+    desktop: 1280,
+    desktopLarge: 1440,
+  },
   colors: {
     // Base palette,
     blue,
@@ -558,6 +563,34 @@ export default mergeTheme(defaultTheme, {
       },
     ],
   },
+  ButtonGroup: {
+    Root: [
+      {
+        border: '1px solid border',
+        borderRadius: 4,
+        '& > button': {
+          border: '1px solid transparent',
+        },
+        overflow: 'hidden',
+      },
+      ({ direction }: any) => direction === 'row' && {
+        '& > button': {
+          borderLeft: '1px solid border',
+          '&:first-of-type': {
+            borderLeft: '1px solid transparent',
+          },
+        },
+      },
+      ({ direction }: any) => direction === 'column' && {
+        '& > button': {
+          borderTop: '1px solid border',
+          '&:first-of-type': {
+            borderTop: '1px solid transparent',
+          },
+        },
+      },
+    ],
+  },
   Checkbox: {
     Root: [
       ({ checked }: any) => ({
@@ -638,6 +671,7 @@ export default mergeTheme(defaultTheme, {
         justifyContent: 'space-between',
         align: 'center',
         height: 'auto',
+        minHeight: 'auto',
         width: 'auto',
         paddingTop: 0,
         paddingBottom: 0,
