@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Button, Div, Flex, H1 } from 'honorable'
-import { useState } from 'react'
+import { Key, useState } from 'react'
 import { useTabListState } from '@react-stately/tabs'
 
-import { TabList, TabListItem, TabPanel } from '../components/TabList'
+import { TabList, TabListItem, TabListStateProps, TabPanel } from '../components/TabList'
 
 export default {
   title: 'Tab List',
@@ -40,7 +38,7 @@ const tabs = {
 
 function TemplateVertical() {
   const orientation = 'vertical'
-  const tabListProps = {
+  const tabListStateProps:TabListStateProps = {
     keyboardActivation: 'manual',
     orientation,
     children: Object.entries(tabs).map(([key, tab]) => (
@@ -53,14 +51,14 @@ function TemplateVertical() {
     )),
   }
 
-  const tabState = useTabListState(tabListProps)
+  const tabState = useTabListState(tabListStateProps)
 
   return (
     <Div>
       <Flex flexDirection={orientation === 'vertical' ? 'row' : 'column'}>
         <TabList
-          tabState={tabState}
-          tabProps={tabListProps}
+          state={tabState}
+          stateProps={tabListStateProps}
           flexShrink={0}
           marginRight={orientation === 'vertical' ? 'large' : 0}
           marginBottom={orientation === 'vertical' ? 0 : 'xlarge'}
@@ -74,8 +72,8 @@ function TemplateVertical() {
             {tabs[tabState.selectedKey]?.label}
           </H1>
           <TabPanel
-            tabState={tabState}
-            tabProps={tabListProps}
+            state={tabState}
+            stateProps={tabListStateProps}
             paddingTop="large"
             paddingBottom="large"
             borderTop="1px solid border"
@@ -91,7 +89,7 @@ function TemplateVertical() {
 
 function TemplateHorizontal() {
   const orientation = 'horizontal'
-  const tabListProps = {
+  const tabListProps:TabListStateProps = {
     keyboardActivation: 'manual',
     orientation,
     children: Object.entries(tabs).map(([key, tab]) => (
@@ -110,8 +108,8 @@ function TemplateHorizontal() {
     <Div>
       <Flex flexDirection="column">
         <TabList
-          tabState={tabState}
-          tabProps={tabListProps}
+          state={tabState}
+          stateProps={tabListProps}
           flexShrink={0}
           marginRight={0}
           marginBottom="xlarge"
@@ -125,8 +123,8 @@ function TemplateHorizontal() {
             {tabs[tabState.selectedKey]?.label}
           </H1>
           <TabPanel
-            tabState={tabState}
-            tabProps={tabListProps}
+            state={tabState}
+            stateProps={tabListProps}
             paddingTop="large"
             paddingBottom="large"
             borderTop="1px solid border"
@@ -141,12 +139,12 @@ function TemplateHorizontal() {
 }
 
 function TemplateComplex() {
-  const [selectedTabKey, setSelectedTabKey] = useState('lions')
+  const [selectedTabKey, setSelectedTabKey] = useState<Key>('lions')
   const orientation = 'vertical'
-  const tabListProps = {
+  const tabListStateProps:TabListStateProps = {
     keyboardActivation: 'manual',
     selectedKey: selectedTabKey,
-    onSelectionChange: (key:any) => {
+    onSelectionChange: key => {
       console.log('key changed to', key)
       setSelectedTabKey(key)
     },
@@ -196,14 +194,14 @@ function TemplateComplex() {
     ],
   }
 
-  const tabState = useTabListState(tabListProps)
+  const tabState = useTabListState(tabListStateProps)
 
   return (
     <Div>
       <Flex flexDirection={orientation === 'vertical' ? 'row' : 'column'}>
         <TabList
-          tabState={tabState}
-          tabProps={tabListProps}
+          state={tabState}
+          stateProps={tabListStateProps}
           flexShrink={0}
           marginRight={orientation === 'vertical' ? 'large' : 0}
           marginBottom={orientation === 'vertical' ? 0 : 'xlarge'}
@@ -232,8 +230,8 @@ function TemplateComplex() {
             {tabs[tabState.selectedKey]?.label}
           </H1>
           <TabPanel
-            tabState={tabState}
-            tabProps={tabListProps}
+            state={tabState}
+            stateProps={tabListStateProps}
             paddingTop="large"
             paddingBottom="large"
             borderTop="1px solid border"

@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Div, DivProps, Flex, FlexProps } from 'honorable'
+import { AriaTabListProps } from '@react-types/tabs'
 import { Item } from '@react-stately/collections'
 import { useTab, useTabList, useTabPanel } from '@react-aria/tabs'
 import { TabListState } from '@react-stately/tabs'
@@ -13,10 +13,12 @@ import {
 
 import Tab from './Tab'
 
+type TabListStateProps = AriaTabListProps<object>;
+
 type Renderer = (
   props: HTMLAttributes<HTMLElement>,
   ref: RefObject<any>,
-  state: TabListState<any>
+  state: TabListState<object>
 ) => JSX.Element;
 
 type MakeOptional<Type, Key extends keyof Type> = Omit<Type, Key> &
@@ -30,38 +32,38 @@ type TabListItemProps = ComponentPropsWithRef<typeof Tab> &
 const TabListItem = Item as (props: TabListItemProps) => JSX.Element
 
 type TabListProps = {
-  tabState: TabListState<object>;
-  tabProps: any;
+  state: TabListState<object>;
+  stateProps: TabListStateProps;
   renderer?: Renderer;
 };
 function TabList({
-  tabState,
-  tabProps,
+  state,
+  stateProps,
   renderer,
   ...props
 }: TabListProps & FlexProps) {
-  tabProps = {
+  stateProps = {
     ...{
       keyboardActivation: 'manual',
       orientation: 'horizontal',
     },
-    ...tabProps,
+    ...stateProps,
   }
   const ref = useRef<HTMLDivElement>(null)
-  const { tabListProps } = useTabList(tabProps, tabState, ref)
-  const tabChildren = [...tabState.collection].map(item => (
+  const { tabListProps } = useTabList(stateProps, state, ref)
+  const tabChildren = [...state.collection].map(item => (
     <TabRenderer
       key={item.key}
-      item={item as any}
-      tabState={tabState}
-      tabProps={tabProps}
+      item={item}
+      state={state}
+      stateProps={stateProps}
     />
   ))
   if (renderer) {
     return renderer(
       { ...props, ...tabListProps, ...{ children: tabChildren } },
       ref,
-      tabState
+      state
     )
   }
 
@@ -69,9 +71,9 @@ function TabList({
     <Flex
       {...tabListProps}
       {...props}
-      flexDirection={tabProps.orientation === 'vertical' ? 'column' : 'row'}
+      flexDirection={stateProps.orientation === 'vertical' ? 'column' : 'row'}
       alignItems={
-        tabProps.orientation === 'vertical' ? 'flex-start' : 'flex-end'
+        stateProps.orientation === 'vertical' ? 'flex-start' : 'flex-end'
       }
       ref={ref}
     >
@@ -81,21 +83,21 @@ function TabList({
 }
 
 type TabRendererProps = {
-  item: Node<typeof TabListItem>;
-  tabState: TabListState<any>;
-  tabProps: any;
+  item: Node<unknown>;
+  state: TabListState<object>;
+  stateProps: TabListStateProps;
 };
-function TabRenderer({ item, tabState, tabProps }: TabRendererProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const { tabProps: props } = useTab({ key: item.key }, tabState, ref)
+function TabRenderer({ item, state, stateProps }: TabRendererProps) {
+  const ref = useRef(null)
+  const { tabProps: props } = useTab({ key: item.key }, state, ref)
 
   if (item.props.renderer) {
     if (item.rendered) {
       props.children = (
         <Tab
-          active={tabState.selectedKey === item.key}
-          vertical={tabProps.orientation === 'vertical'}
-          width={tabProps.orientation === 'vertical' ? '100%' : 'auto'}
+          active={state.selectedKey === item.key}
+          vertical={stateProps.orientation === 'vertical'}
+          width={stateProps.orientation === 'vertical' ? '100%' : 'auto'}
           {...item.props}
         >
           {item.rendered}
@@ -103,15 +105,15 @@ function TabRenderer({ item, tabState, tabProps }: TabRendererProps) {
       )
     }
 
-    return item.props.renderer(props, ref, tabState)
+    return item.props.renderer(props, ref, state)
   }
 
   return (
     <Tab
       ref={ref}
       {...props}
-      active={tabState.selectedKey === item.key}
-      vertical={tabProps.orientation === 'vertical'}
+      active={state.selectedKey === item.key}
+      vertical={stateProps.orientation === 'vertical'}
       {...item.props}
     >
       {item.rendered}
@@ -120,21 +122,21 @@ function TabRenderer({ item, tabState, tabProps }: TabRendererProps) {
 }
 
 type TabPanelProps = {
-  tabState: TabListState<object>;
-  tabProps: any;
+  state: TabListState<object>;
+  stateProps: TabListStateProps;
   renderer?: Renderer;
 };
 
 function TabPanel({
-  tabState,
-  tabProps,
+  state,
+  stateProps,
   renderer,
   ...props
 }: TabPanelProps & DivProps) {
-  const ref = useRef<any>()
-  const { tabPanelProps } = useTabPanel(tabProps, tabState, ref)
+  const ref = useRef()
+  const { tabPanelProps } = useTabPanel(stateProps, state, ref)
   if (renderer) {
-    return renderer({ ...tabPanelProps, ...props }, ref, tabState)
+    return renderer({ ...tabPanelProps, ...props }, ref, state)
   }
 
   return (
@@ -153,4 +155,5 @@ export {
   TabListItemProps,
   TabPanel,
   TabPanelProps,
+  TabListStateProps,
 }
