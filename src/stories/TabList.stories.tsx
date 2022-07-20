@@ -2,7 +2,12 @@ import { Button, Div, Flex, H1 } from 'honorable'
 import { Key, useState } from 'react'
 import { useTabListState } from '@react-stately/tabs'
 
-import { TabList, TabListItem, TabListStateProps, TabPanel } from '../components/TabList'
+import {
+  TabList,
+  TabListItem,
+  TabListStateProps,
+  TabPanel,
+} from '../components/TabList'
 
 export default {
   title: 'Tab List',
@@ -38,7 +43,7 @@ const tabs = {
 
 function TemplateVertical() {
   const orientation = 'vertical'
-  const tabListStateProps:TabListStateProps = {
+  const tabListStateProps: TabListStateProps = {
     keyboardActivation: 'manual',
     orientation,
     children: Object.entries(tabs).map(([key, tab]) => (
@@ -89,7 +94,7 @@ function TemplateVertical() {
 
 function TemplateHorizontal() {
   const orientation = 'horizontal'
-  const tabListProps:TabListStateProps = {
+  const tabListProps: TabListStateProps = {
     keyboardActivation: 'manual',
     orientation,
     children: Object.entries(tabs).map(([key, tab]) => (
@@ -141,7 +146,7 @@ function TemplateHorizontal() {
 function TemplateComplex() {
   const [selectedTabKey, setSelectedTabKey] = useState<Key>('lions')
   const orientation = 'vertical'
-  const tabListStateProps:TabListStateProps = {
+  const tabListStateProps: TabListStateProps = {
     keyboardActivation: 'manual',
     selectedKey: selectedTabKey,
     onSelectionChange: key => {
@@ -158,14 +163,12 @@ function TemplateComplex() {
       </TabListItem>,
       <TabListItem
         key="tigers"
-        justifyContent="center"
-        backgroundColor="fill-three"
         renderer={({ children, ...props }, ref) => (
           <Div
             {...props}
             ref={ref}
             width="100%"
-            outline="2px solid border-fill-two"
+            border="2px solid border-error"
           >
             {children}
           </Div>
@@ -182,12 +185,21 @@ function TemplateComplex() {
             {...props}
             ref={ref}
             width="100%"
-            background={tabState?.selectedKey === 'bears' ? 'red' : 'fill-two'}
-            height="100px"
             padding="20px"
             textAlign="center"
+            border="1px solid border-fill-two"
           >
-            Completely custom bears
+            <Div
+              subtitle2
+              padding="small"
+              background={
+                tabState?.selectedKey === 'bears'
+                  ? 'action-primary'
+                  : 'fill-two'
+              }
+            >
+              Com&shy;plete&shy;ly custom bears
+            </Div>
           </Flex>
         )}
       />,
@@ -214,10 +226,12 @@ function TemplateComplex() {
               border="1px solid"
               borderColor={
                 tabState.selectedKey === 'lions'
-                  ? 'yellow'
+                  ? 'border.primary'
                   : tabState.selectedKey === 'tigers'
-                    ? 'orange'
-                    : 'brown'
+                    ? 'border-warning'
+                    : tabState.selectedKey === 'bears'
+                      ? 'border-success'
+                      : 'border-error'
               }
             />
           )}

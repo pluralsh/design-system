@@ -105,7 +105,17 @@ function TabRenderer({ item, state, stateProps }: TabRendererProps) {
       )
     }
 
-    return item.props.renderer(props, ref, state)
+    return item.props.renderer(
+      {
+        ...{
+          cursor: 'pointer',
+          _focusVisible: { outline: '1px solid border-outline-focused' },
+        },
+        ...props,
+      },
+      ref,
+      state
+    )
   }
 
   return (
