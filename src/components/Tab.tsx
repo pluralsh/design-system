@@ -45,11 +45,11 @@ function TabRef(
         borderBottom={
           vertical
             ? null
-            : `2px solid ${active ? 'border-primary' : 'transparent'}`
+            : `3px solid ${active ? 'border-primary' : 'transparent'}`
         }
         borderRight={
           vertical
-            ? `2px solid ${active ? 'border-primary' : 'transparent'}`
+            ? `3px solid ${active ? 'border-primary' : 'transparent'}`
             : null
         }
         hoverIndicator="action-input-hover"
