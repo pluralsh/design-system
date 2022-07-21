@@ -150,7 +150,6 @@ function TemplateComplex() {
     keyboardActivation: 'manual',
     selectedKey: selectedTabKey,
     onSelectionChange: key => {
-      console.log('key changed to', key)
       setSelectedTabKey(key)
     },
     orientation,
