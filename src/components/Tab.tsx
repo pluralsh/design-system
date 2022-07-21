@@ -17,7 +17,6 @@ const propTypes = {
 function TabRef({ startIcon, active, children, vertical, ...props }: TagProps, ref:Ref<any>) {
   return (
     <Div
-      alignSelf={vertical ? 'end' : null}
       ref={ref}
       buttonMedium
       tabIndex={0}
@@ -29,8 +28,8 @@ function TabRef({ startIcon, active, children, vertical, ...props }: TagProps, r
     >
       <Flex
         paddingHorizontal="medium"
-        paddingTop={vertical ? null : 'medium'}
-        paddingBottom={vertical ? null : 'xsmall'}
+        paddingTop={vertical ? 'xsmall' : 'medium'}
+        paddingBottom="xsmall"
         align="center"
         borderBottom={vertical ? null : `3px solid ${active ? 'border-primary' : 'transparent'}`}
         borderRight={vertical ? `3px solid ${active ? 'border-primary' : 'transparent'}` : null}
