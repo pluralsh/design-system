@@ -8,7 +8,8 @@ type FormFieldProps = DivProps & PropsWithChildren<{
   hint?: ReactNode
   length?: number,
   maxLength?: number,
-  required?: boolean
+  required?: boolean,
+  small?: boolean,
 }>
 
 const propTypes = {
@@ -18,6 +19,7 @@ const propTypes = {
   length: PropTypes.number,
   maxLength: PropTypes.number,
   required: PropTypes.bool,
+  small: PropTypes.bool,
 }
 
 function FormFieldRef({

@@ -17,6 +17,7 @@ const propTypes = {
 function TabRef({ startIcon, active, children, vertical, ...props }: TagProps, ref:Ref<any>) {
   return (
     <Div
+      alignSelf={vertical ? 'end' : null}
       ref={ref}
       buttonMedium
       tabIndex={0}
@@ -28,11 +29,11 @@ function TabRef({ startIcon, active, children, vertical, ...props }: TagProps, r
     >
       <Flex
         paddingHorizontal="medium"
-        paddingTop={vertical ? 'xsmall' : 'medium'}
-        paddingBottom="xsmall"
+        paddingTop={vertical ? null : 'medium'}
+        paddingBottom={vertical ? null : 'xsmall'}
         align="center"
-        borderBottom={vertical ? null : `2px solid ${active ? 'border-primary' : 'transparent'}`}
-        borderRight={vertical ? `2px solid ${active ? 'border-primary' : 'transparent'}` : null}
+        borderBottom={vertical ? null : `3px solid ${active ? 'border-primary' : 'transparent'}`}
+        borderRight={vertical ? `3px solid ${active ? 'border-primary' : 'transparent'}` : null}
         hoverIndicator="action-input-hover"
         color={active ? 'text' : 'text-xlight'}
         _hover={{ color: 'text' }}

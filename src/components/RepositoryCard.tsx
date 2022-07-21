@@ -16,7 +16,8 @@ type RepositoryCardProps = DivProps & {
   installed?: boolean
   description?: string
   imageUrl?: string
-  tags?: string[]
+  tags?: string[],
+  size?: 'small' | 'medium' | 'large',
 }
 
 const propTypes = {
@@ -27,6 +28,7 @@ const propTypes = {
   description: PropTypes.string,
   imageUrl: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.string),
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
 }
 
 function RepositoryCardRef({
@@ -37,6 +39,7 @@ function RepositoryCardRef({
   description,
   imageUrl,
   tags = [],
+  size = 'medium',
   ...props
 }: RepositoryCardProps,
 ref: Ref<any>
@@ -89,7 +92,7 @@ ref: Ref<any>
             justifyContent="end"
             flexGrow={1}
           >
-            {!!installed && ( 
+            {!!installed && (
               <Chip
                 severity="success"
                 icon={<StatusOkIcon />}
@@ -115,6 +118,12 @@ ref: Ref<any>
           body2
           marginTop="xsmall"
           color="text-light"
+          style={{
+            display: '-webkit-box',
+            '-webkit-line-clamp': '2',
+            '-webkit-box-orient': 'vertical',
+            overflow: 'hidden',
+          }}
         >
           {description}
         </P>
@@ -127,13 +136,14 @@ ref: Ref<any>
           flexWrap="wrap"
         >
           {tags.map(tag => (
-            <Tag
+            <Chip
+              size="small"
               key={tag}
               _last={{ marginRight: 0 }}
               backgroundColor="fill-two"
             >
               {tag}
-            </Tag>
+            </Chip>
           ))}
         </Flex>
       )}
