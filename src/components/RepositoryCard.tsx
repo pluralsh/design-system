@@ -1,5 +1,7 @@
 import RepositoryIcon from '@src/components/RepositoryIcon'
-import { Div, DivProps, Flex, H2, H3, P, Span } from 'honorable'
+import {
+  Div, DivProps, Flex, H2, H3, P, Span,
+} from 'honorable'
 import PropTypes from 'prop-types'
 import { Ref, forwardRef } from 'react'
 
@@ -38,11 +40,9 @@ function RepositoryCardRef({
   description,
   imageUrl,
   tags = [],
-  size = 'medium',
   ...props
 }: RepositoryCardProps,
-ref: Ref<any>
-) {
+ref: Ref<any>) {
   return (
     <Flex
       ref={ref}
