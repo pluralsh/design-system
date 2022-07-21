@@ -7,8 +7,6 @@ import Chip from './Chip'
 import PadlockLockedIcon from './icons/PadlockLockedIcon'
 import StatusOkIcon from './icons/StatusOkIcon'
 
-import Tag from './Tag'
-
 type RepositoryCardProps = DivProps & {
   title?: string
   publisher?: string
