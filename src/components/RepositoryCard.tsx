@@ -1,4 +1,5 @@
-import { Div, DivProps, Flex, H2, H3, Img, P, Span } from 'honorable'
+import RepositoryIcon from '@src/components/RepositoryIcon'
+import { Div, DivProps, Flex, H2, H3, P, Span } from 'honorable'
 import PropTypes from 'prop-types'
 import { Ref, forwardRef } from 'react'
 
@@ -15,7 +16,7 @@ type RepositoryCardProps = DivProps & {
   description?: string
   imageUrl?: string
   tags?: string[],
-  size?: 'small' | 'medium' | 'large',
+  size?: 'small' | 'medium' | 'large' | string
 }
 
 const propTypes = {
@@ -58,14 +59,9 @@ ref: Ref<any>
       {...props}
     >
       <Flex align="center">
-        <Img
-          src={imageUrl}
-          alt="Logo"
-          width={56}
-          height={56}
-          padding={8}
-          borderRadius="medium"
-          objectFit="cover"
+        <RepositoryIcon
+          size="small"
+          url={imageUrl}
         />
         <Flex
           direction="row"

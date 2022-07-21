@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Ref, forwardRef } from 'react'
 
 type RepositoryIconProps = DivProps & {
-  size?: 'small' | 'medium' | 'large'
+  size?: 'small' | 'medium' | 'large' | string
   url?: string
   alt?: string
 }
@@ -40,6 +40,8 @@ function RepositoryIconRef({
       borderColor="border-fill-two"
       width={sizeToWidth[size]}
       height={sizeToWidth[size]}
+      minWidth={sizeToWidth[size]}
+      minHeight={sizeToWidth[size]}
       align="center"
       justify="center"
     >
