@@ -37,12 +37,6 @@ const sizeToWidth: { [key in 'small' | 'medium' | 'large']: number } = {
   large: 801,
 }
 
-const sizeToHeight: { [key in 'small' | 'medium' | 'large']: number } = {
-  small: 196,
-  medium: 188,
-  large: 224,
-}
-
 function RepositoryCardRef({
   title,
   publisher,
