@@ -1,4 +1,4 @@
-import { Div, DivProps, Flex, Img } from 'honorable'
+import { DivProps, Flex, Img } from 'honorable'
 import PropTypes from 'prop-types'
 import { Ref, forwardRef } from 'react'
 
