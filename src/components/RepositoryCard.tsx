@@ -5,7 +5,7 @@ import { Ref, forwardRef } from 'react'
 import Chip from './Chip'
 import PadlockLockedIcon from './icons/PadlockLockedIcon'
 import VerifiedIcon from './icons/VerifiedIcon'
-import RepositoryIcon from './RepositoryIcon'
+import Icon from './Icon'
 
 type RepositoryCardProps = DivProps & {
   title?: string
@@ -68,7 +68,7 @@ ref: Ref<any>
       {...props}
     >
       <Flex align="center">
-        <RepositoryIcon
+        <Icon
           size={size}
           url={imageUrl}
         />
