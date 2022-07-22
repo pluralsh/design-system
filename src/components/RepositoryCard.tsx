@@ -4,7 +4,6 @@ import { Ref, forwardRef } from 'react'
 
 import Chip from './Chip'
 import PadlockLockedIcon from './icons/PadlockLockedIcon'
-import StatusOkIcon from './icons/StatusOkIcon'
 import VerifiedIcon from './icons/VerifiedIcon'
 import RepositoryIcon from './RepositoryIcon'
 
