@@ -9,7 +9,7 @@ type SubTabProps = DivProps & {
 
 const SubTab = forwardRef(
   (
-    { startIcon, active, children, vertical, ...props }: SubTabProps,
+    { startIcon, active, children, ...props }: SubTabProps,
     ref: Ref<any>
   ) => (
     <Flex
@@ -28,6 +28,7 @@ const SubTab = forwardRef(
         color: 'text',
         backgroundColor: active ? 'fill-zero-selected' : 'action-input-hover',
       }}
+      _focusVisible={{ outline: '1px solid border-outline-focused' }}
       {...props}
     >
       {!!startIcon && <Icon marginRight="small">{startIcon}</Icon>}
