@@ -2,7 +2,7 @@ import { DivProps, Flex, Img } from 'honorable'
 import PropTypes from 'prop-types'
 import { Ref, forwardRef } from 'react'
 
-type IconProps = DivProps & {
+type IconFrameProps = DivProps & {
   size?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | string
   spacing?: 'none' | 'padding' | string
   hue?: 'default' | 'lighter' | 'lightest' | string
@@ -48,7 +48,7 @@ const hueToBorderColor: { [key in 'default' | 'lighter' | 'lightest']: string } 
   lightest: 'border-input',
 }
 
-function IconRef({
+function IconFrameRef({
   size = 'medium',
   spacing = 'padding',
   hue = 'lighter',
@@ -57,9 +57,9 @@ function IconRef({
   alt,
   onClose,
   ...props
-}: IconProps, ref: Ref<any>) {
+}: IconFrameProps, ref: Ref<any>) {
   const boxSize = sizeToWidth[size]
-  const iconSize = spacing === 'padding' ? sizeToIconWidth[size] : sizeToWidth[size]
+  const iconSize = spacing === 'padding' ? sizeToIconWidth[size] : sizeToWidth[size] + 1
   const color = hueToColor[hue]
   const borderColor = hueToBorderColor[hue]
 
@@ -67,7 +67,7 @@ function IconRef({
     <Flex
       backgroundColor={color}
       borderRadius="medium"
-      border="1px solid border"
+      border={spacing === 'padding' ? '1px solid border' : 'none'}
       borderColor={borderColor}
       width={boxSize}
       height={boxSize}
@@ -76,6 +76,7 @@ function IconRef({
       align="center"
       justify="center"
       cursor={clickable ? 'pointer' : 'auto'}
+      overflow="hidden"
       _hover={clickable ? { backgroundColor: borderColor } : null}
       onClick={clickable ? onClose : null}
     >
@@ -91,8 +92,8 @@ function IconRef({
   )
 }
 
-const Icon = forwardRef(IconRef)
+const IconFrame = forwardRef(IconFrameRef)
 
-Icon.propTypes = propTypes
+IconFrame.propTypes = propTypes
 
-export default Icon
+export default IconFrame

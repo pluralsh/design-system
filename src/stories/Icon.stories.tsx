@@ -1,10 +1,10 @@
 import { Flex, H3 } from 'honorable'
 
-import Icon from '../components/Icon'
+import IconFrame from '../components/IconFrame'
 
 export default {
   title: 'Icon',
-  component: Icon,
+  component: IconFrame,
   argTypes: {
     icon: {
       options: ['/logos/plural-logomark-only-black.svg', '/logos/plural-logomark-only-white.svg', '/logos/airflow-logo.svg', '/logos/airbyte-logo.svg'],
@@ -38,20 +38,20 @@ function Template(args: any) {
         direction="row"
         gap={16}
       >
-        <Icon
+        <IconFrame
           size="xlarge"
           url={args.icon}
           {...args}
         />
 
-        <Icon
+        <IconFrame
           size="xlarge"
           url="photo.png"
           spacing="none"
           {...args}
         />
 
-        <Icon
+        <IconFrame
           size="xlarge"
           url="user.png"
           spacing="none"
@@ -64,20 +64,20 @@ function Template(args: any) {
         direction="row"
         gap={16}
       >
-        <Icon
+        <IconFrame
           size="large"
           url={args.icon}
           {...args}
         />
 
-        <Icon
+        <IconFrame
           size="large"
           url="photo.png"
           spacing="none"
           {...args}
         />
 
-        <Icon
+        <IconFrame
           size="large"
           url="user.png"
           spacing="none"
@@ -90,18 +90,18 @@ function Template(args: any) {
         direction="row"
         gap={16}
       >
-        <Icon
+        <IconFrame
           url={args.icon}
           {...args}
         />
 
-        <Icon
+        <IconFrame
           url="photo.png"
           spacing="none"
           {...args}
         />
 
-        <Icon
+        <IconFrame
           url="user.png"
           spacing="none"
           {...args}
@@ -113,20 +113,20 @@ function Template(args: any) {
         direction="row"
         gap={16}
       >
-        <Icon
+        <IconFrame
           size="small"
           url={args.icon}
           {...args}
         />
 
-        <Icon
+        <IconFrame
           size="small"
           url="photo.png"
           spacing="none"
           {...args}
         />
 
-        <Icon
+        <IconFrame
           size="small"
           url="user.png"
           spacing="none"
@@ -139,20 +139,20 @@ function Template(args: any) {
         direction="row"
         gap={16}
       >
-        <Icon
+        <IconFrame
           size="xsmall"
           url={args.icon}
           {...args}
         />
 
-        <Icon
+        <IconFrame
           size="xsmall"
           url="photo.png"
           spacing="none"
           {...args}
         />
 
-        <Icon
+        <IconFrame
           size="xsmall"
           url="user.png"
           spacing="none"
