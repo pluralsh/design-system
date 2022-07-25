@@ -178,55 +178,108 @@ function Typography({
 }) {
   return (
     <>
-      <Text h1 marginBottom="large">
+      <Text
+        h1
+        marginBottom="large"
+      >
         H1 - {exampleText}
       </Text>
-      <Text h2 marginBottom="large">
+      <Text
+        h2
+        marginBottom="large"
+      >
         H2 - {exampleText}
       </Text>
-      <Text h3 marginBottom="large">
+      <Text
+        h3
+        marginBottom="large"
+      >
         H3 - {exampleText}
       </Text>
-      <Text h4 marginBottom="large">
+      <Text
+        h4
+        marginBottom="large"
+      >
         H4 - {exampleText}
       </Text>
-      <Text title1 marginBottom="large">
+      <Text
+        title1
+        marginBottom="large"
+      >
         Title 1 - {exampleText}
       </Text>
-      <Text title2 marginBottom="large">
+      <Text
+        title2
+        marginBottom="large"
+      >
         Title 2 - {exampleText}
       </Text>
-      <Text subtitle1 marginBottom="large">
+      <Text
+        subtitle1
+        marginBottom="large"
+      >
         Subtitle 1 - {exampleText}
       </Text>
-      <Text subtitle2 marginBottom="large">
+      <Text
+        subtitle2
+        marginBottom="large"
+      >
         Subtitle 2 - {exampleText}
       </Text>
-      <Text body1 marginBottom="medium" bold>
+      <Text
+        body1
+        marginBottom="medium"
+        bold
+      >
         Body 1 (Bold) - {exampleText}
       </Text>
-      <Text body1 marginBottom="large">
+      <Text
+        body1
+        marginBottom="large"
+      >
         Body 1 - {exampleText}
       </Text>
-      <Text body2 marginBottom="medium" bold>
+      <Text
+        body2
+        marginBottom="medium"
+        bold
+      >
         Body 2 (Bold) - {exampleText}
       </Text>
-      <Text body2 marginBottom="large">
+      <Text
+        body2
+        marginBottom="large"
+      >
         Body 2 - {exampleText}
       </Text>
-      <Text caption marginBottom="large">
+      <Text
+        caption
+        marginBottom="large"
+      >
         Caption - {exampleText}
       </Text>
-      <Text badge-label marginBottom="large">
+      <Text
+        badge-label
+        marginBottom="large"
+      >
         Badge Label - {exampleText}
       </Text>
-      <Text button-large marginBottom="large">
+      <Text
+        button-large
+        marginBottom="large"
+      >
         Large Button - {exampleText}
       </Text>
-      <Text button-small marginBottom="large">
+      <Text
+        button-small
+        marginBottom="large"
+      >
         Small Button - {exampleText}
       </Text>
-      <Text overline marginBottom="large">
+      <Text
+        overline
+        marginBottom="large"
+      >
         Overline - {exampleText}
       </Text>
     </>
