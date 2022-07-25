@@ -14,6 +14,7 @@ import {
 } from 'react'
 
 import Tab from './Tab'
+import SubTab from './SubTab'
 
 type TabListStateProps = AriaTabListProps<object>;
 
@@ -33,15 +34,19 @@ type TabListItemProps = ComponentPropsWithRef<typeof Tab> &
 
 const TabListItem = Item as (props: TabListItemProps) => JSX.Element
 
+type TabStyle = 'default' | 'subtab';
+
 type TabListProps = {
   state: TabListState<object>;
   stateProps: TabListStateProps;
   renderer?: Renderer;
+  tabStyle?: TabStyle;
 };
 function TabList({
   state,
   stateProps,
   renderer,
+  tabStyle,
   ...props
 }: TabListProps & FlexProps) {
   stateProps = {
@@ -59,6 +64,7 @@ function TabList({
       item={item}
       state={state}
       stateProps={stateProps}
+      tabStyle={tabStyle}
     />
   ))
 
@@ -87,22 +93,27 @@ type TabRendererProps = {
   item: Node<unknown>;
   state: TabListState<object>;
   stateProps: TabListStateProps;
+  tabStyle: TabStyle;
 };
-function TabRenderer({ item, state, stateProps }: TabRendererProps) {
+function TabRenderer({
+  item, state, stateProps, tabStyle = 'default',
+}: TabRendererProps) {
   const ref = useRef(null)
   const { tabProps: props } = useTab({ key: item.key }, state, ref)
+
+  const TabComponent = tabStyle === 'subtab' ? SubTab : Tab
 
   if (item.props.renderer) {
     if (item.rendered) {
       props.children = (
-        <Tab
+        <TabComponent
           active={state.selectedKey === item.key}
           vertical={stateProps.orientation === 'vertical'}
           width={stateProps.orientation === 'vertical' ? '100%' : 'auto'}
           {...item.props}
         >
           {item.rendered}
-        </Tab>
+        </TabComponent>
       )
     }
 
@@ -118,7 +129,7 @@ function TabRenderer({ item, state, stateProps }: TabRendererProps) {
   }
 
   return (
-    <Tab
+    <TabComponent
       ref={ref}
       {...props}
       active={state.selectedKey === item.key}
@@ -126,7 +137,7 @@ function TabRenderer({ item, state, stateProps }: TabRendererProps) {
       {...item.props}
     >
       {item.rendered}
-    </Tab>
+    </TabComponent>
   )
 }
 

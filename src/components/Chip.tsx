@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 type ChipProps = FlexProps & {
   size?: 'small' | 'medium' | 'large' | string
   severity?: 'neutral' | 'info' | 'success' | 'warning' | 'error' | string
+  hue?: 'default' | 'lighter' | 'lightest' | string
   icon?: ReactElement,
   loading?: boolean
 }
@@ -14,6 +15,7 @@ type ChipProps = FlexProps & {
 const propTypes = {
   size: PropTypes.oneOf(['small', 'medium', 'large']),
   severity: PropTypes.oneOf(['neutral', 'info', 'success', 'warning', 'error']),
+  hue: PropTypes.oneOf(['default', 'lighter', 'lightest']),
   icon: PropTypes.element,
   loading: PropTypes.bool,
 }
@@ -26,10 +28,29 @@ const severityToColor = {
   error: 'text-error-light',
 }
 
+const sizeToHeight: { [key in 'small' | 'medium' | 'large']: number } = {
+  small: 20,
+  medium: 24,
+  large: 32,
+}
+
+const hueToColor: { [key in 'default' | 'lighter' | 'lightest']: string } = {
+  default: 'fill-one',
+  lighter: 'fill-two',
+  lightest: 'fill-three',
+}
+
+const hueToBorderColor: { [key in 'default' | 'lighter' | 'lightest']: string } = {
+  default: 'border',
+  lighter: 'border-fill-two',
+  lightest: 'border-input',
+}
+
 function ChipRef({
   children,
   size = 'medium',
   severity = 'neutral',
+  hue = 'default',
   loading = false,
   icon,
   ...props
@@ -43,9 +64,11 @@ function ChipRef({
       paddingHorizontal={size === 'small' ? 'xsmall' : 'small'}
       align="center"
       display="inline-flex"
-      backgroundColor="fill-one"
+      backgroundColor={hueToColor[hue]}
       borderRadius="medium"
       border="1px solid border"
+      borderColor={hueToBorderColor[hue]}
+      maxHeight={sizeToHeight[size]}
       {...props}
     >
       {loading && (
@@ -68,6 +91,7 @@ function ChipRef({
         fontSize={size === 'small' ? 12 : 14}
         fontWeight={size === 'small' ? 400 : 600}
         lineHeight={size === 'small' ? '16px' : '20px'}
+        height={size === 'small' ? '16px' : '20px'}
       >
         {children}
       </P>
