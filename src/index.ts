@@ -3,7 +3,6 @@ export {
   Button,
   Menu,
   MenuItem,
-  Modal,
   Switch,
 } from 'honorable'
 
@@ -138,6 +137,7 @@ export { default as Token } from './components/Token'
 export { default as UserCard } from './components/UserCard'
 export { default as ValidatedInput } from './components/ValidatedInput'
 export { default as Tooltip } from './components/Tooltip'
+export { default as Modal } from './components/Modal'
 // Hooks
 export { default as usePrevious } from './hooks/usePrevious'
 // Theme

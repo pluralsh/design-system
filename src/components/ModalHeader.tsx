@@ -1,8 +1,6 @@
-import { Ref, forwardRef } from 'react'
 import { Flex, FlexProps, P } from 'honorable'
 import PropTypes from 'prop-types'
-
-import CloseIcon from './icons/CloseIcon'
+import { Ref, forwardRef } from 'react'
 
 type ModalHeaderProps = FlexProps & {
   title?: string

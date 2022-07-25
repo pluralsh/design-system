@@ -834,6 +834,10 @@ export default mergeTheme(defaultTheme, {
         border: '1px solid border',
         boxShadow: 'modal',
       },
+      ({ form }: any) => form && ({
+        width: '608px',
+        maxWidth: '608px',
+      }),
     ],
     Backdrop: [
       {
