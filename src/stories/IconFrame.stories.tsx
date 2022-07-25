@@ -3,7 +3,7 @@ import { Flex, H3 } from 'honorable'
 import IconFrame from '../components/IconFrame'
 
 export default {
-  title: 'Icon',
+  title: 'IconFrame',
   component: IconFrame,
   argTypes: {
     icon: {
