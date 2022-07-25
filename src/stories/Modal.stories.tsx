@@ -1,7 +1,9 @@
 import { Button, H3, P } from 'honorable'
 import { useState } from 'react'
 
-import { FormField, Input, Modal, ModalActions, ModalHeader } from '..'
+import {
+  FormField, Input, Modal, ModalActions, ModalHeader,
+} from '..'
 
 export default {
   title: 'Modal',
