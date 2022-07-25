@@ -24,6 +24,8 @@ ref: Ref<any>) {
       onClose={onClose}
       form={form}
       ref={ref}
+      fontSize={16}
+      color="text"
       {...props}
     >{children}
     </Modal>

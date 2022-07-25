@@ -28,7 +28,7 @@ function Template(args: any) {
 
         {!args.form && (
           <>
-            <P marginBottom={8}>Uninstalling this application will disable all future upgrades.</P>
+            <P marginBottom={16}>Uninstalling this application will disable all future upgrades.</P>
             <P>If you'd also like to remove the running instance from your cluster, be sure to run
               `plural destroy` from this application's repository.
             </P>
