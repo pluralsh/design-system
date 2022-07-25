@@ -1,6 +1,5 @@
 import { Flex, FlexProps, P } from 'honorable'
 import PropTypes from 'prop-types'
-import { Ref, forwardRef } from 'react'
 
 type ModalHeaderProps = FlexProps & {
   title?: string
@@ -12,7 +11,7 @@ const propTypes = {
   onClose: PropTypes.func,
 }
 
-function ModalHeaderRef({ children, onClose, ...props }: ModalHeaderProps, ref: Ref<any>) {
+function ModalHeaderRef({ children, ...props }: ModalHeaderProps, ref: Ref<any>) {
   return (
     <Flex
       ref={ref}
