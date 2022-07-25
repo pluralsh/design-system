@@ -1,9 +1,7 @@
 import { Flex, FlexProps } from 'honorable'
 import { Ref, forwardRef } from 'react'
 
-type SidebarProps = FlexProps & {}
-
-const propTypes = {}
+type SidebarProps = FlexProps
 
 function SidebarRef({ children, ...props }: SidebarProps, ref: Ref<any>) {
   const width = '64px'
@@ -29,7 +27,4 @@ function SidebarRef({ children, ...props }: SidebarProps, ref: Ref<any>) {
 }
 
 const Sidebar = forwardRef(SidebarRef)
-
-Sidebar.propTypes = propTypes
-
 export default Sidebar
