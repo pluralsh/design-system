@@ -15,7 +15,7 @@ const BannerAction = styled(Span)`
   &,
   & a,
   & a:any-link {
-    font-weight: 500;
+    font-weight: 600;
     color: ${({ theme }) => theme.colors['action-link-inline']};
     text-decoration: none;
     &:hover {
