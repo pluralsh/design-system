@@ -41,7 +41,7 @@ const hueToSelectedBGColor: {
   lightest: 'fill-three',
 }
 
-const sizeToBorderRadius: {
+const cornerSizeToBorderRadius: {
   [key in CardSize]: string
 } = {
   medium: 'medium',
@@ -54,7 +54,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(({
   <Div
     ref={ref}
     border={`1px solid ${hueToBorderColor[hue]}`}
-    borderRadius={sizeToBorderRadius[size]}
+    borderRadius={cornerSizeToBorderRadius[size]}
     backgroundColor={selected ? hueToSelectedBGColor[hue] : hueToBGColor[hue]}
     {...(clickable && {
       cursor: 'pointer',
