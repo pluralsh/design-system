@@ -369,10 +369,10 @@ export default mergeTheme(defaultTheme, {
     },
     ({ overline }: any) => overline && {
       fontFamily: fontFamilies.semi,
-      fontSize: 14,
-      lineHeight: '24px',
+      fontSize: 12,
+      lineHeight: '16px',
       fontWeight: 400,
-      letterSpacing: '1px',
+      letterSpacing: '1.25px',
       textTransform: 'uppercase',
     },
     ({ truncate }: any) => truncate && {
@@ -833,7 +833,15 @@ export default mergeTheme(defaultTheme, {
         backgroundColor: 'fill-one',
         border: '1px solid border',
         boxShadow: 'modal',
+        paddingTop: 'large',
+        paddingRight: 'large',
+        paddingBottom: 'large',
+        paddingLeft: 'large',
       },
+      ({ form }: any) => form && ({
+        width: '608px',
+        maxWidth: '608px',
+      }),
     ],
     Backdrop: [
       {

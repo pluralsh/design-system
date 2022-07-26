@@ -1,5 +1,9 @@
 export {
-  Avatar, Button, Menu, MenuItem, Modal, Switch,
+  Avatar,
+  Button,
+  Menu,
+  MenuItem,
+  Switch,
 } from 'honorable'
 
 // Icons
@@ -94,6 +98,7 @@ export { default as SendMessageIcon } from './components/icons/SendMessageIcon'
 export { default as ServersIcon } from './components/icons/ServersIcon'
 export { default as ShipIcon } from './components/icons/ShipIcon'
 export { default as SirenIcon } from './components/icons/SirenIcon'
+export { default as SlackLogoIcon } from './components/icons/SlackLogoIcon'
 export { default as SortAscIcon } from './components/icons/SortAscIcon'
 export { default as SortDescIcon } from './components/icons/SortDescIcon'
 export { default as StatusIpIcon } from './components/icons/StatusIpIcon'
@@ -130,6 +135,12 @@ export { default as IconFrame } from './components/IconFrame'
 export { default as RepositoryCard } from './components/RepositoryCard'
 export { default as Select } from './components/Select'
 export { default as Stepper } from './components/Stepper'
+export {
+  default as Sidecar,
+  SidecarProps,
+  SidecarItem,
+  SidecarButton,
+} from './components/Sidecar'
 export { default as Tab } from './components/Tab'
 export {
   TabList,
@@ -146,6 +157,7 @@ export { default as FormTitle } from './components/FormTitle'
 export { default as Sidebar } from './components/Sidebar'
 export { default as SidebarSection } from './components/SidebarSection'
 export { default as SidebarItem } from './components/SidebarItem'
+export { default as Modal } from './components/Modal'
 // Hooks
 export { default as usePrevious } from './hooks/usePrevious'
 // Theme
