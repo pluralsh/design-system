@@ -1,5 +1,6 @@
 import { Flex, FlexProps, P } from 'honorable'
 import PropTypes from 'prop-types'
+import { Ref, forwardRef } from 'react'
 
 type ModalHeaderProps = FlexProps & {
   title?: string
