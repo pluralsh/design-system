@@ -1,6 +1,6 @@
 import { ReactElement, Ref, forwardRef } from 'react'
 import {
-  Flex, FlexProps, P, Spinner,
+  FlexProps, P, Spinner,
 } from 'honorable'
 import PropTypes from 'prop-types'
 
