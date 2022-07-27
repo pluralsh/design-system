@@ -1,4 +1,6 @@
-import { Button, Flex } from 'honorable'
+import {
+  Button, Div, Flex, FlexProps,
+} from 'honorable'
 
 import Tooltip from '../components/Tooltip'
 
@@ -7,21 +9,80 @@ export default {
   component: Tooltip,
 }
 
-function Template(args: any) {
+function CornerBox(props: FlexProps) {
   return (
     <Flex
       width="100%"
-      height={500}
-      alignItems="center"
-      justifyContent="center"
+      padding={20}
+      {...props}
+    />
+  )
+}
+
+function Tip(props:any) {
+  return (
+    <Tooltip
+      label="Here's some info for you!"
+      {...props}
     >
-      <Tooltip
-        label="Here's some info for you!"
-        {...args}
+      <Button>Hover me</Button>
+    </Tooltip>
+  )
+}
+
+function Template(args: any) {
+  return (
+    <Div margin="-32px">
+      <Flex
+        width="100%"
+        height="33vh"
+        alignItems="stretch"
       >
-        <Button>Hover me</Button>
-      </Tooltip>
-    </Flex>
+        <CornerBox
+          alignItems="flex-start"
+          justifyContent="left"
+        >
+          <Tip {...args} />
+        </CornerBox>
+        <CornerBox
+          alignItems="flex-start"
+          justifyContent="right"
+        >
+          <Tip {...args} />
+        </CornerBox>
+      </Flex>
+      <Flex
+        width="100%"
+        height="33.3vh"
+        alignItems="stretch"
+      >
+        <CornerBox
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Tip {...args} />
+        </CornerBox>
+      </Flex>
+      <Flex
+        width="100%"
+        height="33vh"
+        alignItems="stretch"
+      >
+        <CornerBox
+          alignItems="flex-end"
+          justifyContent="left"
+        >
+          <Tip {...args} />
+        </CornerBox>
+        <CornerBox
+          alignItems="flex-end"
+          justifyContent="right"
+        >
+          <Tip {...args} />
+        </CornerBox>
+      </Flex>
+
+    </Div>
   )
 }
 
