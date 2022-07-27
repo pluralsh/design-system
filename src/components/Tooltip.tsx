@@ -35,7 +35,7 @@ type TooltipProps = {
   strategy?: 'absolute' | 'fixed'
   arrow?: boolean
   dismissable?: boolean
-  onOpenChange: (open: boolean) => unknown
+  onOpenChange?: (open: boolean) => unknown
 } & DivProps
 
 const Tip = styled(Div)`
