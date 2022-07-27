@@ -82,6 +82,7 @@ const TooltipArrow = createIcon(({ size, color }) => (
 ))
 
 const ARROW_LENGTH = 5
+const ARROW_WIDTH = 7
 
 const DEFAULT_OFFSET = 4
 
@@ -209,10 +210,10 @@ function Tooltip({
                 position: 'absolute',
                 top: middlewareData?.arrow?.y || '',
                 left: middlewareData?.arrow?.x || '',
-                [staticSide]: '-7px',
+                [staticSide]: `-${ARROW_WIDTH}px`,
               }}
-              width={7}
-              height={7}
+              width={ARROW_WIDTH}
+              height={ARROW_WIDTH}
               transform={`rotate(${arrowRotation}deg)`}
               {...arrowProps}
             >
@@ -220,7 +221,7 @@ function Tooltip({
                 position="absolute"
                 top={0}
                 left={0}
-                size={7}
+                size={ARROW_WIDTH}
                 color="fill-two"
               />
             </Div>
