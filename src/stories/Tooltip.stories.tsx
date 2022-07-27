@@ -1,4 +1,4 @@
-import { Button } from 'honorable'
+import { Button, Flex } from 'honorable'
 
 import Tooltip from '../components/Tooltip'
 
@@ -9,19 +9,22 @@ export default {
 
 function Template(args: any) {
   return (
-    <Tooltip
-      label="Yeah alright!"
-      {...args}
+    <Flex
+      width="100%"
+      height={500}
+      alignItems="center"
+      justifyContent="center"
     >
-      <Button>
-        Hover me
-      </Button>
-    </Tooltip>
+      <Tooltip
+        label="Here's some info for you!"
+        {...args}
+      >
+        <Button>Hover me</Button>
+      </Tooltip>
+    </Flex>
   )
 }
 
 export const Default = Template.bind({})
 
-Default.args = {
-  arrow: false,
-}
+Default.args = {}
