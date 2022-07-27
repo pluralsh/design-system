@@ -151,19 +151,20 @@ function Tooltip({
   const childrenRef = useMemo(() => mergeRefs([reference, (children as any).ref]),
     [reference, children])
 
+  const finalPlacementSide = `${finalPlacement}`.split('-')[0]
   const arrowRotation = {
     top: 0,
     right: 90,
     bottom: 180,
     left: -90,
-  }[finalPlacement.split('-')[0]]
+  }[finalPlacementSide]
 
   const staticSide = {
     top: 'bottom',
     right: 'left',
     bottom: 'top',
     left: 'right',
-  }[finalPlacement.split('-')[0]]
+  }[finalPlacementSide]
 
   const transformOrigin = {
     top: 'top center',
