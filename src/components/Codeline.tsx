@@ -66,7 +66,8 @@ function CodelineRef({ children, ...props }: CodelineProps, ref: Ref<any>) {
       >
         <Tooltip
           offset={8}
-          label="Copied"
+          label="Copied!"
+          color="text-success-light"
           placement="top"
           displayOn="manual"
           dismissable
