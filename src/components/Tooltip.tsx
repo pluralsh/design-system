@@ -81,6 +81,10 @@ const TooltipArrow = createIcon(({ size, color }) => (
   </svg>
 ))
 
+const ARROW_LENGTH = 5
+
+const DEFAULT_OFFSET = 4
+
 function Tooltip({
   children,
   label,
@@ -91,6 +95,7 @@ function Tooltip({
   strategy = 'fixed',
   arrow: showArrow = true,
   dismissable = true,
+  offset: tipOffset,
   onOpenChange,
   ...props
 }: TooltipProps) {
@@ -98,6 +103,10 @@ function Tooltip({
   const arrowRef = useRef()
   const isOpen
     = displayOn === 'none' ? false : displayOn === 'manual' ? manualOpen : open
+
+  const totalOffset
+    = (showArrow ? ARROW_LENGTH : 0)
+    + (typeof tipOffset === 'number' ? tipOffset : DEFAULT_OFFSET)
 
   const {
     x,
@@ -117,9 +126,9 @@ function Tooltip({
       if (onOpenChange) onOpenChange(open)
     },
     middleware: [
-      offset(10),
+      offset(totalOffset),
       flip(),
-      shift({ padding: 8 }),
+      shift({ padding: 12 }),
       ...(showArrow ? [arrow({ element: arrowRef })] : []),
     ],
     whileElementsMounted: autoUpdate,
@@ -188,6 +197,7 @@ function Tooltip({
             top: y ?? 0,
           }}
           transformOrigin={transformOrigin}
+          zIndex={1000}
           {...props}
           {...getFloatingProps()}
         >

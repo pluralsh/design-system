@@ -65,6 +65,7 @@ function CodelineRef({ children, ...props }: CodelineProps, ref: Ref<any>) {
         flexShrink={0}
       >
         <Tooltip
+          offset={8}
           label="Copied"
           placement="top"
           displayOn="manual"
