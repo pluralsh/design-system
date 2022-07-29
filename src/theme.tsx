@@ -351,8 +351,8 @@ export const textMixins = asElementTypes<CSSObject>()({
   body1Bold: {},
   body2Bold: {},
 })
-textMixins.body1Bold = { ...textMixins.body1Bold, ...textMixins.bodyBold }
-textMixins.body2Bold = { ...textMixins.body2Bold, ...textMixins.bodyBold }
+textMixins.body1Bold = { ...textMixins.body1, ...textMixins.bodyBold }
+textMixins.body2Bold = { ...textMixins.body2, ...textMixins.bodyBold }
 
 const honorableTheme = mergeTheme(defaultTheme, {
   name: 'Plural',
