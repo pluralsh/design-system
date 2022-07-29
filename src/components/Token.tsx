@@ -22,7 +22,6 @@ function TokenRef({ children, onClose = () => {}, ...props }: TokenProps, ref: R
       align="center"
       borderRadius="medium"
       backgroundColor="fill-one"
-      border="1px solid border"
       overflow="hidden"
       cursor="pointer"
       hoverIndicator="fill-one-hover"

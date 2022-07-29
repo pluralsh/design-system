@@ -1,19 +1,14 @@
 import { Flex, FlexProps, Spinner } from 'honorable'
 import PropTypes from 'prop-types'
-import {
-  Dispatch, ReactElement, Ref, forwardRef,
-} from 'react'
+import { ReactElement, Ref, forwardRef } from 'react'
 
 import Card, { CardProps } from './Card'
-import CloseIcon from './icons/CloseIcon'
 
 type ChipProps = FlexProps & {
   size?: 'small' | 'medium' | 'large' | string
   severity?: 'neutral' | 'info' | 'success' | 'warning' | 'error' | 'critical' | string
   icon?: ReactElement,
   loading?: boolean,
-  removable?: boolean,
-  onClick?: Dispatch<void>,
 } & CardProps
 
 const propTypes = {
@@ -22,8 +17,6 @@ const propTypes = {
   hue: PropTypes.oneOf(['default', 'lighter', 'lightest']),
   icon: PropTypes.element,
   loading: PropTypes.bool,
-  removable: PropTypes.bool,
-  onClick: PropTypes.func,
 }
 
 const severityToColor = {
@@ -47,8 +40,6 @@ function ChipRef({
   severity = 'neutral',
   hue = 'default',
   loading = false,
-  removable = false,
-  onClick = null,
   icon,
   ...props
 }: ChipProps, ref: Ref<any>) {
@@ -64,7 +55,6 @@ function ChipRef({
       alignItems="center"
       display="inline-flex"
       maxHeight={sizeToHeight[size]}
-      onClick={removable ? null : onClick}
       {...props}
     >
       {loading && (
@@ -91,16 +81,6 @@ function ChipRef({
         gap={4}
       >
         {children}
-        {removable && onClick && (
-          <CloseIcon
-            alignSelf="center"
-            onClick={onClick}
-            width={16}
-            height={16}
-            size={size === 'small' ? 8 : 10}
-            cursor="pointer"
-          />
-        )}
       </Flex>
     </Card>
   )
