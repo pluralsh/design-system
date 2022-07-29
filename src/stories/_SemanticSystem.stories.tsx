@@ -2,7 +2,7 @@ import styled, { useTheme } from 'styled-components'
 
 import Divider from '../components/Divider'
 
-import { mixins } from '../GlobalStyle'
+import { mixins } from '../mixins'
 
 export default {
   title: 'Semantic System',
@@ -38,6 +38,11 @@ function Template({ exampleText }: { exampleText?: string }) {
       />
       <Shadows />
       <Divider
+        text="Borders"
+        marginVertical="xxlarge"
+      />
+      <BoxBorders />
+      <Divider
         text="Border radiuses"
         marginVertical="xxlarge"
       />
@@ -65,13 +70,12 @@ const ColorBoxWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: var(--space-large);
-  margin-right: var(--space-large);
   width: 64px;
 `
-const ColorsWrap = styled.div`
+const FlexWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
+  gap: var(--space-large);
 `
 
 function Colors() {
@@ -86,14 +90,14 @@ function Colors() {
   delete colors.red
 
   return (
-    <ColorsWrap>
+    <FlexWrap>
       {Object.entries(colors).map(([key]) => (
         <ColorBoxWrap key={key}>
           <ColorBox color={`${key}`} />
           <ItemLabel>{key}</ItemLabel>
         </ColorBoxWrap>
       ))}
-    </ColorsWrap>
+    </FlexWrap>
   )
 }
 
@@ -101,7 +105,7 @@ const ShadowedBox = styled(FilledBox)<{ shadow: string }>`
   box-shadow: var(--box-shadow-${({ shadow }) => shadow});
 `
 
-const ShadowsWrap = styled.div`
+const ShadowsWrap = styled(FlexWrap)`
   background-color: var(--color-fill-three);
   padding: var(--space-large);
 `
@@ -127,14 +131,35 @@ function BoxRadiuses() {
   const radii: ('medium' | 'large')[] = ['medium', 'large']
 
   return (
-    <>
+    <FlexWrap>
       {radii.map(key => (
         <BlockWrapper key={key}>
           <RadiusedBox radius={key} />
           <ItemLabel>{key}</ItemLabel>
         </BlockWrapper>
       ))}
-    </>
+    </FlexWrap>
+  )
+}
+
+const BorderedBox = styled(RadiusedBox).attrs(() => ({ radius: 'medium' }))<{
+  border?: string
+}>`
+  border: var(--border-${({ border }) => border});
+`
+
+function BoxBorders() {
+  const { borders } = useTheme()
+
+  return (
+    <FlexWrap>
+      {Object.keys(borders).map(key => (
+        <BlockWrapper key={key}>
+          <BorderedBox border={key} />
+          <ItemLabel>{key}</ItemLabel>
+        </BlockWrapper>
+      ))}
+    </FlexWrap>
   )
 }
 

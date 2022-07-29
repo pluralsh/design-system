@@ -1,9 +1,7 @@
-import { HonorableTheme, mergeTheme } from 'honorable'
+import { mergeTheme } from 'honorable'
 import defaultTheme from 'honorable-theme-default'
 import { CSSObject } from 'styled-components'
 import chroma from 'chroma-js'
-
-import { mixins } from './GlobalStyle'
 
 export const fontFamilies = {
   semi: '"Monument Semi-Mono", "Monument", "Inter", "Helvetica", "Arial", "sans-serif"',
@@ -92,6 +90,71 @@ export const red = {
   50: '#FFF7F5',
 }
 
+export const semanticColors = {
+  // Fill
+  'fill-zero': grey[900],
+  'fill-zero-hover': grey[850],
+  'fill-zero-selected': grey[825],
+  'fill-one': grey[850],
+  'fill-one-hover': grey[825],
+  'fill-one-selected': grey[775],
+  'fill-two': grey[800],
+  'fill-two-hover': grey[775],
+  'fill-two-selected': grey[725],
+  'fill-three': grey[750],
+  // Action
+  'action-primary': blue[400],
+  'action-primary-hover': blue[350],
+  'action-primary-disabled': grey[825],
+  'action-link-inactive': grey[200],
+  'action-link-active': grey[50],
+  'action-link-inline': blue[200],
+  'action-input-hover': `${chroma(grey[50]).alpha(0.96)}`,
+  // Border
+  border: grey[800],
+  'border-input': grey[700],
+  'border-fill-two': grey[750],
+  'border-disabled': grey[700],
+  'border-outline-focused': blue[300],
+  'border-primary': blue[400],
+  'border-success': green[500],
+  'border-warning': yellow[400],
+  'border-error': red[400],
+  // Content
+  text: grey[50],
+  'text-light': grey[200],
+  'text-xlight': grey[400],
+  'text-disabled': grey[700],
+  'text-primary-accent': blue[200],
+  'text-primary-disabled': grey[500],
+  'text-success': green[500],
+  'text-success-light': green[200],
+  'text-warning': yellow[400],
+  'text-warning-light': yellow[200],
+  'text-error': red[400],
+  'text-error-light': red[200],
+  // Icon
+  'icon-success': green[500],
+  'icon-warning': yellow[400],
+  'icon-error': red[400],
+}
+
+export const borderWidths = {
+  default: '1',
+}
+
+export const borderStyles = {
+  default: 'solid',
+}
+
+export const borders = {
+  default: `${borderWidths.default}px ${borderStyles.default} ${semanticColors.border}`,
+  'fill-one': `${borderWidths.default}px ${borderStyles.default} ${semanticColors.border}`,
+  'fill-two': `${borderWidths.default}px ${borderStyles.default} ${semanticColors['border-fill-two']}`,
+  'fill-three': `${borderWidths.default}px ${borderStyles.default} ${semanticColors['border-input']}`,
+  input: `${borderWidths.default}px ${borderStyles.default} ${semanticColors['border-input']}`,
+}
+
 export const borderRadiuses = {
   medium: 3,
   large: 6,
@@ -102,7 +165,7 @@ export const boxShadows = {
   slight: `0px 2px 4px ${chroma(grey[950]).alpha(0.14)}, 0px 2px 7px ${chroma(grey[950]).alpha(0.18)}`,
   moderate: `0px 3px 6px ${chroma(grey[950]).alpha(0.2)}, 0px 10px 20px ${chroma(grey[950]).alpha(0.3)}`,
   modal: `0px 20px 50px ${chroma(grey[950]).alpha(0.6)}`,
-  focused: `0px 0px 0px 1.5px ${blue[300]}`,
+  focused: `0px 0px 0px 1.5px ${semanticColors['border-outline-focused']}`,
 }
 
 export const spacing = {
@@ -305,52 +368,7 @@ const honorableTheme = mergeTheme(defaultTheme, {
     yellow,
     red,
     // Semantic colors,
-    // Fill,
-    'fill-zero': grey[900],
-    'fill-zero-hover': grey[850],
-    'fill-zero-selected': grey[825],
-    'fill-one': grey[850],
-    'fill-one-hover': grey[825],
-    'fill-one-selected': grey[775],
-    'fill-two': grey[800],
-    'fill-two-hover': grey[775],
-    'fill-two-selected': grey[725],
-    'fill-three': grey[750],
-    // Action,
-    'action-primary': blue[400],
-    'action-primary-hover': blue[350],
-    'action-primary-disabled': grey[825],
-    'action-link-inactive': grey[200],
-    'action-link-active': grey[50],
-    'action-link-inline': blue[200],
-    'action-input-hover': `${chroma(grey[50]).alpha(0.96)}`,
-    // Border,
-    border: grey[800],
-    'border-input': grey[700],
-    'border-fill-two': grey[750],
-    'border-disabled': grey[700],
-    'border-outline-focused': blue[300],
-    'border-primary': blue[400],
-    'border-success': green[500],
-    'border-warning': yellow[400],
-    'border-error': red[400],
-    // Content,
-    text: grey[50],
-    'text-light': grey[200],
-    'text-xlight': grey[400],
-    'text-disabled': grey[700],
-    'text-primary-accent': blue[200],
-    'text-primary-disabled': grey[500],
-    'text-success': green[500],
-    'text-success-light': green[200],
-    'text-warning': yellow[400],
-    'text-warning-light': yellow[200],
-    'text-error': red[400],
-    'text-error-light': red[200],
-    // Icon,
-    'icon-success': green[500],
-    'icon-warning': yellow[400],
-    'icon-error': red[400],
+    ...semanticColors,
   },
   stylesheet: {
     html: [
@@ -1050,5 +1068,8 @@ export const styledTheme = {
     boxShadows,
     borderRadiuses,
     fontFamilies,
+    borders,
+    borderStyles,
+    borderWidths,
   },
 }
