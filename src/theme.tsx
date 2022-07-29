@@ -1,12 +1,16 @@
-import { mergeTheme } from 'honorable'
+import { HonorableTheme, mergeTheme } from 'honorable'
 import defaultTheme from 'honorable-theme-default'
+import { CSSObject } from 'styled-components'
+import chroma from 'chroma-js'
 
-const fontFamilies = {
+import { mixins } from './GlobalStyle'
+
+export const fontFamilies = {
   semi: '"Monument Semi-Mono", "Monument", "Inter", "Helvetica", "Arial", "sans-serif"',
   sans: '"Inter", "Helvetica", "Arial", "sans-serif"',
 }
 
-const grey = {
+export const grey = {
   950: '#0E1015',
   900: '#171A21',
   875: '#1B1F27',
@@ -27,7 +31,7 @@ const grey = {
   50: '#EBEFF0',
 }
 
-const blue = {
+export const blue = {
   950: '#00041A',
   900: '#000933',
   850: '#000B4D',
@@ -43,7 +47,7 @@ const blue = {
   50: '#F0F5FF',
 }
 
-const green = {
+export const green = {
   950: '#001409',
   900: '#00240F',
   850: '#023C1A',
@@ -58,7 +62,7 @@ const green = {
   50: '#F5FFF9',
 }
 
-const yellow = {
+export const yellow = {
   950: '#241700',
   900: '#3D2700',
   850: '#573B00',
@@ -73,7 +77,7 @@ const yellow = {
   50: '#FFFCF0',
 }
 
-const red = {
+export const red = {
   950: '#140000',
   900: '#240100',
   850: '#3D0100',
@@ -88,20 +92,20 @@ const red = {
   50: '#FFF7F5',
 }
 
-const borderRadiuses = {
+export const borderRadiuses = {
   medium: 3,
   large: 6,
   normal: 3, // deprecated in favor of medium
 }
 
-const boxShadows = {
-  slight: `0px 2px 4px transparency(${grey[900]}, 88), 0px 3px 6px transparency(${grey[900]}, 85)`,
-  moderate: `0px 3px 6px transparency(${grey[900]}, 80), 0px 10px 20px transparency(${grey[900]}, 70)`,
-  modal: `0px 20px 50px transparency(${grey[900]}, 40)`,
-  focused: '0px 0px 0px 1.5px #8fa5ff',
+export const boxShadows = {
+  slight: `0px 2px 4px ${chroma(grey[950]).alpha(0.14)}, 0px 2px 7px ${chroma(grey[950]).alpha(0.18)}`,
+  moderate: `0px 3px 6px ${chroma(grey[950]).alpha(0.2)}, 0px 10px 20px ${chroma(grey[950]).alpha(0.3)}`,
+  modal: `0px 20px 50px ${chroma(grey[950]).alpha(0.6)}`,
+  focused: `0px 0px 0px 1.5px ${blue[300]}`,
 }
 
-const spacing = {
+export const spacing = {
   'minus-xxxxlarge': -96,
   'minus-xxxlarge': -64,
   'minus-xxlarge': -48,
@@ -142,7 +146,150 @@ const spacers = {
   paddingVertical: ['paddingTop', 'paddingBottom'],
 }
 
-export default mergeTheme(defaultTheme, {
+const bodyBaseStyle = {
+  fontFamily: fontFamilies.sans,
+  fontWeight: 400,
+  letterSpacing: '0.5px',
+  '& b, & strong': {
+    fontWeight: 600,
+  },
+}
+
+function asElementTypes<T>() {
+  return function ret <Obj>(obj: { [K in keyof Obj]: T }) {
+    return obj
+  }
+}
+
+export const textMixins = asElementTypes<CSSObject>()({
+  h1: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 72,
+    lineHeight: '110%',
+    fontWeight: 400,
+    letterSpacing: '-1px',
+  },
+  h2: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 60,
+    lineHeight: '115%',
+    fontWeight: 500,
+    letterSpacing: '-1px',
+  },
+  h3: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 48,
+    lineHeight: '120%',
+    fontWeight: 400,
+    letterSpacing: '-0.5px',
+  },
+  h4: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 36,
+    lineHeight: '45px',
+    fontWeight: 400,
+    letterSpacing: '-0.25px',
+  },
+  title1: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 30,
+    lineHeight: '40px',
+    fontWeight: 500,
+    letterSpacing: '-0.25px',
+  },
+  title2: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 24,
+    lineHeight: '32px',
+    fontWeight: 500,
+    letterSpacing: '-0.25px',
+  },
+  subtitle1: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 20,
+    lineHeight: '24px',
+    fontWeight: 500,
+    letterSpacing: 0,
+  },
+  subtitle2: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 18,
+    lineHeight: '24px',
+    fontWeight: 500,
+    letterSpacing: 0,
+  },
+  body1: {
+    ...bodyBaseStyle,
+    ...{
+      fontSize: 16,
+      lineHeight: '24px',
+    },
+  },
+  body2: {
+    ...bodyBaseStyle,
+    ...{
+      fontSize: 14,
+      lineHeight: '20px',
+    },
+  },
+  bodyBold: {
+    fontWeight: 600,
+  },
+  caption: {
+    fontFamily: fontFamilies.sans,
+    fontSize: 12,
+    lineHeight: '16px',
+    fontWeight: 400,
+    letterSpacing: '0.5px',
+  },
+  badgeLabel: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 12,
+    lineHeight: '100%',
+    fontWeight: 700,
+    letterSpacing: '0.5px',
+  },
+  buttonMedium: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 14,
+    lineHeight: '24px',
+    fontWeight: 500,
+    letterSpacing: '0.5px',
+  },
+  buttonLarge: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 16,
+    lineHeight: '24px',
+    fontWeight: 500,
+    letterSpacing: '0.5px',
+  },
+  buttonSmall: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 12,
+    lineHeight: '24px',
+    fontWeight: 500,
+    letterSpacing: '0.5px',
+  },
+  overline: {
+    fontFamily: fontFamilies.semi,
+    fontSize: 12,
+    lineHeight: '16px',
+    fontWeight: 400,
+    letterSpacing: '1.25px',
+    textTransform: 'uppercase',
+  },
+  truncate: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  body1Bold: {},
+  body2Bold: {},
+})
+textMixins.body1Bold = { ...textMixins.body1Bold, ...textMixins.bodyBold }
+textMixins.body2Bold = { ...textMixins.body2Bold, ...textMixins.bodyBold }
+
+const honorableTheme = mergeTheme(defaultTheme, {
   name: 'Plural',
   mode: 'dark',
   breakpoints: {
@@ -176,7 +323,7 @@ export default mergeTheme(defaultTheme, {
     'action-link-inactive': grey[200],
     'action-link-active': grey[50],
     'action-link-inline': blue[200],
-    'action-input-hover': `transparency(${grey[50]}, 96)`,
+    'action-input-hover': `${chroma(grey[50]).alpha(0.96)}`,
     // Border,
     border: grey[800],
     'border-input': grey[700],
@@ -239,147 +386,49 @@ export default mergeTheme(defaultTheme, {
   },
   global: [
     /* Spacing */
-    ...Object.entries(spacers).map(([key, nextKeys]) => (props: any) => props[key] !== null && typeof props[key] !== 'undefined' && Object.fromEntries(nextKeys.map(nextKey => [nextKey, spacing[props[key]] || props[key]]))),
+    ...Object.entries(spacers).map(([key, nextKeys]) => (props: any) => props[key] !== null
+          && typeof props[key] !== 'undefined'
+          && Object.fromEntries(nextKeys.map(nextKey => [
+            nextKey,
+            spacing[props[key]] || props[key],
+          ]))),
     ({ gap }: any) => typeof gap !== 'undefined' && {
       gap: spacing[gap] || gap,
     },
-    ({ fill }: any) => fill === true && { // === true to prevent the `fill` css property to apply here
+    ({ fill }: any) => fill === true && {
+        // === true to prevent the `fill` css property to apply here
       width: '100%',
       height: '100%',
     },
     /* Border radiuses */
-    ({ borderRadius }: any) => typeof borderRadius !== 'undefined' && ({
+    ({ borderRadius }: any) => typeof borderRadius !== 'undefined' && {
       borderRadius: borderRadiuses[borderRadius] || borderRadius,
-    }),
+    },
     /* Shadows */
-    ({ boxShadow }: any) => typeof boxShadow !== 'undefined' && ({
+    ({ boxShadow }: any) => typeof boxShadow !== 'undefined' && {
       boxShadow: boxShadows[boxShadow] || boxShadow,
-    }),
-    ({ h1 }: any) => h1 && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 72,
-      lineHeight: '110%',
-      fontWeight: 400,
-      letterSpacing: '-1px',
     },
-    ({ h2 }: any) => h2 && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 60,
-      lineHeight: '115%',
-      fontWeight: 500,
-      letterSpacing: '-1px',
-    },
-    ({ h3 }: any) => h3 && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 48,
-      lineHeight: '120%',
-      fontWeight: 400,
-      letterSpacing: '-0.5px',
-    },
-    ({ h4 }: any) => h4 && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 36,
-      lineHeight: '45px',
-      fontWeight: 400,
-      letterSpacing: '-0.25px',
-    },
-    ({ title1 }: any) => title1 && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 30,
-      lineHeight: '40px',
-      fontWeight: 500,
-      letterSpacing: '-0.25px',
-    },
-    ({ title2 }: any) => title2 && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 24,
-      lineHeight: '32px',
-      fontWeight: 500,
-      letterSpacing: '-0.25px',
-    },
-    ({ subtitle1 }: any) => subtitle1 && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 20,
-      lineHeight: '24px',
-      fontWeight: 500,
-      letterSpacing: 0,
-    },
-    ({ subtitle2 }: any) => subtitle2 && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 18,
-      lineHeight: '24px',
-      fontWeight: 500,
-      letterSpacing: 0,
-    },
+    ({ h1 }: any) => h1 && textMixins.h1,
+    ({ h2 }: any) => h2 && textMixins.h2,
+    ({ h3 }: any) => h3 && textMixins.h3,
+    ({ h4 }: any) => h4 && textMixins.h4,
+    ({ title1 }: any) => title1 && textMixins.title1,
+    ({ title2 }: any) => title2 && textMixins.title2,
+    ({ subtitle1 }: any) => subtitle1 && textMixins.subtitle1,
+    ({ subtitle2 }: any) => subtitle2 && textMixins.subtitle2,
     ({ body1, body2, bold }: any) => ({
-      ...((body1 || body2) && {
-        fontFamily: fontFamilies.sans,
-        fontWeight: 400,
-        letterSpacing: '0.5px',
-        '& b, & strong': {
-          fontWeight: 600,
-        },
-      }),
-      ...((body1 || body2) && bold && {
-        fontWeight: 600,
-      }),
-      ...(body1 && {
-        fontSize: 16,
-        lineHeight: '24px',
-      }),
-      ...(body2 && {
-        fontSize: 14,
-        lineHeight: '20px',
-      }),
+      ...((body1 || body2)
+        && bold && textMixins.bodyBold),
+      ...(body1 && textMixins.body1),
+      ...(body2 && textMixins.body2),
     }),
-    ({ caption }: any) => caption && {
-      fontFamily: fontFamilies.sans,
-      fontSize: 12,
-      lineHeight: '16px',
-      fontWeight: 400,
-      letterSpacing: '0.5px',
-    },
-    ({ badgeLabel }: any) => badgeLabel && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 12,
-      lineHeight: '100%',
-      fontWeight: 700,
-      letterSpacing: '0.5px',
-    },
-    ({ buttonMedium }: any) => buttonMedium && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 14,
-      lineHeight: '24px',
-      fontWeight: 500,
-      letterSpacing: '0.5px',
-    },
-    ({ buttonLarge }: any) => buttonLarge && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 16,
-      lineHeight: '24px',
-      fontWeight: 500,
-      letterSpacing: '0.5px',
-    },
-    ({ buttonSmall }: any) => buttonSmall && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 12,
-      lineHeight: '24px',
-      fontWeight: 500,
-      letterSpacing: '0.5px',
-    },
-    ({ overline }: any) => overline && {
-      fontFamily: fontFamilies.semi,
-      fontSize: 12,
-      lineHeight: '16px',
-      fontWeight: 400,
-      letterSpacing: '1.25px',
-      textTransform: 'uppercase',
-    },
-    ({ truncate }: any) => truncate && {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
+    ({ caption }: any) => caption && textMixins.caption,
+    ({ badgeLabel }: any) => badgeLabel && textMixins.badgeLabel,
+    ({ buttonMedium }: any) => buttonMedium && textMixins.buttonMedium,
+    ({ buttonLarge }: any) => buttonLarge && textMixins.buttonLarge,
+    ({ buttonSmall }: any) => buttonSmall && textMixins.buttonSmall,
+    ({ overline }: any) => overline && textMixins.overline,
+    ({ truncate }: any) => truncate && textMixins.truncate,
     /* Deprecated */
     ({ body0 }: any) => body0 && {
       fontSize: 18,
@@ -636,7 +685,7 @@ export default mergeTheme(defaultTheme, {
           },
         },
       },
-      ({ checked }: any) => checked && ({
+      ({ checked }: any) => checked && {
         color: 'text',
         '> span': {
           backgroundColor: 'action-primary',
@@ -648,12 +697,12 @@ export default mergeTheme(defaultTheme, {
             border: '1px solid text',
           },
         },
-      }),
-      ({ small }: any) => small && ({
+      },
+      ({ small }: any) => small && {
         '> span': {
           borderWidth: '.75px',
         },
-      }),
+      },
     ],
     Control: [
       {
@@ -838,10 +887,10 @@ export default mergeTheme(defaultTheme, {
         paddingBottom: 'large',
         paddingLeft: 'large',
       },
-      ({ form }: any) => form && ({
+      ({ form }: any) => form && {
         width: '608px',
         maxWidth: '608px',
-      }),
+      },
     ],
     Backdrop: [
       {
@@ -871,7 +920,7 @@ export default mergeTheme(defaultTheme, {
           },
         },
       },
-      ({ checked }: any) => checked && ({
+      ({ checked }: any) => checked && {
         color: 'text',
         '> span': {
           border: '1px solid text',
@@ -881,12 +930,12 @@ export default mergeTheme(defaultTheme, {
             border: '1px solid text',
           },
         },
-      }),
-      ({ small }: any) => small && ({
+      },
+      ({ small }: any) => small && {
         '> span': {
           borderWidth: '.75px',
         },
-      }),
+      },
     ],
     Control: [
       {
@@ -917,16 +966,22 @@ export default mergeTheme(defaultTheme, {
           backgroundColor: checked ? 'action-primary' : 'transparent',
           border: `1px solid ${checked ? 'text' : 'border-input'}`,
           '> span': {
-            backgroundColor: checked ? 'action-link-active' : 'action-link-inactive',
+            backgroundColor: checked
+              ? 'action-link-active'
+              : 'action-link-inactive',
           },
         },
         ':hover': {
           color: 'text',
           '> div:first-of-type': {
-            backgroundColor: checked ? 'action-primary-hover' : 'action-input-hover',
+            backgroundColor: checked
+              ? 'action-primary-hover'
+              : 'action-input-hover',
             border: `1px solid ${checked ? 'text' : 'border-input'}`,
             '> span': {
-              backgroundColor: checked ? 'action-link-active' : 'action-link-active',
+              backgroundColor: checked
+                ? 'action-link-active'
+                : 'action-link-active',
             },
           },
         },
@@ -971,7 +1026,8 @@ export default mergeTheme(defaultTheme, {
         top: '50%',
         left: 0,
         transformOrigin: '50% 50%',
-        transform: 'translate(calc(-50% + 1px), -50%) scaleY(0.77) rotate(45deg)',
+        transform:
+          'translate(calc(-50% + 1px), -50%) scaleY(0.77) rotate(45deg)',
       },
     ],
   },
@@ -985,3 +1041,14 @@ export default mergeTheme(defaultTheme, {
     ],
   },
 })
+
+export default honorableTheme
+export const styledTheme = {
+  ...honorableTheme,
+  ...{
+    spacing,
+    boxShadows,
+    borderRadiuses,
+    fontFamilies,
+  },
+}
