@@ -536,6 +536,4 @@ function Template(args: any) {
 export const Default = Template.bind({})
 Default.args = {
   hue: 'default',
-  removable: false,
-  onClick: () => alert('remove'),
 }
