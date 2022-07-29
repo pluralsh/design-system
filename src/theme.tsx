@@ -308,7 +308,7 @@ export const textMixins = asElementTypes<CSSObject>()({
     letterSpacing: '0.5px',
   },
   badgeLabel: {
-    fontFamily: fontFamilies.semi,
+    fontFamily: fontFamilies.sans,
     fontSize: 12,
     lineHeight: '100%',
     fontWeight: 700,
