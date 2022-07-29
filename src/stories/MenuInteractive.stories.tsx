@@ -1,10 +1,10 @@
 import { Div } from 'honorable'
 
-import { Item, ListBox } from '../components/ListBox'
+import { ListBox, ListItemBasic } from '../components/ListBox'
 
 export default {
   title: 'Menu Interactive',
-  component: ListBox,
+  component: ListItemBasic,
 }
 
 const items = ['Ratatouille', 'Pizza', 'Sushi', 'Couscous', 'Dim Sum']
@@ -18,7 +18,12 @@ function Template() {
         width="100%"
       >
         {items.map(item => (
-          <Item key={item}>{item}</Item>
+          <ListItemBasic
+            key={item}
+            label={`label: ${item}`}
+          >
+            {item}
+          </ListItemBasic>
         ))}
       </ListBox>
     </Div>
