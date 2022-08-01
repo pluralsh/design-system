@@ -1,8 +1,9 @@
 import {
   Children,
+  ReactElement,
   cloneElement,
+  useMemo,
   useRef,
-  useState,
 } from 'react'
 import { useListBox, useOption } from '@react-aria/listbox'
 import { useListState } from '@react-stately/list'
@@ -16,8 +17,12 @@ import styled from 'styled-components'
 
 import { Card } from '../index'
 
+import { ListBoxItemBaseProps } from './ListBoxItem'
+
 type ListBoxProps = {
-  onSelectionChange: (selection: unknown) => unknown
+  onSelectionChange: (key: string) => unknown
+  selectedKey: string
+  children: ReactElement<ListBoxItemBaseProps> | ReactElement<ListBoxItemBaseProps>[]
 }
 
 const ListBoxCard = styled(Card)`
@@ -27,9 +32,17 @@ const ListBoxCard = styled(Card)`
   overflow-x: visible;
 `
 
-function ListBox({ children, onSelectionChange, ...props }: any) {
+function ListBox({
+  children,
+  selectedKey,
+  onSelectionChange,
+  ...props
+}: ListBoxProps) {
   // Create state based on the incoming props
-  const [selected, setSelected] = useState(new Set(['Pizza']))
+  const selected = useMemo(() => new Set(selectedKey ? [`.$${selectedKey}`] : null),
+    [selectedKey])
+
+  console.log('selected keyz', selectedKey, selected)
 
   console.log('selected', selected)
   const listStateProps: AriaListBoxProps<string> = {
@@ -37,25 +50,25 @@ function ListBox({ children, onSelectionChange, ...props }: any) {
     // items:
     selectionMode: 'single',
     selectedKeys: selected,
-    onSelectionChange: setSelected as any,
-    children: Children.map(children, (child, index) => {
-      console.log('child', child)
+    onSelectionChange: selection => {
+      const [newKey] = selection
 
-      return (
-        <Item
-          key={child.key || index}
-          textValue={child.props.label}
-        >
-          {child}
-        </Item>
-      )
-    }),
+      onSelectionChange(typeof newKey === 'string' ? newKey.substring(2) : '')
+    },
+    children: Children.map(children, (child, index) => (
+      <Item
+        key={child.key || index}
+        textValue={child?.props?.label}
+      >
+        {child}
+      </Item>
+    )),
   }
 
   const state = useListState(listStateProps as any)
   // Get props for the listbox element
   const ref = useRef()
-  const { listBoxProps, labelProps } = useListBox(props, state, ref)
+  const { listBoxProps } = useListBox(props, state, ref)
 
   return (
     <ListBoxCard
@@ -63,13 +76,17 @@ function ListBox({ children, onSelectionChange, ...props }: any) {
       {...listBoxProps}
       {...props}
     >
-      {[...state.collection].map(item => (
-        <Option
-          key={item.key}
-          item={item}
-          state={state}
-        />
-      ))}
+      {[...state.collection].map(item => {
+        console.log('item.keyz', item.key)
+
+        return (
+          <Option
+            key={item.key}
+            item={item}
+            state={state}
+          />
+        )
+      })}
     </ListBoxCard>
   )
 }
@@ -82,7 +99,7 @@ function Option({ item, state }: any) {
   }
     = useOption({ key: item.key }, state, ref)
 
-  console.log('isSelected', isSelected)
+  console.log('isSelected', isSelected, item.key)
   // Determine whether we should show a keyboard
   // focus ring for accessibility
   const { isFocusVisible, focusProps } = useFocusRing()
