@@ -47,7 +47,7 @@ function TokenRef({
       backgroundColor={background}
       overflow="hidden"
       cursor="pointer"
-      hoverIndicator={hover}
+      _hover={{ backgroundColor: hover }}
       onClick={onClose}
       {...props}
     >
