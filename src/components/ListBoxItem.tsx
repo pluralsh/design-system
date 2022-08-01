@@ -102,31 +102,27 @@ const ListBoxItem = forwardRef<HTMLDivElement, ListBoxItemProps>(({
   heading,
   ...props
 },
-ref) => {
-  console.log('')
-
-  return (
-    <ListBoxItemInner
-      ref={ref}
-      isFocusVisible={isFocusVisible}
-      selected={selected}
-      {...props}
-    >
-      {leftContent && <div className="left-content">{leftContent}</div>}
-      <div className="center-content">
-        {heading && <div className="heading">{heading}</div>}
-        {subHeading && <div className="sub-heading">{subHeading}</div>}
-      </div>
-      {rightContent && <div className="right-content">{rightContent}</div>}
-      {selected && (
-        <StatusOkIcon
-          className="selected-indicator"
-          size={16}
-        />
-      )}
-    </ListBoxItemInner>
-  )
-})
+ref) => (
+  <ListBoxItemInner
+    ref={ref}
+    isFocusVisible={isFocusVisible}
+    selected={selected}
+    {...props}
+  >
+    {leftContent && <div className="left-content">{leftContent}</div>}
+    <div className="center-content">
+      {heading && <div className="heading">{heading}</div>}
+      {subHeading && <div className="sub-heading">{subHeading}</div>}
+    </div>
+    {rightContent && <div className="right-content">{rightContent}</div>}
+    {selected && (
+      <StatusOkIcon
+        className="selected-indicator"
+        size={16}
+      />
+    )}
+  </ListBoxItemInner>
+))
 
 const ChipListInner = styled.div(({ theme }) => ({}))
 const ChipList = forwardRef<HTMLDivElement, any>(() => {

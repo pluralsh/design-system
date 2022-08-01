@@ -132,8 +132,11 @@ function Template() {
         </ListBox>
       </Div>
       <Div
+        display="flex"
+        flexDirection="column"
         maxWidth={512}
-        maxHeight={400}
+        maxHeight={200}
+        overflow="hidden"
       >
         <ListBox
           selectedKey={selectedKey}

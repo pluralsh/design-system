@@ -1,6 +1,7 @@
 import {
   Children,
   ReactElement,
+  ReactNode,
   cloneElement,
   useMemo,
   useRef,
@@ -13,41 +14,61 @@ import { mergeProps } from '@react-aria/utils'
 import { AriaListBoxProps } from '@react-types/listbox'
 import { mergeRefs } from 'react-merge-refs'
 
-import styled from 'styled-components'
+import styled, { CSSProperties } from 'styled-components'
 
 import { Card } from '../index'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 
 type ListBoxProps = {
-  onSelectionChange: (key: string) => unknown
   selectedKey: string
-  children: ReactElement<ListBoxItemBaseProps> | ReactElement<ListBoxItemBaseProps>[]
+  onSelectionChange: (key: string) => unknown
+  disallowEmptySelection: boolean
+  children:
+    | ReactElement<ListBoxItemBaseProps>
+    | ReactElement<ListBoxItemBaseProps>[]
+  topContent?: ReactNode
+  bottomContent?: ReactNode
 }
 
 const ListBoxCard = styled(Card)`
-  padding-top: var(--space-xxxsmall);
-  padding-bottom: var(--space-xxxsmall);
-  overflow-y: auto;
-  overflow-x: visible;
+  ${({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    flexShrink: 1,
+    overflowX: 'visible',
+    overflowY: 'hidden',
+  })}
 `
+
+const ScrollContainer = styled.div<{ hue?: 'default' | 'lighter' }>(({ theme, hue = 'default' }) => ({
+  overflowX: 'hidden',
+  overflowY: 'auto',
+  flexShrink: 1,
+  flexGrow: 1,
+  paddingTop: theme.spacing.xxxsmall,
+  paddingBottom: theme.spacing.xxxsmall,
+
+    // ...props,
+}))
 
 function ListBox({
   children,
   selectedKey,
   onSelectionChange,
+  disallowEmptySelection = true,
+  topContent,
+  bottomContent,
   ...props
 }: ListBoxProps) {
   // Create state based on the incoming props
   const selected = useMemo(() => new Set(selectedKey ? [`.$${selectedKey}`] : null),
     [selectedKey])
 
-  console.log('selected keyz', selectedKey, selected)
-
-  console.log('selected', selected)
   const listStateProps: AriaListBoxProps<string> = {
     // filter: () => true,
     // items:
+    disallowEmptySelection,
     selectionMode: 'single',
     selectedKeys: selected,
     onSelectionChange: selection => {
@@ -71,22 +92,21 @@ function ListBox({
   const { listBoxProps } = useListBox(props, state, ref)
 
   return (
-    <ListBoxCard
-      ref={ref}
-      {...listBoxProps}
-      {...props}
-    >
-      {[...state.collection].map(item => {
-        console.log('item.keyz', item.key)
-
-        return (
+    <ListBoxCard {...props}>
+      {topContent && <div className="top-content">{topContent}</div>}
+      <ScrollContainer
+        ref={ref}
+        {...listBoxProps}
+      >
+        {[...state.collection].map(item => (
           <Option
             key={item.key}
             item={item}
             state={state}
           />
-        )
-      })}
+        ))}
+      </ScrollContainer>
+      {bottomContent && <div>{bottomContent}</div>}
     </ListBoxCard>
   )
 }
@@ -99,7 +119,6 @@ function Option({ item, state }: any) {
   }
     = useOption({ key: item.key }, state, ref)
 
-  console.log('isSelected', isSelected, item.key)
   // Determine whether we should show a keyboard
   // focus ring for accessibility
   const { isFocusVisible, focusProps } = useFocusRing()
@@ -107,11 +126,8 @@ function Option({ item, state }: any) {
     selected: isSelected,
     disabled: isDisabled,
     isFocusVisible,
-    onClick: () => console.log('clicked'),
     ref: mergeRefs([ref, item.rendered.ref]),
   })
-
-  console.log('mergedProps', mergedProps)
 
   return cloneElement(item.rendered, mergedProps)
 }
