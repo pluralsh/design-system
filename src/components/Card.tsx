@@ -9,6 +9,7 @@ type CardProps = {
   cornerSize?: CardSize
   clickable?: boolean
   selected?: boolean
+  form?: boolean
 } & DivProps
 
 const hueToBGColor: { [key in CardHue]: string } = {
@@ -49,13 +50,15 @@ const cornerSizeToBorderRadius: {
 }
 
 const Card = forwardRef<HTMLDivElement, CardProps>(({
-  cornerSize: size = 'large', hue = 'default', selected = false, clickable = false, ...props
+  cornerSize: size = 'large', hue = 'default', selected = false, clickable = false, form = false, ...props
 }, ref) => (
   <Div
     ref={ref}
     border={`1px solid ${hueToBorderColor[hue]}`}
     borderRadius={cornerSizeToBorderRadius[size]}
     backgroundColor={selected ? hueToSelectedBGColor[hue] : hueToBGColor[hue]}
+    paddingVertical={form ? 'xlarge' : null}
+    maxWidth={form ? '608px' : null}
     {...(clickable && {
       cursor: 'pointer',
     })}

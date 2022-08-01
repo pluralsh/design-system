@@ -12,20 +12,24 @@ function Template({
   selected,
   width,
   height,
+  ...args
 }: { width: number; height: number } & CardProps) {
   return (
     <Flex
       flexWrap="wrap"
       gap="xxlarge"
+      direction="column"
     >
       <Flex
         flexWrap="wrap"
         gap="xxlarge"
+        grow={1}
       >
         <Card
           clickable={clickable}
           selected={selected}
           width={width}
+          {...args}
         >
           <Flex
             caption
@@ -43,6 +47,7 @@ function Template({
           clickable={clickable}
           selected={selected}
           width={width}
+          {...args}
         >
           <Flex
             caption
@@ -60,6 +65,7 @@ function Template({
           clickable={clickable}
           selected={selected}
           width={width}
+          {...args}
         >
           <Flex
             caption
@@ -72,16 +78,18 @@ function Template({
             hue="lightest"
           </Flex>
         </Card>
-      </Flex>{' '}
+      </Flex>
       <Flex
         flexWrap="wrap"
         gap="xxlarge"
+        grow={1}
       >
         <Card
           cornerSize="medium"
           clickable={clickable}
           selected={selected}
           width={width}
+          {...args}
         >
           <Flex
             caption
@@ -100,6 +108,7 @@ function Template({
           clickable={clickable}
           selected={selected}
           width={width}
+          {...args}
         >
           <Flex
             caption
@@ -118,6 +127,7 @@ function Template({
           clickable={clickable}
           selected={selected}
           width={width}
+          {...args}
         >
           <Flex
             caption
@@ -149,4 +159,11 @@ Clickable.args = {
   ...{
     clickable: true,
   },
+}
+
+export const Form = Template.bind({})
+Form.args = {
+  width: '100%',
+  height: '100px',
+  form: true,
 }
