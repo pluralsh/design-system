@@ -12,6 +12,9 @@ jobs:
           diff-search: true
           file-url: https://unpkg.com/pluralsh-design-system@latest/package.json
           static-checking: localIsNew
+      - name: Log when unchanged
+        if: steps.check.outputs.changed == 'false'
+        run: 'echo "Update version in package.json"'
   build:
     name: Build
     runs-on: ubuntu-latest
