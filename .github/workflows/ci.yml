@@ -16,7 +16,7 @@ jobs:
       - if: ${{ steps.check.outputs.published == 'true' }}
         run: |
           echo '${{ steps.check.outputs.version }} is already published on npm'
-          echo 'Update package version to version bigger than ${{ steps.npm.output }}'
+          echo 'Update package version to version bigger than ${{ steps.npm.outputs.stdout }}'
           exit 1
   build:
     name: Build
