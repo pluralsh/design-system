@@ -1,23 +1,28 @@
-import { HTMLAttributes, ReactNode, forwardRef } from 'react'
+import {
+  HTMLAttributes, ReactElement, ReactNode, forwardRef,
+} from 'react'
 import { ItemProps } from '@react-types/shared'
-import styled, { CSSObject } from 'styled-components'
+import styled from 'styled-components'
 
+import Tooltip from './Tooltip'
 import StatusOkIcon from './icons/StatusOkIcon'
+import Chip from './Chip'
 
 type ListBoxItemBaseProps = {
   isFocusVisible?: boolean
   selected?: boolean
   disabled?: boolean
-  label?: string
-  heading?: ReactNode
+  label?: ReactNode
+  description?: ReactNode
   key?: string
+  labelProps?: HTMLAttributes<HTMLElement>
+  descriptionProps?: HTMLAttributes<HTMLElement>
 } & HTMLAttributes<HTMLDivElement> &
   Omit<ItemProps<void>, 'children'>
 
 type ListBoxItemProps = {
   leftContent?: ReactNode
   rightContent?: ReactNode
-  subHeading?: ReactNode
 } & ListBoxItemBaseProps
 
 const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
@@ -33,13 +38,11 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
   padding: `${theme.spacing.xsmall}px ${theme.spacing.medium}px`,
   backgroundColor: selected ? 'var(--color-fill-two-selected)' : 'none',
   cursor: 'pointer',
-  zIndex: 0,
   '&:hover': {
     backgroundColor: !disabled ? 'var(--color-fill-two-hover)' : 'none',
   },
   '&:focus, &:focus-visible': {
     outline: 'none',
-    zIndex: 100,
   },
   '&:last-child': {
     borderBottom: 'none',
@@ -67,18 +70,21 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
   '.center-content': {
     flexGrow: 1,
   },
-  '.heading': {
+  '.label': {
     ...theme.partials.text.body2,
     color: disabled
       ? 'var(--color-text-primary-disabled)'
       : 'var(--color-text)',
   },
-  '.sub-heading': {
+  '.description': {
     ...theme.partials.text.caption,
     color: theme.colors['text-xlight'],
   },
   '.selected-indicator': {
     position: 'relative',
+    '& svg': {
+      zIndex: 0,
+    },
     '&::before': {
       content: '""',
       position: 'absolute',
@@ -88,7 +94,6 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
       bottom: '2px',
       backgroundColor: theme.colors.text,
       borderRadius: '50%',
-      zIndex: -1,
     },
   },
 }))
@@ -96,10 +101,12 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
 const ListBoxItem = forwardRef<HTMLDivElement, ListBoxItemProps>(({
   isFocusVisible = false,
   selected,
-  subHeading,
+  label,
+  labelProps = {},
+  description,
+  descriptionProps = {},
   leftContent,
   rightContent,
-  heading,
   ...props
 },
 ref) => (
@@ -111,8 +118,22 @@ ref) => (
   >
     {leftContent && <div className="left-content">{leftContent}</div>}
     <div className="center-content">
-      {heading && <div className="heading">{heading}</div>}
-      {subHeading && <div className="sub-heading">{subHeading}</div>}
+      {label && (
+        <div
+          className="label"
+          {...labelProps}
+        >
+          {label}
+        </div>
+      )}
+      {description && (
+        <div
+          className="description"
+          {...descriptionProps}
+        >
+          {description}
+        </div>
+      )}
     </div>
     {rightContent && <div className="right-content">{rightContent}</div>}
     {selected && (
@@ -124,11 +145,34 @@ ref) => (
   </ListBoxItemInner>
 ))
 
-const ChipListInner = styled.div(({ theme }) => ({}))
-const ChipList = forwardRef<HTMLDivElement, any>(() => {
+const ChipListInner = styled.div(({ theme }) => ({
+  display: 'flex',
+  flexDiretion: 'row',
+  gap: theme.spacing.xxsmall,
+  '.tooltip': {
+    ...theme.partials.text.caption,
+  },
+}))
+const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips }) => {
   console.log('stuff')
+  const firstChips = chips.slice(0, 3)
+  const restChips = chips.slice(3)
 
-  return <ChipListInner />
+  console.log('restChips', restChips)
+  const extra = restChips.length > 0 && (
+    <Tooltip
+      placement="top"
+      label={<>{restChips.map(n => <div className="tooltip">{n?.props?.children}<br /></div>)}</>}
+    >
+      <Chip
+        size="small"
+        hue="lighter"
+      >{`+${restChips.length}`}
+      </Chip>
+    </Tooltip>
+  )
+
+  return <ChipListInner>{[...firstChips, extra]}</ChipListInner>
 })
 
 export { ListBoxItem, ListBoxItemBaseProps, ChipList as ListBoxItemChipList }

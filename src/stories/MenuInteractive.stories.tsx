@@ -2,7 +2,12 @@ import { Div, Flex } from 'honorable'
 import { useState } from 'react'
 
 import {
-  IconFrame, ListBox, ListBoxItem, PersonIcon,
+  Chip,
+  IconFrame,
+  ListBox,
+  ListBoxItem,
+  ListBoxItemChipList,
+  PersonIcon,
 } from '../index'
 
 export default {
@@ -10,99 +15,117 @@ export default {
   component: ListBox,
 }
 
+const portrait = (
+  <IconFrame
+    spacing="none"
+    size="xsmall"
+    url="photo.png"
+  />
+)
+const smallIcon = <PersonIcon size={16} />
+
+const chipProps = {
+  size: 'small',
+  hue: 'lighter',
+}
+const chips = (
+  <ListBoxItemChipList
+    chips={[
+      <Chip
+        severity="success"
+        {...chipProps}
+      >
+        Installed
+      </Chip>,
+      <Chip
+        severity="neutral"
+        {...chipProps}
+      >
+        Warm
+      </Chip>,
+      <Chip
+        severity="neutral"
+        {...chipProps}
+      >
+        Latest
+      </Chip>,
+      <Chip
+        severity="neutral"
+        {...chipProps}
+      >
+        Additional
+      </Chip>,
+      <Chip
+        severity="neutral"
+        {...chipProps}
+      >
+        Extra
+      </Chip>,
+      <Chip
+        severity="neutral"
+        {...chipProps}
+      >
+        More
+      </Chip>,
+    ]}
+  />
+)
+
 const items = [
   {
     key: 'ratatouille',
     label: 'Ratatouille',
-    heading: 'Ratatouille',
-    subHeading: '',
-    rightContent: '',
-    leftContent: <PersonIcon size={16} />,
+    description: 'With ham and cheese',
   },
   {
     key: 'pizza',
     label: 'Pizza',
-    heading: 'Pizza',
-    subHeading: 'With ham and cheese',
-    rightContent: '',
-    leftContent: '',
+    description: 'With ham and cheese',
   },
   {
     key: 'sushi',
     label: 'Sushi',
-    heading: 'Sushi',
-    subHeading: 'With ham and cheese',
-    rightContent: '',
-    leftContent: <IconFrame
-      spacing="none"
-      size="xsmall"
-      url="photo.png"
-    />,
+    description: 'With ham and cheese',
   },
   {
     key: 'couscous',
     label: 'Couscous',
-    heading: 'Couscous',
-    subHeading: 'With ham and cheese',
-    rightContent: '',
-    leftContent: '',
+    description: 'With ham and cheese',
   },
   {
     key: 'dim-sum',
     label: 'Dim Sum',
-    heading: 'Dim Sum',
-    subHeading: 'With ham and cheese',
-    rightContent: '',
-    leftContent: '',
+    description: 'With ham and cheese',
   },
   {
     key: 'ratatouille2',
     label: 'Ratatouille',
-    heading: 'Ratatouille',
-    subHeading: '',
-    rightContent: '',
-    leftContent: <PersonIcon size={16} />,
+    description: 'With ham and cheese',
   },
   {
     key: 'pizza2',
     label: 'Pizza',
-    heading: 'Pizza',
-    subHeading: 'With ham and cheese',
-    rightContent: '',
-    leftContent: '',
+    description: 'With ham and cheese',
   },
   {
     key: 'sushi2',
     label: 'Sushi',
-    heading: 'Sushi',
-    subHeading: 'With ham and cheese',
-    rightContent: '',
-    leftContent: <IconFrame
-      spacing="none"
-      size="xsmall"
-      url="photo.png"
-    />,
+    description: 'With ham and cheese',
   },
   {
     key: 'couscous2',
     label: 'Couscous',
-    heading: 'Couscous',
-    subHeading: 'With ham and cheese',
-    rightContent: '',
-    leftContent: '',
+    description: 'With ham and cheese',
   },
   {
     key: 'dim-sum2',
     label: 'Dim Sum',
-    heading: 'Dim Sum',
-    subHeading: 'With ham and cheese',
-    rightContent: '',
-    leftContent: '',
+    description: 'With ham and cheese',
   },
 ]
 
 function Template() {
-  const [selectedKey, setSelectedKey] = useState<string>('sushi')
+  const [selectedKey, setSelectedKey] = useState<string>()
 
   return (
     <Flex
@@ -117,16 +140,11 @@ function Template() {
             setSelectedKey(key)
           }}
         >
-          {items.slice(0, 4).map(({
-            key, label, heading, subHeading, rightContent, leftContent,
-          }) => (
+          {items.slice(0, 4).map(({ key, label }) => (
             <ListBoxItem
               key={key}
               label={label}
-              heading={heading}
-              subHeading={subHeading}
-              rightContent={rightContent}
-              leftContent={leftContent}
+              leftContent={smallIcon}
             />
           ))}
         </ListBox>
@@ -144,23 +162,20 @@ function Template() {
             console.log('keyz changed 2', key)
             setSelectedKey(key)
           }}
+          bottomContent={<div>Bottom content</div>}
         >
-          {items.map(({
-            key, label, heading, subHeading, rightContent, leftContent,
-          }) => (
+          {items.map(({ key, label, description }) => (
             <ListBoxItem
               key={key}
               label={label}
-              heading={heading}
-              subHeading={subHeading}
-              rightContent={rightContent}
-              leftContent={leftContent}
+              description={description}
+              rightContent={chips}
+              leftContent={portrait}
             />
           ))}
         </ListBox>
       </Div>
     </Flex>
-
   )
 }
 

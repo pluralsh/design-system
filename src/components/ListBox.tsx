@@ -14,7 +14,7 @@ import { mergeProps } from '@react-aria/utils'
 import { AriaListBoxProps } from '@react-types/listbox'
 import { mergeRefs } from 'react-merge-refs'
 
-import styled, { CSSProperties } from 'styled-components'
+import styled, { CSSObject, useTheme } from 'styled-components'
 
 import { Card } from '../index'
 
@@ -23,7 +23,7 @@ import { ListBoxItemBaseProps } from './ListBoxItem'
 type ListBoxProps = {
   selectedKey: string
   onSelectionChange: (key: string) => unknown
-  disallowEmptySelection: boolean
+  disallowEmptySelection?: boolean
   children:
     | ReactElement<ListBoxItemBaseProps>
     | ReactElement<ListBoxItemBaseProps>[]
@@ -31,26 +31,49 @@ type ListBoxProps = {
   bottomContent?: ReactNode
 }
 
-const ListBoxCard = styled(Card)`
-  ${({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    flexShrink: 1,
-    overflowX: 'visible',
-    overflowY: 'hidden',
-  })}
-`
-
-const ScrollContainer = styled.div<{ hue?: 'default' | 'lighter' }>(({ theme, hue = 'default' }) => ({
-  overflowX: 'hidden',
-  overflowY: 'auto',
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ListBoxCard = styled(Card).attrs(() => ({ cornerSize: 'medium' }))(_p => ({
+  display: 'flex',
+  flexDirection: 'column',
   flexShrink: 1,
-  flexGrow: 1,
-  paddingTop: theme.spacing.xxxsmall,
-  paddingBottom: theme.spacing.xxxsmall,
-
-    // ...props,
+  overflowX: 'visible',
+  overflowY: 'hidden',
 }))
+
+type ScrollContainerProps = {
+  hue?: 'default' | 'lighter'
+  extendStyle?: CSSObject
+}
+const ScrollContainer = styled.div<ScrollContainerProps>(({ theme, hue = 'default', extendStyle }) => {
+  const trackColor
+      = hue === 'lighter' ? theme.colors['fill-two'] : theme.colors['fill-two']
+  const barColor
+      = hue === 'lighter'
+        ? theme.colors['text-xlight']
+        : theme.colors['fill-three']
+  const barWidth = 6
+  const barRadius = barWidth / 2
+
+  return {
+    overflow: 'auto',
+    flexShrink: 1,
+    flexGrow: 1,
+    scrollbarWidth: 'thin',
+    '&::-webkit-scrollbar-track': {
+      backgroundColor: trackColor,
+    },
+    '&::-webkit-scrollbar': {
+      width: `${barWidth}px`,
+      borderRadius: `${barRadius}px 0 0 ${barRadius}px`,
+      backgroundColor: trackColor,
+    },
+    '&::-webkit-scrollbar-thumb': {
+      borderRadius: `${barRadius}px`,
+      backgroundColor: barColor,
+    },
+    ...extendStyle,
+  }
+})
 
 function ListBox({
   children,
@@ -61,13 +84,12 @@ function ListBox({
   bottomContent,
   ...props
 }: ListBoxProps) {
-  // Create state based on the incoming props
+  const theme = useTheme()
   const selected = useMemo(() => new Set(selectedKey ? [`.$${selectedKey}`] : null),
     [selectedKey])
 
   const listStateProps: AriaListBoxProps<string> = {
     // filter: () => true,
-    // items:
     disallowEmptySelection,
     selectionMode: 'single',
     selectedKeys: selected,
@@ -77,12 +99,7 @@ function ListBox({
       onSelectionChange(typeof newKey === 'string' ? newKey.substring(2) : '')
     },
     children: Children.map(children, (child, index) => (
-      <Item
-        key={child.key || index}
-        textValue={child?.props?.label}
-      >
-        {child}
-      </Item>
+      <Item key={child.key || index}>{child}</Item>
     )),
   }
 
@@ -96,6 +113,11 @@ function ListBox({
       {topContent && <div className="top-content">{topContent}</div>}
       <ScrollContainer
         ref={ref}
+        hue="lighter"
+        extendStyle={{
+          paddingTop: topContent ? 0 : theme.spacing.xxxsmall,
+          paddingBottom: bottomContent ? 0 : theme.spacing.xxxsmall,
+        }}
         {...listBoxProps}
       >
         {[...state.collection].map(item => (
@@ -125,6 +147,8 @@ function Option({ item, state }: any) {
   const mergedProps = mergeProps(optionProps, focusProps, {
     selected: isSelected,
     disabled: isDisabled,
+    labelProps,
+    descriptionProps,
     isFocusVisible,
     ref: mergeRefs([ref, item.rendered.ref]),
   })
