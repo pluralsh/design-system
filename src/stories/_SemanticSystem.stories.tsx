@@ -1,28 +1,27 @@
+import { styledTheme } from 'src'
 import styled, { useTheme } from 'styled-components'
 
 import Divider from '../components/Divider'
-
-import { mixins } from '../mixins'
 
 export default {
   title: 'Semantic System',
   component: null,
 }
 
-const ItemLabel = styled.div`
-  ${mixins.text.caption}
-  margin-top: var(--space-xxsmall);
-`
+const ItemLabel = styled.div(({ theme }) => ({
+  ...theme.partials.text.caption,
+  marginTop: theme.spacing.xxsmall,
+}))
 
-const BlockWrapper = styled.div`
-  margin-bottom: var(--space-large);
-`
+const BlockWrapper = styled.div(({ theme }) => ({
+  marginBottom: theme.spacing.large,
+}))
 
-const FilledBox = styled.div`
-  width: 64px;
-  height: 64px;
-  background-color: var(--color-fill-one);
-`
+const FilledBox = styled.div(({ theme }) => ({
+  width: '64px',
+  height: '64px',
+  backgroundColor: theme.colors['fill-one'],
+}))
 
 function Template({ exampleText }: { exampleText?: string }) {
   return (
@@ -61,22 +60,24 @@ function Template({ exampleText }: { exampleText?: string }) {
   )
 }
 
-const ColorBox = styled(FilledBox)<{ color: string }>`
-  box-shadow: var(--box-shadow-moderate);
-  background-color: var(--color-${({ color }) => color});
-`
+const ColorBox = styled(FilledBox)<{ color: string }>(({ theme, color }) => ({
+  boxShadow: theme.boxShadows.moderate,
+  backgroundColor: theme.colors[color],
+}))
 
-const ColorBoxWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 64px;
-`
-const FlexWrap = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-large);
-`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ColorBoxWrap = styled.div(_p => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '64px',
+}))
+
+const FlexWrap = styled.div(({ theme }) => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: theme.spacing.large,
+}))
 
 function Colors() {
   const theme = useTheme()
@@ -105,10 +106,10 @@ const ShadowedBox = styled(FilledBox)<{ shadow: string }>`
   box-shadow: var(--box-shadow-${({ shadow }) => shadow});
 `
 
-const ShadowsWrap = styled(FlexWrap)`
-  background-color: var(--color-fill-three);
-  padding: var(--space-large);
-`
+const ShadowsWrap = styled(FlexWrap)(({ theme }) => ({
+  backgroundColor: theme.colors['fill-three'],
+  padding: theme.spacing.large,
+}))
 
 function Shadows() {
   return (
@@ -123,9 +124,9 @@ function Shadows() {
   )
 }
 
-const RadiusedBox = styled(FilledBox)<{ radius: 'medium' | 'large' }>`
-  border-radius: var(--radius-${({ radius }) => radius});
-`
+const RadiusedBox = styled(FilledBox)<{ radius: 'medium' | 'large' }>(({ theme, radius }) => ({
+  borderRadius: theme.borderRadiuses[radius],
+}))
 
 function BoxRadiuses() {
   const radii: ('medium' | 'large')[] = ['medium', 'large']
@@ -163,21 +164,14 @@ function BoxBorders() {
   )
 }
 
-const SpacingBox = styled.div<{ space: string }>`
-  border-radius: 0;
-  background-color: var(--color-action-primary);
-  margin: 0;
-  background-color: var(--color-action-primary);
-  padding-right: ${({ space }) => `var(--space-${space})`};
-  padding-top: ${({ space }) => `var(--space-${space})`};
-  width: min-content;
-  ${p => {
-    console.log(p.theme.colors)
-    console.log(p.theme.boxShadows)
-
-    return ''
-  }}
-`
+const SpacingBox = styled.div<{ space: string }>(({ theme, space }) => ({
+  borderRadius: 0,
+  backgroundColor: theme.colors['action-primary'],
+  margin: 0,
+  paddingRight: theme.spacing[space],
+  paddingTop: theme.spacing[space],
+  width: 'min-content',
+}))
 
 function Spacing() {
   return (
@@ -203,10 +197,12 @@ function Spacing() {
   )
 }
 
-const SemanticText = styled.div<{ typeStyle?: keyof typeof mixins.text }>`
-  ${({ typeStyle }) => [mixins.text[typeStyle]]}
-  margin-bottom: var(--space-large);
-`
+const SemanticText = styled.div<{
+  typeStyle?: keyof typeof styledTheme.partials.text
+}>(({ theme, typeStyle }) => ({
+  ...theme.partials.text[typeStyle],
+  marginBottom: theme.spacing.large,
+}))
 
 function Typography({
   exampleText: txt = 'Lorem ipsum dolor sit amet',
