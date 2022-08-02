@@ -6,7 +6,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: kriasoft/check-version@v1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.15.0
+      - uses: flood-io/is-published-on-npm@v1
+        id: published
+      - if: ${{ steps.published.outputs.published == 'true' }}
+        run: |
+          echo '${{ steps.published.outputs.version }} is already published on npm, update it in package.json'
+          exit 1
   build:
     name: Build
     runs-on: ubuntu-latest
