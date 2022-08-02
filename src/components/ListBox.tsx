@@ -20,15 +20,19 @@ import { Card } from '../index'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 
-type ListBoxProps = {
+type ListBoxUnmanagedProps = {
+  state: any
+  topContent?: ReactNode
+  bottomContent?: ReactNode
+}
+
+type ListBoxProps = ListBoxUnmanagedProps & {
   selectedKey: string
   onSelectionChange: (key: string) => unknown
   disallowEmptySelection?: boolean
   children:
     | ReactElement<ListBoxItemBaseProps>
     | ReactElement<ListBoxItemBaseProps>[]
-  topContent?: ReactNode
-  bottomContent?: ReactNode
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -80,15 +84,12 @@ const ScrollContainer = styled.div<ScrollContainerProps>(({ theme, hue = 'defaul
 })
 
 function ListBox({
-  children,
+  disallowEmptySelection,
   selectedKey,
+  children,
   onSelectionChange,
-  disallowEmptySelection = true,
-  topContent,
-  bottomContent,
   ...props
 }: ListBoxProps) {
-  const theme = useTheme()
   const selected = useMemo(() => new Set(selectedKey ? [selectedKey] : null),
     [selectedKey])
   const wrappedChildren = useMemo(() => {
@@ -100,7 +101,6 @@ function ListBox({
 
     return wrappedChildren
   }, [children])
-
   const listStateProps: AriaListBoxProps<string> = {
     // filter: () => true,
     disallowEmptySelection,
@@ -115,6 +115,23 @@ function ListBox({
   }
 
   const state = useListState(listStateProps as any)
+
+  return (
+    <ListBoxUnmanaged
+      state={state}
+      {...props}
+    />
+  )
+}
+
+function ListBoxUnmanaged({
+  state,
+  topContent,
+  bottomContent,
+  ...props
+}: ListBoxUnmanagedProps) {
+  const theme = useTheme()
+
   // Get props for the listbox element
   const ref = useRef()
   const { listBoxProps } = useListBox(props, state, ref)
