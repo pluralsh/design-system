@@ -58,7 +58,8 @@ const Card = forwardRef<HTMLDivElement, CardProps>(({
     borderRadius={cornerSizeToBorderRadius[size]}
     backgroundColor={selected ? hueToSelectedBGColor[hue] : hueToBGColor[hue]}
     paddingVertical={form ? 'xlarge' : null}
-    maxWidth={form ? '608px' : null}
+    paddingHorizontal={form ? '112px' : null}
+    maxWidth={form ? '832px' : null}
     {...(clickable && {
       cursor: 'pointer',
     })}
