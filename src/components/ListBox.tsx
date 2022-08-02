@@ -64,12 +64,16 @@ const ScrollContainer = styled.div<ScrollContainerProps>(({ theme, hue = 'defaul
     },
     '&::-webkit-scrollbar': {
       width: `${barWidth}px`,
-      borderRadius: `${barRadius}px 0 0 ${barRadius}px`,
+      height: `${barWidth}px`,
+      borderRadius: `${barRadius}px`,
       backgroundColor: trackColor,
     },
     '&::-webkit-scrollbar-thumb': {
       borderRadius: `${barRadius}px`,
       backgroundColor: barColor,
+    },
+    '&::-webkit-scrollbar-corner': {
+      backgroundColor: 'transparent',
     },
     ...extendStyle,
   }
