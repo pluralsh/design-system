@@ -5,13 +5,14 @@ import {
   Chip,
   IconFrame,
   ListBox,
+  ListBoxFooterAdd,
   ListBoxItem,
   ListBoxItemChipList,
   PersonIcon,
 } from '../index'
 
 export default {
-  title: 'Menu Interactive',
+  title: 'List Box',
   component: ListBox,
 }
 
@@ -162,7 +163,7 @@ function Template() {
             console.log('keyz changed 2', key)
             setSelectedKey(key)
           }}
-          bottomContent={<div>Bottom content</div>}
+          bottomContent={<ListBoxFooterAdd>New tag</ListBoxFooterAdd>}
         >
           {items.map(({ key, label, description }) => (
             <ListBoxItem

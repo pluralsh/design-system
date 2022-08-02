@@ -1,5 +1,6 @@
 import {
   Children,
+  HTMLAttributes,
   ReactElement,
   ReactNode,
   cloneElement,
@@ -24,9 +25,9 @@ type ListBoxUnmanagedProps = {
   state: any
   topContent?: ReactNode
   bottomContent?: ReactNode
-}
+} & HTMLAttributes<HTMLElement>
 
-type ListBoxProps = ListBoxUnmanagedProps & {
+type ListBoxProps = Omit<ListBoxUnmanagedProps, 'state'> & {
   selectedKey: string
   onSelectionChange: (key: string) => unknown
   disallowEmptySelection?: boolean
@@ -42,46 +43,36 @@ const ListBoxCard = styled(Card).attrs(() => ({ cornerSize: 'medium' }))(_p => (
   flexShrink: 1,
   overflowX: 'visible',
   overflowY: 'hidden',
+  '&:focus, &:focus-visible': {
+    outline: '1px solid red',
+  },
 }))
 
 type ScrollContainerProps = {
-  hue?: 'default' | 'lighter'
-  extendStyle?: CSSObject
+  hue?: 'default' | 'lighter',
+  extendStyle?: CSSObject,
 }
-const ScrollContainer = styled.div<ScrollContainerProps>(({ theme, hue = 'default', extendStyle }) => {
-  const trackColor
-      = hue === 'lighter' ? theme.colors['fill-two'] : theme.colors['fill-two']
-  const barColor
-      = hue === 'lighter'
-        ? theme.colors['text-xlight']
-        : theme.colors['fill-three']
-  const barWidth = 6
-  const barRadius = barWidth / 2
+const ScrollContainer = styled.div<ScrollContainerProps>(({ theme, extendStyle }) => ({
+  ...theme.partials.scrollBar({ hue: 'lighter' }),
+  overflow: 'auto',
+  flexShrink: 1,
+  flexGrow: 1,
+  ...extendStyle,
+}))
 
-  return {
-    overflow: 'auto',
-    flexShrink: 1,
-    flexGrow: 1,
-    scrollbarWidth: 'thin',
-    '&::-webkit-scrollbar-track': {
-      backgroundColor: trackColor,
-    },
-    '&::-webkit-scrollbar': {
-      width: `${barWidth}px`,
-      height: `${barWidth}px`,
-      borderRadius: `${barRadius}px`,
-      backgroundColor: trackColor,
-    },
-    '&::-webkit-scrollbar-thumb': {
-      borderRadius: `${barRadius}px`,
-      backgroundColor: barColor,
-    },
-    '&::-webkit-scrollbar-corner': {
-      backgroundColor: 'transparent',
-    },
-    ...extendStyle,
-  }
-})
+function useItemWrappedChildren(children: React.ReactElement<unknown> | React.ReactElement<unknown>[]) {
+  return useMemo(() => {
+    // Children.map() prefixes the key props in an undocumented and possibly
+    // unstable way, so using Children.forEach() to maintain original key values
+    const wrapped: JSX.Element[] = []
+
+    Children.forEach(children, child => {
+      wrapped.push(<Item key={child.key}>{child}</Item>)
+    })
+
+    return wrapped
+  }, [children])
+}
 
 function ListBox({
   disallowEmptySelection,
@@ -92,15 +83,6 @@ function ListBox({
 }: ListBoxProps) {
   const selected = useMemo(() => new Set(selectedKey ? [selectedKey] : null),
     [selectedKey])
-  const wrappedChildren = useMemo(() => {
-    const wrappedChildren: JSX.Element[] = []
-
-    Children.forEach(children, child => {
-      wrappedChildren.push(<Item key={child.key}>{child}</Item>)
-    })
-
-    return wrappedChildren
-  }, [children])
   const listStateProps: AriaListBoxProps<string> = {
     // filter: () => true,
     disallowEmptySelection,
@@ -111,7 +93,7 @@ function ListBox({
 
       onSelectionChange(typeof newKey === 'string' ? newKey : '')
     },
-    children: wrappedChildren,
+    children: useItemWrappedChildren(children),
   }
 
   const state = useListState(listStateProps as any)
@@ -134,6 +116,8 @@ function ListBoxUnmanaged({
 
   // Get props for the listbox element
   const ref = useRef()
+
+  console.log('ListBoxUnmanaged props', props)
   const { listBoxProps } = useListBox(props, state, ref)
 
   return (
@@ -184,4 +168,10 @@ function Option({ item, state }: any) {
   return cloneElement(item.rendered, mergedProps)
 }
 
-export { ListBox }
+export {
+  ListBox,
+  ListBoxProps,
+  ListBoxUnmanaged,
+  ListBoxUnmanagedProps,
+  useItemWrappedChildren,
+}

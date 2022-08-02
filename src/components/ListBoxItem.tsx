@@ -4,9 +4,12 @@ import {
 import { ItemProps } from '@react-types/shared'
 import styled from 'styled-components'
 
+import theme from 'honorable-theme-default'
+
 import Tooltip from './Tooltip'
 import StatusOkIcon from './icons/StatusOkIcon'
 import Chip from './Chip'
+import PlusIcon from './icons/PlusIcon'
 
 type ListBoxItemBaseProps = {
   isFocusVisible?: boolean
@@ -25,9 +28,7 @@ type ListBoxItemProps = {
   rightContent?: ReactNode
 } & ListBoxItemBaseProps
 
-const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
-  theme, isFocusVisible, disabled, selected,
-}) => ({
+const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({ theme, isFocusVisible, disabled }) => ({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
@@ -36,7 +37,7 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
   borderBottom: 'var(--border-fill-one)',
 
   padding: `${theme.spacing.xsmall}px ${theme.spacing.medium}px`,
-  backgroundColor: selected ? 'var(--color-fill-two-selected)' : 'none',
+  backgroundColor: 'none',
   cursor: 'pointer',
   '&:hover': {
     backgroundColor: !disabled ? 'var(--color-fill-two-hover)' : 'none',
@@ -153,6 +154,7 @@ const ChipListInner = styled.div(({ theme }) => ({
     ...theme.partials.text.caption,
   },
 }))
+
 const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips }) => {
   console.log('stuff')
   const firstChips = chips.slice(0, 3)
@@ -162,12 +164,22 @@ const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips 
   const extra = restChips.length > 0 && (
     <Tooltip
       placement="top"
-      label={<>{restChips.map(n => <div className="tooltip">{n?.props?.children}<br /></div>)}</>}
+      label={(
+        <>
+          {restChips.map(n => (
+            <div className="tooltip">
+              {n?.props?.children}
+              <br />
+            </div>
+          ))}
+        </>
+      )}
     >
       <Chip
         size="small"
         hue="lighter"
-      >{`+${restChips.length}`}
+      >
+        {`+${restChips.length}`}
       </Chip>
     </Tooltip>
   )
@@ -175,4 +187,66 @@ const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips 
   return <ChipListInner>{[...firstChips, extra]}</ChipListInner>
 })
 
-export { ListBoxItem, ListBoxItemBaseProps, ChipList as ListBoxItemChipList }
+type ListBoxFooterProps = {
+  children: ReactNode
+  leftContent?: ReactNode
+  rightContent?: ReactNode
+}
+const ListBoxFooterInner = styled.button(({ theme }) => ({
+  ...theme.partials.reset.button,
+  width: '100%',
+  padding: `${theme.spacing.small}px ${theme.spacing.medium}px`,
+  display: 'flex',
+  '.children': {
+    flexGrow: 1,
+  },
+  '.leftContent': {
+    marginRight: theme.spacing.small,
+  },
+  '.rightContent': {
+    marginLeft: theme.spacing.small,
+  },
+}))
+const ListBoxFooter = forwardRef<HTMLButtonElement, ListBoxFooterProps>(({
+  leftContent, rightContent, children, ...props
+}, ref) => (
+  <ListBoxFooterInner
+    ref={ref}
+    {...props}
+  >
+    {leftContent && <div className="leftContent">{leftContent}</div>}
+    <div className="children">{children}</div>
+    {rightContent && <div className="rightContent">{rightContent}</div>}
+  </ListBoxFooterInner>
+))
+
+const ListBoxFooterAddInner = styled(ListBoxFooter)(({ theme }) => ({
+  color: theme.colors['text-primary-accent'],
+}))
+const ListBoxFooterAdd = forwardRef<HTMLButtonElement, ListBoxFooterProps>(({ leftContent, children, ...props }) => (
+  <ListBoxFooterAddInner
+    leftContent={
+      leftContent || (
+        <PlusIcon
+          size={16}
+          color={theme.colors['text-primary-accent']}
+        >
+          {children || 'Add'}
+        </PlusIcon>
+      )
+    }
+    {...props}
+  >
+    {children}
+  </ListBoxFooterAddInner>
+))
+
+export {
+  ListBoxItem,
+  ListBoxItemBaseProps,
+  ChipList as ListBoxItemChipList,
+  ListBoxFooter,
+  ListBoxFooterProps,
+  ListBoxFooterAdd,
+  ListBoxFooterProps as ListBoxFooterAddProps,
+}

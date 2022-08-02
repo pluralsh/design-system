@@ -405,6 +405,19 @@ export const textPartials = asElementTypes<CSSObject>()({
 textPartials.body1Bold = { ...textPartials.body1, ...textPartials.bodyBold }
 textPartials.body2Bold = { ...textPartials.body2, ...textPartials.bodyBold }
 
+const resetPartials = asElementTypes<CSSObject>()({
+  button: {
+    textAlign: 'inherit',
+    background: 'none',
+    color: 'inherit',
+    border: 'none',
+    padding: 0,
+    font: 'inherit',
+    cursor: 'pointer',
+    outline: 'inherit',
+  },
+})
+
 const baseTheme = {
   name: 'Plural',
   mode: 'dark',
@@ -1115,6 +1128,7 @@ export const styledTheme = {
       text: textPartials,
       focus: focusPartials,
       scrollBar,
+      reset: resetPartials,
     },
   },
 }
