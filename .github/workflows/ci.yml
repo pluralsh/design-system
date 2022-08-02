@@ -11,10 +11,12 @@ jobs:
           node-version: 16.15.0
       - uses: flood-io/is-published-on-npm@v1
         id: check
+      - run: |
+          echo "Local version from package.json is ${{ steps.check.outputs.version }}"
+          echo "Published version from npm registry is $(npm view . version)"
       - if: ${{ steps.check.outputs.published == 'true' }}
         run: |
-          echo "${{ steps.check.outputs.version }} is already published on npm"
-          echo "Update package version to be bigger than $(npm view pluralsh-design-system version)"
+          echo "This version is already published, update local version to be bigger than published one"
           exit 1
   build:
     name: Build
