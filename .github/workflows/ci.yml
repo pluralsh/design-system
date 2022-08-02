@@ -1,6 +1,15 @@
 name: CI
 on: pull_request
 jobs:
+  version:
+    name: Check version
+    runs-on: ubuntu-latest
+    steps:
+      - id: check
+        uses: EndBug/version-check@v1
+        with:
+          file-url: https://unpkg.com/pluralsh-design-system@latest/package.json
+          static-checking: localIsNew
   build:
     name: Build
     runs-on: ubuntu-latest
