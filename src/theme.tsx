@@ -142,7 +142,8 @@ export const semanticColors = {
 }
 
 export const borderWidths = {
-  default: '1',
+  default: 1,
+  focus: 1.5,
 }
 
 export const borderStyles = {
@@ -168,6 +169,21 @@ export const boxShadows = {
   moderate: `0px 3px 6px ${chroma(grey[950]).alpha(0.2)}, 0px 10px 20px ${chroma(grey[950]).alpha(0.3)}`,
   modal: `0px 20px 50px ${chroma(grey[950]).alpha(0.6)}`,
   focused: `0px 0px 0px 1.5px ${semanticColors['border-outline-focused']}`,
+}
+
+const focusPartials = {
+  default: {
+    '&:focus, &:focus-visible': {
+      outline: 'none',
+      boxShadow: boxShadows.focused,
+    },
+  },
+  defaultChild: {
+    ':focus &, :focus-visible &': {
+      outline: 'none',
+      boxShadow: boxShadows.focused,
+    },
+  },
 }
 
 export const spacing = {
@@ -226,7 +242,7 @@ function asElementTypes<T>() {
   }
 }
 
-export const textMixins = asElementTypes<CSSObject>()({
+export const textPartials = asElementTypes<CSSObject>()({
   h1: {
     fontFamily: fontFamilies.semi,
     fontSize: 72,
@@ -351,10 +367,10 @@ export const textMixins = asElementTypes<CSSObject>()({
   body1Bold: {},
   body2Bold: {},
 })
-textMixins.body1Bold = { ...textMixins.body1, ...textMixins.bodyBold }
-textMixins.body2Bold = { ...textMixins.body2, ...textMixins.bodyBold }
+textPartials.body1Bold = { ...textPartials.body1, ...textPartials.bodyBold }
+textPartials.body2Bold = { ...textPartials.body2, ...textPartials.bodyBold }
 
-const honorableTheme = mergeTheme(defaultTheme, {
+const baseTheme = {
   name: 'Plural',
   mode: 'dark',
   breakpoints: {
@@ -372,6 +388,10 @@ const honorableTheme = mergeTheme(defaultTheme, {
     // Semantic colors,
     ...semanticColors,
   },
+}
+
+const honorableTheme = mergeTheme(defaultTheme, {
+  ...baseTheme,
   stylesheet: {
     html: [
       {
@@ -428,27 +448,27 @@ const honorableTheme = mergeTheme(defaultTheme, {
     ({ boxShadow }: any) => typeof boxShadow !== 'undefined' && {
       boxShadow: boxShadows[boxShadow] || boxShadow,
     },
-    ({ h1 }: any) => h1 && textMixins.h1,
-    ({ h2 }: any) => h2 && textMixins.h2,
-    ({ h3 }: any) => h3 && textMixins.h3,
-    ({ h4 }: any) => h4 && textMixins.h4,
-    ({ title1 }: any) => title1 && textMixins.title1,
-    ({ title2 }: any) => title2 && textMixins.title2,
-    ({ subtitle1 }: any) => subtitle1 && textMixins.subtitle1,
-    ({ subtitle2 }: any) => subtitle2 && textMixins.subtitle2,
+    ({ h1 }: any) => h1 && textPartials.h1,
+    ({ h2 }: any) => h2 && textPartials.h2,
+    ({ h3 }: any) => h3 && textPartials.h3,
+    ({ h4 }: any) => h4 && textPartials.h4,
+    ({ title1 }: any) => title1 && textPartials.title1,
+    ({ title2 }: any) => title2 && textPartials.title2,
+    ({ subtitle1 }: any) => subtitle1 && textPartials.subtitle1,
+    ({ subtitle2 }: any) => subtitle2 && textPartials.subtitle2,
     ({ body1, body2, bold }: any) => ({
       ...((body1 || body2)
-        && bold && textMixins.bodyBold),
-      ...(body1 && textMixins.body1),
-      ...(body2 && textMixins.body2),
+        && bold && textPartials.bodyBold),
+      ...(body1 && textPartials.body1),
+      ...(body2 && textPartials.body2),
     }),
-    ({ caption }: any) => caption && textMixins.caption,
-    ({ badgeLabel }: any) => badgeLabel && textMixins.badgeLabel,
-    ({ buttonMedium }: any) => buttonMedium && textMixins.buttonMedium,
-    ({ buttonLarge }: any) => buttonLarge && textMixins.buttonLarge,
-    ({ buttonSmall }: any) => buttonSmall && textMixins.buttonSmall,
-    ({ overline }: any) => overline && textMixins.overline,
-    ({ truncate }: any) => truncate && textMixins.truncate,
+    ({ caption }: any) => caption && textPartials.caption,
+    ({ badgeLabel }: any) => badgeLabel && textPartials.badgeLabel,
+    ({ buttonMedium }: any) => buttonMedium && textPartials.buttonMedium,
+    ({ buttonLarge }: any) => buttonLarge && textPartials.buttonLarge,
+    ({ buttonSmall }: any) => buttonSmall && textPartials.buttonSmall,
+    ({ overline }: any) => overline && textPartials.overline,
+    ({ truncate }: any) => truncate && textPartials.truncate,
     /* Deprecated */
     ({ body0 }: any) => body0 && {
       fontSize: 18,
@@ -1063,8 +1083,9 @@ const honorableTheme = mergeTheme(defaultTheme, {
 })
 
 export default honorableTheme
+
 export const styledTheme = {
-  ...honorableTheme,
+  ...baseTheme,
   ...{
     spacing,
     boxShadows,
@@ -1073,5 +1094,9 @@ export const styledTheme = {
     borders,
     borderStyles,
     borderWidths,
+    partials: {
+      text: textPartials,
+      focus: focusPartials,
+    },
   },
 }
