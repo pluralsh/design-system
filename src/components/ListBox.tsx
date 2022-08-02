@@ -89,8 +89,17 @@ function ListBox({
   ...props
 }: ListBoxProps) {
   const theme = useTheme()
-  const selected = useMemo(() => new Set(selectedKey ? [`.$${selectedKey}`] : null),
+  const selected = useMemo(() => new Set(selectedKey ? [selectedKey] : null),
     [selectedKey])
+  const wrappedChildren = useMemo(() => {
+    const wrappedChildren: JSX.Element[] = []
+
+    Children.forEach(children, child => {
+      wrappedChildren.push(<Item key={child.key}>{child}</Item>)
+    })
+
+    return wrappedChildren
+  }, [children])
 
   const listStateProps: AriaListBoxProps<string> = {
     // filter: () => true,
@@ -100,11 +109,9 @@ function ListBox({
     onSelectionChange: selection => {
       const [newKey] = selection
 
-      onSelectionChange(typeof newKey === 'string' ? newKey.substring(2) : '')
+      onSelectionChange(typeof newKey === 'string' ? newKey : '')
     },
-    children: Children.map(children, (child, index) => (
-      <Item key={child.key || index}>{child}</Item>
-    )),
+    children: wrappedChildren,
   }
 
   const state = useListState(listStateProps as any)
