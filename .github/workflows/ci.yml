@@ -9,6 +9,7 @@ jobs:
       - id: check
         uses: EndBug/version-check@v1
         with:
+          diff-search: true
           file-url: https://unpkg.com/pluralsh-design-system@latest/package.json
           static-checking: localIsNew
   build:
