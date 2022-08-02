@@ -166,4 +166,3 @@ export { default as usePrevious } from './hooks/usePrevious'
 // Theme
 export { default as theme, styledTheme } from './theme'
 export { default as GlobalStyle } from './GlobalStyle'
-export { mixins } from './mixins'
