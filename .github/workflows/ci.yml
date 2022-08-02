@@ -6,15 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - id: check
-        uses: EndBug/version-check@v1
-        with:
-          diff-search: true
-          file-url: https://unpkg.com/pluralsh-design-system@latest/package.json
-          static-checking: localIsNew
-      - name: Log when unchanged
-        if: steps.check.outputs.changed == 'false'
-        run: 'echo "Update version in package.json"'
+      - uses: kriasoft/check-version@v1
   build:
     name: Build
     runs-on: ubuntu-latest
