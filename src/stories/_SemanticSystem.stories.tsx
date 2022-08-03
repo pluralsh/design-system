@@ -102,9 +102,7 @@ function Colors() {
   )
 }
 
-const ShadowedBox = styled(FilledBox)<{ shadow: string }>`
-  box-shadow: var(--box-shadow-${({ shadow }) => shadow});
-`
+const ShadowedBox = styled(FilledBox)<{ shadow: string }>(({ theme, shadow }) => ({ boxShadow: theme.boxShadows[shadow] }))
 
 const ShadowsWrap = styled(FlexWrap)(({ theme }) => ({
   backgroundColor: theme.colors['fill-three'],
@@ -145,9 +143,7 @@ function BoxRadiuses() {
 
 const BorderedBox = styled(RadiusedBox).attrs(() => ({ radius: 'medium' }))<{
   border?: string
-}>`
-  border: var(--border-${({ border }) => border});
-`
+}>(({ theme, border }) => ({ border: theme.borders[border] }))
 
 function BoxBorders() {
   const { borders } = useTheme()
