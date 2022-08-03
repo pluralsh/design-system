@@ -10,39 +10,63 @@ import {
   spacing,
 } from './theme'
 
-const colorsToCSSVars: (colors: unknown, prefix?: string) => (string | null)[]
-  = (colors, prefix = '') => Object.entries(colors)
-    .map(([key, value]) => {
+const colorsToCSSVars: (colors: unknown) => any = colors => {
+  function inner(colors: unknown, prefix = '') {
+    Object.entries(colors).forEach(([key, value]) => {
       if (typeof value === 'string') {
-        return `--color-${prefix}${key}: ${value};`
+        cssVars[`--color-${prefix}${key}`] = value
       }
-      if (typeof value === 'object') {
-        return colorsToCSSVars(value, `${prefix}${key}-`)
+      else if (typeof value === 'object') {
+        inner(value, `${prefix}${key}-`)
       }
-
-      return ''
     })
-    .flat()
+  }
 
-const fontsToCSSVars = Object.entries(fontFamilies).map(([name, value]) => `--font-${name}: ${value};`)
-const shadowsToCSSVars = Object.entries(boxShadows).map(([name, value]) => `--box-shadow-${name}: ${value};`)
-const spacingToCSSVars = Object.entries(spacing).map(([name, value]) => `--space-${name}: ${value}px;`)
-const radiiToCSSVars = Object.entries(borderRadiuses).map(([name, value]) => `--radius-${name}: ${value}px;`)
-const borderStylesCSSVars = Object.entries(borderStyles).map(([name, value]) => `--border-style-${name}: ${value};`)
-const borderWidthsToToCSSVars = Object.entries(borderWidths).map(([name, value]) => `--border-width-${name}: ${value}px;`)
-const bordersToCSSVars = Object.entries(borders).map(([name, value]) => `--border-${name}: ${value};`)
+  const cssVars = {}
 
-const GlobalStyle = createGlobalStyle`
-:root {
-  ${({ theme }) => (theme as any).colors && colorsToCSSVars((theme as any)?.colors)}
-  ${fontsToCSSVars}
-  ${shadowsToCSSVars}
-  ${spacingToCSSVars}
-  ${radiiToCSSVars}
-  ${borderStylesCSSVars}
-  ${borderWidthsToToCSSVars}
-  ${bordersToCSSVars}
+  inner(colors)
+
+  return cssVars
 }
-`
+
+const fontsToCSSVars = Object.fromEntries(Object.entries(fontFamilies).map(([name, value]) => [`--font-${name}`, value]))
+const shadowsToCSSVars = Object.fromEntries(Object.entries(boxShadows).map(([name, value]) => [
+  `--box-shadow-${name}`,
+  value,
+]))
+const spacingToCSSVars = Object.fromEntries(Object.entries(spacing).map(([name, value]) => [
+  `--space-${name}`,
+  `${value}px`,
+]))
+const radiiToCSSVars = Object.fromEntries(Object.entries(borderRadiuses).map(([name, value]) => [
+  `--radius-${name}`,
+  `${value}px`,
+]))
+const borderStylesCSSVars = Object.fromEntries(Object.entries(borderStyles).map(([name, value]) => [
+  `--border-style-${name}`,
+  value,
+]))
+const borderWidthsToToCSSVars = Object.fromEntries(Object.entries(borderWidths).map(([name, value]) => [
+  `--border-width-${name}`,
+  `${value}px`,
+]))
+const bordersToCSSVars = Object.fromEntries(Object.entries(borders).map(([name, value]) => [`--border-${name}`, value]))
+
+const GlobalStyle = createGlobalStyle(({ theme }) => {
+  console.log('theme.colors', theme.colors)
+
+  return {
+    ':root': {
+      ...(theme.colors ? colorsToCSSVars(theme.colors) : {}),
+      ...fontsToCSSVars,
+      ...shadowsToCSSVars,
+      ...spacingToCSSVars,
+      ...radiiToCSSVars,
+      ...borderStylesCSSVars,
+      ...borderWidthsToToCSSVars,
+      ...bordersToCSSVars,
+    },
+  }
+})
 
 export default GlobalStyle
