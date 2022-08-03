@@ -1,10 +1,6 @@
 import {
   Children,
-  HTMLAttributes,
-  PropsWithChildren,
-  ReactNode,
   cloneElement,
-  forwardRef,
   useRef,
   useState,
 } from 'react'
@@ -13,81 +9,12 @@ import { useListState } from '@react-stately/list'
 import { Item } from '@react-stately/collections'
 import { useFocusRing } from '@react-aria/focus'
 import { mergeProps } from '@react-aria/utils'
-import { ItemProps, Node } from '@react-types/shared'
 import { AriaListBoxProps } from '@react-types/listbox'
 import { mergeRefs } from 'react-merge-refs'
 
-import styled, { CSSObject, css } from 'styled-components'
+import styled from 'styled-components'
 
-import { Card, mixins } from '../index'
-
-type ListItemProps = PropsWithChildren<
-  {
-    isFocusVisible?: boolean
-    selected?: boolean
-    disabled?: boolean
-    label?: string
-  } & HTMLAttributes<HTMLDivElement> &
-    ItemProps<void>
->
-
-type ListItemBasicProps = {
-  leftItem?: ReactNode
-  rightItem?: ReactNode
-} & ListItemProps
-
-const ListItemBasicInner = styled.div<Partial<ListItemProps>>(({
-  theme, isFocusVisible, disabled, selected,
-}) => {
-  const focusStyle: CSSObject = isFocusVisible
-    ? {
-      '&:focus::after, &:focus-visible::after': {
-        content: '""',
-        position: 'absolute',
-        top: `${theme.borderWidths.focus}px`,
-        left: `${theme.borderWidths.focus}px`,
-        right: `${theme.borderWidths.focus}px`,
-        bottom: `${theme.borderWidths.focus}px`,
-        boxShadow: theme.boxShadows.focused,
-      },
-    }
-    : {}
-
-  return {
-    ...theme.partials.text.body2,
-    position: 'relative',
-    width: '100%',
-    borderBottom: 'var(--border-fill-one)',
-    color: disabled
-      ? 'var(--color-text-primary-disabled)'
-      : 'var(--color-text)',
-    padding: `${theme.spacing.xsmall}px ${theme.spacing.medium}px`,
-    backgroundColor: selected ? 'var(--color-fill-two-selected)' : 'none',
-    cursor: 'pointer',
-    zIndex: 0,
-    '&:hover': {
-      backgroundColor: !disabled ? 'var(--color-fill-two-hover)' : 'none',
-    },
-    '&:focus, &:focus-visible': {
-      outline: 'none',
-      zIndex: 100,
-    },
-    '&:last-child': {
-      borderBottom: 'none',
-    },
-    ...focusStyle,
-  }
-})
-
-const ListItemBasic = forwardRef<HTMLDivElement, ListItemBasicProps>(({ isFocusVisible = false, children, ...props }, ref) => (
-  <ListItemBasicInner
-    ref={ref}
-    isFocusVisible={isFocusVisible}
-    {...props}
-  >
-    {children}
-  </ListItemBasicInner>
-))
+import { Card } from '../index'
 
 type ListBoxProps = {
   onSelectionChange: (selection: unknown) => unknown
@@ -172,4 +99,4 @@ function Option({ item, state }: any) {
   return cloneElement(item.rendered, mergedProps)
 }
 
-export { ListItemBasic, ListBox }
+export { ListBox }
