@@ -42,6 +42,11 @@ function Template({ exampleText }: { exampleText?: string }) {
       />
       <BoxBorders />
       <Divider
+        text="Scrollbars"
+        marginVertical="xxlarge"
+      />
+      <Scrollbars />
+      <Divider
         text="Border radiuses"
         marginVertical="xxlarge"
       />
@@ -157,6 +162,80 @@ function BoxBorders() {
         </BlockWrapper>
       ))}
     </FlexWrap>
+  )
+}
+
+const ScrollbarBox = styled(FilledBox)<{
+  scrollHue?: string
+}>(({ theme, scrollHue }) => ({
+  ...theme.partials.scrollBar({ hue: scrollHue }),
+  ...theme.partials.text.caption,
+  width: '100%',
+  height: 'auto',
+  padding: theme.spacing.medium,
+  maxWidth: '300px',
+  overflow: 'auto',
+  '&.horizontal .inner': {
+    width: '600px',
+  },
+  '&.vertical': {
+    maxHeight: '100px',
+  },
+  '&.both': {
+    maxHeight: '100px',
+    '.inner': {
+      width: '600px',
+    },
+  },
+
+}))
+
+function Scrollbars() {
+  const scrollHues = ['default', 'lighter']
+  const exampleText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+
+  return (
+    <>
+      <FlexWrap>
+        {scrollHues.map(key => (
+          <BlockWrapper key={key}>
+            <ScrollbarBox
+              className="vertical"
+              scrollHue={key}
+            >
+              <div className="inner">{exampleText}</div>
+            </ScrollbarBox>
+            <ItemLabel>vertical - {key}</ItemLabel>
+          </BlockWrapper>
+        ))}
+      </FlexWrap>
+      <FlexWrap>
+        {scrollHues.map(key => (
+          <BlockWrapper key={key}>
+            <ScrollbarBox
+              className="horizontal"
+              scrollHue={key}
+            >
+              <div className="inner">{exampleText}</div>
+            </ScrollbarBox>
+            <ItemLabel>horizontal - {key}</ItemLabel>
+          </BlockWrapper>
+        ))}
+      </FlexWrap>
+      <FlexWrap>
+        {scrollHues.map(key => (
+          <BlockWrapper key={key}>
+            <ScrollbarBox
+              className="both"
+              scrollHue={key}
+            >
+              <div className="inner">{exampleText}</div>
+            </ScrollbarBox>
+            <ItemLabel>vertical + horizontal - {key}</ItemLabel>
+          </BlockWrapper>
+        ))}
+      </FlexWrap>
+    </>
   )
 }
 

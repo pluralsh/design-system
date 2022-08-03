@@ -150,6 +150,41 @@ export const borderStyles = {
   default: 'solid',
 }
 
+export const scrollBar = ({ hue = 'default' } = {}) => {
+  const trackColor
+      = hue === 'lighter' ? semanticColors['fill-three'] : semanticColors['fill-two']
+  const barColor
+      = hue === 'lighter'
+        ? semanticColors['text-xlight']
+        : semanticColors['fill-three']
+  const barWidth = 6
+  const barRadius = barWidth / 2
+
+  const style: CSSObject = {
+    scrollbarWidth: 'thin',
+    scrollbarColor: `${barColor} ${trackColor}`,
+    '&::-webkit-scrollbar-track': {
+      backgroundColor: trackColor,
+      borderRadius: `${barRadius}px`,
+    },
+    '&::-webkit-scrollbar': {
+      width: `${barWidth}px`,
+      height: `${barWidth}px`,
+      borderRadius: `${barRadius}px`,
+      backgroundColor: trackColor,
+    },
+    '&::-webkit-scrollbar-thumb': {
+      borderRadius: `${barRadius}px`,
+      backgroundColor: barColor,
+    },
+    '&::-webkit-scrollbar-corner': {
+      backgroundColor: 'transparent',
+    },
+  }
+
+  return style
+}
+
 export const borders = {
   default: `${borderWidths.default}px ${borderStyles.default} ${semanticColors.border}`,
   'fill-one': `${borderWidths.default}px ${borderStyles.default} ${semanticColors.border}`,
@@ -403,24 +438,6 @@ const honorableTheme = mergeTheme(defaultTheme, {
     '::placeholder': [
       {
         color: 'text-xlight',
-      },
-    ],
-    '* ::-webkit-scrollbar-track': [
-      {
-        borderRadius: '10px',
-        backgroundColor: 'fill-one',
-      },
-    ],
-    '* ::-webkit-scrollbar': [
-      {
-        width: '6px',
-        backgroundColor: 'fill-one',
-      },
-    ],
-    '* ::-webkit-scrollbar-thumb': [
-      {
-        borderRadius: '6px',
-        backgroundColor: 'fill-two',
       },
     ],
   },
@@ -1097,6 +1114,7 @@ export const styledTheme = {
     partials: {
       text: textPartials,
       focus: focusPartials,
+      scrollBar,
     },
   },
 }

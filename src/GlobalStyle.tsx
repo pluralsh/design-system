@@ -66,6 +66,7 @@ const GlobalStyle = createGlobalStyle(({ theme }) => {
       ...borderWidthsToToCSSVars,
       ...bordersToCSSVars,
     },
+    '*': theme.partials.scrollBar(),
   }
 })
 
