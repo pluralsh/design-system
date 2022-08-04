@@ -47,9 +47,9 @@ function Trigger({
 
   return cloneElement(buttonElt, {
     ref,
+    ...buttonProps,
     style: { appearance: 'unset' },
     tabIndex: 0,
-    ...buttonProps,
   })
 }
 
