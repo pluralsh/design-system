@@ -1,16 +1,16 @@
 import { Button, Div, Flex } from 'honorable'
 import { Key, useState } from 'react'
 
-import { Select } from '../components/Select'
-
 import {
+  CheckIcon,
   Chip,
   IconFrame,
+  InfoIcon,
   ListBoxFooterAdd,
   ListBoxItem,
   ListBoxItemChipList,
   PersonIcon,
-  SearchIcon,
+  SearchIcon, Select, SelectButton,
 } from '../index'
 
 export default {
@@ -130,6 +130,11 @@ const items = [
 function Template() {
   const [selectedKey, setSelectedKey] = useState<Key>()
 
+  const curItem = items.find(item => item.key === selectedKey)
+  const customLabel = curItem
+    ? `You have selected ${curItem.label}`
+    : 'Select an item please'
+
   return (
     <Flex
       flexDirection="column"
@@ -163,14 +168,43 @@ function Template() {
           }}
           defaultOpen={false}
           onLoadMore={() => true}
-          onOpenChange={isOpen => console.log('Select isOpen changed to', isOpen)}
-          onBlur={() => console.log('Select blurred')}
-          onFocus={() => console.log('Select focused')}
-          onKeyDown={key => console.log('Select keyDown', key)}
-          onKeyUp={key => console.log('Select keyUp', key)}
           leftContent={<SearchIcon />}
           rightContent={<PersonIcon />}
-          dropdownBottomContent={<ListBoxFooterAdd>Create new</ListBoxFooterAdd>}
+          dropdownBottomContent={
+            <ListBoxFooterAdd>Create new</ListBoxFooterAdd>
+          }
+        >
+          {items.map(({ key, label, description }) => (
+            <ListBoxItem
+              key={key}
+              label={label}
+              description={description}
+              rightContent={chips}
+              leftContent={portrait}
+            />
+          ))}
+        </Select>
+      </Div>
+
+      <Div maxWidth={512}>
+        <Select
+          label="Pick something"
+          selectedKey={selectedKey}
+          onSelectionChange={key => {
+            setSelectedKey(key)
+          }}
+          defaultOpen={false}
+          onLoadMore={() => true}
+          dropdownBottomContent={
+            <ListBoxFooterAdd>Create new</ListBoxFooterAdd>
+          }
+          triggerButton={(
+            <SelectButton
+              leftContent={curItem ? <CheckIcon /> : <InfoIcon />}
+            >
+              {customLabel}
+            </SelectButton>
+          )}
         >
           {items.map(({ key, label, description }) => (
             <ListBoxItem
@@ -195,10 +229,13 @@ function Template() {
             <Button
               medium
               primary
-            >Click me!
+            >
+              Click me!
             </Button>
           )}
-          dropdownBottomContent={<ListBoxFooterAdd>Create new</ListBoxFooterAdd>}
+          dropdownBottomContent={
+            <ListBoxFooterAdd>Create new</ListBoxFooterAdd>
+          }
         >
           {items.map(({ key, label, description }) => (
             <ListBoxItem

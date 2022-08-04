@@ -170,3 +170,4 @@ export { ListBox } from './components/ListBox'
 export {
   ListBoxItem, ListBoxItemChipList, ListBoxFooter, ListBoxFooterAdd,
 } from './components/ListBoxItem'
+export { Select, SelectButton } from './components/Select'

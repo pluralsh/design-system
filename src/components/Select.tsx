@@ -222,4 +222,4 @@ function Select({
   )
 }
 
-export { Select }
+export { Select, SelectButton }
