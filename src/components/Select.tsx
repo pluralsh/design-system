@@ -27,19 +27,13 @@ type SelectButtonProps = {
 }
 
 type SelectProps = Exclude<SelectButtonProps, 'children'> & {
-  selectedKey: string
-  onSelectionChange: (key: string) => unknown
-  disallowEmptySelection?: boolean
   children:
     | ReactElement<ListBoxItemBaseProps>
     | ReactElement<ListBoxItemBaseProps>[]
   dropdownTopContent?: ReactNode
   dropdownBottomContent?: ReactNode
-  label: string
-  name: string
-  formField?: any
   triggerButton?: ReactElement
-}
+} & Exclude<AriaSelectProps<object>, 'autoFocus' | 'onLoadMore'>
 
 function Trigger({
   buttonElt,
@@ -53,35 +47,13 @@ function Trigger({
 
   return cloneElement(buttonElt, {
     ref,
-    style: { '-webkit-appearance': 'unset' },
-    tabindex: 0,
+    style: { appearance: 'unset' },
+    tabIndex: 0,
     ...buttonProps,
   })
 }
 
-const SelectButtonBase = forwardRef<
-  HTMLDivElement,
-  SelectButtonProps & HTMLAttributes<HTMLDivElement>
->(({
-  leftContent, rightContent, children, showArrow = true, ...props
-},
-ref) => (
-  <div
-    ref={ref}
-    {...props}
-  >
-    <div className="leftContent">{leftContent}</div>
-    <div className="children">{children}</div>
-    <div className="rightContent">{rightContent}</div>
-    {showArrow && (
-      <div className="arrow">
-        <DropdownArrowIcon size={16} />
-      </div>
-    )}
-  </div>
-))
-
-export const SelectButton = styled(SelectButtonBase)(({ theme, isOpen }) => ({
+export const SelectButtonInner = styled.div<{ isOpen: boolean }>(({ theme, isOpen }) => ({
   ...theme.partials.reset.button,
   ...theme.partials.text.body2,
   ...theme.partials.focus.default,
@@ -97,10 +69,20 @@ export const SelectButton = styled(SelectButtonBase)(({ theme, isOpen }) => ({
   '.children': {
     flexGrow: 1,
   },
+  '.leftContent, .rightContent': {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  '.leftContent': {
+    marginRight: theme.spacing.medium,
+  },
+  '.rightContent': {
+    marginLeft: theme.spacing.medium,
+  },
   '.arrow': {
     transition: 'transform 0.1s ease',
     display: 'flex',
-    // alignSelf: 'flex-end',
+    marginLeft: theme.spacing.medium,
     alignItems: 'center',
     ...(isOpen
       ? {
@@ -110,65 +92,78 @@ export const SelectButton = styled(SelectButtonBase)(({ theme, isOpen }) => ({
   },
 }))
 
+const SelectButton = forwardRef<
+  HTMLDivElement,
+  SelectButtonProps & HTMLAttributes<HTMLDivElement>
+>(({
+  leftContent, rightContent, children, showArrow = true, isOpen, ...props
+},
+ref) => (
+  <SelectButtonInner
+    isOpen={isOpen}
+    ref={ref}
+    {...props}
+  >
+    <div className="leftContent">{leftContent}</div>
+    <div className="children">{children}</div>
+    <div className="rightContent">{rightContent}</div>
+    {showArrow && (
+      <div className="arrow">
+        <DropdownArrowIcon size={16} />
+      </div>
+    )}
+  </SelectButtonInner>
+))
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const SelectInner = styled.div(_p => ({
+  position: 'relative',
+}))
+
 function Select({
   children,
   selectedKey,
   onSelectionChange,
-  dropdownTopContent: topContent,
-  dropdownBottomContent: bottomContent,
+  onOpenChange,
+  leftContent,
+  rightContent,
+  dropdownTopContent,
+  dropdownBottomContent,
   label,
   name,
   triggerButton,
-}: // formField,
-// ...props
-SelectProps) {
+  ...props
+}: SelectProps) {
   const selectStateProps: AriaSelectProps<object> = {
-    // filter: () => true,
-    // disallowEmptySelection,
-    // selectionMode: 'single',
-    onOpenChange: e => {
-      console.log('open change', e)
-    },
+    onOpenChange,
     defaultOpen: false,
     selectedKey,
     onSelectionChange,
+    label,
     children: useItemWrappedChildren(children),
+    ...props,
   }
 
-  console.log('beforestate change', selectStateProps)
   const state = useSelectState(selectStateProps)
 
-  console.log('state2 ', state)
   // Get props for the listbox element
   const ref = useRef()
-  const {
-    labelProps, triggerProps, valueProps, menuProps,
-  } = useSelect(selectStateProps,
-    state,
-    ref)
-
-  console.log('labelProps', labelProps)
-  console.log('triggerProps', triggerProps)
-  console.log('valueProps', valueProps)
-  console.log('menuProps', menuProps)
-  console.log('state', state)
+  const { triggerProps, menuProps } = useSelect(selectStateProps, state, ref)
 
   label = label || ' '
   triggerButton = triggerButton || (
     <SelectButton
-      leftContent
-      rightContent
+      className="triggerButton"
+      leftContent={leftContent}
+      rightContent={rightContent}
       isOpen={state.isOpen}
     >
       {state.selectedItem?.props?.children?.props?.label || label}
     </SelectButton>
   )
-  console.log('triggerButtn', triggerButton)
-
-  console.log('klink render isOpen', state.isOpen)
 
   return (
-    <div style={{ position: 'relative' }}>
+    <SelectInner>
       <HiddenSelect
         state={state}
         triggerRef={ref}
@@ -180,24 +175,21 @@ SelectProps) {
         buttonElt={triggerButton}
         {...triggerProps}
       />
-      {true && state.isOpen && (
+      {state.isOpen && (
         <SelectPopover
           isOpen={state.isOpen}
-          onClose={() => {
-            console.log('onClose')
-            state.close()
-          }}
+          onClose={state.close}
         >
           <ListBoxUnmanaged
             className="listBox"
             state={state}
-            topContent={topContent}
-            bottomContent={bottomContent}
+            topContent={dropdownTopContent}
+            bottomContent={dropdownBottomContent}
             {...menuProps}
           />
         </SelectPopover>
       )}
-    </div>
+    </SelectInner>
   )
 }
 

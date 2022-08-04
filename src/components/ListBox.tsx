@@ -45,9 +45,6 @@ const ListBoxCard = styled(Card).attrs(() => ({ cornerSize: 'medium', hue: 'ligh
   flexShrink: 1,
   overflowX: 'visible',
   overflowY: 'hidden',
-  '&:focus, &:focus-visible': {
-    outline: '1px solid red',
-  },
 }))
 
 type ScrollContainerProps = {
@@ -56,9 +53,23 @@ type ScrollContainerProps = {
 }
 const ScrollContainer = styled.div<ScrollContainerProps>(({ theme, extendStyle }) => ({
   ...theme.partials.scrollBar({ hue: 'lighter' }),
+  position: 'relative',
   overflow: 'auto',
   flexShrink: 1,
   flexGrow: 1,
+  '&:focus': {
+    outline: 'none',
+  },
+  '&:focus-visible::after': {
+    position: 'absolute',
+    content: "''",
+    pointerEvents: 'none',
+    top: `${theme.borderWidths.focus}px`,
+    right: `${theme.borderWidths.focus}px`,
+    left: `${theme.borderWidths.focus}px`,
+    bottom: `${theme.borderWidths.focus}px`,
+    boxShadow: theme.boxShadows.focused,
+  },
   ...extendStyle,
 }))
 
@@ -113,18 +124,18 @@ function ListBoxUnmanaged({
   topContent,
   bottomContent,
   extendStyle,
+  className,
   ...props
 }: ListBoxUnmanagedProps) {
   const theme = useTheme()
 
   // Get props for the listbox element
   const ref = useRef()
-
-  console.log('ListBoxUnmanaged props', props)
   const { listBoxProps } = useListBox(props, state, ref)
 
   return (
     <ListBoxCard
+      className={`listBox ${className || ''}`}
       {...extendStyle}
       {...props}
     >

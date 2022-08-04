@@ -92,7 +92,6 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
   },
   '.selected-indicator': {
     opacity: selected ? 1 : 0,
-
     position: 'relative',
     '& svg': {
       zIndex: 0,
@@ -207,9 +206,10 @@ type ListBoxFooterProps = ComponentPropsWithRef<'button'> & {
 }
 const ListBoxFooterInner = styled.button(({ theme }) => ({
   ...theme.partials.reset.button,
+  display: 'flex',
+  position: 'relative',
   width: '100%',
   padding: `${theme.spacing.small}px ${theme.spacing.medium}px`,
-  display: 'flex',
   '.children': {
     flexGrow: 1,
   },
@@ -219,11 +219,22 @@ const ListBoxFooterInner = styled.button(({ theme }) => ({
   '.rightContent': {
     marginLeft: theme.spacing.small,
   },
+  '&:focus-visible::after': {
+    content: '""',
+    position: 'absolute',
+    top: `${theme.borderWidths.focus}px`,
+    left: `${theme.borderWidths.focus}px`,
+    right: `${theme.borderWidths.focus}px`,
+    bottom: `${theme.borderWidths.focus}px`,
+    boxShadow: theme.boxShadows.focused,
+  },
+
 }))
 const ListBoxFooter = forwardRef<HTMLButtonElement, ListBoxFooterProps>(({
   leftContent, rightContent, children, ...props
 }, ref) => (
   <ListBoxFooterInner
+    tabIndex={0}
     ref={ref}
     {...props}
   >

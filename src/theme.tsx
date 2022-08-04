@@ -150,13 +150,22 @@ export const borderStyles = {
   default: 'solid',
 }
 
+export const zIndexes = {
+  base: 0,
+  selectPopover: 1000,
+  tooltip: 10000,
+  modal: 100000,
+}
+
 export const scrollBar = ({ hue = 'default' } = {}) => {
   const trackColor
-      = hue === 'lighter' ? semanticColors['fill-three'] : semanticColors['fill-two']
+    = hue === 'lighter'
+      ? semanticColors['fill-three']
+      : semanticColors['fill-two']
   const barColor
-      = hue === 'lighter'
-        ? semanticColors['text-xlight']
-        : semanticColors['fill-three']
+    = hue === 'lighter'
+      ? semanticColors['text-xlight']
+      : semanticColors['fill-three']
   const barWidth = 6
   const barRadius = barWidth / 2
 
@@ -272,7 +281,7 @@ const bodyBaseStyle = {
 }
 
 function asElementTypes<T>() {
-  return function ret <Obj>(obj: { [K in keyof Obj]: T }) {
+  return function ret<Obj>(obj: { [K in keyof Obj]: T }) {
     return obj
   }
 }
@@ -487,8 +496,7 @@ const honorableTheme = mergeTheme(defaultTheme, {
     ({ subtitle1 }: any) => subtitle1 && textPartials.subtitle1,
     ({ subtitle2 }: any) => subtitle2 && textPartials.subtitle2,
     ({ body1, body2, bold }: any) => ({
-      ...((body1 || body2)
-        && bold && textPartials.bodyBold),
+      ...((body1 || body2) && bold && textPartials.bodyBold),
       ...(body1 && textPartials.body1),
       ...(body2 && textPartials.body2),
     }),
@@ -1124,6 +1132,7 @@ export const styledTheme = {
     borders,
     borderStyles,
     borderWidths,
+    zIndexes,
     partials: {
       text: textPartials,
       focus: focusPartials,

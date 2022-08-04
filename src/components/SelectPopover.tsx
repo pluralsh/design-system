@@ -47,11 +47,9 @@ function Popover(props:PopoverProps) {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PopoverStyled = styled.div(({ theme }) => ({
-  zIndex: 999999,
+  zIndex: theme.zIndexes.selectPopover,
   maxHeight: '230px',
   display: 'flex',
-  // alignItems: 'stretch',
-  // justifyContent: 'stretch',
   overflow: 'hidden',
   position: 'absolute',
   width: '100%',
@@ -59,9 +57,6 @@ const PopoverStyled = styled.div(({ theme }) => ({
   boxShadow: theme.boxShadows.moderate,
   '> *': {
     flexGrow: 1,
-  },
-  '&:focus, &:focus-visible': {
-    outline: '1px solid red',
   },
 }))
 

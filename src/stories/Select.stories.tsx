@@ -1,5 +1,5 @@
 import { Button, Div, Flex } from 'honorable'
-import { useState } from 'react'
+import { Key, useState } from 'react'
 
 import { Select } from '../components/Select'
 
@@ -10,6 +10,7 @@ import {
   ListBoxItem,
   ListBoxItemChipList,
   PersonIcon,
+  SearchIcon,
 } from '../index'
 
 export default {
@@ -127,7 +128,7 @@ const items = [
 ]
 
 function Template() {
-  const [selectedKey, setSelectedKey] = useState<string>()
+  const [selectedKey, setSelectedKey] = useState<Key>()
 
   return (
     <Flex
@@ -136,11 +137,10 @@ function Template() {
     >
       <Div maxWidth={512}>
         <Select
+          defaultOpen={false}
           label="Pick something"
-          name="It's a name"
           selectedKey={selectedKey}
           onSelectionChange={key => {
-            console.log('keyz changed 2', key)
             setSelectedKey(key)
           }}
         >
@@ -157,12 +157,19 @@ function Template() {
       <Div maxWidth={512}>
         <Select
           label="Pick something"
-          name="It's a name"
           selectedKey={selectedKey}
           onSelectionChange={key => {
-            console.log('keyz changed 2', key)
             setSelectedKey(key)
           }}
+          defaultOpen={false}
+          onLoadMore={() => true}
+          onOpenChange={isOpen => console.log('Select isOpen changed to', isOpen)}
+          onBlur={() => console.log('Select blurred')}
+          onFocus={() => console.log('Select focused')}
+          onKeyDown={key => console.log('Select keyDown', key)}
+          onKeyUp={key => console.log('Select keyUp', key)}
+          leftContent={<SearchIcon />}
+          rightContent={<PersonIcon />}
           dropdownBottomContent={<ListBoxFooterAdd>Create new</ListBoxFooterAdd>}
         >
           {items.map(({ key, label, description }) => (
@@ -180,10 +187,8 @@ function Template() {
       <Div maxWidth={512}>
         <Select
           label="Pick something"
-          name="It's a name"
           selectedKey={selectedKey}
           onSelectionChange={key => {
-            console.log('keyz changed 2', key)
             setSelectedKey(key)
           }}
           triggerButton={(
