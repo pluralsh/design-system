@@ -1,6 +1,7 @@
 import {
   Children,
-  HTMLAttributes,
+  ComponentPropsWithRef,
+  ElementType,
   ReactElement,
   ReactNode,
   cloneElement,
@@ -25,7 +26,8 @@ type ListBoxUnmanagedProps = {
   state: any
   topContent?: ReactNode
   bottomContent?: ReactNode
-} & HTMLAttributes<HTMLElement>
+  extendStyle?: CSSObject
+} & ComponentPropsWithRef<ElementType>
 
 type ListBoxProps = Omit<ListBoxUnmanagedProps, 'state'> & {
   selectedKey: string
@@ -37,7 +39,7 @@ type ListBoxProps = Omit<ListBoxUnmanagedProps, 'state'> & {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ListBoxCard = styled(Card).attrs(() => ({ cornerSize: 'medium' }))(_p => ({
+const ListBoxCard = styled(Card).attrs(() => ({ cornerSize: 'medium', hue: 'lighter' }))(_p => ({
   display: 'flex',
   flexDirection: 'column',
   flexShrink: 1,
@@ -110,6 +112,7 @@ function ListBoxUnmanaged({
   state,
   topContent,
   bottomContent,
+  extendStyle,
   ...props
 }: ListBoxUnmanagedProps) {
   const theme = useTheme()
@@ -121,7 +124,10 @@ function ListBoxUnmanaged({
   const { listBoxProps } = useListBox(props, state, ref)
 
   return (
-    <ListBoxCard {...props}>
+    <ListBoxCard
+      {...extendStyle}
+      {...props}
+    >
       {topContent && <div className="top-content">{topContent}</div>}
       <ScrollContainer
         ref={ref}

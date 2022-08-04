@@ -167,4 +167,6 @@ export { default as usePrevious } from './hooks/usePrevious'
 export { default as theme, styledTheme } from './theme'
 export { default as GlobalStyle } from './GlobalStyle'
 export { ListBox } from './components/ListBox'
-export { ListBoxItem, ListBoxItemChipList, ListBoxFooterAdd } from './components/ListBoxItem'
+export {
+  ListBoxItem, ListBoxItemChipList, ListBoxFooter, ListBoxFooterAdd,
+} from './components/ListBoxItem'

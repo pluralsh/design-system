@@ -1,5 +1,5 @@
 import {
-  ReactElement, ReactNode, RefObject, useRef,
+  ReactNode, RefObject, useRef,
 } from 'react'
 import { DismissButton, useOverlay } from '@react-aria/overlays'
 import { FocusScope } from '@react-aria/focus'

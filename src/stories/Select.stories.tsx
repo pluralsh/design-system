@@ -1,12 +1,11 @@
-import { Div, Flex } from 'honorable'
+import { Button, Div, Flex } from 'honorable'
 import { useState } from 'react'
 
-import { Select, SelectButton } from '../components/Select'
+import { Select } from '../components/Select'
 
 import {
   Chip,
   IconFrame,
-  ListBox,
   ListBoxFooterAdd,
   ListBoxItem,
   ListBoxItemChipList,
@@ -14,7 +13,8 @@ import {
 } from '../index'
 
 export default {
-  title: 'Select2',
+  title: 'Select',
+  component: 'Select',
 }
 
 const portrait = (
@@ -163,7 +163,37 @@ function Template() {
             console.log('keyz changed 2', key)
             setSelectedKey(key)
           }}
-          dropdownBottomContent={<ListBoxFooterAdd>New tag</ListBoxFooterAdd>}
+          dropdownBottomContent={<ListBoxFooterAdd>Create new</ListBoxFooterAdd>}
+        >
+          {items.map(({ key, label, description }) => (
+            <ListBoxItem
+              key={key}
+              label={label}
+              description={description}
+              rightContent={chips}
+              leftContent={portrait}
+            />
+          ))}
+        </Select>
+      </Div>
+
+      <Div maxWidth={512}>
+        <Select
+          label="Pick something"
+          name="It's a name"
+          selectedKey={selectedKey}
+          onSelectionChange={key => {
+            console.log('keyz changed 2', key)
+            setSelectedKey(key)
+          }}
+          triggerButton={(
+            <Button
+              medium
+              primary
+            >Click me!
+            </Button>
+          )}
+          dropdownBottomContent={<ListBoxFooterAdd>Create new</ListBoxFooterAdd>}
         >
           {items.map(({ key, label, description }) => (
             <ListBoxItem

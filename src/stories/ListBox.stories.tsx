@@ -5,6 +5,7 @@ import {
   Chip,
   IconFrame,
   ListBox,
+  ListBoxFooter,
   ListBoxFooterAdd,
   ListBoxItem,
   ListBoxItemChipList,
@@ -27,7 +28,6 @@ const smallIcon = <PersonIcon size={16} />
 
 const chipProps = {
   size: 'small',
-  hue: 'lighter',
 }
 const chips = (
   <ListBoxItemChipList
@@ -140,12 +140,16 @@ function Template() {
             console.log('keyz changed 2', key)
             setSelectedKey(key)
           }}
+          extendStyle={{
+            width: 'max-content',
+          }}
         >
           {items.slice(0, 4).map(({ key, label }) => (
             <ListBoxItem
               key={key}
               label={label}
               leftContent={smallIcon}
+              reserveSelectedIndicatorSpace
             />
           ))}
         </ListBox>
@@ -163,7 +167,41 @@ function Template() {
             console.log('keyz changed 2', key)
             setSelectedKey(key)
           }}
-          bottomContent={<ListBoxFooterAdd>New tag</ListBoxFooterAdd>}
+          bottomContent={(
+            <ListBoxFooter onClick={() => alert('You clicked the footer')}>
+              Footer - Default
+            </ListBoxFooter>
+          )}
+        >
+          {items.map(({ key, label, description }) => (
+            <ListBoxItem
+              key={key}
+              label={label}
+              description={description}
+              leftContent={portrait}
+            />
+          ))}
+        </ListBox>
+      </Div>
+
+      <Div
+        display="flex"
+        flexDirection="column"
+        maxWidth={512}
+        maxHeight={200}
+        overflow="hidden"
+      >
+        <ListBox
+          selectedKey={selectedKey}
+          onSelectionChange={key => {
+            console.log('keyz changed 2', key)
+            setSelectedKey(key)
+          }}
+          bottomContent={(
+            <ListBoxFooterAdd onClick={() => alert('You clicked the footer')}>
+              Footer - Add
+            </ListBoxFooterAdd>
+          )}
         >
           {items.map(({ key, label, description }) => (
             <ListBoxItem

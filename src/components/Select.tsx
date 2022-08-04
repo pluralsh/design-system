@@ -11,7 +11,7 @@ import { HiddenSelect, useSelect } from '@react-aria/select'
 import { useSelectState } from '@react-stately/select'
 import { AriaSelectProps } from '@react-types/select'
 import { useButton } from '@react-aria/button'
-import styled, { classNames, useTheme } from 'styled-components'
+import styled from 'styled-components'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 import { ListBoxUnmanaged, useItemWrappedChildren } from './ListBox'
@@ -23,6 +23,7 @@ type SelectButtonProps = {
   rightContent?: ReactNode
   children?: ReactNode
   showArrow?: boolean
+  isOpen?: boolean
 }
 
 type SelectProps = Exclude<SelectButtonProps, 'children'> & {
@@ -49,8 +50,6 @@ function Trigger({
 } & HTMLAttributes<HTMLElement>) {
   const ref = props.buttonRef
   const { buttonProps } = useButton(props, ref)
-
-  console.log('ref.current', ref.current)
 
   return cloneElement(buttonElt, {
     ref,
@@ -103,11 +102,12 @@ export const SelectButton = styled(SelectButtonBase)(({ theme, isOpen }) => ({
     display: 'flex',
     // alignSelf: 'flex-end',
     alignItems: 'center',
-    ...(isOpen ? {
-      transform: 'scaleY(-100%)',
-    } : {}),
+    ...(isOpen
+      ? {
+        transform: 'scaleY(-100%)',
+      }
+      : {}),
   },
-
 }))
 
 function Select({
@@ -119,11 +119,9 @@ function Select({
   label,
   name,
   triggerButton,
-  // formField,
-  ...props
-}: SelectProps) {
-  const theme = useTheme()
-
+}: // formField,
+// ...props
+SelectProps) {
   const selectStateProps: AriaSelectProps<object> = {
     // filter: () => true,
     // disallowEmptySelection,

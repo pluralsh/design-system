@@ -8,7 +8,7 @@ import {
 
 type FormFieldProps = DivProps & PropsWithChildren<{
   label?: ReactNode
-  labelProps: HTMLAttributes<HTMLElement>
+  labelProps?: HTMLAttributes<HTMLElement>
   caption?: ReactNode
   hint?: ReactNode
   length?: number,

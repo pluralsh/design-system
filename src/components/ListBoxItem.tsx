@@ -1,5 +1,11 @@
 import {
-  HTMLAttributes, ReactElement, ReactNode, forwardRef,
+  ComponentPropsWithRef,
+  ComponentPropsWithoutRef,
+  ElementType,
+  ReactElement,
+  ReactNode,
+  cloneElement,
+  forwardRef,
 } from 'react'
 import { ItemProps } from '@react-types/shared'
 import styled from 'styled-components'
@@ -18,29 +24,32 @@ type ListBoxItemBaseProps = {
   label?: ReactNode
   description?: ReactNode
   key?: string
-  labelProps?: HTMLAttributes<HTMLElement>
-  descriptionProps?: HTMLAttributes<HTMLElement>
-} & HTMLAttributes<HTMLDivElement> &
+  labelProps?: ComponentPropsWithoutRef<ElementType>
+  descriptionProps?: ComponentPropsWithoutRef<ElementType>
+} & ComponentPropsWithRef<'div'> &
   Omit<ItemProps<void>, 'children'>
 
 type ListBoxItemProps = {
   leftContent?: ReactNode
   rightContent?: ReactNode
+  reserveSelectedIndicatorSpace?: boolean
 } & ListBoxItemBaseProps
 
-const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({ theme, isFocusVisible, disabled }) => ({
+const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
+  theme, isFocusVisible, disabled, selected,
+}) => ({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
   position: 'relative',
-  width: '100%',
-  borderBottom: 'var(--border-fill-one)',
+  width: 'auto',
+  borderBottom: theme.borders['fill-two'],
 
   padding: `${theme.spacing.xsmall}px ${theme.spacing.medium}px`,
   backgroundColor: 'none',
   cursor: 'pointer',
   '&:hover': {
-    backgroundColor: !disabled ? 'var(--color-fill-two-hover)' : 'none',
+    backgroundColor: !disabled ? theme.colors['fill-two-hover'] : 'none',
   },
   '&:focus, &:focus-visible': {
     outline: 'none',
@@ -74,14 +83,16 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({ theme, isFocus
   '.label': {
     ...theme.partials.text.body2,
     color: disabled
-      ? 'var(--color-text-primary-disabled)'
-      : 'var(--color-text)',
+      ? theme.colors['text-primary-disabled']
+      : theme.colors.text,
   },
   '.description': {
     ...theme.partials.text.caption,
     color: theme.colors['text-xlight'],
   },
   '.selected-indicator': {
+    opacity: selected ? 1 : 0,
+
     position: 'relative',
     '& svg': {
       zIndex: 0,
@@ -108,6 +119,7 @@ const ListBoxItem = forwardRef<HTMLDivElement, ListBoxItemProps>(({
   descriptionProps = {},
   leftContent,
   rightContent,
+  reserveSelectedIndicatorSpace,
   ...props
 },
 ref) => (
@@ -137,7 +149,7 @@ ref) => (
       )}
     </div>
     {rightContent && <div className="right-content">{rightContent}</div>}
-    {selected && (
+    {(selected || reserveSelectedIndicatorSpace) && (
       <StatusOkIcon
         className="selected-indicator"
         size={16}
@@ -156,11 +168,12 @@ const ChipListInner = styled.div(({ theme }) => ({
 }))
 
 const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips }) => {
-  console.log('stuff')
-  const firstChips = chips.slice(0, 3)
+  const chipHue = 'lightest'
+  const firstChips = chips
+    .slice(0, 3)
+    .map(chip => cloneElement(chip, { hue: chipHue }))
   const restChips = chips.slice(3)
 
-  console.log('restChips', restChips)
   const extra = restChips.length > 0 && (
     <Tooltip
       placement="top"
@@ -177,7 +190,7 @@ const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips 
     >
       <Chip
         size="small"
-        hue="lighter"
+        hue={chipHue}
       >
         {`+${restChips.length}`}
       </Chip>
@@ -187,7 +200,7 @@ const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips 
   return <ChipListInner>{[...firstChips, extra]}</ChipListInner>
 })
 
-type ListBoxFooterProps = {
+type ListBoxFooterProps = ComponentPropsWithRef<'button'> & {
   children: ReactNode
   leftContent?: ReactNode
   rightContent?: ReactNode
