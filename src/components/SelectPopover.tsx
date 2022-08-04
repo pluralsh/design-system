@@ -1,11 +1,10 @@
 import {
-  ReactNode, RefObject, StyleHTMLAttributes, useRef,
+  ReactNode, RefObject, useRef,
 } from 'react'
 import { DismissButton, useOverlay } from '@react-aria/overlays'
 import { FocusScope } from '@react-aria/focus'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 import { animated } from 'react-spring'
-import theme from 'honorable-theme-default'
 
 type PopoverProps = {
   isOpen?: boolean
@@ -31,30 +30,28 @@ function Popover({ animatedStyles, ...props }: PopoverProps) {
   },
   popoverRef)
 
-  const theme = useTheme()
-
-  // Need to remove ref, overlayProps, hidden DismissButton, and
-  // FocusScop wrapper when closed to react-aria immediately moves
-  // focus to the trigger button while transition animations are happening
+  // Need to remove ref and change key when closed so react-aria thinks the
+  // Popover has unmounted when animating out
   let content = (
     <PopoverStyled
+      key={isOpen ? 'open' : 'closed'}
       className="popover"
       isOpen={isOpen}
+      {...overlayProps}
       {...(isOpen && {
-        ...overlayProps,
         ref: popoverRef,
       })}
     >
       {children}
       {/* Add a hidden <DismissButton> component at the end of the popover
           to allow screen reader users to dismiss the popup easily. */}
-      {isOpen && <DismissButton onDismiss={onClose} />}
+      <DismissButton onDismiss={onClose} />
     </PopoverStyled>
   )
 
-  if (isOpen) {
-    content = <FocusScope restoreFocus>{content}</FocusScope>
-  }
+  // if (isOpen) {
+  content = <FocusScope restoreFocus>{content}</FocusScope>
+  // }
 
   // Wrapping for spring animation
   return (
