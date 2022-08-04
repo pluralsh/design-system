@@ -1,24 +1,23 @@
 import {
-  ReactNode, RefObject, useRef,
+  ReactNode, RefObject, StyleHTMLAttributes, useRef,
 } from 'react'
 import { DismissButton, useOverlay } from '@react-aria/overlays'
 import { FocusScope } from '@react-aria/focus'
 import styled from 'styled-components'
+import { animated } from 'react-spring'
 
 type PopoverProps = {
-  isOpen?: boolean,
-  onClose?: () => unknown,
-  popoverRef?: RefObject<any>,
-  children: ReactNode,
+  isOpen?: boolean
+  onClose?: () => unknown
+  popoverRef?: RefObject<any>
+  children: ReactNode
+  animatedStyles: any
 }
 
-function Popover(props:PopoverProps) {
+function Popover({ animatedStyles, ...props }: PopoverProps) {
   const ref = useRef()
   const {
-    popoverRef = ref,
-    isOpen,
-    onClose,
-    children,
+    popoverRef = ref, isOpen, onClose, children,
   } = props
 
   // Handle events that should cause the popup to close,
@@ -28,26 +27,37 @@ function Popover(props:PopoverProps) {
     onClose,
     shouldCloseOnBlur: true,
     isDismissable: true,
-  }, popoverRef)
+  },
+  popoverRef)
 
-  // Add a hidden <DismissButton> component at the end of the popover
-  // to allow screen reader users to dismiss the popup easily.
-  return (
-    <FocusScope restoreFocus>
-      <PopoverStyled
-        {...overlayProps}
-        ref={popoverRef}
-      >
-        {children}
-        <DismissButton onDismiss={onClose} />
-      </PopoverStyled>
-    </FocusScope>
+  // Need to remove ref, overlayProps, hidden DismissButton, and
+  // FocusScop wrapper when closed to react-aria immediately moves
+  // focus to the trigger button while transition animations are happening
+  let content = (
+    <PopoverStyled
+      className="popover"
+      {...(isOpen && {
+        ...overlayProps,
+        ref: popoverRef,
+      })}
+    >
+      {children}
+      {/* Add a hidden <DismissButton> component at the end of the popover
+          to allow screen reader users to dismiss the popup easily. */}
+      {isOpen && <DismissButton onDismiss={onClose} />}
+    </PopoverStyled>
   )
+
+  if (isOpen) {
+    content = <FocusScope restoreFocus>{content}</FocusScope>
+  }
+
+  // Wrapping for spring animation
+  return <animated.div style={animatedStyles}>{content}</animated.div>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PopoverStyled = styled.div(({ theme }) => ({
-  zIndex: theme.zIndexes.selectPopover,
   maxHeight: '230px',
   display: 'flex',
   overflow: 'hidden',

@@ -12,6 +12,7 @@ import { useSelectState } from '@react-stately/select'
 import { AriaSelectProps } from '@react-types/select'
 import { useButton } from '@react-aria/button'
 import styled from 'styled-components'
+import { useTransition } from 'react-spring'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 import { ListBoxUnmanaged, useItemWrappedChildren } from './ListBox'
@@ -117,9 +118,16 @@ ref) => (
   </SelectButtonInner>
 ))
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SelectInner = styled.div(_p => ({
+const SelectInner = styled.div<{ isOpen: boolean }>(({ theme, isOpen }) => ({
   position: 'relative',
+  ...(isOpen && { zIndex: theme.zIndexes.selectPopover }),
+  '.popoverWrapper': {
+    position: 'relative',
+    zIndex: -1,
+    overflow: 'hidden',
+    top: -1,
+    height: 9999,
+  },
 }))
 
 function Select({
@@ -164,8 +172,19 @@ function Select({
     </SelectButton>
   )
 
+  const transitions = useTransition(state.isOpen, {
+    from: { opacity: 0, translateY: '-150px' },
+    enter: { opacity: 1, translateY: '0' },
+    leave: { opacity: 0, translateY: '-150px' },
+    config: {
+      mass: 0.6,
+      tension: 280,
+      velocity: 0.02,
+    },
+  })
+
   return (
-    <SelectInner>
+    <SelectInner isOpen={state.isOpen}>
       <HiddenSelect
         state={state}
         triggerRef={ref}
@@ -177,20 +196,23 @@ function Select({
         buttonElt={triggerButton}
         {...triggerProps}
       />
-      {state.isOpen && (
-        <SelectPopover
-          isOpen={state.isOpen}
-          onClose={state.close}
-        >
-          <ListBoxUnmanaged
-            className="listBox"
-            state={state}
-            topContent={dropdownTopContent}
-            bottomContent={dropdownBottomContent}
-            {...menuProps}
-          />
-        </SelectPopover>
-      )}
+      <div className="popoverWrapper">
+        {transitions((styles, item) => item && (
+          <SelectPopover
+            isOpen={state.isOpen}
+            onClose={state.close}
+            animatedStyles={styles}
+          >
+            <ListBoxUnmanaged
+              className="listBox"
+              state={state}
+              topContent={dropdownTopContent}
+              bottomContent={dropdownBottomContent}
+              {...menuProps}
+            />
+          </SelectPopover>
+        ))}
+      </div>
     </SelectInner>
   )
 }

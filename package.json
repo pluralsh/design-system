@@ -31,6 +31,7 @@
     "chroma-js": "2.4.2",
     "prop-types": "15.8.1",
     "react-merge-refs": "2.0.1",
+    "react-spring": "9.5.2",
     "resize-observer-polyfill": "1.5.1",
     "styled-components": "5.3.5"
   },
