@@ -107,9 +107,9 @@ ref) => (
     ref={ref}
     {...props}
   >
-    <div className="leftContent">{leftContent}</div>
+    {leftContent && <div className="leftContent">{leftContent}</div>}
     <div className="children">{children}</div>
-    <div className="rightContent">{rightContent}</div>
+    {rightContent && <div className="rightContent">{rightContent}</div>}
     {showArrow && (
       <div className="arrow">
         <DropdownArrowIcon size={16} />
@@ -120,13 +120,16 @@ ref) => (
 
 const SelectInner = styled.div<{ isOpen: boolean }>(({ theme, isOpen }) => ({
   position: 'relative',
-  ...(isOpen && { zIndex: theme.zIndexes.selectPopover }),
   '.popoverWrapper': {
-    position: 'relative',
-    zIndex: -1,
+    position: 'absolute',
     overflow: 'hidden',
-    top: -1,
+    width: '100%',
     height: 9999,
+  },
+  '.zStacker': {
+    position: 'absolute',
+    width: '100%',
+    zIndex: theme.zIndexes.selectPopover,
   },
 }))
 
@@ -173,9 +176,9 @@ function Select({
   )
 
   const transitions = useTransition(state.isOpen, {
-    from: { opacity: 0, translateY: '-150px' },
-    enter: { opacity: 1, translateY: '0' },
-    leave: { opacity: 0, translateY: '-150px' },
+    from: { opacity: 0, translateY: '-150px', zIndex: 99999 },
+    enter: { opacity: 1, translateY: '0', zIndex: 99999 },
+    leave: { opacity: 0, translateY: '-150px', zIndex: 99999 },
     config: {
       mass: 0.6,
       tension: 280,
@@ -197,21 +200,23 @@ function Select({
         {...triggerProps}
       />
       <div className="popoverWrapper">
-        {transitions((styles, item) => item && (
-          <SelectPopover
-            isOpen={state.isOpen}
-            onClose={state.close}
-            animatedStyles={styles}
-          >
-            <ListBoxUnmanaged
-              className="listBox"
-              state={state}
-              topContent={dropdownTopContent}
-              bottomContent={dropdownBottomContent}
-              {...menuProps}
-            />
-          </SelectPopover>
-        ))}
+        <div className="zStacker">
+          {transitions((styles, item) => item && (
+            <SelectPopover
+              isOpen={state.isOpen}
+              onClose={state.close}
+              animatedStyles={styles}
+            >
+              <ListBoxUnmanaged
+                className="listBox"
+                state={state}
+                topContent={dropdownTopContent}
+                bottomContent={dropdownBottomContent}
+                {...menuProps}
+              />
+            </SelectPopover>
+          ))}
+        </div>
       </div>
     </SelectInner>
   )

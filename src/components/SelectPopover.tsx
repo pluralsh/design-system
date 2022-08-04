@@ -3,8 +3,9 @@ import {
 } from 'react'
 import { DismissButton, useOverlay } from '@react-aria/overlays'
 import { FocusScope } from '@react-aria/focus'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { animated } from 'react-spring'
+import theme from 'honorable-theme-default'
 
 type PopoverProps = {
   isOpen?: boolean
@@ -30,12 +31,15 @@ function Popover({ animatedStyles, ...props }: PopoverProps) {
   },
   popoverRef)
 
+  const theme = useTheme()
+
   // Need to remove ref, overlayProps, hidden DismissButton, and
   // FocusScop wrapper when closed to react-aria immediately moves
   // focus to the trigger button while transition animations are happening
   let content = (
     <PopoverStyled
       className="popover"
+      isOpen={isOpen}
       {...(isOpen && {
         ...overlayProps,
         ref: popoverRef,
@@ -53,11 +57,17 @@ function Popover({ animatedStyles, ...props }: PopoverProps) {
   }
 
   // Wrapping for spring animation
-  return <animated.div style={animatedStyles}>{content}</animated.div>
+  return (
+    <animated.div
+      style={{ ...animatedStyles }}
+    >
+      {content}
+    </animated.div>
+  )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const PopoverStyled = styled.div(({ theme }) => ({
+const PopoverStyled = styled.div<{isOpen:boolean}>(({ theme, isOpen }) => ({
   maxHeight: '230px',
   display: 'flex',
   overflow: 'hidden',
@@ -68,6 +78,7 @@ const PopoverStyled = styled.div(({ theme }) => ({
   '> *': {
     flexGrow: 1,
   },
+  ...(!isOpen ? { pointerEvents: 'none' } : {}),
 }))
 
 export { Popover as SelectPopover }
