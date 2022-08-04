@@ -56,7 +56,6 @@ function Trigger({
 export const SelectButtonInner = styled.div<{ isOpen: boolean }>(({ theme, isOpen }) => ({
   ...theme.partials.reset.button,
   ...theme.partials.text.body2,
-  ...theme.partials.focus.default,
   display: 'flex',
   flexDirection: 'row',
   flexShrink: 1,
@@ -89,6 +88,9 @@ export const SelectButtonInner = styled.div<{ isOpen: boolean }>(({ theme, isOpe
         transform: 'scaleY(-100%)',
       }
       : {}),
+  },
+  '&:focus-visible': {
+    ...theme.partials.focus.default,
   },
 }))
 

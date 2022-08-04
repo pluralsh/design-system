@@ -215,21 +215,6 @@ export const boxShadows = {
   focused: `0px 0px 0px 1.5px ${semanticColors['border-outline-focused']}`,
 }
 
-const focusPartials = {
-  default: {
-    '&:focus, &:focus-visible': {
-      outline: 'none',
-      boxShadow: boxShadows.focused,
-    },
-  },
-  defaultChild: {
-    ':focus &, :focus-visible &': {
-      outline: 'none',
-      boxShadow: boxShadows.focused,
-    },
-  },
-}
-
 export const spacing = {
   'minus-xxxxlarge': -96,
   'minus-xxxlarge': -64,
@@ -424,6 +409,24 @@ const resetPartials = asElementTypes<CSSObject>()({
     font: 'inherit',
     cursor: 'pointer',
     outline: 'inherit',
+  },
+})
+
+const focusPartials = asElementTypes<CSSObject>()({
+  default: {
+    outline: 'none',
+    boxShadow: boxShadows.focused,
+  },
+  insetAbsolute: {
+    outline: 'none',
+    position: 'absolute',
+    content: "''",
+    pointerEvents: 'none',
+    top: `${borderWidths.focus}px`,
+    right: `${borderWidths.focus}px`,
+    left: `${borderWidths.focus}px`,
+    bottom: `${borderWidths.focus}px`,
+    boxShadow: boxShadows.focused,
   },
 })
 

@@ -61,14 +61,7 @@ const ScrollContainer = styled.div<ScrollContainerProps>(({ theme, extendStyle }
     outline: 'none',
   },
   '&:focus-visible::after': {
-    position: 'absolute',
-    content: "''",
-    pointerEvents: 'none',
-    top: `${theme.borderWidths.focus}px`,
-    right: `${theme.borderWidths.focus}px`,
-    left: `${theme.borderWidths.focus}px`,
-    bottom: `${theme.borderWidths.focus}px`,
-    boxShadow: theme.boxShadows.focused,
+    ...theme.partials.focus.insetAbsolute,
   },
   ...extendStyle,
 }))

@@ -60,13 +60,7 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
   ...(isFocusVisible
     ? {
       '&:focus::after, &:focus-visible::after': {
-        content: '""',
-        position: 'absolute',
-        top: `${theme.borderWidths.focus}px`,
-        left: `${theme.borderWidths.focus}px`,
-        right: `${theme.borderWidths.focus}px`,
-        bottom: `${theme.borderWidths.focus}px`,
-        boxShadow: theme.boxShadows.focused,
+        ...theme.partials.focus.insetAbsolute,
       },
     }
     : {}),
@@ -220,15 +214,8 @@ const ListBoxFooterInner = styled.button(({ theme }) => ({
     marginLeft: theme.spacing.small,
   },
   '&:focus-visible::after': {
-    content: '""',
-    position: 'absolute',
-    top: `${theme.borderWidths.focus}px`,
-    left: `${theme.borderWidths.focus}px`,
-    right: `${theme.borderWidths.focus}px`,
-    bottom: `${theme.borderWidths.focus}px`,
-    boxShadow: theme.boxShadows.focused,
+    ...theme.partials.focus.insetAbsolute,
   },
-
 }))
 const ListBoxFooter = forwardRef<HTMLButtonElement, ListBoxFooterProps>(({
   leftContent, rightContent, children, ...props
