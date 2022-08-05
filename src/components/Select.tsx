@@ -39,19 +39,20 @@ type SelectProps = Exclude<SelectButtonProps, 'children'> & {
     'autoFocus' | 'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder'
   >
 
-function Trigger({
-  buttonElt,
-  ...props
-}: {
+type TriggerProps = {
   buttonRef: RefObject<HTMLElement>
   buttonElt: any
-} & HTMLAttributes<HTMLElement>) {
+  isOpen: boolean
+} & HTMLAttributes<HTMLElement>
+
+function Trigger({ buttonElt, isOpen, ...props }: TriggerProps) {
   const ref = props.buttonRef
   const { buttonProps } = useButton(props, ref)
 
   return cloneElement(buttonElt, {
     ref,
     ...buttonProps,
+    isOpen,
     style: { appearance: 'unset' },
     tabIndex: 0,
   })
@@ -207,6 +208,7 @@ function Select({
       <Trigger
         buttonRef={ref}
         buttonElt={triggerButton}
+        isOpen={state.isOpen}
         {...triggerProps}
       />
       <div className="popoverWrapper">

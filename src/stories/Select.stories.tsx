@@ -1,5 +1,6 @@
 import { Button, Div, Flex } from 'honorable'
 import { Key, useState } from 'react'
+import styled from 'styled-components'
 
 import {
   CheckIcon,
@@ -10,7 +11,9 @@ import {
   ListBoxFooterAdd,
   ListBoxItem,
   ListBoxItemChipList,
-  PersonIcon, SearchIcon, Select,
+  PersonIcon,
+  SearchIcon,
+  Select,
   SelectButton,
 } from '../index'
 
@@ -125,7 +128,6 @@ const items = [
     label: 'Couscous',
     description: 'With ham and cheese',
     chips: chips.slice(0).reverse(),
-
   },
   {
     key: 'dim-sum2',
@@ -134,6 +136,22 @@ const items = [
     chips: chips.slice(5).reverse(),
   },
 ]
+
+const CustomTriggerButton = styled((props: {isOpen?: boolean}) => (
+  <Button
+    medium
+    primary
+    endIcon={<DropdownArrowIcon className="dropdownIcon" />}
+    {...props}
+  >
+    Click me!
+  </Button>
+))(({ isOpen }) => ({
+  '.dropdownIcon': {
+    transform: isOpen ? 'scaleY(-1)' : 'scaleY(1)',
+    transition: 'transform 0.1s ease',
+  },
+}))
 
 function Template() {
   const [selectedKey, setSelectedKey] = useState<Key>()
@@ -207,9 +225,7 @@ function Template() {
             <ListBoxFooterAdd>Create new</ListBoxFooterAdd>
           }
           triggerButton={(
-            <SelectButton
-              leftContent={curItem ? <CheckIcon /> : <InfoIcon />}
-            >
+            <SelectButton leftContent={curItem ? <CheckIcon /> : <InfoIcon />}>
               {customLabel}
             </SelectButton>
           )}
@@ -235,15 +251,7 @@ function Template() {
           onSelectionChange={key => {
             setSelectedKey(key)
           }}
-          triggerButton={(
-            <Button
-              medium
-              primary
-              endIcon={<DropdownArrowIcon />}
-            >
-              Click me!
-            </Button>
-          )}
+          triggerButton={<CustomTriggerButton />}
           dropdownBottomContent={
             <ListBoxFooterAdd>Create new</ListBoxFooterAdd>
           }
