@@ -293,6 +293,7 @@ function Template() {
           onSelectionChange={key => {
             setSelectedKey(key)
           }}
+          onFooterClick={() => setShownLimit(shownLimit + shownStep)}
           onOpenChange={open => {
             if (!open) setShownLimit(shownStep)
           }}
@@ -307,11 +308,7 @@ function Template() {
           }
           dropdownFooter={
             shownLimit < items.length && (
-              <ListBoxFooterPlus
-                onClick={() => setShownLimit(shownLimit + shownStep)}
-              >
-                View more
-              </ListBoxFooterPlus>
+              <ListBoxFooterPlus>View more</ListBoxFooterPlus>
             )
           }
         >

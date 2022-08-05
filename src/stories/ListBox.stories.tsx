@@ -250,7 +250,6 @@ function Template() {
             )
           }
           onFooterClick={() => {
-            console.log('klink footer clicked')
             setShownLimit(shownLimit + shownStep)
           }}
         >

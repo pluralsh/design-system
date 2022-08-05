@@ -6,6 +6,7 @@ import {
   cloneElement,
   forwardRef,
   useRef,
+  useState,
 } from 'react'
 import { HiddenSelect, useSelect } from '@react-aria/select'
 import { useSelectState } from '@react-stately/select'
@@ -16,7 +17,10 @@ import { useTransition } from 'react-spring'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 import {
-  FOOTER_KEY, HEADER_KEY, ListBoxUnmanaged, useItemWrappedChildren,
+  FOOTER_KEY,
+  HEADER_KEY,
+  ListBoxUnmanaged,
+  useItemWrappedChildren,
 } from './ListBox'
 import { SelectPopover } from './SelectPopover'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
@@ -147,6 +151,7 @@ function Select({
   children,
   selectedKey,
   onSelectionChange,
+  isOpen,
   onOpenChange,
   leftContent,
   rightContent,
@@ -161,15 +166,34 @@ function Select({
   triggerButton,
   ...props
 }: SelectProps) {
+  const [isOpenUncontrolled, setIsOpen] = useState(false)
+  const temporarilyPreventClose = useRef(false)
+
+  if (typeof isOpen !== 'boolean') {
+    isOpen = isOpenUncontrolled
+  }
   const selectStateProps: AriaSelectProps<object> = {
-    onOpenChange,
+    onOpenChange: open => {
+      if (!open && temporarilyPreventClose.current) {
+        temporarilyPreventClose.current = false
+
+        return
+      }
+      setIsOpen(open)
+      if (onOpenChange) {
+        onOpenChange(open)
+      }
+    },
+    isOpen,
     defaultOpen: false,
     selectedKey,
     onSelectionChange: newKey => {
       if (newKey === HEADER_KEY && onHeaderClick) {
+        temporarilyPreventClose.current = true
         onHeaderClick()
       }
       else if (newKey === FOOTER_KEY && onFooterClick) {
+        temporarilyPreventClose.current = true
         onFooterClick()
       }
       else if (onSelectionChange) {
