@@ -15,7 +15,9 @@ import styled from 'styled-components'
 import { useTransition } from 'react-spring'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
-import { ListBoxUnmanaged, useItemWrappedChildren } from './ListBox'
+import {
+  FOOTER_KEY, HEADER_KEY, ListBoxUnmanaged, useItemWrappedChildren,
+} from './ListBox'
 import { SelectPopover } from './SelectPopover'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
 
@@ -31,11 +33,13 @@ type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   children:
     | ReactElement<ListBoxItemBaseProps>
     | ReactElement<ListBoxItemBaseProps>[]
-    dropdownHeaderFixed?: ReactNode
-    dropdownFooterFixed?: ReactNode
-    dropdownHeader?: ReactNode
-    dropdownFooter?: ReactNode
-      triggerButton?: ReactElement
+  dropdownHeaderFixed?: ReactNode
+  dropdownFooterFixed?: ReactNode
+  dropdownHeader?: ReactElement
+  dropdownFooter?: ReactElement
+  onHeaderClick?: () => unknown
+  onFooterClick?: () => unknown
+  triggerButton?: ReactElement
 } & Omit<
     AriaSelectProps<object>,
     'autoFocus' | 'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder'
@@ -150,6 +154,8 @@ function Select({
   dropdownFooter,
   dropdownHeaderFixed,
   dropdownFooterFixed,
+  onHeaderClick,
+  onFooterClick,
   label,
   name,
   triggerButton,
@@ -159,9 +165,19 @@ function Select({
     onOpenChange,
     defaultOpen: false,
     selectedKey,
-    onSelectionChange,
+    onSelectionChange: newKey => {
+      if (newKey === HEADER_KEY && onHeaderClick) {
+        onHeaderClick()
+      }
+      else if (newKey === FOOTER_KEY && onFooterClick) {
+        onFooterClick()
+      }
+      else if (onSelectionChange) {
+        onSelectionChange(typeof newKey === 'string' ? newKey : '')
+      }
+    },
     label,
-    children: useItemWrappedChildren(children),
+    children: useItemWrappedChildren(children, dropdownHeader, dropdownFooter),
     ...props,
   }
 

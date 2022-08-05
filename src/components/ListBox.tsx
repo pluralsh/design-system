@@ -1,7 +1,6 @@
 import {
   Children,
   ComponentPropsWithRef,
-  ElementType,
   ReactElement,
   ReactNode,
   cloneElement,
@@ -9,7 +8,7 @@ import {
   useRef,
 } from 'react'
 import { useListBox, useOption } from '@react-aria/listbox'
-import { useListState } from '@react-stately/list'
+import { ListState, useListState } from '@react-stately/list'
 import { Item } from '@react-stately/collections'
 import { useFocusRing } from '@react-aria/focus'
 import { mergeProps } from '@react-aria/utils'
@@ -20,24 +19,25 @@ import styled, { CSSObject, useTheme } from 'styled-components'
 
 import { Card } from '../index'
 
-import { ListBoxItemBaseProps } from './ListBoxItem'
+export const HEADER_KEY = '$$header$$'
+export const FOOTER_KEY = '$$footer$$'
 
-type ListBoxUnmanagedProps = {
-  state: any
-  header?: ReactNode
-  footer?: ReactNode
+type ListBoxUnmanagedProps = ComponentPropsWithRef<'div'> & {
+  state: ListState<object>
+  header?: ReactElement
+  footer?: ReactElement
   headerFixed?: ReactNode
   footerFixed?: ReactNode
   extendStyle?: CSSObject
-} & ComponentPropsWithRef<ElementType>
+}
 
 type ListBoxProps = Omit<ListBoxUnmanagedProps, 'state'> & {
   selectedKey: string
   onSelectionChange: (key: string) => unknown
+  onHeaderClick?: () => unknown
+  onFooterClick?: () => unknown
   disallowEmptySelection?: boolean
-  children:
-    | ReactElement<ListBoxItemBaseProps>
-    | ReactElement<ListBoxItemBaseProps>[]
+  children: ReactElement | ReactElement[]
 }
 
 const ListBoxCard = styled(Card).attrs(() => ({
@@ -71,25 +71,39 @@ const ScrollContainer = styled.div<ScrollContainerProps>(({ theme, extendStyle }
   ...extendStyle,
 }))
 
-function useItemWrappedChildren(children: React.ReactElement<unknown> | React.ReactElement<unknown>[]) {
+function useItemWrappedChildren(children: ReactElement | ReactElement[],
+  header: ReactElement,
+  footer: ReactElement) {
   return useMemo(() => {
     // Children.map() prefixes the key props in an undocumented and possibly
     // unstable way, so using Children.forEach() to maintain original key values
     const wrapped: JSX.Element[] = []
 
+    if (header) {
+      wrapped.push(<Item key={HEADER_KEY}>{header}</Item>)
+    }
     Children.forEach(children, child => {
-      wrapped.push(<Item key={child.key}>{child}</Item>)
+      if (child) {
+        wrapped.push(<Item key={child.key}>{child}</Item>)
+      }
     })
+    if (footer) {
+      wrapped.push(<Item key={FOOTER_KEY}>{footer}</Item>)
+    }
 
     return wrapped
-  }, [children])
+  }, [children, header, footer])
 }
 
 function ListBox({
   disallowEmptySelection,
   selectedKey,
   children,
+  header,
+  footer,
   onSelectionChange,
+  onHeaderClick,
+  onFooterClick,
   ...props
 }: ListBoxProps) {
   const selected = useMemo(() => new Set(selectedKey ? [selectedKey] : null),
@@ -102,9 +116,17 @@ function ListBox({
     onSelectionChange: selection => {
       const [newKey] = selection
 
-      onSelectionChange(typeof newKey === 'string' ? newKey : '')
+      if (newKey === HEADER_KEY && onHeaderClick) {
+        onHeaderClick()
+      }
+      else if (newKey === FOOTER_KEY && onFooterClick) {
+        onFooterClick()
+      }
+      else if (onSelectionChange) {
+        onSelectionChange(typeof newKey === 'string' ? newKey : '')
+      }
     },
-    children: useItemWrappedChildren(children),
+    children: useItemWrappedChildren(children, header, footer),
   }
 
   const state = useListState(listStateProps as any)
@@ -119,8 +141,6 @@ function ListBox({
 
 function ListBoxUnmanaged({
   state,
-  header,
-  footer,
   headerFixed,
   footerFixed,
   extendStyle,
@@ -149,7 +169,6 @@ function ListBoxUnmanaged({
         }}
         {...listBoxProps}
       >
-        {header && <div className="header">{header}</div>}
         {[...state.collection].map(item => (
           <Option
             key={item.key}
@@ -157,7 +176,6 @@ function ListBoxUnmanaged({
             state={state}
           />
         ))}
-        {footer && <div className="footer">{footer}</div>}
       </ScrollContainer>
       {footerFixed && <div className="footerFixed">{footerFixed}</div>}
     </ListBoxCard>

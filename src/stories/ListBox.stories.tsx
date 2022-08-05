@@ -246,13 +246,13 @@ function Template() {
           }}
           footer={
             shownLimit < items.length && (
-              <ListBoxFooterPlus
-                onClick={() => setShownLimit(shownLimit + shownStep)}
-              >
-                View more
-              </ListBoxFooterPlus>
+              <ListBoxFooterPlus>View more</ListBoxFooterPlus>
             )
           }
+          onFooterClick={() => {
+            console.log('klink footer clicked')
+            setShownLimit(shownLimit + shownStep)
+          }}
         >
           {items.slice(0, shownLimit).map(({ key, chips, version }) => (
             <ListBoxItem

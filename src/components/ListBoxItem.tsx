@@ -172,7 +172,6 @@ const ChipList = forwardRef<
   if (!Array.isArray(chips)) {
     chips = []
   }
-  console.log('klinkchips', chips)
   const firstChips = useMemo(() => chips
     .slice(0, maxVisible)
     .filter(chip => !!chip)
@@ -180,7 +179,6 @@ const ChipList = forwardRef<
   [chips, maxVisible])
   const restChips = useMemo(() => chips.slice(maxVisible), [chips, maxVisible])
 
-  console.log('restChips', restChips)
   const extra = useMemo(() => showExtra && restChips.length > 0 && (
     <Tooltip
       placement="top"
@@ -191,7 +189,6 @@ const ChipList = forwardRef<
               key={i}
               className="tooltip"
             >
-              {console.log(i, n?.props?.children)}
               {n?.props?.children}
               <br />
             </div>
@@ -212,12 +209,12 @@ const ChipList = forwardRef<
   return <ChipListInner>{[...firstChips, extra]}</ChipListInner>
 })
 
-type ListBoxFooterProps = ComponentPropsWithRef<'button'> & {
+type ListBoxFooterProps = ComponentPropsWithRef<'div'> & {
   children: ReactNode
   leftContent?: ReactNode
   rightContent?: ReactNode
 }
-const ListBoxFooterInner = styled.button(({ theme }) => ({
+const ListBoxFooterInner = styled.div(({ theme }) => ({
   ...theme.partials.reset.button,
   display: 'flex',
   position: 'relative',
@@ -235,11 +232,14 @@ const ListBoxFooterInner = styled.button(({ theme }) => ({
   '.rightContent': {
     marginLeft: theme.spacing.small,
   },
+  '&:focus': {
+    outline: 'none',
+  },
   '&:focus-visible::after': {
     ...theme.partials.focus.insetAbsolute,
   },
 }))
-const ListBoxFooter = forwardRef<HTMLButtonElement, ListBoxFooterProps>(({
+const ListBoxFooter = forwardRef<HTMLDivElement, ListBoxFooterProps>(({
   leftContent, rightContent, children, ...props
 }, ref) => (
   <ListBoxFooterInner
@@ -256,8 +256,9 @@ const ListBoxFooter = forwardRef<HTMLButtonElement, ListBoxFooterProps>(({
 const ListBoxFooterPlusInner = styled(ListBoxFooter)(({ theme }) => ({
   color: theme.colors['text-primary-accent'],
 }))
-const ListBoxFooterPlus = forwardRef<HTMLButtonElement, ListBoxFooterProps>(({ leftContent, children, ...props }) => (
+const ListBoxFooterPlus = forwardRef<HTMLDivElement, ListBoxFooterProps>(({ leftContent, children, ...props }, ref) => (
   <ListBoxFooterPlusInner
+    ref={ref}
     leftContent={
       leftContent || (
         <PlusIcon
