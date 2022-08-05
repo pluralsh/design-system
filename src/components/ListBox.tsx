@@ -24,8 +24,10 @@ import { ListBoxItemBaseProps } from './ListBoxItem'
 
 type ListBoxUnmanagedProps = {
   state: any
-  topContent?: ReactNode
-  bottomContent?: ReactNode
+  header?: ReactNode
+  footer?: ReactNode
+  headerFixed?: ReactNode
+  footerFixed?: ReactNode
   extendStyle?: CSSObject
 } & ComponentPropsWithRef<ElementType>
 
@@ -38,8 +40,11 @@ type ListBoxProps = Omit<ListBoxUnmanagedProps, 'state'> & {
     | ReactElement<ListBoxItemBaseProps>[]
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ListBoxCard = styled(Card).attrs(() => ({ cornerSize: 'medium', hue: 'lighter' }))(_p => ({
+const ListBoxCard = styled(Card).attrs(() => ({
+  cornerSize: 'medium',
+  hue: 'lighter',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+}))(_p => ({
   display: 'flex',
   flexDirection: 'column',
   flexShrink: 1,
@@ -48,8 +53,8 @@ const ListBoxCard = styled(Card).attrs(() => ({ cornerSize: 'medium', hue: 'ligh
 }))
 
 type ScrollContainerProps = {
-  hue?: 'default' | 'lighter',
-  extendStyle?: CSSObject,
+  hue?: 'default' | 'lighter'
+  extendStyle?: CSSObject
 }
 const ScrollContainer = styled.div<ScrollContainerProps>(({ theme, extendStyle }) => ({
   ...theme.partials.scrollBar({ hue: 'lighter' }),
@@ -114,8 +119,10 @@ function ListBox({
 
 function ListBoxUnmanaged({
   state,
-  topContent,
-  bottomContent,
+  header,
+  footer,
+  headerFixed,
+  footerFixed,
   extendStyle,
   className,
   ...props
@@ -132,16 +139,17 @@ function ListBoxUnmanaged({
       {...extendStyle}
       {...props}
     >
-      {topContent && <div className="top-content">{topContent}</div>}
+      {headerFixed && <div className="headerFixed">{headerFixed}</div>}
       <ScrollContainer
         ref={ref}
         hue="lighter"
         extendStyle={{
-          paddingTop: topContent ? 0 : theme.spacing.xxxsmall,
-          paddingBottom: bottomContent ? 0 : theme.spacing.xxxsmall,
+          paddingTop: headerFixed ? 0 : theme.spacing.xxxsmall,
+          paddingBottom: footerFixed ? 0 : theme.spacing.xxxsmall,
         }}
         {...listBoxProps}
       >
+        {header && <div className="header">{header}</div>}
         {[...state.collection].map(item => (
           <Option
             key={item.key}
@@ -149,8 +157,9 @@ function ListBoxUnmanaged({
             state={state}
           />
         ))}
+        {footer && <div className="footer">{footer}</div>}
       </ScrollContainer>
-      {bottomContent && <div>{bottomContent}</div>}
+      {footerFixed && <div className="footerFixed">{footerFixed}</div>}
     </ListBoxCard>
   )
 }

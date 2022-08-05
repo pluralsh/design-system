@@ -9,7 +9,7 @@ import {
   DropdownArrowIcon,
   IconFrame,
   InfoIcon,
-  ListBoxFooterAdd,
+  ListBoxFooterPlus,
   ListBoxItem,
   ListBoxItemChipList,
   PersonIcon,
@@ -71,7 +71,7 @@ const chips = [
     severity="info"
     {...chipProps}
   >
-    More
+    Another
   </Chip>,
 ]
 
@@ -81,60 +81,70 @@ const items = [
     label: 'Ratatouille',
     description: 'With ham and cheese',
     chips: chips.slice(0, 1),
+    version: '0.2.24',
   },
   {
     key: 'pizza',
     label: 'Pizza',
     description: 'With ham and cheese',
     chips: chips.slice(1, 3),
+    version: '0.2.25',
   },
   {
     key: 'sushi',
     label: 'Sushi',
     description: 'With ham and cheese',
     chips: null,
+    version: '0.2.26',
   },
   {
     key: 'couscous',
     label: 'Couscous',
     description: 'With ham and cheese',
     chips: chips.slice(4),
+    version: '0.3.00',
   },
   {
     key: 'dim-sum',
     label: 'Dim Sum',
     description: 'With ham and cheese',
     chips: chips.slice(4, 5),
+    version: '0.3.01',
   },
   {
     key: 'ratatouille2',
     label: 'Ratatouille',
     description: 'With ham and cheese',
-    chips: [chips[0], chips[3], chips[6]],
+    chips: [chips[0], chips[3], chips[5]],
+    version: '0.3.02',
   },
   {
     key: 'pizza2',
     label: 'Pizza',
     description: 'With ham and cheese',
     chips: [chips[5], chips[0]],
+    version: '0.3.05',
   },
   {
     key: 'sushi2',
     label: 'Sushi',
     description: 'With ham and cheese',
     chips: chips.slice(0),
+    version: '0.3.12',
   },
   {
     key: 'couscous2',
     label: 'Couscous',
     description: 'With ham and cheese',
     chips: chips.slice(0).reverse(),
+    version: '0.4.00',
   },
   {
     key: 'dim-sum2',
     label: 'Dim Sum',
     description: 'With ham and cheese',
     chips: chips.slice(5).reverse(),
+    version: '0.4.01',
   },
 ]
 
@@ -150,7 +160,7 @@ const CustomTriggerButton = styled(forwardRef<any, any>((props, ref) => (
   >
     Click me!
   </Button>
-)))<{isOpen?:boolean}>(({ isOpen = false }) => ({
+)))<{ isOpen?: boolean }>(({ isOpen = false }) => ({
   '.dropdownIcon': {
     transform: isOpen ? 'scaleY(-1)' : 'scaleY(1)',
     transition: 'transform 0.1s ease',
@@ -159,6 +169,8 @@ const CustomTriggerButton = styled(forwardRef<any, any>((props, ref) => (
 
 function Template() {
   const [selectedKey, setSelectedKey] = useState<Key>()
+  const shownStep = 4
+  const [shownLimit, setShownLimit] = useState<number>(shownStep)
 
   const curItem = items.find(item => item.key === selectedKey)
   const customLabel = curItem
@@ -199,8 +211,8 @@ function Template() {
           defaultOpen={false}
           leftContent={<SearchIcon />}
           rightContent={<ListBoxItemChipList chips={curItem?.chips} />}
-          dropdownBottomContent={
-            <ListBoxFooterAdd>Create new</ListBoxFooterAdd>
+          dropdownFooterFixed={
+            <ListBoxFooterPlus>Create new</ListBoxFooterPlus>
           }
         >
           {items.map(({
@@ -225,8 +237,8 @@ function Template() {
             setSelectedKey(key)
           }}
           defaultOpen={false}
-          dropdownBottomContent={
-            <ListBoxFooterAdd>Create new</ListBoxFooterAdd>
+          dropdownFooterFixed={
+            <ListBoxFooterPlus>Create new</ListBoxFooterPlus>
           }
           triggerButton={(
             <SelectButton leftContent={curItem ? <CheckIcon /> : <InfoIcon />}>
@@ -256,8 +268,8 @@ function Template() {
             setSelectedKey(key)
           }}
           triggerButton={<CustomTriggerButton />}
-          dropdownBottomContent={
-            <ListBoxFooterAdd>Create new</ListBoxFooterAdd>
+          dropdownFooterFixed={
+            <ListBoxFooterPlus>Create new</ListBoxFooterPlus>
           }
         >
           {items.map(({
@@ -269,6 +281,51 @@ function Template() {
               description={description}
               rightContent={<ListBoxItemChipList chips={chips} />}
               leftContent={portrait}
+            />
+          ))}
+        </Select>
+      </Div>
+
+      <Div maxWidth={224}>
+        <Select
+          label="Version"
+          selectedKey={selectedKey}
+          onSelectionChange={key => {
+            setSelectedKey(key)
+          }}
+          onOpenChange={open => {
+            if (!open) setShownLimit(shownStep)
+          }}
+          rightContent={
+            curItem && (
+              <ListBoxItemChipList
+                maxVisible={0}
+                showExtra
+                chips={curItem.chips}
+              />
+            )
+          }
+          dropdownFooter={
+            shownLimit < items.length && (
+              <ListBoxFooterPlus
+                onClick={() => setShownLimit(shownLimit + shownStep)}
+              >
+                View more
+              </ListBoxFooterPlus>
+            )
+          }
+        >
+          {items.slice(0, shownLimit).map(({ key, chips, version }) => (
+            <ListBoxItem
+              key={key}
+              label={version}
+              rightContent={(
+                <ListBoxItemChipList
+                  maxVisible={2}
+                  showExtra
+                  chips={chips}
+                />
+              )}
             />
           ))}
         </Select>

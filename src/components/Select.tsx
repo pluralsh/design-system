@@ -31,9 +31,11 @@ type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   children:
     | ReactElement<ListBoxItemBaseProps>
     | ReactElement<ListBoxItemBaseProps>[]
-  dropdownTopContent?: ReactNode
-  dropdownBottomContent?: ReactNode
-  triggerButton?: ReactElement
+    dropdownHeaderFixed?: ReactNode
+    dropdownFooterFixed?: ReactNode
+    dropdownHeader?: ReactNode
+    dropdownFooter?: ReactNode
+      triggerButton?: ReactElement
 } & Omit<
     AriaSelectProps<object>,
     'autoFocus' | 'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder'
@@ -144,8 +146,10 @@ function Select({
   onOpenChange,
   leftContent,
   rightContent,
-  dropdownTopContent,
-  dropdownBottomContent,
+  dropdownHeader,
+  dropdownFooter,
+  dropdownHeaderFixed,
+  dropdownFooterFixed,
   label,
   name,
   triggerButton,
@@ -222,8 +226,10 @@ function Select({
               <ListBoxUnmanaged
                 className="listBox"
                 state={state}
-                topContent={dropdownTopContent}
-                bottomContent={dropdownBottomContent}
+                header={dropdownHeader}
+                footer={dropdownFooter}
+                headerFixed={dropdownHeaderFixed}
+                footerFixed={dropdownFooterFixed}
                 {...menuProps}
               />
             </SelectPopover>

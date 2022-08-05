@@ -155,27 +155,33 @@ ref) => (
 const ChipListInner = styled.div(({ theme }) => ({
   display: 'flex',
   flexDiretion: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'end',
   gap: theme.spacing.xxsmall,
   '.tooltip': {
     ...theme.partials.text.caption,
   },
 }))
 
-const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips }) => {
+const ChipList = forwardRef<
+  HTMLDivElement,
+  { chips: ReactElement[]; maxVisible?: number, showExtra?: boolean }
+>(({ chips, maxVisible = 3, showExtra = true }) => {
   const chipHue = 'lightest'
 
   if (!Array.isArray(chips)) {
     chips = []
   }
-
+  console.log('klinkchips', chips)
   const firstChips = useMemo(() => chips
-    .slice(0, 3)
+    .slice(0, maxVisible)
     .filter(chip => !!chip)
     .map((chip, i) => cloneElement(chip, { hue: chipHue, key: i })),
-  [chips])
-  const restChips = useMemo(() => chips.slice(3), [chips])
+  [chips, maxVisible])
+  const restChips = useMemo(() => chips.slice(maxVisible), [chips, maxVisible])
 
-  const extra = useMemo(() => restChips.length > 0 && (
+  console.log('restChips', restChips)
+  const extra = useMemo(() => showExtra && restChips.length > 0 && (
     <Tooltip
       placement="top"
       label={(
@@ -185,6 +191,7 @@ const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips 
               key={i}
               className="tooltip"
             >
+              {console.log(i, n?.props?.children)}
               {n?.props?.children}
               <br />
             </div>
@@ -200,7 +207,7 @@ const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips 
       </Chip>
     </Tooltip>
   ),
-  [restChips])
+  [restChips, showExtra])
 
   return <ChipListInner>{[...firstChips, extra]}</ChipListInner>
 })
@@ -243,11 +250,11 @@ const ListBoxFooter = forwardRef<HTMLButtonElement, ListBoxFooterProps>(({
   </ListBoxFooterInner>
 ))
 
-const ListBoxFooterAddInner = styled(ListBoxFooter)(({ theme }) => ({
+const ListBoxFooterPlusInner = styled(ListBoxFooter)(({ theme }) => ({
   color: theme.colors['text-primary-accent'],
 }))
-const ListBoxFooterAdd = forwardRef<HTMLButtonElement, ListBoxFooterProps>(({ leftContent, children, ...props }) => (
-  <ListBoxFooterAddInner
+const ListBoxFooterPlus = forwardRef<HTMLButtonElement, ListBoxFooterProps>(({ leftContent, children, ...props }) => (
+  <ListBoxFooterPlusInner
     leftContent={
       leftContent || (
         <PlusIcon
@@ -261,7 +268,7 @@ const ListBoxFooterAdd = forwardRef<HTMLButtonElement, ListBoxFooterProps>(({ le
     {...props}
   >
     {children}
-  </ListBoxFooterAddInner>
+  </ListBoxFooterPlusInner>
 ))
 
 export {
@@ -270,6 +277,6 @@ export {
   ChipList as ListBoxItemChipList,
   ListBoxFooter,
   ListBoxFooterProps,
-  ListBoxFooterAdd,
-  ListBoxFooterProps as ListBoxFooterAddProps,
+  ListBoxFooterPlus,
+  ListBoxFooterProps as ListBoxFooterPlusProps,
 }
