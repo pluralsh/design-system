@@ -223,6 +223,9 @@ const ListBoxFooterInner = styled.button(({ theme }) => ({
   position: 'relative',
   width: '100%',
   padding: `${theme.spacing.small}px ${theme.spacing.medium}px`,
+  '&:hover': {
+    backgroundColor: theme.colors['fill-two-hover'],
+  },
   '.children': {
     flexGrow: 1,
   },
