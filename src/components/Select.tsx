@@ -117,8 +117,8 @@ const SelectButton = forwardRef<
 },
 ref) => (
   <SelectButtonInner
-    isOpen={isOpen}
     ref={ref}
+    isOpen={isOpen}
     {...props}
   >
     {leftContent && <div className="leftContent">{leftContent}</div>}

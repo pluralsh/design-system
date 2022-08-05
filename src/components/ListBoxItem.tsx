@@ -166,7 +166,7 @@ const ChipListInner = styled.div(({ theme }) => ({
 const ChipList = forwardRef<
   HTMLDivElement,
   { chips: ReactElement[]; maxVisible?: number, showExtra?: boolean }
->(({ chips, maxVisible = 3, showExtra = true }) => {
+>(({ chips, maxVisible = 3, showExtra = true }, ref) => {
   const chipHue = 'lightest'
 
   if (!Array.isArray(chips)) {
@@ -206,7 +206,7 @@ const ChipList = forwardRef<
   ),
   [restChips, showExtra])
 
-  return <ChipListInner>{[...firstChips, extra]}</ChipListInner>
+  return <ChipListInner ref={ref}>{[...firstChips, extra]}</ChipListInner>
 })
 
 type ListBoxFooterProps = ComponentPropsWithRef<'div'> & {
