@@ -34,7 +34,7 @@ type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   dropdownTopContent?: ReactNode
   dropdownBottomContent?: ReactNode
   triggerButton?: ReactElement
-} & Exclude<AriaSelectProps<object>, 'autoFocus' | 'onLoadMore'>
+} & Omit<AriaSelectProps<object>, 'autoFocus' | 'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder' >
 
 function Trigger({
   buttonElt,
