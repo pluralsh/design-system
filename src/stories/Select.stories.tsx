@@ -1,8 +1,9 @@
-import { Button, Div, Flex } from 'honorable'
-import { Key, useState } from 'react'
+import { Div, Flex } from 'honorable'
+import { Key, forwardRef, useState } from 'react'
 import styled from 'styled-components'
 
 import {
+  Button,
   CheckIcon,
   Chip,
   DropdownArrowIcon,
@@ -137,8 +138,11 @@ const items = [
   },
 ]
 
-const CustomTriggerButton = styled((props: {isOpen?: boolean}) => (
+// Make sure any custom trigger button forwards ref to outermost element,
+// otherwise it'll error
+const CustomTriggerButton = styled(forwardRef<any, any>((props, ref) => (
   <Button
+    ref={ref}
     medium
     primary
     endIcon={<DropdownArrowIcon className="dropdownIcon" />}
@@ -146,7 +150,7 @@ const CustomTriggerButton = styled((props: {isOpen?: boolean}) => (
   >
     Click me!
   </Button>
-))(({ isOpen }) => ({
+)))<{isOpen?:boolean}>(({ isOpen = false }) => ({
   '.dropdownIcon': {
     transform: isOpen ? 'scaleY(-1)' : 'scaleY(1)',
     transition: 'transform 0.1s ease',
