@@ -6,6 +6,7 @@ import {
   ReactNode,
   cloneElement,
   forwardRef,
+  useMemo,
 } from 'react'
 import { ItemProps } from '@react-types/shared'
 import styled from 'styled-components'
@@ -162,18 +163,28 @@ const ChipListInner = styled.div(({ theme }) => ({
 
 const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips }) => {
   const chipHue = 'lightest'
-  const firstChips = chips
-    .slice(0, 3)
-    .map(chip => cloneElement(chip, { hue: chipHue }))
-  const restChips = chips.slice(3)
 
-  const extra = restChips.length > 0 && (
+  if (!Array.isArray(chips)) {
+    chips = []
+  }
+
+  const firstChips = useMemo(() => chips
+    .slice(0, 3)
+    .filter(chip => !!chip)
+    .map((chip, i) => cloneElement(chip, { hue: chipHue, key: i })),
+  [chips])
+  const restChips = useMemo(() => chips.slice(3), [chips])
+
+  const extra = useMemo(() => restChips.length > 0 && (
     <Tooltip
       placement="top"
       label={(
         <>
-          {restChips.map(n => (
-            <div className="tooltip">
+          {restChips.map((n, i) => (
+            <div
+              key={i}
+              className="tooltip"
+            >
               {n?.props?.children}
               <br />
             </div>
@@ -188,7 +199,8 @@ const ChipList = forwardRef<HTMLDivElement, { chips: ReactElement[] }>(({ chips 
         {`+${restChips.length}`}
       </Chip>
     </Tooltip>
-  )
+  ),
+  [restChips])
 
   return <ChipListInner>{[...firstChips, extra]}</ChipListInner>
 })
