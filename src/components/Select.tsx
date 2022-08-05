@@ -34,7 +34,10 @@ type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   dropdownTopContent?: ReactNode
   dropdownBottomContent?: ReactNode
   triggerButton?: ReactElement
-} & Omit<AriaSelectProps<object>, 'autoFocus' | 'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder' >
+} & Omit<
+    AriaSelectProps<object>,
+    'autoFocus' | 'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder'
+  >
 
 function Trigger({
   buttonElt,
@@ -179,16 +182,18 @@ function Select({
     from: { opacity: 0, translateY: '-150px', zIndex: 99999 },
     enter: { opacity: 1, translateY: '0', zIndex: 99999 },
     leave: { opacity: 0, translateY: '-150px', zIndex: 99999 },
-    config: state.isOpen ? {
-      mass: 0.6,
-      tension: 280,
-      velocity: 0.02,
-    } : {
-      mass: 0.6,
-      tension: 400,
-      velocity: 0.02,
-      restVelocity: 0.1,
-    },
+    config: state.isOpen
+      ? {
+        mass: 0.6,
+        tension: 280,
+        velocity: 0.02,
+      }
+      : {
+        mass: 0.6,
+        tension: 400,
+        velocity: 0.02,
+        restVelocity: 0.1,
+      },
   })
 
   return (

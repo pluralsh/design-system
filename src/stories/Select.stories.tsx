@@ -4,13 +4,14 @@ import { Key, useState } from 'react'
 import {
   CheckIcon,
   Chip,
+  DropdownArrowIcon,
   IconFrame,
   InfoIcon,
   ListBoxFooterAdd,
   ListBoxItem,
   ListBoxItemChipList,
-  PersonIcon,
-  SearchIcon, Select, SelectButton,
+  PersonIcon, SearchIcon, Select,
+  SelectButton,
 } from '../index'
 
 export default {
@@ -31,99 +32,106 @@ const chipProps = {
   size: 'small',
   hue: 'lighter',
 }
-const chips = (
-  <ListBoxItemChipList
-    chips={[
-      <Chip
-        severity="success"
-        {...chipProps}
-      >
-        Installed
-      </Chip>,
-      <Chip
-        severity="neutral"
-        {...chipProps}
-      >
-        Warm
-      </Chip>,
-      <Chip
-        severity="neutral"
-        {...chipProps}
-      >
-        Latest
-      </Chip>,
-      <Chip
-        severity="neutral"
-        {...chipProps}
-      >
-        Additional
-      </Chip>,
-      <Chip
-        severity="neutral"
-        {...chipProps}
-      >
-        Extra
-      </Chip>,
-      <Chip
-        severity="neutral"
-        {...chipProps}
-      >
-        More
-      </Chip>,
-    ]}
-  />
-)
+const chips = [
+  <Chip
+    severity="success"
+    {...chipProps}
+  >
+    Installed
+  </Chip>,
+  <Chip
+    severity="neutral"
+    {...chipProps}
+  >
+    Warm
+  </Chip>,
+  <Chip
+    severity="neutral"
+    {...chipProps}
+  >
+    Latest
+  </Chip>,
+  <Chip
+    severity="warning"
+    {...chipProps}
+  >
+    Additional
+  </Chip>,
+  <Chip
+    severity="error"
+    {...chipProps}
+  >
+    Extra
+  </Chip>,
+  <Chip
+    severity="info"
+    {...chipProps}
+  >
+    More
+  </Chip>,
+]
 
 const items = [
   {
     key: 'ratatouille',
     label: 'Ratatouille',
     description: 'With ham and cheese',
+    chips: chips.slice(0, 1),
   },
   {
     key: 'pizza',
     label: 'Pizza',
     description: 'With ham and cheese',
+    chips: chips.slice(1, 3),
   },
   {
     key: 'sushi',
     label: 'Sushi',
     description: 'With ham and cheese',
+    chips: null,
   },
   {
     key: 'couscous',
     label: 'Couscous',
     description: 'With ham and cheese',
+    chips: chips.slice(4),
   },
   {
     key: 'dim-sum',
     label: 'Dim Sum',
     description: 'With ham and cheese',
+    chips: chips.slice(4, 5),
   },
   {
     key: 'ratatouille2',
     label: 'Ratatouille',
     description: 'With ham and cheese',
+    chips: [chips[0], chips[3], chips[6]],
   },
   {
     key: 'pizza2',
     label: 'Pizza',
     description: 'With ham and cheese',
+    chips: [chips[5], chips[0]],
   },
   {
     key: 'sushi2',
     label: 'Sushi',
     description: 'With ham and cheese',
+    chips: chips.slice(0),
   },
   {
     key: 'couscous2',
     label: 'Couscous',
     description: 'With ham and cheese',
+    chips: chips.slice(0).reverse(),
+
   },
   {
     key: 'dim-sum2',
     label: 'Dim Sum',
     description: 'With ham and cheese',
+    chips: chips.slice(5).reverse(),
   },
 ]
 
@@ -167,19 +175,20 @@ function Template() {
             setSelectedKey(key)
           }}
           defaultOpen={false}
-          onLoadMore={() => true}
           leftContent={<SearchIcon />}
-          rightContent={<PersonIcon />}
+          rightContent={<ListBoxItemChipList chips={curItem?.chips} />}
           dropdownBottomContent={
             <ListBoxFooterAdd>Create new</ListBoxFooterAdd>
           }
         >
-          {items.map(({ key, label, description }) => (
+          {items.map(({
+            key, label, description, chips,
+          }) => (
             <ListBoxItem
               key={key}
               label={label}
               description={description}
-              rightContent={chips}
+              rightContent={<ListBoxItemChipList chips={chips} />}
               leftContent={portrait}
             />
           ))}
@@ -194,7 +203,6 @@ function Template() {
             setSelectedKey(key)
           }}
           defaultOpen={false}
-          onLoadMore={() => true}
           dropdownBottomContent={
             <ListBoxFooterAdd>Create new</ListBoxFooterAdd>
           }
@@ -206,12 +214,14 @@ function Template() {
             </SelectButton>
           )}
         >
-          {items.map(({ key, label, description }) => (
+          {items.map(({
+            key, label, description, chips,
+          }) => (
             <ListBoxItem
               key={key}
               label={label}
               description={description}
-              rightContent={chips}
+              rightContent={<ListBoxItemChipList chips={chips} />}
               leftContent={portrait}
             />
           ))}
@@ -229,6 +239,7 @@ function Template() {
             <Button
               medium
               primary
+              endIcon={<DropdownArrowIcon />}
             >
               Click me!
             </Button>
@@ -237,12 +248,14 @@ function Template() {
             <ListBoxFooterAdd>Create new</ListBoxFooterAdd>
           }
         >
-          {items.map(({ key, label, description }) => (
+          {items.map(({
+            key, label, description, chips,
+          }) => (
             <ListBoxItem
               key={key}
               label={label}
               description={description}
-              rightContent={chips}
+              rightContent={<ListBoxItemChipList chips={chips} />}
               leftContent={portrait}
             />
           ))}

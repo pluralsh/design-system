@@ -137,7 +137,6 @@ function Template() {
         <ListBox
           selectedKey={selectedKey}
           onSelectionChange={key => {
-            console.log('keyz changed 2', key)
             setSelectedKey(key)
           }}
           extendStyle={{
@@ -164,7 +163,6 @@ function Template() {
         <ListBox
           selectedKey={selectedKey}
           onSelectionChange={key => {
-            console.log('keyz changed 2', key)
             setSelectedKey(key)
           }}
           bottomContent={(
@@ -194,7 +192,6 @@ function Template() {
         <ListBox
           selectedKey={selectedKey}
           onSelectionChange={key => {
-            console.log('keyz changed 2', key)
             setSelectedKey(key)
           }}
           bottomContent={(
