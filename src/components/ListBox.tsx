@@ -1,6 +1,7 @@
 import {
   Children,
   ComponentPropsWithRef,
+  Key,
   ReactElement,
   ReactNode,
   cloneElement,
@@ -31,7 +32,7 @@ type ListBoxUnmanagedProps = ComponentPropsWithRef<'div'> & {
   extendStyle?: CSSObject
 }
 
-type ListBoxProps = Omit<ListBoxUnmanagedProps, 'state'> & {
+type ListBoxProps = Omit<ListBoxUnmanagedProps, 'state' | 'nextFocusedKeyRef'> & {
   selectedKey: string
   onSelectionChange: (key: string) => unknown
   onHeaderClick?: () => unknown
@@ -106,6 +107,8 @@ function ListBox({
   onFooterClick,
   ...props
 }: ListBoxProps) {
+  const nextFocusedKeyRef = useRef<Key>(null)
+  const stateRef = useRef<ListState<object> | null>(null)
   const selected = useMemo(() => new Set(selectedKey ? [selectedKey] : null),
     [selectedKey])
   const listStateProps: AriaListBoxProps<string> = {
@@ -121,6 +124,11 @@ function ListBox({
       }
       else if (newKey === FOOTER_KEY && onFooterClick) {
         onFooterClick()
+        if (stateRef.current) {
+          const state = stateRef.current
+
+          nextFocusedKeyRef.current = state.collection.getKeyBefore(FOOTER_KEY)
+        }
       }
       else if (onSelectionChange) {
         onSelectionChange(typeof newKey === 'string' ? newKey : '')
@@ -130,6 +138,17 @@ function ListBox({
   }
 
   const state = useListState(listStateProps as any)
+
+  if (nextFocusedKeyRef.current) {
+    const focusedKey
+      = state.collection.getKeyAfter(nextFocusedKeyRef.current)
+      || nextFocusedKeyRef.current
+
+    state.selectionManager.setFocusedKey(focusedKey)
+    nextFocusedKeyRef.current = null
+  }
+
+  stateRef.current = state
 
   return (
     <ListBoxUnmanaged
