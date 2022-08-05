@@ -168,6 +168,9 @@ export { default as theme, styledTheme } from './theme'
 export { default as GlobalStyle } from './GlobalStyle'
 export { ListBox } from './components/ListBox'
 export {
-  ListBoxItem, ListBoxItemChipList, ListBoxFooter, ListBoxFooterPlus,
+  ListBoxItem,
+  ListBoxFooter,
+  ListBoxFooterPlus,
 } from './components/ListBoxItem'
+export { default as ListBoxItemChipList } from './components/ListBoxItemChipList'
 export { Select, SelectButton } from './components/Select'
