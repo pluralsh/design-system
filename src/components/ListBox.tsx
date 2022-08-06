@@ -125,9 +125,7 @@ function ListBox({
       else if (newKey === FOOTER_KEY && onFooterClick) {
         onFooterClick()
         if (stateRef.current) {
-          const state = stateRef.current
-
-          nextFocusedKeyRef.current = state.collection.getKeyBefore(FOOTER_KEY)
+          nextFocusedKeyRef.current = stateRef?.current?.collection?.getKeyBefore(FOOTER_KEY)
         }
       }
       else if (onSelectionChange) {
@@ -139,6 +137,8 @@ function ListBox({
 
   const state = useListState(listStateProps as any)
 
+  stateRef.current = state
+
   if (nextFocusedKeyRef.current) {
     const focusedKey
       = state.collection.getKeyAfter(nextFocusedKeyRef.current)
@@ -147,8 +147,6 @@ function ListBox({
     state.selectionManager.setFocusedKey(focusedKey)
     nextFocusedKeyRef.current = null
   }
-
-  stateRef.current = state
 
   return (
     <ListBoxUnmanaged

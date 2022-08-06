@@ -181,8 +181,9 @@ function Template() {
     <Flex
       flexDirection="column"
       gap="large"
+      maxWidth={512}
     >
-      <Div maxWidth={512}>
+      <Div>
         <Select
           defaultOpen={false}
           label="Pick something"
@@ -201,7 +202,7 @@ function Template() {
         </Select>
       </Div>
 
-      <Div maxWidth={512}>
+      <Div>
         <Select
           label="Pick something"
           selectedKey={selectedKey}
@@ -229,7 +230,7 @@ function Template() {
         </Select>
       </Div>
 
-      <Div maxWidth={512}>
+      <Div>
         <Select
           label="Pick something"
           selectedKey={selectedKey}
@@ -260,36 +261,14 @@ function Template() {
         </Select>
       </Div>
 
-      <Div maxWidth={512}>
-        <Select
-          label="Pick something"
-          selectedKey={selectedKey}
-          onSelectionChange={key => {
-            setSelectedKey(key)
-          }}
-          triggerButton={<CustomTriggerButton />}
-          dropdownFooterFixed={
-            <ListBoxFooterPlus>Create new</ListBoxFooterPlus>
-          }
-        >
-          {items.map(({
-            key, label, description, chips,
-          }) => (
-            <ListBoxItem
-              key={key}
-              label={label}
-              description={description}
-              rightContent={<ListBoxItemChipList chips={chips} />}
-              leftContent={portrait}
-            />
-          ))}
-        </Select>
-      </Div>
-
-      <Div maxWidth={224}>
+      <Flex justifyContent="right">
         <Select
           label="Version"
           selectedKey={selectedKey}
+          triggerButton={<CustomTriggerButton />}
+          width={224}
+          maxHeight={197}
+          placement="right"
           onSelectionChange={key => {
             setSelectedKey(key)
           }}
@@ -326,7 +305,7 @@ function Template() {
             />
           ))}
         </Select>
-      </Div>
+      </Flex>
     </Flex>
   )
 }

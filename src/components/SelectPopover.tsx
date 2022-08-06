@@ -65,7 +65,6 @@ function Popover({ animatedStyles, ...props }: PopoverProps) {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PopoverStyled = styled.div<{isOpen:boolean}>(({ theme, isOpen }) => ({
-  maxHeight: '230px',
   display: 'flex',
   overflow: 'hidden',
   position: 'absolute',

@@ -13,6 +13,8 @@ import { HiddenSelect, useSelect } from '@react-aria/select'
 import { useSelectState } from '@react-stately/select'
 import { AriaSelectProps } from '@react-types/select'
 import { useButton } from '@react-aria/button'
+import { ListState } from '@react-stately/list'
+
 import styled from 'styled-components'
 import { useTransition } from 'react-spring'
 
@@ -34,6 +36,8 @@ type SelectButtonProps = {
   isOpen?: boolean
 }
 
+type Placement = 'left' | 'right'
+
 type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   children:
     | ReactElement<ListBoxItemBaseProps>
@@ -45,6 +49,9 @@ type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   onHeaderClick?: () => unknown
   onFooterClick?: () => unknown
   triggerButton?: ReactElement
+  placement?: Placement
+  width?: string | number
+  maxHeight?: string | number
 } & Omit<
     AriaSelectProps<object>,
     'autoFocus' | 'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder'
@@ -133,18 +140,31 @@ ref) => (
   </SelectButtonInner>
 ))
 
-const SelectInner = styled.div<{ isOpen: boolean }>(({ theme }) => ({
+const SelectInner = styled.div<{
+  isOpen: boolean
+  width: string | number
+  maxHeight: string | number
+  placement: Placement
+}>(({
+  theme, width, maxHeight, placement,
+}) => ({
   position: 'relative',
   '.popoverWrapper': {
     position: 'absolute',
     overflow: 'hidden',
-    width: '100%',
+    ...(placement === 'right' && { right: 0, left: 'auto' }),
+    width: width ? 10000 : '100%',
     height: 9999,
   },
   '.zStacker': {
     position: 'absolute',
     width: '100%',
     zIndex: theme.zIndexes.selectPopover,
+  },
+  '.popover': {
+    maxHeight: maxHeight || 230,
+    width: width || '100%',
+    ...(placement === 'right' && { right: 0, left: 'auto' }),
   },
 }))
 
@@ -165,8 +185,13 @@ function Select({
   label,
   name,
   triggerButton,
+  placement,
+  width,
+  maxHeight,
   ...props
 }: SelectProps) {
+  const nextFocusedKeyRef = useRef<Key>(null)
+  const stateRef = useRef<ListState<object> | null>(null)
   const [isOpenUncontrolled, setIsOpen] = useState(false)
   const temporarilyPreventClose = useRef(false)
 
@@ -196,6 +221,10 @@ function Select({
       else if (newKey === FOOTER_KEY && onFooterClick) {
         temporarilyPreventClose.current = true
         onFooterClick()
+        if (stateRef.current) {
+          nextFocusedKeyRef.current
+            = stateRef?.current?.collection?.getKeyBefore(FOOTER_KEY)
+        }
       }
       else if (onSelectionChange) {
         onSelectionChange(typeof newKey === 'string' ? newKey : '')
@@ -207,6 +236,17 @@ function Select({
   }
 
   const state = useSelectState(selectStateProps)
+
+  stateRef.current = state
+
+  if (nextFocusedKeyRef.current) {
+    const focusedKey
+      = state.collection.getKeyAfter(nextFocusedKeyRef.current)
+      || nextFocusedKeyRef.current
+
+    state.selectionManager.setFocusedKey(focusedKey)
+    nextFocusedKeyRef.current = null
+  }
 
   // Get props for the listbox element
   const ref = useRef()
@@ -243,7 +283,12 @@ function Select({
   })
 
   return (
-    <SelectInner isOpen={state.isOpen}>
+    <SelectInner
+      isOpen={state.isOpen}
+      width={width}
+      maxHeight={maxHeight}
+      placement={placement}
+    >
       <HiddenSelect
         state={state}
         triggerRef={ref}
