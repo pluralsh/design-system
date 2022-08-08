@@ -21,7 +21,7 @@ import { mergeRefs } from 'react-merge-refs'
 import { Div, DivProps } from 'honorable'
 import { CSSTransition } from 'react-transition-group'
 
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 
 import createIcon from './icons/createIcon'
 
