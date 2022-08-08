@@ -44,7 +44,6 @@ type ListBoxProps = Omit<ListBoxUnmanagedProps, 'state' | 'nextFocusedKeyRef'> &
 const ListBoxCard = styled(Card).attrs(() => ({
   cornerSize: 'medium',
   hue: 'lighter',
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }))(_p => ({
   display: 'flex',
   flexDirection: 'column',
@@ -112,7 +111,6 @@ function ListBox({
   const selected = useMemo(() => new Set(selectedKey ? [selectedKey] : null),
     [selectedKey])
   const listStateProps: AriaListBoxProps<string> = {
-    // filter: () => true,
     disallowEmptySelection,
     selectionMode: 'single',
     selectedKeys: selected,

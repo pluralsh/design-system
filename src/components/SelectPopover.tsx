@@ -49,9 +49,7 @@ function Popover({ animatedStyles, ...props }: PopoverProps) {
     </PopoverStyled>
   )
 
-  // if (isOpen) {
   content = <FocusScope restoreFocus>{content}</FocusScope>
-  // }
 
   // Wrapping for spring animation
   return (
@@ -63,7 +61,6 @@ function Popover({ animatedStyles, ...props }: PopoverProps) {
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PopoverStyled = styled.div<{isOpen:boolean}>(({ theme, isOpen }) => ({
   display: 'flex',
   overflow: 'hidden',

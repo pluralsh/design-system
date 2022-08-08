@@ -2828,9 +2828,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pluralsh/eslint-config-typescript@npm:2.2.0":
-  version: 2.2.0
-  resolution: "@pluralsh/eslint-config-typescript@npm:2.2.0"
+"@pluralsh/eslint-config-typescript@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@pluralsh/eslint-config-typescript@npm:2.3.0"
   dependencies:
     "@babel/core": ^7.18.9
     "@babel/eslint-parser": ^7.18.9
@@ -2842,7 +2842,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.30.7
     eslint: ^8.20.0
     typescript: ^4.7.4
-  checksum: 48edeebea7b62a53a74d8600a84295d4e559e20c3a376bb62c15acb864c3792ea15a38cf83af79ca4694608c93b85e81e4415e3296612eca825a647041706361
+  checksum: 620326de374fca06e8379acf72428e8f9eec315874377f1870094dc807cb61c4b32713da9252f087b5196dd759ebf538a4c0befa05fd1eeff054a0ab80cf4fbf
   languageName: node
   linkType: hard
 
@@ -15703,7 +15703,7 @@ __metadata:
     "@emotion/react": 11.9.3
     "@emotion/styled": 11.9.3
     "@floating-ui/react-dom-interactions": 0.8.1
-    "@pluralsh/eslint-config-typescript": 2.2.0
+    "@pluralsh/eslint-config-typescript": 2.3.0
     "@react-aria/button": 3.6.0
     "@react-aria/focus": 3.7.0
     "@react-aria/listbox": 3.6.0
