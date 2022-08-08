@@ -1,5 +1,5 @@
 import {
-  Div, DivProps, Flex, H1, H3, P, Span,
+  Div, DivProps, Flex, H1, H3, Img, P, Span,
 } from 'honorable'
 import PropTypes from 'prop-types'
 import { Ref, forwardRef } from 'react'
@@ -7,7 +7,6 @@ import { Ref, forwardRef } from 'react'
 import Chip from './Chip'
 import PadlockLockedIcon from './icons/PadlockLockedIcon'
 import VerifiedIcon from './icons/VerifiedIcon'
-import IconFrame from './IconFrame'
 import Card from './Card'
 
 type RepositoryCardProps = DivProps & {
@@ -34,12 +33,6 @@ const propTypes = {
   size: PropTypes.oneOf(['small', 'medium', 'large']),
 }
 
-const sizeToWidth: { [key in 'small' | 'medium' | 'large']: number } = {
-  small: 697,
-  medium: 777,
-  large: 801,
-}
-
 function RepositoryCardRef({
   title,
   publisher,
@@ -49,7 +42,6 @@ function RepositoryCardRef({
   description,
   imageUrl,
   tags = [],
-  size = 'small',
   ...props
 }: RepositoryCardProps,
 ref: Ref<any>) {
@@ -58,15 +50,18 @@ ref: Ref<any>) {
       ref={ref}
       clickable
       flexDirection="column"
-      padding="large"
-      width={sizeToWidth[size]}
-      maxWidth={sizeToWidth[size]}
+      padding="medium"
+      paddingBottom="large"
+      width={697}
+      maxWidth={697}
       {...props}
     >
       <Flex align="center">
-        <IconFrame
-          size={size}
-          url={imageUrl}
+        <Img
+          src={imageUrl}
+          width={40}
+          height={40}
+          margin="xxsmall"
         />
         <Flex
           direction="row"
@@ -76,8 +71,7 @@ ref: Ref<any>) {
           <Flex direction="column">
             <H1
               color="text"
-              title1={size === 'large'}
-              title2={size !== 'large'}
+              title2
             >
               {title}
               {!!verified && (
@@ -96,45 +90,6 @@ ref: Ref<any>) {
             >
               {publisher}
             </H3>
-
-            {size !== 'small' && (
-              <>
-                {description && (
-                  <P
-                    body2
-                    marginTop="xsmall"
-                    color="text-light"
-                    style={{
-                      display: '-webkit-box',
-                      '-webkit-line-clamp': '2',
-                      '-webkit-box-orient': 'vertical',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {description}
-                  </P>
-                )}
-                <Div flexGrow={1} />
-                {tags && tags.length > 0 && (
-                  <Flex
-                    marginTop="medium"
-                    gap="xsmall"
-                    flexWrap="wrap"
-                  >
-                    {tags.map(tag => (
-                      <Chip
-                        size="small"
-                        hue="lighter"
-                        key={tag}
-                        _last={{ marginRight: 0 }}
-                      >
-                        {tag}
-                      </Chip>
-                    ))}
-                  </Flex>
-                )}
-              </>
-            )}
           </Flex>
           <Flex
             justifyContent="end"
@@ -163,43 +118,39 @@ ref: Ref<any>) {
           </Flex>
         </Flex>
       </Flex>
-      {size === 'small' && (
-        <>
-          {description && (
-            <P
-              body2
-              marginTop="xsmall"
-              color="text-light"
-              style={{
-                display: '-webkit-box',
-                '-webkit-line-clamp': '2',
-                '-webkit-box-orient': 'vertical',
-                overflow: 'hidden',
-              }}
+      {description && (
+        <P
+          body2
+          marginTop="xsmall"
+          color="text-light"
+          style={{
+            display: '-webkit-box',
+            '-webkit-line-clamp': '2',
+            '-webkit-box-orient': 'vertical',
+            overflow: 'hidden',
+          }}
+        >
+          {description}
+        </P>
+      )}
+      <Div flexGrow={1} />
+      {tags && tags.length > 0 && (
+        <Flex
+          marginTop="medium"
+          gap="xsmall"
+          flexWrap="wrap"
+        >
+          {tags.map(tag => (
+            <Chip
+              size="small"
+              hue="lighter"
+              key={tag}
+              _last={{ marginRight: 0 }}
             >
-              {description}
-            </P>
-          )}
-          <Div flexGrow={1} />
-          {tags && tags.length > 0 && (
-            <Flex
-              marginTop="medium"
-              gap="xsmall"
-              flexWrap="wrap"
-            >
-              {tags.map(tag => (
-                <Chip
-                  size="small"
-                  hue="lighter"
-                  key={tag}
-                  _last={{ marginRight: 0 }}
-                >
-                  {tag}
-                </Chip>
-              ))}
-            </Flex>
-          )}
-        </>
+              {tag}
+            </Chip>
+          ))}
+        </Flex>
       )}
     </Card>
   )
