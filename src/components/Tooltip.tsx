@@ -99,7 +99,6 @@ function Tooltip({
   onOpenChange,
   ...props
 }: TooltipProps) {
-  const theme = useTheme()
   const [open, setOpen] = useState(false)
   const arrowRef = useRef()
   const isOpen
