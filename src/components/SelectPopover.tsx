@@ -63,7 +63,6 @@ function Popover({ animatedStyles, ...props }: PopoverProps) {
 
 const PopoverStyled = styled.div<{isOpen:boolean}>(({ isOpen }) => ({
   display: 'flex',
-  overflow: 'hidden',
   position: 'absolute',
   width: '100%',
   marginTop: 4,
