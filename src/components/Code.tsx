@@ -52,9 +52,7 @@ function CodeRef({ children, language, ...props }: CodeProps) {
   if (typeof children !== 'string') throw new Error('Code component expects a string as its children')
 
   useEffect(() => {
-    if (copied) {
-      return () => clearTimeout(setTimeout(() => setCopied(false), 1000))
-    }
+    if (copied) return () => clearTimeout(setTimeout(() => setCopied(false), 1000))
   }, [copied])
 
   const handleCopy = () => window.navigator.clipboard.writeText(children).then(() => setCopied(true))
@@ -91,7 +89,6 @@ function CodeRef({ children, language, ...props }: CodeProps) {
         </Div>
       </Div>
     </Card>
-
   )
 }
 
