@@ -155,6 +155,7 @@ const SelectInner = styled.div<{
     ...(placement === 'right' && { right: 0, left: 'auto' }),
     width: width ? 10000 : '100%',
     height: 9999,
+    pointerEvents: 'none',
   },
   '.zStacker': {
     position: 'absolute',
@@ -165,6 +166,7 @@ const SelectInner = styled.div<{
     maxHeight: maxHeight || 230,
     width: width || '100%',
     ...(placement === 'right' && { right: 0, left: 'auto' }),
+    pointerEvents: 'auto',
   },
 }))
 
