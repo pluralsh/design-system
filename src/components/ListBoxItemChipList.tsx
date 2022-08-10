@@ -28,9 +28,9 @@ const ChipList = forwardRef<
   if (!Array.isArray(chips)) {
     chips = []
   }
+  chips = chips.filter(chip => !!chip)
   const firstChips = useMemo(() => chips
     .slice(0, maxVisible)
-    .filter(chip => !!chip)
     .map((chip, i) => cloneElement(chip, { hue: chipHue, key: i })),
   [chips, maxVisible])
   const restChips = useMemo(() => chips.slice(maxVisible), [chips, maxVisible])
