@@ -59,6 +59,7 @@
     "babel-loader": "8.2.5",
     "eslint": "8.20.0",
     "eslint-plugin-storybook": "0.6.1",
+    "highlight.js": "11.6.0",
     "honorable": "0.131.0",
     "honorable-theme-default": "0.63.0",
     "react": "18.2.0",
