@@ -1,4 +1,6 @@
-import { Card, Markdown } from '..'
+import { Div } from 'honorable'
+
+import { Markdown } from '..'
 
 const markdown = `# Plural Console
 
@@ -69,15 +71,12 @@ export default {
 
 function Template() {
   return (
-    <Card
-      width="832px"
-      padding="large"
-    >
+    <Div width="800px">
       <Markdown
         text={markdown}
         gitUrl="https://github.com/pluralsh/console/"
       />
-    </Card>
+    </Div>
   )
 }
 
