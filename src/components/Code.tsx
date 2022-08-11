@@ -2,7 +2,7 @@ import {
   forwardRef, useEffect, useRef, useState,
 } from 'react'
 import {
-  Button, Div, FlexProps, Pre,
+  Button, Flex, FlexProps, Pre,
 } from 'honorable'
 import hljs from 'highlight.js'
 
@@ -70,10 +70,7 @@ function CodeRef({ children, language, ...props }: CodeProps) {
       minHeight="90px"
       {...props}
     >
-      <Div
-        position="relative"
-        padding={null}
-      >
+      <Flex position="relative">
         {hover && (
           <Button
             position="absolute"
@@ -88,13 +85,15 @@ function CodeRef({ children, language, ...props }: CodeProps) {
             {copied ? 'Copied' : 'Copy'}
           </Button>
         )}
-        <Div
+        <Flex
+          minHeight="90px"
           overflowX="auto"
           padding="large"
+          alignItems="center"
         >
           <Highlight language={language}>{children}</Highlight>
-        </Div>
-      </Div>
+        </Flex>
+      </Flex>
     </Card>
   )
 }
