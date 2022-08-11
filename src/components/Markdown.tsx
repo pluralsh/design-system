@@ -170,7 +170,7 @@ function MarkdownRef({ text, gitUrl }: MarkdownProps) {
             ':first-of-type': { marginTop: '0px' },
           },
         }),
-        img: (props: any) => (
+        img: props => (
           <MarkdownImage
             {...{
               ...props,
