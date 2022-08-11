@@ -2191,26 +2191,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^0.7.3":
-  version: 0.7.3
-  resolution: "@floating-ui/core@npm:0.7.3"
-  checksum: f48f9fb0d19dcbe7a68c38e8de7fabb11f0c0e6e0ef215ae60b5004900bacb1386e7b89cb377d91a90ff7d147ea1f06c2905136ecf34dea162d9696d8f448d5f
-  languageName: node
-  linkType: hard
-
 "@floating-ui/core@npm:^1.0.1":
   version: 1.0.1
   resolution: "@floating-ui/core@npm:1.0.1"
   checksum: c8a5f1a491788e5bebfe747e9372df2c7cbee0d8790ddf95e25149ac91ccf1a2cca8f768029826cfd3d687617c1d0f3241b97f1648bdf2a28d421f39e79c2eee
-  languageName: node
-  linkType: hard
-
-"@floating-ui/dom@npm:^0.5.3":
-  version: 0.5.4
-  resolution: "@floating-ui/dom@npm:0.5.4"
-  dependencies:
-    "@floating-ui/core": ^0.7.3
-  checksum: 9f9d8a51a828c6be5f187204aa6d293c6c9ef70d51dcc5891a4d85683745fceebf79ff8826d0f75ae41b45c3b138367d339756f27f41be87a8770742ebc0de42
   languageName: node
   linkType: hard
 
@@ -2233,19 +2217,6 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   checksum: 62a168c00b23ee4cec61ae9b291c316591e5eb32aad58d594f9b39a8582a4d052a4a571b08a8526fb028a5ca3a952cb666851949deffd1f2b92a9f0030c45710
-  languageName: node
-  linkType: hard
-
-"@floating-ui/react-dom@npm:^0.7.2":
-  version: 0.7.2
-  resolution: "@floating-ui/react-dom@npm:0.7.2"
-  dependencies:
-    "@floating-ui/dom": ^0.5.3
-    use-isomorphic-layout-effect: ^1.1.1
-  peerDependencies:
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  checksum: bc3f2b5557f87f6f4bbccfe3e8d097abafad61a41083d3b79f3499f27590e273bcb3dc7136c2444841ee7a8c0d2a70cc1385458c16103fa8b70eade80c24af52
   languageName: node
   linkType: hard
 
@@ -2980,7 +2951,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/focus@npm:3.7.0, @react-aria/focus@npm:^3.6.1, @react-aria/focus@npm:^3.7.0":
+"@react-aria/focus@npm:3.7.0, @react-aria/focus@npm:^3.7.0":
   version: 3.7.0
   resolution: "@react-aria/focus@npm:3.7.0"
   dependencies:
@@ -2995,7 +2966,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/i18n@npm:^3.4.1, @react-aria/i18n@npm:^3.5.0":
+"@react-aria/i18n@npm:^3.5.0":
   version: 3.5.1
   resolution: "@react-aria/i18n@npm:3.5.1"
   dependencies:
@@ -3013,7 +2984,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/interactions@npm:^3.10.0, @react-aria/interactions@npm:^3.9.1":
+"@react-aria/interactions@npm:^3.10.0":
   version: 3.10.0
   resolution: "@react-aria/interactions@npm:3.10.0"
   dependencies:
@@ -3128,7 +3099,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/selection@npm:^3.10.0, @react-aria/selection@npm:^3.9.1":
+"@react-aria/selection@npm:^3.10.0":
   version: 3.10.0
   resolution: "@react-aria/selection@npm:3.10.0"
   dependencies:
@@ -3157,27 +3128,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/tabs@npm:3.2.1":
-  version: 3.2.1
-  resolution: "@react-aria/tabs@npm:3.2.1"
+"@react-aria/tabs@npm:3.3.0":
+  version: 3.3.0
+  resolution: "@react-aria/tabs@npm:3.3.0"
   dependencies:
     "@babel/runtime": ^7.6.2
-    "@react-aria/focus": ^3.6.1
-    "@react-aria/i18n": ^3.4.1
-    "@react-aria/interactions": ^3.9.1
-    "@react-aria/selection": ^3.9.1
-    "@react-aria/utils": ^3.13.1
-    "@react-stately/list": ^3.5.1
-    "@react-stately/tabs": ^3.1.1
-    "@react-types/shared": ^3.13.1
-    "@react-types/tabs": ^3.1.1
+    "@react-aria/focus": ^3.7.0
+    "@react-aria/i18n": ^3.5.0
+    "@react-aria/interactions": ^3.10.0
+    "@react-aria/selection": ^3.10.0
+    "@react-aria/utils": ^3.13.2
+    "@react-stately/list": ^3.5.2
+    "@react-stately/tabs": ^3.2.0
+    "@react-types/shared": ^3.14.0
+    "@react-types/tabs": ^3.1.2
   peerDependencies:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-  checksum: 308762983fadb5a078da444cfaccc13a148b78e4431e7e3a21feb88dc67436dc077c3bbf88f9c2c704ce91dd567571a1580e0ece04085c55253acad9baeeb605
+  checksum: 4d8cb3250d8d0218a8f0413a501b9001797fa3f8571b9d5c739fd551ae03ee6c5947621ae0e964e23b3b2a543ec4885f9414ec5ff2ad7a1ea241c6403902d5b6
   languageName: node
   linkType: hard
 
-"@react-aria/utils@npm:^3.13.1, @react-aria/utils@npm:^3.13.2":
+"@react-aria/utils@npm:^3.13.2":
   version: 3.13.2
   resolution: "@react-aria/utils@npm:3.13.2"
   dependencies:
@@ -3338,19 +3309,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-stately/collections@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@react-stately/collections@npm:3.4.1"
-  dependencies:
-    "@babel/runtime": ^7.6.2
-    "@react-types/shared": ^3.13.1
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-  checksum: 62ca0e423e56bf93ef853e0e6cccfd6d1a11f72229efa94a45bd26d40041772149fbe61a48fee9a8163013909dd1c177d5a034dd23605aceb0099b808df9bea0
-  languageName: node
-  linkType: hard
-
-"@react-stately/collections@npm:^3.4.2":
+"@react-stately/collections@npm:3.4.2, @react-stately/collections@npm:^3.4.2":
   version: 3.4.2
   resolution: "@react-stately/collections@npm:3.4.2"
   dependencies:
@@ -3362,7 +3321,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-stately/list@npm:^3.5.1, @react-stately/list@npm:^3.5.2":
+"@react-stately/list@npm:^3.5.2":
   version: 3.5.2
   resolution: "@react-stately/list@npm:3.5.2"
   dependencies:
@@ -3437,21 +3396,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-stately/tabs@npm:3.1.1":
-  version: 3.1.1
-  resolution: "@react-stately/tabs@npm:3.1.1"
-  dependencies:
-    "@babel/runtime": ^7.6.2
-    "@react-stately/list": ^3.5.1
-    "@react-stately/utils": ^3.5.0
-    "@react-types/tabs": ^3.1.1
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-  checksum: cb089b1ed30ea0274dccf6a4630f38c84ebd6931dda14244e1e4988bf6454bd1cc11004e2b935c3e24a5921b0db8a9a4f7f7f0249637a87458a53d07ad4a9d1a
-  languageName: node
-  linkType: hard
-
-"@react-stately/tabs@npm:^3.1.1":
+"@react-stately/tabs@npm:3.2.0, @react-stately/tabs@npm:^3.2.0":
   version: 3.2.0
   resolution: "@react-stately/tabs@npm:3.2.0"
   dependencies:
@@ -3494,7 +3439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-stately/utils@npm:^3.5.0, @react-stately/utils@npm:^3.5.1":
+"@react-stately/utils@npm:^3.5.1":
   version: 3.5.1
   resolution: "@react-stately/utils@npm:3.5.1"
   dependencies:
@@ -3592,7 +3537,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-types/shared@npm:^3.13.1, @react-types/shared@npm:^3.14.0":
+"@react-types/shared@npm:^3.14.0":
   version: 3.14.0
   resolution: "@react-types/shared@npm:3.14.0"
   peerDependencies:
@@ -3601,7 +3546,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-types/tabs@npm:^3.1.1, @react-types/tabs@npm:^3.1.2":
+"@react-types/tabs@npm:^3.1.2":
   version: 3.1.2
   resolution: "@react-types/tabs@npm:3.1.2"
   dependencies:
@@ -12075,21 +12020,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"honorable-theme-default@npm:0.63.0":
-  version: 0.63.0
-  resolution: "honorable-theme-default@npm:0.63.0"
+"honorable-theme-default@npm:0.65.0":
+  version: 0.65.0
+  resolution: "honorable-theme-default@npm:0.65.0"
   peerDependencies:
     "@emotion/react": ">=10.0.0"
-  checksum: 2e50ae3b074f4e8b0530f67428beb224d25348061fa3b67f5ebf9fb787a6c694c936138fa1dc0a9b4b89ebd62a455bbc1966a14802729011f509b58ace86aa30
+  checksum: d2358d4bf9398b8d4e3cfa84c8aa9bde3178463d9a69d8f905d49cf71735e55acf25461641c1a5de8586e7d916bea2a649d9dc5173bc2b0e6e878b0d07fcded5
   languageName: node
   linkType: hard
 
-"honorable@npm:0.131.0":
-  version: 0.131.0
-  resolution: "honorable@npm:0.131.0"
+"honorable@npm:0.135.0":
+  version: 0.135.0
+  resolution: "honorable@npm:0.135.0"
   dependencies:
     "@emotion/is-prop-valid": ^1.1.3
-    "@floating-ui/react-dom": ^0.7.2
+    "@floating-ui/react-dom": ^1.0.0
     lodash.merge: ^4.6.2
     lodash.mergewith: ^4.6.2
     prop-types: ^15.8.1
@@ -12100,7 +12045,7 @@ __metadata:
     "@emotion/styled": ">=10.0.0"
     react: ">=16.0.0"
     react-dom: ">=16.0.0"
-  checksum: 46810a6aa20d7df8c2fa1cf6f7bf7eff3df09cf33b19f456ef6d45115b41cba3be7d1a872f2ff66678252680fe63c007add9cb5bf97ca70767c38989ebd5f37a
+  checksum: 0231a986640b5aee6d819eed3d9973080cec146f47023969ee464f2204c8937f18456be7dc837355448168b39c49309eb003782f9b91c58a4d8f4dca3154bc77
   languageName: node
   linkType: hard
 
@@ -16453,10 +16398,10 @@ __metadata:
     "@react-aria/listbox": 3.6.0
     "@react-aria/overlays": 3.10.0
     "@react-aria/select": 3.8.0
-    "@react-aria/tabs": 3.2.1
-    "@react-stately/collections": 3.4.1
+    "@react-aria/tabs": 3.3.0
+    "@react-stately/collections": 3.4.2
     "@react-stately/overlays": 3.4.0
-    "@react-stately/tabs": 3.1.1
+    "@react-stately/tabs": 3.2.0
     "@react-types/shared": 3.13.1
     "@storybook/addon-actions": 6.5.9
     "@storybook/addon-docs": 6.5.9
@@ -16479,8 +16424,8 @@ __metadata:
     eslint: 8.20.0
     eslint-plugin-storybook: 0.6.1
     highlight.js: 11.6.0
-    honorable: 0.131.0
-    honorable-theme-default: 0.63.0
+    honorable: 0.135.0
+    honorable-theme-default: 0.65.0
     prop-types: 15.8.1
     react: 18.2.0
     react-dom: 18.2.0
@@ -16498,8 +16443,8 @@ __metadata:
   peerDependencies:
     "@emotion/react": ">=11.9.3"
     "@emotion/styled": ">=11.9.3"
-    honorable: ">=0.128.0"
-    honorable-theme-default: ">=0.63.0"
+    honorable: ">=0.135.0"
+    honorable-theme-default: ">=0.65.0"
     react: ">=16.0.0"
     react-dom: ">=16.0.0"
     react-transition-group: ">=4.4.2"

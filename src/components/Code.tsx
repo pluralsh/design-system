@@ -6,7 +6,7 @@ import {
 } from 'honorable'
 import hljs from 'highlight.js'
 
-import { fontFamilies } from 'src/theme'
+import { fontFamilies } from '../theme'
 
 import CopyIcon from './icons/CopyIcon'
 import Card from './Card'
