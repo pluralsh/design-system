@@ -32,7 +32,6 @@ function Template() {
       <Code
         language="js"
         width="600px"
-        padding={null}
       >
         {jsCode}
       </Code>
