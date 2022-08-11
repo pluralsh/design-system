@@ -104,7 +104,7 @@ function MarkdownRef({ text, gitUrl }: MarkdownProps) {
         }),
         li: toReactMarkdownComponent({
           component: Li,
-          props: { body1: true, marginTop: 'xxsmall' },
+          props: { body2: true, marginTop: 'xxsmall' },
         }),
         h1: toReactMarkdownComponent({
           component: H1,
