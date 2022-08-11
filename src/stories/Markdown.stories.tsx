@@ -1,5 +1,3 @@
-import { Flex } from 'honorable'
-
 import { Card, Markdown } from '..'
 
 const markdown = `# Plural Console
