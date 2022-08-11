@@ -74,19 +74,3 @@ ref): JSX.Element => (
 ))
 
 export default LoopingLogo
-
-// export function LoopingLogo({
-//                               nofill, darkbg, height, scale, dark, still,
-//                             }) {
-//   return (
-//     <Box
-//       fill={!nofill}
-//       background={darkbg ? 'background' : null}
-//       height={height}
-//       align="center"
-//       justify="center"
-//     >
-
-//     </Box>
-//   )
-// }
