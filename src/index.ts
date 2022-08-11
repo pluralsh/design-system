@@ -120,6 +120,7 @@ export { default as Banner } from './components/Banner'
 export { default as Card, CardProps } from './components/Card'
 export { default as Checkbox } from './components/Checkbox'
 export { default as Chip } from './components/Chip'
+export { default as Code } from './components/Code'
 export { default as Codeline } from './components/Codeline'
 export {
   default as ContentCard,
