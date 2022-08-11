@@ -200,8 +200,8 @@ function MarkdownRef({ text, gitUrl }: MarkdownProps) {
         span: toReactMarkdownComponent({
           component: Span, props: { style: { verticalAlign: 'bottom' } },
         }),
-        code: toReactMarkdownComponent({ component: Code }),
-        pre: toReactMarkdownComponent({ component: MarkdownPreformatted }),
+        code: toReactMarkdownComponent({ component: Code, props: { marginBottom: 'medium' } }),
+        pre: toReactMarkdownComponent({ component: MarkdownPreformatted, props: { marginBottom: 'medium' } }),
       }}
     >
       {text}
