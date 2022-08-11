@@ -63,9 +63,9 @@ function CodeRef({ children, language, ...props }: CodeProps) {
     <Card
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      {...props}
     >
       <Div
-        {...props}
         position="relative"
         padding={null}
       >

@@ -1,12 +1,12 @@
 import { Children, forwardRef, useMemo } from 'react'
 import {
-  A, Blockquote, Div, H1, H2, H3, H4, H5, H6, Img, Li, Ol, P, Span, Ul,
+  A, Blockquote, Code, Div, H1, H2, H3, H4, H5, H6, Img, Li, Ol, P, Span, Ul,
 } from 'honorable'
 import ReactMarkdown from 'react-markdown'
 
 import rehypeRaw from 'rehype-raw'
 
-import Code from './Code'
+import MultilineCode from './Code'
 
 type MarkdownProps = {
   text: string,
@@ -51,12 +51,12 @@ function MdPre({ children, ...props }: any) {
 
   return (
     <Div mb={1}>
-      <Code
+      <MultilineCode
         language={lang}
         {...props}
       >
         {stringChild}
-      </Code>
+      </MultilineCode>
     </Div>
   )
 }
