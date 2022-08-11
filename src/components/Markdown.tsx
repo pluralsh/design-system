@@ -15,7 +15,7 @@ type MarkdownProps = {
 
 const propTypes = {}
 
-const toReactMarkdownComponent = ({ component: Component, ...props }: any) => function renderComponent(p: any) {
+const toReactMarkdownComponent = ({ component: Component, props }: any) => function renderComponent(p: any) {
   return (
     <Component
       {...{
@@ -41,7 +41,7 @@ function getLastStringChild(children: any, depth = 0): any {
   return lastChild
 }
 
-function MdPre({ children, ...props }: any) {
+function MarkdownPreformatted({ children, ...props }: any) {
   let lang
 
   if (children.props?.className?.startsWith('lang-')) {
@@ -61,12 +61,14 @@ function MdPre({ children, ...props }: any) {
   )
 }
 
-function MdImg({ src, gitUrl, ...props }: any) {
+function MarkdownImage({ src, gitUrl, ...props }: any) {
   // Convert local image paths to full path on github
   // Only works if primary git branch is named "master"
   if (gitUrl && src && !src.match(/^https*/)) {
     src = `${gitUrl}/raw/master/${src}`
   }
+
+  console.log(props)
 
   return (
     <Img
@@ -79,8 +81,7 @@ function MdImg({ src, gitUrl, ...props }: any) {
 }
 
 function MarkdownRef({ text, gitUrl }: MarkdownProps) {
-  const memo = useMemo(() => (
-
+  return useMemo(() => (
     <ReactMarkdown
       rehypePlugins={[rehypeRaw]}
       components={{
@@ -170,7 +171,7 @@ function MarkdownRef({ text, gitUrl }: MarkdownProps) {
           },
         }),
         img: (props: any) => (
-          <MdImg
+          <MarkdownImage
             {...{
               ...props,
               ...{
@@ -194,21 +195,18 @@ function MarkdownRef({ text, gitUrl }: MarkdownProps) {
             inline: true,
             display: 'inline',
             target: '_blank',
-                // display: 'inline', color: 'text-light', size: 'small', target: '_blank',
           },
         }),
         span: toReactMarkdownComponent({
           component: Span, props: { style: { verticalAlign: 'bottom' } },
         }),
         code: toReactMarkdownComponent({ component: Code }),
-        pre: toReactMarkdownComponent({ component: MdPre }),
+        pre: toReactMarkdownComponent({ component: MarkdownPreformatted }),
       }}
     >
       {text}
     </ReactMarkdown>
   ), [gitUrl, text])
-
-  return <Div>{ memo }</Div>
 }
 
 const Markdown = forwardRef(MarkdownRef)
