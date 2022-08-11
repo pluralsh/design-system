@@ -41,6 +41,15 @@ function Template() {
       >
         {goCode}
       </Code>
+      <Code width="400px">
+        One line
+      </Code>
+      <Code width="400px">
+        {'Two lines\nTwo lines'}
+      </Code>
+      <Code width="400px">
+        {'Three lines\nThree lines\nThree lines'}
+      </Code>
     </Flex>
   )
 }

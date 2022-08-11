@@ -14,7 +14,7 @@ import CheckIcon from './icons/CheckIcon'
 
 type CodeProps = FlexProps & {
   children: string,
-  language: string,
+  language?: string,
 }
 
 type HighlightProps = FlexProps & {
@@ -67,6 +67,7 @@ function CodeRef({ children, language, ...props }: CodeProps) {
     <Card
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      minHeight="90px"
       {...props}
     >
       <Div
