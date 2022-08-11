@@ -6,6 +6,8 @@ import {
 } from 'honorable'
 import hljs from 'highlight.js'
 
+import { fontFamilies } from 'src/theme'
+
 import CopyIcon from './icons/CopyIcon'
 import Card from './Card'
 import CheckIcon from './icons/CheckIcon'
@@ -36,7 +38,7 @@ function Highlight({ language, children } : HighlightProps) {
       margin="0"
       padding="0"
       background="none"
-      fontFamily="Monument Mono, monospace"
+      fontFamily={fontFamilies.mono}
       className={(language && `language-${language}`) || 'nohighlight'}
       ref={codeRef}
     >
