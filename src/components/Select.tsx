@@ -15,18 +15,15 @@ import { AriaSelectProps } from '@react-types/select'
 import { useButton } from '@react-aria/button'
 import { ListState } from '@react-stately/list'
 import styled, { useTheme } from 'styled-components'
-import { useTransition } from 'react-spring'
-import { CSSTransition } from 'react-transition-group'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 import {
   FOOTER_KEY,
   HEADER_KEY,
-  ListBoxUnmanaged,
   useItemWrappedChildren,
 } from './ListBox'
-import { SelectPopover } from './SelectPopover'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
+import { PopoverListBox } from './PopoverListBox'
 
 type SelectButtonProps = {
   leftContent?: ReactNode
@@ -38,7 +35,7 @@ type SelectButtonProps = {
 
 type Placement = 'left' | 'right'
 
-type SelectProps = Exclude<SelectButtonProps, 'children'> & {
+export type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   children:
     | ReactElement<ListBoxItemBaseProps>
     | ReactElement<ListBoxItemBaseProps>[]
@@ -146,24 +143,12 @@ ref) => (
 
 const SelectInner = styled.div<{
   isOpen: boolean
-  width: string | number
   maxHeight: string | number
   placement: Placement
 }>(({
-  theme, width, maxHeight, placement,
+  maxHeight, placement,
 }) => ({
   position: 'relative',
-  '.popoverWrapper': {
-    position: 'absolute',
-    width: width || '100%',
-    ...(placement === 'right' && { right: 0, left: 'auto' }),
-    pointerEvents: 'none',
-    zIndex: theme.zIndexes.selectPopover,
-    clipPath: 'polygon(-100px 0, -100px 99999px, 99999px 99999px, 99999px 0)',
-    '&.enter-done': {
-      clipPath: 'none',
-    },
-  },
   '.popover': {
     maxHeight: maxHeight || 230,
     width: '100%',
@@ -198,7 +183,6 @@ function Select({
   const stateRef = useRef<ListState<object> | null>(null)
   const [isOpenUncontrolled, setIsOpen] = useState(false)
   const temporarilyPreventClose = useRef(false)
-  const theme = useTheme()
 
   if (typeof isOpen !== 'boolean') {
     isOpen = isOpenUncontrolled
@@ -270,28 +254,9 @@ function Select({
     </SelectButton>
   )
 
-  const transitions = useTransition(state.isOpen, {
-    from: { opacity: 0, translateY: '-150px' },
-    enter: { opacity: 1, translateY: '0' },
-    leave: { opacity: 0, translateY: '-150px' },
-    config: state.isOpen
-      ? {
-        mass: 0.6,
-        tension: 280,
-        velocity: 0.02,
-      }
-      : {
-        mass: 0.6,
-        tension: 400,
-        velocity: 0.02,
-        restVelocity: 0.1,
-      },
-  })
-
   return (
     <SelectInner
       isOpen={state.isOpen}
-      width={width}
       maxHeight={maxHeight}
       placement={placement}
     >
@@ -307,34 +272,35 @@ function Select({
         isOpen={state.isOpen}
         {...triggerProps}
       />
-      <CSSTransition
-        in={state.isOpen}
-        timeout={150}
-      >
-        <div className="popoverWrapper">
-          {transitions((styles, item) => item && (
-            <SelectPopover
-              isOpen={state.isOpen}
-              onClose={state.close}
-              animatedStyles={styles}
-            >
-              <ListBoxUnmanaged
-                className="listBox"
-                state={state}
-                headerFixed={dropdownHeaderFixed}
-                footerFixed={dropdownFooterFixed}
-                extendStyle={{
-                  boxShadow: theme.boxShadows.moderate,
-                }}
-                {...menuProps}
-              />
-            </SelectPopover>
-          ))}
-        </div>
-      </CSSTransition>
+      <PopoverListBox
+        isOpen={state.isOpen}
+        onClose={state.close}
+        listBoxState={state}
+        listBoxProps={menuProps}
+        dropdownHeaderFixed={dropdownHeaderFixed}
+        dropdownFooterFixed={dropdownFooterFixed}
+        width={width}
+        placement={placement}
+      />
     </SelectInner>
   )
 }
+
+export const PopoverWrapper = styled.div<{
+  isOpen: boolean
+  width: string | number
+  placement: Placement
+}>(({ theme, width, placement }) => ({
+  position: 'absolute',
+  width: width || '100%',
+  ...(placement === 'right' && { right: 0, left: 'auto' }),
+  pointerEvents: 'none',
+  zIndex: theme.zIndexes.selectPopover,
+  clipPath: 'polygon(-100px 0, -100px 99999px, 99999px 99999px, 99999px 0)',
+  '&.enter-done': {
+    clipPath: 'none',
+  },
+}))
 
 export {
   Select, SelectButton, SelectButtonInner, SelectInner,

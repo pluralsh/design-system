@@ -9,10 +9,9 @@ import {
   useMemo,
   useRef,
 } from 'react'
-import { useListBox, useOption } from '@react-aria/listbox'
+import { AriaListBoxOptions, useListBox, useOption } from '@react-aria/listbox'
 import { ListState, useListState } from '@react-stately/list'
 import { Item } from '@react-stately/collections'
-import { useFocusRing } from '@react-aria/focus'
 import { mergeProps } from '@react-aria/utils'
 import { AriaListBoxProps } from '@react-types/listbox'
 import { mergeRefs } from 'react-merge-refs'
@@ -24,13 +23,14 @@ import { Card } from '../index'
 export const HEADER_KEY = '$$header$$'
 export const FOOTER_KEY = '$$footer$$'
 
-type ListBoxUnmanagedProps = ComponentPropsWithRef<'div'> & {
-  state: ListState<object>
-  headerFixed?: ReactNode
-  footerFixed?: ReactNode
-  extendStyle?: CSSObject
-  listBoxRef?: RefObject<any>
-}
+type ListBoxUnmanagedProps = AriaListBoxOptions<object> &
+  ComponentPropsWithRef<'div'> & {
+    state: ListState<object>
+    headerFixed?: ReactNode
+    footerFixed?: ReactNode
+    extendStyle?: CSSObject
+    listBoxRef?: RefObject<any>
+  }
 
 type ListBoxProps = Omit<
   ListBoxUnmanagedProps,
@@ -94,7 +94,7 @@ function useItemWrappedChildren(children: ReactElement | ReactElement[],
             key={child.key}
             textValue={child?.props?.textValue}
           >
-            { child }
+            {child}
           </Item>
         )
 
@@ -222,9 +222,13 @@ function Option({ item, state }: any) {
   // Get props for the option element
   const ref = useRef()
   const {
-    optionProps, isSelected, isDisabled, labelProps, descriptionProps, isFocused,
-  }
-    = useOption({ key: item.key }, state, ref)
+    optionProps,
+    isSelected,
+    isDisabled,
+    labelProps,
+    descriptionProps,
+    isFocused,
+  } = useOption({ key: item.key }, state, ref)
 
   const mergedProps = mergeProps(optionProps, {
     selected: isSelected,

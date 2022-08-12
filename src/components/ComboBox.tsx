@@ -13,21 +13,18 @@ import { AriaComboBoxProps } from '@react-types/combobox'
 import { ListState } from '@react-stately/list'
 import pick from 'lodash/pick'
 import omit from 'lodash/omit'
-import styled, { useTheme } from 'styled-components'
-import { useTransition } from 'react-spring'
-import { CSSTransition } from 'react-transition-group'
+import styled from 'styled-components'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 import {
   FOOTER_KEY,
   HEADER_KEY,
-  ListBoxUnmanaged,
   useItemWrappedChildren,
 } from './ListBox'
-import { SelectPopover } from './SelectPopover'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
 import Input, { InputProps } from './Input'
 import { SelectInner } from './Select'
+import { PopoverListBox } from './PopoverListBox'
 
 type ComboBoxInputProps = {
   leftContent?: ReactNode
@@ -129,9 +126,7 @@ ref) => (
       }
       inputProps={inputProps}
       {...props}
-    >
-      {/* <div className="children">{children}</div> */}
-    </Input>
+    />
   </ComboBoxInputInner>
 ))
 
@@ -165,7 +160,6 @@ function ComboBox({
   const stateRef = useRef<ListState<object> | null>(null)
   const [isOpenUncontrolled, setIsOpen] = useState(false)
   const temporarilyPreventClose = useRef(false)
-  const theme = useTheme()
 
   if (typeof isOpen !== 'boolean') {
     isOpen = isOpenUncontrolled
@@ -256,24 +250,6 @@ function ComboBox({
   //     </Input>
   //   )
 
-  const transitions = useTransition(state.isOpen, {
-    from: { opacity: 0, translateY: '-150px' },
-    enter: { opacity: 1, translateY: '0' },
-    leave: { opacity: 0, translateY: '-150px' },
-    config: state.isOpen
-      ? {
-        mass: 0.6,
-        tension: 280,
-        velocity: 0.02,
-      }
-      : {
-        mass: 0.6,
-        tension: 400,
-        velocity: 0.02,
-        restVelocity: 0.1,
-      },
-  })
-
   const honorableInputPropNames = [
     'onChange',
     'onFocus',
@@ -291,7 +267,6 @@ function ComboBox({
   return (
     <ComboBoxInner
       isOpen={state.isOpen}
-      width={width}
       maxHeight={maxHeight}
       placement={placement}
     >
@@ -308,33 +283,18 @@ function ComboBox({
         isOpen={state.isOpen}
         inputProps={inputProps}
       /> */}
-      <CSSTransition
-        in={state.isOpen}
-        timeout={150}
-      >
-        <div className="popoverWrapper">
-          {transitions((styles, item) => item && (
-            <SelectPopover
-              isOpen={state.isOpen}
-              onClose={state.close}
-              animatedStyles={styles}
-              popoverRef={popoverRef}
-            >
-              <ListBoxUnmanaged
-                className="listBox"
-                state={state}
-                headerFixed={dropdownHeaderFixed}
-                footerFixed={dropdownFooterFixed}
-                extendStyle={{
-                  boxShadow: theme.boxShadows.moderate,
-                }}
-                listBoxRef={listBoxRef}
-                {...listBoxProps}
-              />
-            </SelectPopover>
-          ))}
-        </div>
-      </CSSTransition>
+      <PopoverListBox
+        isOpen={state.isOpen}
+        onClose={state.close}
+        listBoxState={state}
+        listBoxProps={listBoxProps}
+        popoverRef={popoverRef}
+        listBoxRef={listBoxRef}
+        dropdownHeaderFixed={dropdownHeaderFixed}
+        dropdownFooterFixed={dropdownFooterFixed}
+        width={width}
+        placement={placement}
+      />
     </ComboBoxInner>
   )
 }
