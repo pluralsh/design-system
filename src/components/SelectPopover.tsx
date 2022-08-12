@@ -20,8 +20,6 @@ function Popover({ animatedStyles, ...props }: PopoverProps) {
     popoverRef = ref, isOpen, onClose, children,
   } = props
 
-  console.log('popoverRef', popoverRef)
-
   // Handle events that should cause the popup to close,
   // e.g. blur, clicking outside, or pressing the escape key.
   const { overlayProps } = useOverlay({

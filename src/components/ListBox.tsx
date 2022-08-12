@@ -187,7 +187,6 @@ function ListBoxUnmanaged({
   if (listBoxRef) {
     ref = listBoxRef
   }
-  console.log('klink listBoxRef', ref.current)
   const { listBoxProps } = useListBox(props, state, ref)
 
   return (
@@ -227,18 +226,12 @@ function Option({ item, state }: any) {
   }
     = useOption({ key: item.key }, state, ref)
 
-  // Determine whether we should show a keyboard
-  // focus ring for accessibility
-  const { isFocusVisible, focusProps } = useFocusRing()
-
-  // console.log('isFocusVisible', isFocusVisible)
-  const mergedProps = mergeProps(optionProps, focusProps, {
+  const mergedProps = mergeProps(optionProps, {
     selected: isSelected,
     disabled: isDisabled,
     focused: isFocused,
     labelProps,
     descriptionProps,
-    isFocusVisible: true,
     ref: mergeRefs([ref, item.rendered.ref]),
   })
 

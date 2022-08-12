@@ -6,7 +6,6 @@ import {
   RefObject,
   cloneElement,
   forwardRef,
-  useEffect,
   useRef,
   useState,
 } from 'react'
@@ -15,9 +14,9 @@ import { useSelectState } from '@react-stately/select'
 import { AriaSelectProps } from '@react-types/select'
 import { useButton } from '@react-aria/button'
 import { ListState } from '@react-stately/list'
-
 import styled, { useTheme } from 'styled-components'
 import { useTransition } from 'react-spring'
+import { CSSTransition } from 'react-transition-group'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 import {
@@ -147,39 +146,29 @@ ref) => (
 
 const SelectInner = styled.div<{
   isOpen: boolean
-  openIsComplete: boolean
   width: string | number
   maxHeight: string | number
   placement: Placement
 }>(({
-  theme, width, maxHeight, placement, openIsComplete,
+  theme, width, maxHeight, placement,
 }) => ({
   position: 'relative',
   '.popoverWrapper': {
     position: 'absolute',
     width: width || '100%',
     ...(placement === 'right' && { right: 0, left: 'auto' }),
-    ...(!openIsComplete && {
-      clipPath: 'polygon(-100px 0, -100px 99999px, 99999px 99999px, 99999px 0)',
-    }),
     pointerEvents: 'none',
     zIndex: theme.zIndexes.selectPopover,
+    clipPath: 'polygon(-100px 0, -100px 99999px, 99999px 99999px, 99999px 0)',
+    '&.enter-done': {
+      clipPath: 'none',
+    },
   },
   '.popover': {
     maxHeight: maxHeight || 230,
     width: '100%',
     ...(placement === 'right' && { right: 0, left: 'auto' }),
     pointerEvents: 'auto',
-  },
-  '&.enter, &.enter-active, &.exit, &.exit-active, &.exit-done': {
-    '.popoverWrapper': {
-      clipPath: 'polygon(-100px 0, -100px 99999px, 99999px 99999px, 99999px 0)',
-    },
-  },
-  '&.enter-done': {
-    '.popoverWrapper': {
-      clipPath: 'none',
-    },
   },
 }))
 
@@ -208,22 +197,12 @@ function Select({
   const nextFocusedKeyRef = useRef<Key>(null)
   const stateRef = useRef<ListState<object> | null>(null)
   const [isOpenUncontrolled, setIsOpen] = useState(false)
-  const [openIsComplete, setOpenIsComplete] = useState(false)
-  const [isOpenWithDelay, setIsOpenWithDelay] = useState(false)
   const temporarilyPreventClose = useRef(false)
   const theme = useTheme()
 
   if (typeof isOpen !== 'boolean') {
     isOpen = isOpenUncontrolled
   }
-  useEffect(() => {
-    if (isOpen !== isOpenWithDelay) {
-      setIsOpenWithDelay(isOpen)
-    }
-    if (!isOpen && openIsComplete) {
-      setOpenIsComplete(false)
-    }
-  }, [isOpen, isOpenWithDelay, openIsComplete])
 
   const selectStateProps: AriaSelectProps<object> = {
     onOpenChange: open => {
@@ -279,8 +258,6 @@ function Select({
   const ref = useRef()
   const { triggerProps, menuProps } = useSelect(selectStateProps, state, ref)
 
-  console.log('klink menuProps', menuProps)
-
   label = label || ' '
   triggerButton = triggerButton || (
     <SelectButton
@@ -293,16 +270,11 @@ function Select({
     </SelectButton>
   )
 
-  const transitions = useTransition(isOpenWithDelay, {
+  const transitions = useTransition(state.isOpen, {
     from: { opacity: 0, translateY: '-150px' },
     enter: { opacity: 1, translateY: '0' },
     leave: { opacity: 0, translateY: '-150px' },
-    onRest: () => {
-      if (state.isOpen) {
-        setOpenIsComplete(true)
-      }
-    },
-    config: isOpenWithDelay
+    config: state.isOpen
       ? {
         mass: 0.6,
         tension: 280,
@@ -319,7 +291,6 @@ function Select({
   return (
     <SelectInner
       isOpen={state.isOpen}
-      openIsComplete={openIsComplete}
       width={width}
       maxHeight={maxHeight}
       placement={placement}
@@ -336,26 +307,31 @@ function Select({
         isOpen={state.isOpen}
         {...triggerProps}
       />
-      <div className="popoverWrapper">
-        {transitions((styles, item) => item && (
-          <SelectPopover
-            isOpen={state.isOpen}
-            onClose={state.close}
-            animatedStyles={styles}
-          >
-            <ListBoxUnmanaged
-              className="listBox"
-              state={state}
-              headerFixed={dropdownHeaderFixed}
-              footerFixed={dropdownFooterFixed}
-              extendStyle={{
-                boxShadow: theme.boxShadows.moderate,
-              }}
-              {...menuProps}
-            />
-          </SelectPopover>
-        ))}
-      </div>
+      <CSSTransition
+        in={state.isOpen}
+        timeout={150}
+      >
+        <div className="popoverWrapper">
+          {transitions((styles, item) => item && (
+            <SelectPopover
+              isOpen={state.isOpen}
+              onClose={state.close}
+              animatedStyles={styles}
+            >
+              <ListBoxUnmanaged
+                className="listBox"
+                state={state}
+                headerFixed={dropdownHeaderFixed}
+                footerFixed={dropdownFooterFixed}
+                extendStyle={{
+                  boxShadow: theme.boxShadows.moderate,
+                }}
+                {...menuProps}
+              />
+            </SelectPopover>
+          ))}
+        </div>
+      </CSSTransition>
     </SelectInner>
   )
 }

@@ -8,15 +8,13 @@ import {
 } from 'react'
 import { useComboBox } from '@react-aria/combobox'
 import { useFilter } from '@react-aria/i18n'
-import { useComboBoxState } from '@react-stately/combobox'
+import { ComboBoxStateOptions, useComboBoxState } from '@react-stately/combobox'
 import { AriaComboBoxProps } from '@react-types/combobox'
 import { ListState } from '@react-stately/list'
 import pick from 'lodash/pick'
 import omit from 'lodash/omit'
-
 import styled, { useTheme } from 'styled-components'
 import { useTransition } from 'react-spring'
-
 import { CSSTransition } from 'react-transition-group'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
@@ -34,7 +32,6 @@ import { SelectInner } from './Select'
 type ComboBoxInputProps = {
   leftContent?: ReactNode
   rightContent?: ReactNode
-  //   children?: ReactNode
   showArrow?: boolean
   isOpen?: boolean
 }
@@ -55,9 +52,10 @@ type ComboBoxProps = Exclude<ComboBoxInputProps, 'children'> & {
   placement?: Placement
   width?: string | number
   maxHeight?: string | number
+  filter?: ComboBoxStateOptions<object>['defaultFilter']
 } & Omit<
     AriaComboBoxProps<object>,
-    'autoFocus' | 'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder'
+    'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder'
   >
 
 // type InputCloneProps = {
@@ -174,7 +172,7 @@ function ComboBox({
   }
 
   const selectStateProps: AriaComboBoxProps<object> = {
-    menuTrigger: 'focus',
+    menuTrigger: 'input',
     onOpenChange: open => {
       if (!open && temporarilyPreventClose.current) {
         temporarilyPreventClose.current = false
@@ -276,10 +274,6 @@ function ComboBox({
       },
   })
 
-  console.log('inputref', inputRef.current)
-
-  console.log('inputProps', inputProps)
-
   const honorableInputPropNames = [
     'onChange',
     'onFocus',
@@ -295,30 +289,29 @@ function ComboBox({
   const innerInputProps = omit(inputProps, honorableInputPropNames)
 
   return (
-    <CSSTransition
-      in={isOpen}
-      appear
-      timeout={250}
+    <ComboBoxInner
+      isOpen={state.isOpen}
+      width={width}
+      maxHeight={maxHeight}
+      placement={placement}
     >
-      <ComboBoxInner
-        isOpen={state.isOpen}
-        width={width}
-        maxHeight={maxHeight}
-        placement={placement}
-      >
-        <Input
-          {...outerInputProps}
-          inputProps={{
-            ...innerInputProps,
-            ref: inputRef,
-          }}
-        />
-        {/* <InputClone
+      <Input
+        {...outerInputProps}
+        inputProps={{
+          ...innerInputProps,
+          ref: inputRef,
+        }}
+      />
+      {/* <InputClone
         inputRef={inputRef}
         inputElt={inputElt}
         isOpen={state.isOpen}
         inputProps={inputProps}
       /> */}
+      <CSSTransition
+        in={state.isOpen}
+        timeout={150}
+      >
         <div className="popoverWrapper">
           {transitions((styles, item) => item && (
             <SelectPopover
@@ -341,8 +334,8 @@ function ComboBox({
             </SelectPopover>
           ))}
         </div>
-      </ComboBoxInner>
-    </CSSTransition>
+      </CSSTransition>
+    </ComboBoxInner>
   )
 }
 
