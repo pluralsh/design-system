@@ -1,9 +1,11 @@
 import {
+  Dispatch,
   HTMLAttributes,
   Key,
   ReactElement,
   ReactNode,
   RefObject,
+  SetStateAction,
   cloneElement,
   forwardRef,
   useRef,
@@ -17,11 +19,7 @@ import { ListState } from '@react-stately/list'
 import styled, { useTheme } from 'styled-components'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
-import {
-  FOOTER_KEY,
-  HEADER_KEY,
-  useItemWrappedChildren,
-} from './ListBox'
+import { FOOTER_KEY, HEADER_KEY, useItemWrappedChildren } from './ListBox'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
 import { PopoverListBox } from './PopoverListBox'
 
@@ -145,9 +143,7 @@ const SelectInner = styled.div<{
   isOpen: boolean
   maxHeight: string | number
   placement: Placement
-}>(({
-  maxHeight, placement,
-}) => ({
+}>(({ maxHeight, placement }) => ({
   position: 'relative',
   '.popover': {
     maxHeight: maxHeight || 230,
@@ -156,6 +152,53 @@ const SelectInner = styled.div<{
     pointerEvents: 'auto',
   },
 }))
+
+const useSelectComboHandlers:(props: Partial<SelectProps> & {
+  setIsOpen: Dispatch<SetStateAction<boolean>>
+  nextFocusedKeyRef: RefObject<any>
+  stateRef: RefObject<ListState<object> | null>
+})=> Partial<AriaSelectProps<object>> = ({
+  setIsOpen,
+  onOpenChange,
+  onFooterClick,
+  onHeaderClick,
+  onSelectionChange,
+  nextFocusedKeyRef,
+  stateRef,
+}) => {
+  const temporarilyPreventClose = useRef(false)
+
+  return {
+    onOpenChange: open => {
+      if (!open && temporarilyPreventClose.current) {
+        temporarilyPreventClose.current = false
+
+        return
+      }
+      setIsOpen(open)
+      if (onOpenChange) {
+        onOpenChange(open)
+      }
+    },
+    onSelectionChange: newKey => {
+      if (newKey === HEADER_KEY && onHeaderClick) {
+        temporarilyPreventClose.current = true
+        onHeaderClick()
+      }
+      else if (newKey === FOOTER_KEY && onFooterClick) {
+        temporarilyPreventClose.current = true
+        onFooterClick()
+        if (stateRef.current) {
+          nextFocusedKeyRef.current
+            = stateRef?.current?.collection?.getKeyBefore(FOOTER_KEY)
+        }
+      }
+      else if (onSelectionChange) {
+        onSelectionChange(typeof newKey === 'string' ? newKey : '')
+      }
+    },
+  }
+}
 
 function Select({
   children,
@@ -182,44 +225,27 @@ function Select({
   const nextFocusedKeyRef = useRef<Key>(null)
   const stateRef = useRef<ListState<object> | null>(null)
   const [isOpenUncontrolled, setIsOpen] = useState(false)
-  const temporarilyPreventClose = useRef(false)
 
   if (typeof isOpen !== 'boolean') {
     isOpen = isOpenUncontrolled
   }
 
-  const selectStateProps: AriaSelectProps<object> = {
-    onOpenChange: open => {
-      if (!open && temporarilyPreventClose.current) {
-        temporarilyPreventClose.current = false
+  const selectStateBaseProps: Partial<AriaSelectProps<object>>
+    = useSelectComboHandlers({
+      setIsOpen,
+      onFooterClick,
+      onHeaderClick,
+      onOpenChange,
+      onSelectionChange,
+      nextFocusedKeyRef,
+      stateRef,
+    })
 
-        return
-      }
-      setIsOpen(open)
-      if (onOpenChange) {
-        onOpenChange(open)
-      }
-    },
+  const selectStateProps: AriaSelectProps<object> = {
+    ...selectStateBaseProps,
     isOpen,
     defaultOpen: false,
     selectedKey,
-    onSelectionChange: newKey => {
-      if (newKey === HEADER_KEY && onHeaderClick) {
-        temporarilyPreventClose.current = true
-        onHeaderClick()
-      }
-      else if (newKey === FOOTER_KEY && onFooterClick) {
-        temporarilyPreventClose.current = true
-        onFooterClick()
-        if (stateRef.current) {
-          nextFocusedKeyRef.current
-            = stateRef?.current?.collection?.getKeyBefore(FOOTER_KEY)
-        }
-      }
-      else if (onSelectionChange) {
-        onSelectionChange(typeof newKey === 'string' ? newKey : '')
-      }
-    },
     label,
     children: useItemWrappedChildren(children, dropdownHeader, dropdownFooter),
     ...props,
