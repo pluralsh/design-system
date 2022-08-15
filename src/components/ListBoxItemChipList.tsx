@@ -37,6 +37,7 @@ const ChipList = forwardRef<
 
   const extra = useMemo(() => showExtra && restChips.length > 0 && (
     <Tooltip
+      key="extra"
       placement="top"
       label={(
         <>
