@@ -15,7 +15,7 @@ import {
   useComboBoxState,
 } from '@react-stately/combobox'
 import { AriaComboBoxProps } from '@react-types/combobox'
-import { useButton } from '@react-aria/button'
+import { AriaButtonProps, useButton } from '@react-aria/button'
 import pick from 'lodash/pick'
 import omit from 'lodash/omit'
 import styled from 'styled-components'
@@ -78,19 +78,21 @@ type ComboBoxInputProps = {
 const OpenButton = styled(({
   isOpen: _isOpen,
   buttonRef,
+  buttonProps,
   ...props
 }: HTMLAttributes<HTMLDivElement> & {
     isOpen?: boolean
     buttonRef: RefObject<any>
+    buttonProps: AriaButtonProps
   }) => {
-  const { buttonProps } = useButton({ ...props, elementType: 'div' },
+  const { buttonProps: useButtonProps } = useButton({ ...buttonProps, elementType: 'div' },
     buttonRef)
 
   return (
     <div
       ref={buttonRef}
       {...props}
-      {...buttonProps}
+      {...useButtonProps}
     >
       <DropdownArrowIcon />
     </div>
@@ -185,7 +187,7 @@ function ComboBoxInput({
             <OpenButton
               isOpen={isOpen}
               buttonRef={buttonRef}
-              {...buttonProps}
+              buttonProps={buttonProps}
             />
           ) : undefined
         }
@@ -193,7 +195,10 @@ function ComboBoxInput({
           ...innerInputProps,
           ref: inputRef,
         }}
-        onClick={manualOpen}
+        onClick={() => {
+          manualOpen()
+          inputRef?.current?.focus()
+        }}
         {...outerInputProps}
       />
     </ExtendTheme>

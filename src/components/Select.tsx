@@ -10,10 +10,9 @@ import {
   useState,
 } from 'react'
 import { HiddenSelect, useSelect } from '@react-aria/select'
-import { useSelectState } from '@react-stately/select'
+import { SelectState, useSelectState } from '@react-stately/select'
 import { AriaSelectProps } from '@react-types/select'
 import { useButton } from '@react-aria/button'
-import { ListState } from '@react-stately/list'
 import styled, { useTheme } from 'styled-components'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
@@ -169,7 +168,7 @@ function Select({
   maxHeight,
   ...props
 }: SelectProps) {
-  const stateRef = useRef<ListState<object> | null>(null)
+  const stateRef = useRef<SelectState<object> | null>(null)
   const [isOpenUncontrolled, setIsOpen] = useState(false)
   const nextFocusedKeyRef = useRef<Key>(null)
 

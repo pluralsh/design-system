@@ -92,7 +92,7 @@ function useItemWrappedChildren(children: ReactElement | ReactElement[],
         const item = (
           <Item
             key={child.key}
-            textValue={child?.props?.textValue || ' '}
+            textValue={child?.props?.textValue || ''}
           >
             {child}
           </Item>
