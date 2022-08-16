@@ -9,6 +9,7 @@ import {
   Chip,
   ComboBox,
   IconFrame,
+  ListBoxFooterPlus,
   ListBoxItem,
   ListBoxItemChipList,
   PersonIcon,
@@ -153,7 +154,6 @@ function Template() {
   const shownStep = 4
   const [shownLimit, setShownLimit] = useState<number>(shownStep)
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedKey, setSelectedKey] = useState<Key>('')
 
   const [selectedKeys, setSelectedKeys] = useState(new Set<Key>())
   const [inputValue, setInputValue] = useState('')
@@ -175,25 +175,20 @@ function Template() {
   const onSelectionChange: ComponentProps<
     typeof ComboBox
   >['onSelectionChange'] = key => {
-    console.log('selectionChanged', key)
     if (key) {
       setSelectedKeys(new Set([...selectedKeys, key]))
-      setSelectedKey('pizza')
       setInputValue(null)
     }
   }
 
-  const onInputChange: ComponentProps<typeof ComboBox>['onInputChange'] = (value,
-    ...args) => {
-    console.log('inputChanged', value)
-    console.log('inputchanged args', args)
-    setInputValue(value)
-  }
+  const onInputChange: ComponentProps<typeof ComboBox>['onInputChange']
+    = value => {
+      setInputValue(value)
+    }
 
   const onOpenChange: ComponentProps<typeof ComboBox>['onOpenChange'] = (isOpen,
-    menuTrigger) => {
+    _menuTrigger) => {
     setIsOpen(isOpen)
-    console.log('openChanged outer', isOpen, menuTrigger)
   }
 
   const ChipList = styled(ListBoxItemChipList)(({ theme }) => ({

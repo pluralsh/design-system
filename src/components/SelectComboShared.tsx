@@ -49,7 +49,7 @@ function useSelectComboStateProps<T extends TType>({
   const temporarilyPreventClose = useRef(false)
 
   return {
-    onOpenChange: (open:boolean, ...args:any[]) => {
+    onOpenChange: (open: boolean, ...args: any[]) => {
       if (!open && temporarilyPreventClose.current) {
         temporarilyPreventClose.current = false
 
@@ -61,7 +61,6 @@ function useSelectComboStateProps<T extends TType>({
       }
     },
     onSelectionChange: (newKey, ...args) => {
-      console.log('onSelectionChange', newKey, args)
       if (newKey === HEADER_KEY && onHeaderClick) {
         temporarilyPreventClose.current = true
         onHeaderClick()

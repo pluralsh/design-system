@@ -7,10 +7,7 @@ import {
   useState,
 } from 'react'
 import { useComboBox } from '@react-aria/combobox'
-import {
-  ComboBoxStateOptions,
-  useComboBoxState,
-} from '@react-stately/combobox'
+import { ComboBoxStateOptions, useComboBoxState } from '@react-stately/combobox'
 import { AriaComboBoxProps } from '@react-types/combobox'
 import { ListState } from '@react-stately/list'
 import pick from 'lodash/pick'
@@ -106,7 +103,7 @@ const ComboBoxInput = forwardRef<
   ComboBoxInputProps & InputProps
 >(({
   leftContent,
-  rightContent: _rightContent,
+  rightContent,
   children: _children,
   inputProps,
   showArrow = true,
@@ -120,10 +117,12 @@ ref) => (
       isOpen={isOpen}
       leftIcon={leftContent}
       rightIcon={
-        showArrow && (
+        showArrow ? (
           <div className="arrow">
             <DropdownArrowIcon size={16} />
           </div>
+        ) : (
+          rightContent
         )
       }
       inputProps={inputProps}
@@ -156,9 +155,24 @@ function ComboBox({
   const nextFocusedKeyRef = useRef<Key>(null)
   const stateRef = useRef<ListState<object> | null>(null)
   const [isOpenUncontrolled, setIsOpen] = useState(false)
+  const [selectedKeyUncontrolled, setSelectedKey] = useState<Key>(null)
 
   if (typeof isOpen !== 'boolean') {
     isOpen = isOpenUncontrolled
+  }
+  if (typeof selectedKey !== undefined) {
+    selectedKey = selectedKeyUncontrolled
+  }
+
+  const wrappedOnSelectionChange: typeof onSelectionChange = (newKey,
+    ...args) => {
+    setSelectedKey(newKey)
+    if (onSelectionChange) {
+      onSelectionChange.apply(this, [
+        typeof newKey === 'string' ? newKey : '',
+        ...args,
+      ])
+    }
   }
 
   const comboStateBaseProps = useSelectComboStateProps<ComboBoxProps>({
@@ -167,7 +181,7 @@ function ComboBox({
     onFooterClick,
     onHeaderClick,
     onOpenChange,
-    onSelectionChange,
+    onSelectionChange: wrappedOnSelectionChange,
     children,
     setIsOpen,
     stateRef,
