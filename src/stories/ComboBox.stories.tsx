@@ -220,7 +220,6 @@ function Template() {
             <ListBoxItem
               key={item.key}
               label={item.label}
-              textValue={item.label}
               leftContent={smallIcon}
               selected={selectedKeys.has(item.key)}
             />
