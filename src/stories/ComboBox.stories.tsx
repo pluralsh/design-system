@@ -155,8 +155,6 @@ const ChipList = styled(ListBoxItemChipList)(({ theme }) => ({
 }))
 
 function Template() {
-  // const shownStep = 4
-  // const [shownLimit, setShownLimit] = useState<number>(shownStep)
   const [isOpen, setIsOpen] = useState(false)
 
   const [selectedKeys, setSelectedKeys] = useState(new Set<Key>())
@@ -188,12 +186,14 @@ function Template() {
 
   const onInputChange: ComponentProps<typeof ComboBox>['onInputChange']
     = value => {
+      console.log('onInputChange', value)
       setInputValue(value)
     }
 
   const onOpenChange: ComponentProps<typeof ComboBox>['onOpenChange'] = (isOpen,
     _menuTrigger) => {
-    setIsOpen(isOpen)
+    console.log('onOpenChange', isOpen, _menuTrigger)
+    setIsOpen(false)
   }
 
   return (
@@ -215,6 +215,7 @@ function Template() {
             <ListBoxItem
               key={item.key}
               label={item.label}
+              textValue={item.label}
               leftContent={smallIcon}
               selected={selectedKeys.has(item.key)}
             />

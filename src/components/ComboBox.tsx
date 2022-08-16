@@ -196,7 +196,7 @@ function ComboBoxInput({
           ref: inputRef,
         }}
         onClick={() => {
-          manualOpen()
+          if (manualOpen) manualOpen()
           inputRef?.current?.focus()
         }}
         {...outerInputProps}
@@ -210,6 +210,7 @@ const ComboBoxInner = styled(SelectInner)(_p => ({}))
 function ComboBox({
   children,
   selectedKey,
+  inputValue,
   onSelectionChange,
   onFocusChange,
   isOpen,
@@ -242,12 +243,26 @@ function ComboBox({
         typeof newKey === 'string' ? newKey : '',
         ...args,
       ])
+      if (stateRef?.current?.isOpen) {
+        stateRef.current.close()
+      }
     }
   },
   [onSelectionChange])
 
+  const wrappedOnOpenChange: typeof onOpenChange = useCallback((isOpen, menuTrigger) => {
+    // Don't reopen after inputValue is reset by making a selection
+    if (isOpen && menuTrigger === 'input' && !inputValue) {
+      stateRef?.current?.close()
+    }
+    else {
+      onOpenChange(isOpen, menuTrigger)
+    }
+  },
+  [onOpenChange, inputValue])
+
   const wrappedOnFocusChange: typeof onFocusChange = useCallback((isFocused, ...args) => {
-      // Enforce open on focus
+    // Enforce open on focus
     if (isFocused && stateRef.current && !stateRef.current.isOpen) {
       stateRef.current.open(null, 'focus')
     }
@@ -268,7 +283,7 @@ function ComboBox({
     dropdownFooter,
     onFooterClick,
     onHeaderClick,
-    onOpenChange,
+    onOpenChange: wrappedOnOpenChange,
     onSelectionChange: wrappedOnSelectionChange,
     children,
     setIsOpen,
@@ -279,8 +294,9 @@ function ComboBox({
   const comboStateProps: AriaComboBoxProps<object> = {
     ...comboStateBaseProps,
     menuTrigger: 'focus',
-    selectedKey,
+    selectedKey: selectedKey || null,
     onFocusChange: wrappedOnFocusChange,
+    inputValue,
     ...props,
   }
 
