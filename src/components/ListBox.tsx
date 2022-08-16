@@ -34,10 +34,10 @@ type ListBoxUnmanagedProps = AriaListBoxOptions<object> &
 
 type ListBoxProps = Omit<
   ListBoxUnmanagedProps,
-  'state' | 'nextFocusedKeyRef'
+  'state' | 'nextFocusedKeyRef' | 'onSelectionChange'
 > & {
-  selectedKey: string
-  onSelectionChange: (key: string) => unknown
+  selectedKey: Key
+  onSelectionChange: (key: Key) => unknown
   onHeaderClick?: () => unknown
   onFooterClick?: () => unknown
   disallowEmptySelection?: boolean
@@ -143,7 +143,7 @@ function ListBox({
         }
       }
       else if (onSelectionChange) {
-        onSelectionChange(typeof newKey === 'string' ? newKey : '')
+        onSelectionChange(newKey)
       }
     },
     children: useItemWrappedChildren(children, header, footer),
