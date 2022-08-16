@@ -81,7 +81,7 @@ function Trigger({ buttonElt, isOpen, ...props }: TriggerProps) {
   })
 }
 
-export const SelectButtonInner = styled.div<{ isOpen: boolean }>(({ theme, isOpen }) => ({
+const SelectButtonInner = styled.div<{ isOpen: boolean }>(({ theme, isOpen }) => ({
   ...theme.partials.reset.button,
   ...theme.partials.text.body2,
   display: 'flex',
@@ -170,6 +170,16 @@ const SelectInner = styled.div<{
     width: '100%',
     ...(placement === 'right' && { right: 0, left: 'auto' }),
     pointerEvents: 'auto',
+  },
+  '&.enter, &.enter-active, &.exit, &.exit-active, &.exit-done': {
+    '.popoverWrapper': {
+      clipPath: 'polygon(-100px 0, -100px 99999px, 99999px 99999px, 99999px 0)',
+    },
+  },
+  '&.enter-done': {
+    '.popoverWrapper': {
+      clipPath: 'none',
+    },
   },
 }))
 
@@ -269,6 +279,8 @@ function Select({
   const ref = useRef()
   const { triggerProps, menuProps } = useSelect(selectStateProps, state, ref)
 
+  console.log('klink menuProps', menuProps)
+
   label = label || ' '
   triggerButton = triggerButton || (
     <SelectButton
@@ -334,8 +346,6 @@ function Select({
             <ListBoxUnmanaged
               className="listBox"
               state={state}
-              header={dropdownHeader}
-              footer={dropdownFooter}
               headerFixed={dropdownHeaderFixed}
               footerFixed={dropdownFooterFixed}
               extendStyle={{
@@ -350,4 +360,6 @@ function Select({
   )
 }
 
-export { Select, SelectButton }
+export {
+  Select, SelectButton, SelectButtonInner, SelectInner,
+}

@@ -2063,26 +2063,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^0.7.3":
-  version: 0.7.3
-  resolution: "@floating-ui/core@npm:0.7.3"
-  checksum: f48f9fb0d19dcbe7a68c38e8de7fabb11f0c0e6e0ef215ae60b5004900bacb1386e7b89cb377d91a90ff7d147ea1f06c2905136ecf34dea162d9696d8f448d5f
-  languageName: node
-  linkType: hard
-
 "@floating-ui/core@npm:^1.0.0":
   version: 1.0.0
   resolution: "@floating-ui/core@npm:1.0.0"
   checksum: 093eaa226c1317c1770218bfa9e689c57b3aaef9eab15521269b24f50aeb16143471347bf8025c70ea67a80a165242b6f3a3335a47cbda565d3e055fbfa29501
-  languageName: node
-  linkType: hard
-
-"@floating-ui/dom@npm:^0.5.3":
-  version: 0.5.4
-  resolution: "@floating-ui/dom@npm:0.5.4"
-  dependencies:
-    "@floating-ui/core": ^0.7.3
-  checksum: 9f9d8a51a828c6be5f187204aa6d293c6c9ef70d51dcc5891a4d85683745fceebf79ff8826d0f75ae41b45c3b138367d339756f27f41be87a8770742ebc0de42
   languageName: node
   linkType: hard
 
@@ -2105,19 +2089,6 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   checksum: 62a168c00b23ee4cec61ae9b291c316591e5eb32aad58d594f9b39a8582a4d052a4a571b08a8526fb028a5ca3a952cb666851949deffd1f2b92a9f0030c45710
-  languageName: node
-  linkType: hard
-
-"@floating-ui/react-dom@npm:^0.7.2":
-  version: 0.7.2
-  resolution: "@floating-ui/react-dom@npm:0.7.2"
-  dependencies:
-    "@floating-ui/dom": ^0.5.3
-    use-isomorphic-layout-effect: ^1.1.1
-  peerDependencies:
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  checksum: bc3f2b5557f87f6f4bbccfe3e8d097abafad61a41083d3b79f3499f27590e273bcb3dc7136c2444841ee7a8c0d2a70cc1385458c16103fa8b70eade80c24af52
   languageName: node
   linkType: hard
 
@@ -2902,6 +2873,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-aria/combobox@npm:^3.4.0":
+  version: 3.4.0
+  resolution: "@react-aria/combobox@npm:3.4.0"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+    "@react-aria/i18n": ^3.5.0
+    "@react-aria/interactions": ^3.10.0
+    "@react-aria/listbox": ^3.6.0
+    "@react-aria/live-announcer": ^3.1.1
+    "@react-aria/menu": ^3.6.0
+    "@react-aria/overlays": ^3.10.0
+    "@react-aria/selection": ^3.10.0
+    "@react-aria/textfield": ^3.7.0
+    "@react-aria/utils": ^3.13.2
+    "@react-stately/collections": ^3.4.2
+    "@react-stately/combobox": ^3.2.0
+    "@react-stately/layout": ^3.6.0
+    "@react-types/button": ^3.6.0
+    "@react-types/combobox": ^3.5.2
+    "@react-types/shared": ^3.14.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: 59683bb8114974f006a1b165ee5dab4fba1ea084d0388fbda60cd4b388fa7fe5c28f3457f3261254e0eb38a2a09d539d32833711142bd818ce0d3572a53297d2
+  languageName: node
+  linkType: hard
+
 "@react-aria/focus@npm:3.7.0, @react-aria/focus@npm:^3.7.0":
   version: 3.7.0
   resolution: "@react-aria/focus@npm:3.7.0"
@@ -2949,7 +2947,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/i18n@npm:^3.5.0":
+"@react-aria/i18n@npm:^3.5.0, @react-aria/i18n@npm:^3.5.1":
   version: 3.5.1
   resolution: "@react-aria/i18n@npm:3.5.1"
   dependencies:
@@ -3024,6 +3022,15 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
   checksum: 9d48b90785ade55515b5da13c4c88d49dd8ffefe452107d07c09bba5b65bfe7ae05945925b7d98defa699f83cc6d73e3e6f78e73fc21b1a7f8e99c5ec0ab6c15
+  languageName: node
+  linkType: hard
+
+"@react-aria/live-announcer@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@react-aria/live-announcer@npm:3.1.1"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+  checksum: feb02fe339ed1ce005b3fc6f07366ea100fbdfc3e42688f52d4e6704f6e09724b37f4e6b0c121578081940af11004421aab1b1a91f99c7193c4c2945ff43f92c
   languageName: node
   linkType: hard
 
@@ -3170,6 +3177,22 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
   checksum: 308762983fadb5a078da444cfaccc13a148b78e4431e7e3a21feb88dc67436dc077c3bbf88f9c2c704ce91dd567571a1580e0ece04085c55253acad9baeeb605
+  languageName: node
+  linkType: hard
+
+"@react-aria/textfield@npm:^3.7.0":
+  version: 3.7.0
+  resolution: "@react-aria/textfield@npm:3.7.0"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+    "@react-aria/focus": ^3.7.0
+    "@react-aria/label": ^3.4.0
+    "@react-aria/utils": ^3.13.2
+    "@react-types/shared": ^3.14.0
+    "@react-types/textfield": ^3.5.2
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: ffa8f1e661575ef71d1991e5c0502a482228304e620421314b89bbb24990aa037165926f0c1f9e8cd5c7169af5bca5ad6f2c91f98e462222caf26065d192e5b8
   languageName: node
   linkType: hard
 
@@ -3373,6 +3396,38 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-stately/combobox@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@react-stately/combobox@npm:3.2.0"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+    "@react-stately/list": ^3.5.2
+    "@react-stately/menu": ^3.4.0
+    "@react-stately/select": ^3.3.0
+    "@react-stately/utils": ^3.5.1
+    "@react-types/combobox": ^3.5.2
+    "@react-types/shared": ^3.14.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: d5536e1fc546f80ef09878b5034b1cce274e448d44f8e74bcfb55af38356eb8b4beff29d1aa9c947454f86daf1bc3d14767b0987c6767125234e5ffbc0cd2cd6
+  languageName: node
+  linkType: hard
+
+"@react-stately/layout@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "@react-stately/layout@npm:3.6.0"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+    "@react-stately/virtualizer": ^3.2.2
+    "@react-types/grid": ^3.1.2
+    "@react-types/shared": ^3.14.0
+    "@react-types/table": ^3.3.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: 6d2917d8390968fc2f6cebd05c63cc0a6d9102916f8428f597558973a3405d520b4b1093c0a914cb8f91ab1c2c9b21d252439e4ca60f029aa650ca6db66f1bda
+  languageName: node
+  linkType: hard
+
 "@react-stately/list@npm:^3.5.1":
   version: 3.5.1
   resolution: "@react-stately/list@npm:3.5.1"
@@ -3542,6 +3597,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-stately/virtualizer@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "@react-stately/virtualizer@npm:3.2.2"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+    "@react-aria/utils": ^3.13.2
+    "@react-types/shared": ^3.14.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: ece74b380255bc66f7d254d21dce283969cb0b3c7556fae472cabac488224267991822e64dc4aac8b11b6d1ca4c312398e7636781749d30714d42fee489e418a
+  languageName: node
+  linkType: hard
+
 "@react-types/button@npm:^3.6.0":
   version: 3.6.0
   resolution: "@react-types/button@npm:3.6.0"
@@ -3561,6 +3629,28 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
   checksum: 60a7dcb50e6aa22336d8f893871ba69faa11b126b5f3970e8d553664d475ba66e18845219374136fcb20af0f37ebfbd912ea0d8c48424e4244411db91849fc0d
+  languageName: node
+  linkType: hard
+
+"@react-types/combobox@npm:^3.5.2":
+  version: 3.5.2
+  resolution: "@react-types/combobox@npm:3.5.2"
+  dependencies:
+    "@react-types/shared": ^3.14.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: 947066af7b96bcf1775a8ba37e5e0ffb9bc4345bf730e64e8725aee12d3b8b1d702003a4496f8e4fc13ede5a3cdb6cf58ebaa788d89a4618f2e08c08363a6913
+  languageName: node
+  linkType: hard
+
+"@react-types/grid@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "@react-types/grid@npm:3.1.2"
+  dependencies:
+    "@react-types/shared": ^3.14.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: 42cc8f0a891a5103d59afaa4d9f2afe03ebc490b07e134466c7a1a10c7ae2bdb8cf171e5bf669ad3867327112840f34699afcb9428bd294c2336bc30afdeb5dd
   languageName: node
   linkType: hard
 
@@ -3638,6 +3728,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-types/table@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@react-types/table@npm:3.3.0"
+  dependencies:
+    "@react-types/grid": ^3.1.2
+    "@react-types/shared": ^3.14.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: 07fed779def3457596f01d53ab8ec7eb8e968c446b4e5bd8c3b57a0809fbafd69f998faf73cef459c0084f24c0f5e7fcf875bc9cb014be1ec70ad6063e02e193
+  languageName: node
+  linkType: hard
+
 "@react-types/tabs@npm:^3.1.1":
   version: 3.1.1
   resolution: "@react-types/tabs@npm:3.1.1"
@@ -3646,6 +3748,17 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
   checksum: 4edfc1a10623736ed9d0d4670700f9281bfce7068018081fe52a8a8ac2907cdbc28ea430b49db20916d912af52641a2df25dcc0ca0d66cfed5260e901ad75147
+  languageName: node
+  linkType: hard
+
+"@react-types/textfield@npm:^3.5.2":
+  version: 3.5.2
+  resolution: "@react-types/textfield@npm:3.5.2"
+  dependencies:
+    "@react-types/shared": ^3.14.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: 9e48881305ac6f2aeb81f94401408068041dda1e744b31f517b0156440e5b8e74b59f6ab71b1ae15db851b4b95fb2ac0c86cc162698aba415e4a73c6bdf174d4
   languageName: node
   linkType: hard
 
@@ -11824,12 +11937,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"honorable@npm:0.131.0":
-  version: 0.131.0
-  resolution: "honorable@npm:0.131.0"
+"honorable@npm:0.135.0":
+  version: 0.135.0
+  resolution: "honorable@npm:0.135.0"
   dependencies:
     "@emotion/is-prop-valid": ^1.1.3
-    "@floating-ui/react-dom": ^0.7.2
+    "@floating-ui/react-dom": ^1.0.0
     lodash.merge: ^4.6.2
     lodash.mergewith: ^4.6.2
     prop-types: ^15.8.1
@@ -11840,7 +11953,7 @@ __metadata:
     "@emotion/styled": ">=10.0.0"
     react: ">=16.0.0"
     react-dom: ">=16.0.0"
-  checksum: 46810a6aa20d7df8c2fa1cf6f7bf7eff3df09cf33b19f456ef6d45115b41cba3be7d1a872f2ff66678252680fe63c007add9cb5bf97ca70767c38989ebd5f37a
+  checksum: 0231a986640b5aee6d819eed3d9973080cec146f47023969ee464f2204c8937f18456be7dc837355448168b39c49309eb003782f9b91c58a4d8f4dca3154bc77
   languageName: node
   linkType: hard
 
@@ -16201,14 +16314,19 @@ __metadata:
     "@floating-ui/react-dom-interactions": 0.8.1
     "@pluralsh/eslint-config-typescript": 2.3.0
     "@react-aria/button": 3.6.0
+    "@react-aria/combobox": ^3.4.0
     "@react-aria/focus": 3.7.0
+    "@react-aria/i18n": ^3.5.1
     "@react-aria/listbox": 3.6.0
     "@react-aria/overlays": 3.10.0
     "@react-aria/select": 3.8.0
     "@react-aria/tabs": 3.2.1
+    "@react-aria/utils": ^3.13.2
     "@react-stately/collections": 3.4.1
+    "@react-stately/combobox": ^3.2.0
     "@react-stately/overlays": 3.4.0
     "@react-stately/tabs": 3.1.1
+    "@react-types/combobox": ^3.5.2
     "@react-types/shared": 3.13.1
     "@storybook/addon-actions": 6.5.9
     "@storybook/addon-docs": 6.5.9
@@ -16231,7 +16349,7 @@ __metadata:
     eslint: 8.20.0
     eslint-plugin-storybook: 0.6.1
     highlight.js: 11.6.0
-    honorable: 0.131.0
+    honorable: 0.135.0
     honorable-theme-default: 0.63.0
     prop-types: 15.8.1
     react: 18.2.0

@@ -11,7 +11,7 @@ type PopoverProps = {
   onClose?: () => unknown
   popoverRef?: RefObject<any>
   children: ReactNode
-  animatedStyles: any
+  animatedStyles?: any
 }
 
 function Popover({ animatedStyles, ...props }: PopoverProps) {
@@ -19,6 +19,8 @@ function Popover({ animatedStyles, ...props }: PopoverProps) {
   const {
     popoverRef = ref, isOpen, onClose, children,
   } = props
+
+  console.log('popoverRef', popoverRef)
 
   // Handle events that should cause the popup to close,
   // e.g. blur, clicking outside, or pressing the escape key.
@@ -51,14 +53,19 @@ function Popover({ animatedStyles, ...props }: PopoverProps) {
 
   content = <FocusScope restoreFocus>{content}</FocusScope>
 
-  // Wrapping for spring animation
-  return (
-    <animated.div
-      style={{ ...animatedStyles }}
-    >
-      {content}
-    </animated.div>
-  )
+  if (animatedStyles) {
+      // Wrapping for spring animation
+
+    return (
+      <animated.div
+        style={{ ...animatedStyles }}
+      >
+        {content}
+      </animated.div>
+    )
+  }
+
+  return content
 }
 
 const PopoverStyled = styled.div<{isOpen:boolean}>(({ isOpen }) => ({
