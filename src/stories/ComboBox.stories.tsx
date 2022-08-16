@@ -8,8 +8,7 @@ import Fuse from 'fuse.js'
 import {
   Chip,
   ComboBox,
-  IconFrame,
-  ListBoxFooterPlus,
+  // IconFrame,
   ListBoxItem,
   ListBoxItemChipList,
   PersonIcon,
@@ -20,13 +19,13 @@ export default {
   component: 'ComboBox',
 }
 
-const portrait = (
-  <IconFrame
-    spacing="none"
-    size="xsmall"
-    url="photo.png"
-  />
-)
+// const portrait = (
+//   <IconFrame
+//     spacing="none"
+//     size="xsmall"
+//     url="photo.png"
+//   />
+// )
 const smallIcon = <PersonIcon size={16} />
 
 const chipProps = {
@@ -148,11 +147,16 @@ const items = [
 const itemsByKey = items.reduce((obj, item) => ({ ...obj, [item.key]: item }),
   {})
 
-const TagPicker = styled.div(({ theme }) => ({}))
+const TagPicker = styled.div(({ theme: _theme }) => ({}))
+
+const ChipList = styled(ListBoxItemChipList)(({ theme }) => ({
+  marginTop: theme.spacing.small,
+  justifyContent: 'start',
+}))
 
 function Template() {
-  const shownStep = 4
-  const [shownLimit, setShownLimit] = useState<number>(shownStep)
+  // const shownStep = 4
+  // const [shownLimit, setShownLimit] = useState<number>(shownStep)
   const [isOpen, setIsOpen] = useState(false)
 
   const [selectedKeys, setSelectedKeys] = useState(new Set<Key>())
@@ -175,9 +179,10 @@ function Template() {
   const onSelectionChange: ComponentProps<
     typeof ComboBox
   >['onSelectionChange'] = key => {
+    console.log('onSelectionChange', key)
     if (key) {
       setSelectedKeys(new Set([...selectedKeys, key]))
-      setInputValue(null)
+      setInputValue('')
     }
   }
 
@@ -190,11 +195,6 @@ function Template() {
     _menuTrigger) => {
     setIsOpen(isOpen)
   }
-
-  const ChipList = styled(ListBoxItemChipList)(({ theme }) => ({
-    marginTop: theme.spacing.small,
-    justifyContent: 'start',
-  }))
 
   return (
     <Flex

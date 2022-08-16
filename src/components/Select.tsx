@@ -103,11 +103,7 @@ const SelectButtonInner = styled.div<{ isOpen: boolean }>(({ theme, isOpen }) =>
     display: 'flex',
     marginLeft: theme.spacing.medium,
     alignItems: 'center',
-    ...(isOpen
-      ? {
-        transform: 'scaleY(-100%)',
-      }
-      : {}),
+    ...theme.partials.dropdown.arrowTransition({ isOpen }),
   },
   '&:focus-visible': {
     ...theme.partials.focus.default,

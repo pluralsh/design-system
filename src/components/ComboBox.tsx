@@ -1,36 +1,36 @@
 import {
+  HTMLAttributes,
   Key,
   ReactElement,
   ReactNode,
-  forwardRef,
+  RefObject,
+  useCallback,
   useRef,
   useState,
 } from 'react'
 import { useComboBox } from '@react-aria/combobox'
-import { ComboBoxStateOptions, useComboBoxState } from '@react-stately/combobox'
+import {
+  ComboBoxState,
+  ComboBoxStateOptions,
+  useComboBoxState,
+} from '@react-stately/combobox'
 import { AriaComboBoxProps } from '@react-types/combobox'
-import { ListState } from '@react-stately/list'
+import { useButton } from '@react-aria/button'
 import pick from 'lodash/pick'
 import omit from 'lodash/omit'
 import styled from 'styled-components'
+import { ExtendTheme, mergeTheme } from 'honorable'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
 import Input, { InputProps } from './Input'
-import { SelectInner } from './Select'
 import {
   setNextFocusedKey,
   useSelectComboStateProps,
 } from './SelectComboShared'
 import { PopoverListBox } from './PopoverListBox'
 import SearchIcon from './icons/SearchIcon'
-
-type ComboBoxInputProps = {
-  leftContent?: ReactNode
-  rightContent?: ReactNode
-  showArrow?: boolean
-  isOpen?: boolean
-}
+import { SelectInner } from './Select'
 
 type Placement = 'left' | 'right'
 
@@ -44,45 +44,16 @@ type ComboBoxProps = Exclude<ComboBoxInputProps, 'children'> & {
   dropdownFooter?: ReactElement
   onHeaderClick?: () => unknown
   onFooterClick?: () => unknown
-  inputComponent?: ReactElement
+  startIcon?: ReactNode
   placement?: Placement
   width?: string | number
   maxHeight?: string | number
+  inputProps?: InputProps
   filter?: ComboBoxStateOptions<object>['defaultFilter']
 } & Omit<
     AriaComboBoxProps<object>,
     'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder'
   >
-
-// type InputCloneProps = {
-//   inputRef: RefObject<HTMLElement>
-//   inputElt: any
-//   isOpen: boolean
-//   inputProps: any
-// } & HTMLAttributes<HTMLElement>
-
-// function InputClone({
-//   inputElt: buttonElt,
-//   isOpen,
-//   inputProps,
-//   inputRef,
-// //   ...props
-// }: InputCloneProps) {
-//   const theme = useTheme()
-
-//   console.log('ref', inputRef.current)
-
-//   return cloneElement(buttonElt, {
-//     // ref,
-//     inputProps: { ...inputProps, ref: inputRef, 'data-stuff': 'chickens' },
-//     isOpen,
-//     style: {
-//     //   appearance: 'unset',
-//       ...(isOpen ? { zIndex: theme.zIndexes.tooltip + 1 } : {}),
-//     },
-//     // tabIndex: 0,
-//   })
-// }
 
 export const ComboBoxInputInner = styled.div<{ isOpen: boolean }>(({ theme, isOpen }) => ({
   '.arrow': {
@@ -98,38 +69,136 @@ export const ComboBoxInputInner = styled.div<{ isOpen: boolean }>(({ theme, isOp
   },
 }))
 
-const ComboBoxInput = forwardRef<
-  HTMLDivElement,
-  ComboBoxInputProps & InputProps
->(({
-  leftContent,
-  rightContent,
+type ComboBoxInputProps = {
+  showArrow?: boolean
+  isOpen?: boolean
+  outerInputProps?: InputProps
+}
+
+const OpenButton = styled(({
+  isOpen: _isOpen,
+  buttonRef,
+  ...props
+}: HTMLAttributes<HTMLDivElement> & {
+    isOpen?: boolean
+    buttonRef: RefObject<any>
+  }) => {
+  const { buttonProps } = useButton({ ...props, elementType: 'div' },
+    buttonRef)
+
+  return (
+    <div
+      ref={buttonRef}
+      {...props}
+      {...buttonProps}
+    >
+      <DropdownArrowIcon />
+    </div>
+  )
+})(({ theme, isOpen }) => ({
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  paddingLeft: theme.spacing.medium,
+  paddingRight: theme.spacing.medium,
+  ...theme.partials.dropdown.arrowTransition({ isOpen }),
+}))
+
+const StartIconButton = styled.div(({ theme }) => ({
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  paddingLeft: theme.spacing.medium,
+  paddingRight: theme.spacing.medium,
+}))
+
+const comboBoxLeftRightStyles = {
+  alignSelf: 'stretch',
+  paddingHorizontal: 0,
+  marginLeft: 0,
+  marginRight: 0,
+}
+
+function ComboBoxInput({
+  startIcon,
   children: _children,
+  inputRef,
   inputProps,
+  outerInputProps,
+  buttonRef,
+  buttonProps,
   showArrow = true,
   isOpen,
-  ...props
-},
-ref) => (
-  <ComboBoxInputInner isOpen={isOpen}>
-    <Input
-      ref={ref}
-      isOpen={isOpen}
-      leftIcon={leftContent}
-      rightIcon={
-        showArrow ? (
-          <div className="arrow">
-            <DropdownArrowIcon size={16} />
-          </div>
-        ) : (
-          rightContent
-        )
-      }
-      inputProps={inputProps}
-      {...props}
-    />
-  </ComboBoxInputInner>
-))
+  manualOpen,
+}: ComboBoxInputProps & InputProps) {
+  const honorableInputPropNames = [
+    'onChange',
+    'onFocus',
+    'onBlur',
+    'onKeyDown',
+    'onKeyUp',
+  ]
+
+  outerInputProps = {
+    ...outerInputProps,
+    ...(pick(inputProps, honorableInputPropNames) as Pick<
+      typeof inputProps,
+      'onChange' | 'onFocus' | 'onBlur' | 'onKeyDown' | 'onKeyUp'
+    >),
+  }
+  const innerInputProps = omit(inputProps, honorableInputPropNames)
+
+  let themeExtension: any = {}
+
+  if (startIcon) {
+    themeExtension = mergeTheme(themeExtension, {
+      Input: {
+        Root: [{ paddingLeft: 0 }],
+        StartIcon: [
+          {
+            ...comboBoxLeftRightStyles,
+          },
+        ],
+      },
+    })
+  }
+
+  if (showArrow) {
+    themeExtension = mergeTheme(themeExtension, {
+      Input: {
+        Root: [{ paddingRight: 0 }],
+        EndIcon: [
+          {
+            ...comboBoxLeftRightStyles,
+          },
+        ],
+      },
+    })
+  }
+
+  return (
+    <ExtendTheme theme={themeExtension}>
+      <Input
+        startIcon={startIcon && <StartIconButton>{startIcon}</StartIconButton>}
+        endIcon={
+          showArrow ? (
+            <OpenButton
+              isOpen={isOpen}
+              buttonRef={buttonRef}
+              {...buttonProps}
+            />
+          ) : undefined
+        }
+        inputProps={{
+          ...innerInputProps,
+          ref: inputRef,
+        }}
+        onClick={manualOpen}
+        {...outerInputProps}
+      />
+    </ExtendTheme>
+  )
+}
 
 const ComboBoxInner = styled(SelectInner)(_p => ({}))
 
@@ -137,6 +206,7 @@ function ComboBox({
   children,
   selectedKey,
   onSelectionChange,
+  onFocusChange,
   isOpen,
   onOpenChange,
   dropdownHeader,
@@ -145,35 +215,48 @@ function ComboBox({
   dropdownFooterFixed,
   onHeaderClick,
   onFooterClick,
-  label,
-  inputComponent,
+  showArrow,
+  startIcon,
   placement,
   width,
   maxHeight,
+  inputProps: outerInputProps,
   ...props
 }: ComboBoxProps) {
   const nextFocusedKeyRef = useRef<Key>(null)
-  const stateRef = useRef<ListState<object> | null>(null)
+  const stateRef = useRef<ComboBoxState<object> | null>(null)
   const [isOpenUncontrolled, setIsOpen] = useState(false)
-  const [selectedKeyUncontrolled, setSelectedKey] = useState<Key>(null)
 
   if (typeof isOpen !== 'boolean') {
     isOpen = isOpenUncontrolled
   }
-  if (typeof selectedKey !== undefined) {
-    selectedKey = selectedKeyUncontrolled
-  }
 
-  const wrappedOnSelectionChange: typeof onSelectionChange = (newKey,
-    ...args) => {
-    setSelectedKey(newKey)
+  const wrappedOnSelectionChange: typeof onSelectionChange = useCallback((newKey, ...args) => {
     if (onSelectionChange) {
       onSelectionChange.apply(this, [
         typeof newKey === 'string' ? newKey : '',
         ...args,
       ])
     }
-  }
+  },
+  [onSelectionChange])
+
+  const wrappedOnFocusChange: typeof onFocusChange = useCallback((isFocused, ...args) => {
+      // Enforce open on focus
+    if (isFocused && stateRef.current && !stateRef.current.isOpen) {
+      stateRef.current.open(null, 'focus')
+    }
+    if (onFocusChange) {
+      onFocusChange(isFocused, ...args)
+    }
+  },
+  [onFocusChange])
+
+  const manualOpen: (...args: any[]) => void = useCallback(() => {
+    if (stateRef.current && !stateRef.current.isOpen) {
+      stateRef.current.open(null, 'manual')
+    }
+  }, [])
 
   const comboStateBaseProps = useSelectComboStateProps<ComboBoxProps>({
     dropdownHeader,
@@ -192,7 +275,7 @@ function ComboBox({
     ...comboStateBaseProps,
     menuTrigger: 'focus',
     selectedKey,
-    label,
+    onFocusChange: wrappedOnFocusChange,
     ...props,
   }
 
@@ -207,12 +290,7 @@ function ComboBox({
   const listBoxRef = useRef(null)
   const popoverRef = useRef(null)
 
-  const {
-    buttonProps: _buttonProps,
-    inputProps,
-    listBoxProps,
-    labelProps: _labelProps,
-  } = useComboBox({
+  const { buttonProps, inputProps, listBoxProps } = useComboBox({
     ...comboStateProps,
     inputRef,
     buttonRef,
@@ -221,34 +299,8 @@ function ComboBox({
   },
   state)
 
-  label = label || ' '
-
-  if (!inputComponent) {
-    const honorableInputPropNames = [
-      'onChange',
-      'onFocus',
-      'onBlur',
-      'onKeyDown',
-      'onKeyUp',
-    ]
-    const outerInputProps: InputProps = pick(inputProps,
-      honorableInputPropNames) as Pick<
-      typeof inputProps,
-      'onChange' | 'onFocus' | 'onBlur' | 'onKeyDown' | 'onKeyUp'
-    >
-    const innerInputProps = omit(inputProps, honorableInputPropNames)
-
-    inputComponent = inputComponent || (
-      <Input
-        startIcon={<SearchIcon />}
-        endIcon={<DropdownArrowIcon />}
-        {...outerInputProps}
-        inputProps={{
-          ...innerInputProps,
-          ref: inputRef,
-        }}
-      />
-    )
+  if (startIcon === undefined) {
+    startIcon = <SearchIcon />
   }
 
   return (
@@ -257,7 +309,17 @@ function ComboBox({
       maxHeight={maxHeight}
       placement={placement}
     >
-      {inputComponent}
+      <ComboBoxInput
+        inputRef={inputRef}
+        inputProps={inputProps}
+        buttonRef={buttonRef}
+        buttonProps={buttonProps}
+        showArrow={showArrow}
+        isOpen={state.isOpen}
+        manualOpen={manualOpen}
+        startIcon={startIcon}
+        outerInputProps={outerInputProps}
+      />
       <PopoverListBox
         isOpen={state.isOpen}
         onClose={state.close}
@@ -274,4 +336,4 @@ function ComboBox({
   )
 }
 
-export { ComboBox, ComboBoxInput, ComboBoxProps }
+export { ComboBox, ComboBoxProps }

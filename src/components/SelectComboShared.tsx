@@ -105,4 +105,4 @@ const setNextFocusedKey = ({
   }
 }
 
-export { useSelectComboStateProps, setNextFocusedKey }
+export { useSelectComboStateProps, setNextFocusedKey, useItemWrappedChildren }

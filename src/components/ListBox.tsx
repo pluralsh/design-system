@@ -11,12 +11,12 @@ import {
 } from 'react'
 import { AriaListBoxOptions, useListBox, useOption } from '@react-aria/listbox'
 import { ListState, useListState } from '@react-stately/list'
-import { Item } from '@react-stately/collections'
 import { mergeProps } from '@react-aria/utils'
 import { AriaListBoxProps } from '@react-types/listbox'
 import { mergeRefs } from 'react-merge-refs'
-
 import styled, { CSSObject, useTheme } from 'styled-components'
+
+import { Item } from '@react-stately/collections'
 
 import { Card } from '../index'
 
@@ -92,7 +92,7 @@ function useItemWrappedChildren(children: ReactElement | ReactElement[],
         const item = (
           <Item
             key={child.key}
-            textValue={child?.props?.textValue}
+            textValue={child?.props?.textValue || ' '}
           >
             {child}
           </Item>
