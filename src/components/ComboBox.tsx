@@ -5,6 +5,7 @@ import {
   ReactNode,
   RefObject,
   useCallback,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -18,8 +19,11 @@ import { AriaComboBoxProps } from '@react-types/combobox'
 import { AriaButtonProps, useButton } from '@react-aria/button'
 import pick from 'lodash/pick'
 import omit from 'lodash/omit'
+import isUndefined from 'lodash/isUndefined'
 import styled from 'styled-components'
 import { ExtendTheme, mergeTheme } from 'honorable'
+
+import { omitBy } from 'lodash'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
@@ -121,6 +125,14 @@ const comboBoxLeftRightStyles = {
   marginRight: 0,
 }
 
+const honorableInputPropNames = [
+  'onChange',
+  'onFocus',
+  'onBlur',
+  'onKeyDown',
+  'onKeyUp',
+]
+
 function ComboBoxInput({
   startIcon,
   children: _children,
@@ -133,14 +145,6 @@ function ComboBoxInput({
   isOpen,
   manualOpen,
 }: ComboBoxInputProps & InputProps) {
-  const honorableInputPropNames = [
-    'onChange',
-    'onFocus',
-    'onBlur',
-    'onKeyDown',
-    'onKeyUp',
-  ]
-
   outerInputProps = {
     ...outerInputProps,
     ...(pick(inputProps, honorableInputPropNames) as Pick<
@@ -148,7 +152,10 @@ function ComboBoxInput({
       'onChange' | 'onFocus' | 'onBlur' | 'onKeyDown' | 'onKeyUp'
     >),
   }
-  const innerInputProps = omit(inputProps, honorableInputPropNames)
+  // Need to filter out undefined properties so they won't override
+  // outerInputProps for honorable <Input> component
+  const innerInputProps = useMemo(() => omitBy(omit(inputProps, honorableInputPropNames), isUndefined),
+    [inputProps])
 
   let themeExtension: any = {}
 
@@ -192,8 +199,8 @@ function ComboBoxInput({
           ) : undefined
         }
         inputProps={{
-          ...innerInputProps,
           ref: inputRef,
+          ...innerInputProps,
         }}
         onClick={() => {
           if (manualOpen) manualOpen()
@@ -255,9 +262,7 @@ function ComboBox({
     if (isOpen && menuTrigger === 'input' && !inputValue) {
       stateRef?.current?.close()
     }
-    else {
-      onOpenChange(isOpen, menuTrigger)
-    }
+    else if (onOpenChange) onOpenChange(isOpen, menuTrigger)
   },
   [onOpenChange, inputValue])
 

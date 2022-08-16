@@ -155,8 +155,6 @@ const ChipList = styled(ListBoxItemChipList)(({ theme }) => ({
 }))
 
 function Template() {
-  const [isOpen, setIsOpen] = useState(false)
-
   const [selectedKeys, setSelectedKeys] = useState(new Set<Key>())
   const [inputValue, setInputValue] = useState('')
   const fuse = useMemo(() => new Fuse(items, {
@@ -177,7 +175,6 @@ function Template() {
   const onSelectionChange: ComponentProps<
     typeof ComboBox
   >['onSelectionChange'] = key => {
-    console.log('onSelectionChange', key)
     if (key) {
       setSelectedKeys(new Set([...selectedKeys, key]))
       setInputValue('')
@@ -186,15 +183,8 @@ function Template() {
 
   const onInputChange: ComponentProps<typeof ComboBox>['onInputChange']
     = value => {
-      console.log('onInputChange', value)
       setInputValue(value)
     }
-
-  const onOpenChange: ComponentProps<typeof ComboBox>['onOpenChange'] = (isOpen,
-    _menuTrigger) => {
-    console.log('onOpenChange', isOpen, _menuTrigger)
-    setIsOpen(false)
-  }
 
   return (
     <Flex
@@ -204,12 +194,10 @@ function Template() {
     >
       <TagPicker>
         <ComboBox
-          isOpen={isOpen}
-          label="Pick something"
+          inputValue={inputValue}
           onSelectionChange={onSelectionChange}
           onInputChange={onInputChange}
-          onOpenChange={onOpenChange}
-          inputValue={inputValue}
+          inputProps={{ placeholder: 'Pick something', error: true }}
         >
           {searchResults.map(({ item, score: _score, refIndex: _refIndex }) => (
             <ListBoxItem
