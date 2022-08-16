@@ -231,8 +231,8 @@ function Option({ item, state }: any) {
   } = useOption({ key: item.key }, state, ref)
 
   const mergedProps = mergeProps(optionProps, {
-    selected: isSelected,
-    disabled: isDisabled,
+    selected: isSelected || item?.rendered?.props?.selected,
+    disabled: isDisabled || item?.rendered?.props?.disabled,
     focused: isFocused,
     labelProps,
     descriptionProps,

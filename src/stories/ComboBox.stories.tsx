@@ -1,22 +1,17 @@
-import { Div, Flex } from 'honorable'
-import { Key, forwardRef, useState } from 'react'
+import { Flex } from 'honorable'
+import {
+  ComponentProps, Key, useMemo, useState,
+} from 'react'
 import styled from 'styled-components'
+import Fuse from 'fuse.js'
 
 import {
-  Button,
-  CheckIcon,
   Chip,
   ComboBox,
-  DropdownArrowIcon,
   IconFrame,
-  InfoIcon,
-  ListBoxFooterPlus,
   ListBoxItem,
   ListBoxItemChipList,
   PersonIcon,
-  SearchIcon,
-  Select,
-  SelectButton,
 } from '../index'
 
 export default {
@@ -107,76 +102,104 @@ const items = [
   },
   {
     key: 'dim-sum',
-    label: 'Dim Sum',
+    label: 'Dim sum',
     description: 'With ham and cheese',
     chips: chips.slice(4, 5),
     version: '0.3.01',
   },
   {
-    key: 'ratatouille2',
-    label: 'Ratatouille',
+    key: 'hamburger',
+    label: 'Hamburger',
     description: 'With ham and cheese',
     chips: [chips[0], chips[3], chips[5]],
     version: '0.3.02',
   },
   {
-    key: 'pizza2',
-    label: 'Pizza',
+    key: 'fried-chicken',
+    label: 'Fried chicken',
     description: 'With ham and cheese',
     chips: [chips[5], chips[0]],
     version: '0.3.05',
   },
   {
-    key: 'sushi2',
-    label: 'Sushi',
+    key: 'taco',
+    label: 'Taco',
     description: 'With ham and cheese',
     chips: chips.slice(0),
     version: '0.3.12',
   },
   {
-    key: 'couscous2',
-    label: 'Couscous',
+    key: 'empanada',
+    label: 'Empanada',
     description: 'With ham and cheese',
     chips: chips.slice(0).reverse(),
     version: '0.4.00',
   },
   {
-    key: 'dim-sum2',
-    label: 'Dim Sum',
+    key: 'chow-mein',
+    label: 'Chow mein',
     description: 'With ham and cheese',
     chips: chips.slice(5).reverse(),
     version: '0.4.01',
   },
 ]
 
-// Make sure any custom trigger button forwards ref to outermost element,
-// otherwise it'll error
-const CustomTriggerButton = styled(forwardRef<any, any>((props, ref) => (
-  <Button
-    ref={ref}
-    medium
-    primary
-    endIcon={<DropdownArrowIcon className="dropdownIcon" />}
-    {...props}
-  >
-    Click me!
-  </Button>
-)))<{ isOpen?: boolean }>(({ isOpen = false }) => ({
-  '.dropdownIcon': {
-    transform: isOpen ? 'scaleY(-1)' : 'scaleY(1)',
-    transition: 'transform 0.1s ease',
-  },
-}))
+const itemsByKey = items.reduce((obj, item) => ({ ...obj, [item.key]: item }),
+  {})
+
+const TagPicker = styled.div(({ theme }) => ({}))
 
 function Template() {
-  const [selectedKey, setSelectedKey] = useState<Key>()
   const shownStep = 4
   const [shownLimit, setShownLimit] = useState<number>(shownStep)
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedKey, setSelectedKey] = useState<Key>('')
 
-  const curItem = items.find(item => item.key === selectedKey)
-  const customLabel = curItem
-    ? `You have selected ${curItem.label}`
-    : 'Select an item please'
+  const [selectedKeys, setSelectedKeys] = useState(new Set<Key>())
+  const [inputValue, setInputValue] = useState('')
+  const fuse = useMemo(() => new Fuse(items, {
+    includeScore: true,
+    shouldSort: true,
+    threshold: 0.3,
+    keys: ['label'],
+  }),
+  [])
+  const searchResults = useMemo(() => {
+    if (inputValue) {
+      return fuse.search(inputValue)
+    }
+
+    return items.map((item, i) => ({ item, score: 1, refIndex: i }))
+  }, [fuse, inputValue])
+
+  const onSelectionChange: ComponentProps<
+    typeof ComboBox
+  >['onSelectionChange'] = key => {
+    console.log('selectionChanged', key)
+    if (key) {
+      setSelectedKeys(new Set([...selectedKeys, key]))
+      setSelectedKey('pizza')
+      setInputValue(null)
+    }
+  }
+
+  const onInputChange: ComponentProps<typeof ComboBox>['onInputChange'] = (value,
+    ...args) => {
+    console.log('inputChanged', value)
+    console.log('inputchanged args', args)
+    setInputValue(value)
+  }
+
+  const onOpenChange: ComponentProps<typeof ComboBox>['onOpenChange'] = (isOpen,
+    menuTrigger) => {
+    setIsOpen(isOpen)
+    console.log('openChanged outer', isOpen, menuTrigger)
+  }
+
+  const ChipList = styled(ListBoxItemChipList)(({ theme }) => ({
+    marginTop: theme.spacing.small,
+    justifyContent: 'start',
+  }))
 
   return (
     <Flex
@@ -184,130 +207,44 @@ function Template() {
       gap="large"
       maxWidth={512}
     >
-      <Div>
+      <TagPicker>
         <ComboBox
-          // isOpen
+          isOpen={isOpen}
           label="Pick something"
-          selectedKey={selectedKey}
-          onSelectionChange={key => {
-            setSelectedKey(key)
-          }}
+          onSelectionChange={onSelectionChange}
+          onInputChange={onInputChange}
+          onOpenChange={onOpenChange}
+          inputValue={inputValue}
         >
-          {items.slice(0, 4).map(({ key, label }) => (
+          {searchResults.map(({ item, score: _score, refIndex: _refIndex }) => (
             <ListBoxItem
-              key={key}
-              label={label}
-              textValue={label}
+              key={item.key}
+              label={item.label}
+              textValue={item.label}
               leftContent={smallIcon}
+              selected={selectedKeys.has(item.key)}
             />
           ))}
         </ComboBox>
-      </Div>
+        <ChipList
+          maxVisible={Infinity}
+          chips={[...selectedKeys].map(key => (
+            <Chip
+              size="small"
+              clickable
+              onClick={() => {
+                const newKeys = new Set(selectedKeys)
 
-      <Div>
-        <Select
-          label="Pick something"
-          selectedKey={selectedKey}
-          onSelectionChange={key => {
-            setSelectedKey(key)
-          }}
-          defaultOpen={false}
-          leftContent={<SearchIcon />}
-          rightContent={<ListBoxItemChipList chips={curItem?.chips} />}
-          dropdownFooterFixed={
-            <ListBoxFooterPlus>Create new</ListBoxFooterPlus>
-          }
-        >
-          {items.map(({
-            key, label, description, chips,
-          }) => (
-            <ListBoxItem
-              key={key}
-              label={label}
-              description={description}
-              rightContent={<ListBoxItemChipList chips={chips} />}
-              leftContent={portrait}
-            />
+                newKeys.delete(key)
+                setSelectedKeys(newKeys)
+              }}
+              closeButton
+            >
+              {itemsByKey[key]?.label}
+            </Chip>
           ))}
-        </Select>
-      </Div>
-
-      <Div>
-        <Select
-          label="Pick something"
-          selectedKey={selectedKey}
-          onSelectionChange={key => {
-            setSelectedKey(key)
-          }}
-          defaultOpen={false}
-          dropdownFooterFixed={
-            <ListBoxFooterPlus>Create new</ListBoxFooterPlus>
-          }
-          triggerButton={(
-            <SelectButton leftContent={curItem ? <CheckIcon /> : <InfoIcon />}>
-              {customLabel}
-            </SelectButton>
-          )}
-        >
-          {items.map(({
-            key, label, description, chips,
-          }) => (
-            <ListBoxItem
-              key={key}
-              label={label}
-              description={description}
-              rightContent={<ListBoxItemChipList chips={chips} />}
-              leftContent={portrait}
-            />
-          ))}
-        </Select>
-      </Div>
-
-      <Flex justifyContent="right">
-        <Select
-          label="Version"
-          selectedKey={selectedKey}
-          triggerButton={<CustomTriggerButton />}
-          width={224}
-          maxHeight={197}
-          placement="right"
-          onSelectionChange={key => {
-            setSelectedKey(key)
-          }}
-          onFooterClick={() => setShownLimit(shownLimit + shownStep)}
-          onOpenChange={open => {
-            if (!open) setShownLimit(shownStep)
-          }}
-          rightContent={
-            curItem && (
-              <ListBoxItemChipList
-                maxVisible={0}
-                showExtra
-                chips={curItem.chips}
-              />
-            )
-          }
-          dropdownFooter={
-            shownLimit < items.length && (
-              <ListBoxFooterPlus>View more</ListBoxFooterPlus>
-            )
-          }
-        >
-          {items.slice(0, shownLimit).map(({ key, chips, version }) => (
-            <ListBoxItem
-              key={key}
-              label={version}
-              rightContent={(
-                <ListBoxItemChipList
-                  maxVisible={2}
-                  showExtra
-                  chips={chips}
-                />
-              )}
-            />
-          ))}
-        </Select>
-      </Flex>
+        />
+      </TagPicker>
     </Flex>
   )
 }

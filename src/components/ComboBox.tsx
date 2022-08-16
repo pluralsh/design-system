@@ -7,8 +7,10 @@ import {
   useState,
 } from 'react'
 import { useComboBox } from '@react-aria/combobox'
-import { useFilter } from '@react-aria/i18n'
-import { ComboBoxStateOptions, useComboBoxState } from '@react-stately/combobox'
+import {
+  ComboBoxStateOptions,
+  useComboBoxState,
+} from '@react-stately/combobox'
 import { AriaComboBoxProps } from '@react-types/combobox'
 import { ListState } from '@react-stately/list'
 import pick from 'lodash/pick'
@@ -16,15 +18,15 @@ import omit from 'lodash/omit'
 import styled from 'styled-components'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
-import {
-  FOOTER_KEY,
-  HEADER_KEY,
-  useItemWrappedChildren,
-} from './ListBox'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
 import Input, { InputProps } from './Input'
 import { SelectInner } from './Select'
+import {
+  setNextFocusedKey,
+  useSelectComboStateProps,
+} from './SelectComboShared'
 import { PopoverListBox } from './PopoverListBox'
+import SearchIcon from './icons/SearchIcon'
 
 type ComboBoxInputProps = {
   leftContent?: ReactNode
@@ -138,87 +140,54 @@ function ComboBox({
   onSelectionChange,
   isOpen,
   onOpenChange,
-  leftContent,
-  rightContent,
   dropdownHeader,
   dropdownFooter,
   dropdownHeaderFixed,
   dropdownFooterFixed,
-  filter,
   onHeaderClick,
   onFooterClick,
   label,
-  //   name,
-  //   inputComponent: inputElt,
+  inputComponent,
   placement,
   width,
   maxHeight,
   ...props
 }: ComboBoxProps) {
-  const { contains } = useFilter({ sensitivity: 'base' })
   const nextFocusedKeyRef = useRef<Key>(null)
   const stateRef = useRef<ListState<object> | null>(null)
   const [isOpenUncontrolled, setIsOpen] = useState(false)
-  const temporarilyPreventClose = useRef(false)
 
   if (typeof isOpen !== 'boolean') {
     isOpen = isOpenUncontrolled
   }
 
-  const selectStateProps: AriaComboBoxProps<object> = {
-    menuTrigger: 'input',
-    onOpenChange: open => {
-      if (!open && temporarilyPreventClose.current) {
-        temporarilyPreventClose.current = false
+  const comboStateBaseProps = useSelectComboStateProps<ComboBoxProps>({
+    dropdownHeader,
+    dropdownFooter,
+    onFooterClick,
+    onHeaderClick,
+    onOpenChange,
+    onSelectionChange,
+    children,
+    setIsOpen,
+    stateRef,
+    nextFocusedKeyRef,
+  })
 
-        return
-      }
-      setIsOpen(open)
-      if (onOpenChange) {
-        onOpenChange(open)
-      }
-    },
+  const comboStateProps: AriaComboBoxProps<object> = {
+    ...comboStateBaseProps,
+    menuTrigger: 'focus',
     selectedKey,
-    onSelectionChange: newKey => {
-      if (newKey === HEADER_KEY && onHeaderClick) {
-        temporarilyPreventClose.current = true
-        onHeaderClick()
-      }
-      else if (newKey === FOOTER_KEY && onFooterClick) {
-        temporarilyPreventClose.current = true
-        onFooterClick()
-        if (stateRef.current) {
-          nextFocusedKeyRef.current
-            = stateRef?.current?.collection?.getKeyBefore(FOOTER_KEY)
-        }
-      }
-      else if (onSelectionChange) {
-        onSelectionChange(typeof newKey === 'string' ? newKey : '')
-      }
-    },
     label,
-    children: useItemWrappedChildren(children, dropdownHeader, dropdownFooter),
     ...props,
   }
 
   const state = useComboBoxState({
-    ...selectStateProps,
-    defaultFilter: filter || contains,
+    ...comboStateProps,
   })
 
-  stateRef.current = state
+  setNextFocusedKey({ nextFocusedKeyRef, state, stateRef })
 
-  if (nextFocusedKeyRef.current) {
-    const focusedKey
-      = state.collection.getKeyAfter(nextFocusedKeyRef.current)
-      || nextFocusedKeyRef.current
-
-    state.selectionManager.setFocusedKey(focusedKey)
-    nextFocusedKeyRef.current = null
-  }
-
-  // Get props for the listbox element
-  // Setup refs and get props for child elements.
   const buttonRef = useRef(null)
   const inputRef = useRef(null)
   const listBoxRef = useRef(null)
@@ -230,7 +199,7 @@ function ComboBox({
     listBoxProps,
     labelProps: _labelProps,
   } = useComboBox({
-    ...selectStateProps,
+    ...comboStateProps,
     inputRef,
     buttonRef,
     listBoxRef,
@@ -239,30 +208,34 @@ function ComboBox({
   state)
 
   label = label || ' '
-  //   inputElt = inputElt || (
-  //     <Input
-  //       className="inputElt"
-  //       leftIcon={leftContent}
-  //       rightIcon={rightContent}
-  //       isOpen={state.isOpen}
-  //     >
-  //       {state.selectedItem?.props?.children?.props?.label || label}
-  //     </Input>
-  //   )
 
-  const honorableInputPropNames = [
-    'onChange',
-    'onFocus',
-    'onBlur',
-    'onKeyDown',
-    'onKeyUp',
-  ]
-  const outerInputProps: InputProps = pick(inputProps,
-    honorableInputPropNames) as Pick<
-    typeof inputProps,
-    'onChange' | 'onFocus' | 'onBlur' | 'onKeyDown' | 'onKeyUp'
-  >
-  const innerInputProps = omit(inputProps, honorableInputPropNames)
+  if (!inputComponent) {
+    const honorableInputPropNames = [
+      'onChange',
+      'onFocus',
+      'onBlur',
+      'onKeyDown',
+      'onKeyUp',
+    ]
+    const outerInputProps: InputProps = pick(inputProps,
+      honorableInputPropNames) as Pick<
+      typeof inputProps,
+      'onChange' | 'onFocus' | 'onBlur' | 'onKeyDown' | 'onKeyUp'
+    >
+    const innerInputProps = omit(inputProps, honorableInputPropNames)
+
+    inputComponent = inputComponent || (
+      <Input
+        startIcon={<SearchIcon />}
+        endIcon={<DropdownArrowIcon />}
+        {...outerInputProps}
+        inputProps={{
+          ...innerInputProps,
+          ref: inputRef,
+        }}
+      />
+    )
+  }
 
   return (
     <ComboBoxInner
@@ -270,19 +243,7 @@ function ComboBox({
       maxHeight={maxHeight}
       placement={placement}
     >
-      <Input
-        {...outerInputProps}
-        inputProps={{
-          ...innerInputProps,
-          ref: inputRef,
-        }}
-      />
-      {/* <InputClone
-        inputRef={inputRef}
-        inputElt={inputElt}
-        isOpen={state.isOpen}
-        inputProps={inputProps}
-      /> */}
+      {inputComponent}
       <PopoverListBox
         isOpen={state.isOpen}
         onClose={state.close}
@@ -299,4 +260,4 @@ function ComboBox({
   )
 }
 
-export { ComboBox, ComboBoxInput }
+export { ComboBox, ComboBoxInput, ComboBoxProps }
