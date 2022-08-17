@@ -87,6 +87,7 @@ export { default as PeoplePlusIcon } from './components/icons/PeoplePlusIcon'
 export { default as PersonIcon } from './components/icons/PersonIcon'
 export { default as PersonPlusIcon } from './components/icons/PersonPlusIcon'
 export { default as PlanIcon } from './components/icons/PlanIcon'
+export { default as PlusIcon } from './components/icons/PlusIcon'
 export { default as PushPinIcon } from './components/icons/PushPinIcon'
 export { default as ReloadIcon } from './components/icons/ReloadIcon'
 export { default as RocketIcon } from './components/icons/RocketIcon'
@@ -119,6 +120,7 @@ export { default as Banner } from './components/Banner'
 export { default as Card, CardProps } from './components/Card'
 export { default as Checkbox } from './components/Checkbox'
 export { default as Chip } from './components/Chip'
+export { default as Code } from './components/Code'
 export { default as Codeline } from './components/Codeline'
 export {
   default as ContentCard,
@@ -128,6 +130,7 @@ export { default as Divider } from './components/Divider'
 export { default as FormField } from './components/FormField'
 export { default as Input } from './components/Input'
 export { default as InstalledLabel } from './components/InstalledLabel'
+export { default as Markdown } from './components/Markdown'
 export { default as ModalActions } from './components/ModalActions'
 export { default as ModalHeader } from './components/ModalHeader'
 export { default as PageCard, PageCardProps } from './components/PageCard'
@@ -136,7 +139,6 @@ export { default as ProgressBar } from './components/ProgressBar'
 export { default as Radio } from './components/Radio'
 export { default as IconFrame } from './components/IconFrame'
 export { default as RepositoryCard } from './components/RepositoryCard'
-export { default as Select } from './components/Select'
 export { default as Stepper } from './components/Stepper'
 export {
   default as Sidecar,
@@ -166,3 +168,13 @@ export { default as usePrevious } from './hooks/usePrevious'
 // Theme
 export { default as theme, styledTheme } from './theme'
 export { default as GlobalStyle } from './GlobalStyle'
+export { ListBox } from './components/ListBox'
+export {
+  ListBoxItem,
+  ListBoxFooter,
+  ListBoxFooterPlus,
+} from './components/ListBoxItem'
+export { default as ListBoxItemChipList } from './components/ListBoxItemChipList'
+export { Select, SelectButton } from './components/Select'
+export { default as LoadingSpinner } from './components/LoadingSpinner'
+export { default as LoopingLogo } from './components/LoopingLogo'
