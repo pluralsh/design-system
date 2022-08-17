@@ -39,8 +39,6 @@ export default function Input({
     })
   }
 
-  console.log('props', props)
-
   return (
     <ExtendTheme theme={themeExtension}>
       <HonorableInput

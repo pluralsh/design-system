@@ -8,7 +8,6 @@ import Fuse from 'fuse.js'
 import {
   Chip,
   ComboBox,
-  // IconFrame,
   ListBoxItem,
   ListBoxItemChipList,
   PersonIcon,
@@ -19,13 +18,6 @@ export default {
   component: 'ComboBox',
 }
 
-// const portrait = (
-//   <IconFrame
-//     spacing="none"
-//     size="xsmall"
-//     url="photo.png"
-//   />
-// )
 const smallIcon = <PersonIcon size={16} />
 
 const chipProps = {
