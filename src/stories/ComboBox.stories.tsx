@@ -197,7 +197,7 @@ function Template() {
           inputValue={inputValue}
           onSelectionChange={onSelectionChange}
           onInputChange={onInputChange}
-          inputProps={{ placeholder: 'Pick something', error: true }}
+          inputProps={{ placeholder: 'Pick something' }}
         >
           {searchResults.map(({ item, score: _score, refIndex: _refIndex }) => (
             <ListBoxItem
