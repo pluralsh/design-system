@@ -149,20 +149,24 @@ const ChipList = styled(ListBoxItemChipList)(({ theme }) => ({
 function Template() {
   const [selectedKeys, setSelectedKeys] = useState(new Set<Key>())
   const [inputValue, setInputValue] = useState('')
-  const fuse = useMemo(() => new Fuse(items, {
+
+  const filteredItems = items.filter(item => !selectedKeys.has(item.key))
+
+  const fuse = useMemo(() => new Fuse(filteredItems, {
     includeScore: true,
     shouldSort: true,
     threshold: 0.3,
     keys: ['label'],
   }),
-  [])
+  [filteredItems])
+
   const searchResults = useMemo(() => {
     if (inputValue) {
       return fuse.search(inputValue)
     }
 
-    return items.map((item, i) => ({ item, score: 1, refIndex: i }))
-  }, [fuse, inputValue])
+    return filteredItems.map((item, i) => ({ item, score: 1, refIndex: i }))
+  }, [fuse, inputValue, filteredItems])
 
   const onSelectionChange: ComponentProps<
     typeof ComboBox
@@ -186,6 +190,7 @@ function Template() {
     >
       <TagPicker>
         <ComboBox
+          startIcon={null}
           inputValue={inputValue}
           onSelectionChange={onSelectionChange}
           onInputChange={onInputChange}
