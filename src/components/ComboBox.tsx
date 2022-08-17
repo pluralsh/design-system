@@ -17,7 +17,6 @@ import {
   ComboBoxStateOptions,
   useComboBoxState,
 } from '@react-stately/combobox'
-import { AriaComboBoxProps } from '@react-types/combobox'
 import { AriaButtonProps, useButton } from '@react-aria/button'
 import pick from 'lodash/pick'
 import omit from 'lodash/omit'
@@ -57,7 +56,7 @@ type ComboBoxProps = Exclude<ComboBoxInputProps, 'children'> & {
   inputProps?: InputProps
   filter?: ComboBoxStateOptions<object>['defaultFilter']
 } & Omit<
-    AriaComboBoxProps<object>,
+    ComboBoxStateOptions<object>,
     'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder'
   >
 
@@ -250,12 +249,24 @@ function ComboBox({
 }: ComboBoxProps) {
   const nextFocusedKeyRef = useRef<Key>(null)
   const stateRef = useRef<ComboBoxState<object> | null>(null)
-  const [isOpenUncontrolled, setIsOpen] = useState(false)
+  const [isOpenUncontrolled, setIsOpenUncontrolled] = useState(false)
   const previousInputValue = useRef(inputValue)
 
   if (typeof isOpen !== 'boolean') {
     isOpen = isOpenUncontrolled
   }
+
+  const wrappedOnOpenChange: typeof onOpenChange = useCallback((nextIsOpen, menuTrigger) => {
+    setIsOpenUncontrolled(nextIsOpen)
+    if (nextIsOpen !== isOpen) {
+      if (onOpenChange) onOpenChange(nextIsOpen, menuTrigger)
+    }
+  },
+  [isOpen, onOpenChange])
+
+  const setIsOpen = useCallback((isOpen:boolean) => {
+    wrappedOnOpenChange(isOpen, 'manual')
+  }, [wrappedOnOpenChange])
 
   const wrappedOnSelectionChange: typeof onSelectionChange = useCallback((newKey, ...args) => {
     if (onSelectionChange) {
@@ -266,15 +277,7 @@ function ComboBox({
       setIsOpen(false)
     }
   },
-  [onSelectionChange])
-
-  const wrappedOnOpenChange: typeof onOpenChange = useCallback((nextIsOpen, menuTrigger) => {
-    if (nextIsOpen !== isOpen) {
-      setIsOpen(nextIsOpen)
-    }
-    if (onOpenChange) onOpenChange(nextIsOpen, menuTrigger)
-  },
-  [isOpen, onOpenChange])
+  [onSelectionChange, setIsOpen])
 
   const wrappedOnFocusChange: typeof onFocusChange = useCallback((isFocused, ...args) => {
     // Enforce open on focus
@@ -285,7 +288,7 @@ function ComboBox({
       onFocusChange(isFocused, ...args)
     }
   },
-  [isOpen, onFocusChange])
+  [isOpen, onFocusChange, setIsOpen])
 
   const wrappedOnInputChange: typeof onInputChange = useCallback((input, ...args) => {
     if (input !== previousInputValue.current) {
@@ -296,7 +299,7 @@ function ComboBox({
       onInputChange(input, ...args)
     }
   },
-  [onInputChange])
+  [onInputChange, setIsOpen])
 
   const comboStateBaseProps = useSelectComboStateProps<ComboBoxProps>({
     dropdownHeader,

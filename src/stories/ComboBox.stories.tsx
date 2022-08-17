@@ -8,6 +8,8 @@ import Fuse from 'fuse.js'
 import {
   Chip,
   ComboBox,
+  IconFrame,
+  ListBoxFooterPlus,
   ListBoxItem,
   ListBoxItemChipList,
   PersonIcon,
@@ -18,6 +20,13 @@ export default {
   component: 'ComboBox',
 }
 
+const portrait = (
+  <IconFrame
+    spacing="none"
+    size="xsmall"
+    url="photo.png"
+  />
+)
 const smallIcon = <PersonIcon size={16} />
 
 const chipProps = {
@@ -63,7 +72,15 @@ const chips = [
   </Chip>,
 ]
 
-const items = [
+type Item = {
+  key: string
+  label?: string
+  description?: string
+  chips?: JSX.Element[]
+  version?: string
+}
+
+const items: Item[] = [
   {
     key: 'ratatouille',
     label: 'Ratatouille',
@@ -138,6 +155,7 @@ const items = [
 
 const itemsByKey = items.reduce((obj, item) => ({ ...obj, [item.key]: item }),
   {})
+const itemKeys = items.map(item => item.key)
 
 const TagPicker = styled.div(({ theme: _theme }) => ({}))
 
@@ -190,7 +208,6 @@ function Template() {
     >
       <TagPicker>
         <ComboBox
-          startIcon={null}
           inputValue={inputValue}
           onSelectionChange={onSelectionChange}
           onInputChange={onInputChange}
@@ -200,8 +217,9 @@ function Template() {
             <ListBoxItem
               key={item.key}
               label={item.label}
-              textValue={item.label}
-              leftContent={smallIcon}
+              textValue={`${item.label} – ${item.description}`}
+              description={item.description}
+              leftContent={portrait}
               selected={selectedKeys.has(item.key)}
             />
           ))}
@@ -229,6 +247,131 @@ function Template() {
   )
 }
 
+function TagsTemplate() {
+  const [selectedKeys, setSelectedKeys] = useState(new Set<Key>())
+  const [inputValue, setInputValue] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+
+  const allItems = [...items]
+
+  for (let key of selectedKeys) {
+    if (typeof key === 'number') {
+      key = String(key)
+    }
+    if (!itemsByKey[key]) {
+      allItems.push({ key })
+    }
+  }
+
+  const filteredItems = allItems.filter(item => !selectedKeys.has(item.key))
+  const allKeys = new Set([...selectedKeys, ...itemKeys])
+
+  const fuse = useMemo(() => new Fuse(filteredItems, {
+    includeScore: true,
+    shouldSort: true,
+    threshold: 0.3,
+    keys: ['key'],
+  }),
+  [filteredItems])
+
+  const searchResults = useMemo(() => {
+    if (inputValue) {
+      return fuse.search(inputValue)
+    }
+
+    return filteredItems.map((item, i) => ({ item, score: 1, refIndex: i }))
+  }, [fuse, inputValue, filteredItems])
+
+  const onSelectionChange: ComponentProps<
+    typeof ComboBox
+  >['onSelectionChange'] = key => {
+    if (key) {
+      setSelectedKeys(new Set([...selectedKeys, key]))
+      setInputValue('')
+    }
+  }
+
+  const onInputChange: ComponentProps<typeof ComboBox>['onInputChange']
+    = value => {
+      setInputValue(value)
+    }
+
+  let newKey = inputValue
+    .toLowerCase()
+    .replaceAll(/\s+/g, '-')
+    .replaceAll(/[^a-z-]/g, '')
+
+  if (allKeys.has(newKey)) {
+    newKey = null
+  }
+
+  return (
+    <Flex
+      flexDirection="column"
+      gap="large"
+      maxWidth={512}
+    >
+      <TagPicker>
+        <ComboBox
+          isOpen={isOpen}
+          inputValue={inputValue}
+          onSelectionChange={onSelectionChange}
+          onInputChange={onInputChange}
+          inputProps={{ placeholder: 'Pick something' }}
+          onOpenChange={(isOpen, trigger) => {
+            setIsOpen(isOpen)
+          }}
+          dropdownFooterFixed={
+            newKey ? (
+              <ListBoxFooterPlus
+                onClick={() => {
+                  setSelectedKeys(new Set([...selectedKeys, newKey]))
+                  setInputValue('')
+                  setIsOpen(false)
+                }}
+              >
+                Create new tag, '{newKey}'
+              </ListBoxFooterPlus>
+            ) : undefined
+          }
+          maxHeight={232}
+          allowsEmptyCollection={!!newKey}
+        >
+          {searchResults.map(({ item, score: _score, refIndex: _refIndex }) => (
+            <ListBoxItem
+              key={item.key}
+              label={item.key}
+              textValue={`${item.key}`}
+              selected={selectedKeys.has(item.key)}
+            />
+          ))}
+        </ComboBox>
+        <ChipList
+          maxVisible={Infinity}
+          chips={[...selectedKeys].map(key => (
+            <Chip
+              size="small"
+              clickable
+              onClick={() => {
+                const newKeys = new Set(selectedKeys)
+
+                newKeys.delete(key)
+                setSelectedKeys(newKeys)
+              }}
+              closeButton
+            >
+              {key}
+            </Chip>
+          ))}
+        />
+      </TagPicker>
+    </Flex>
+  )
+}
+
 export const Default = Template.bind({})
 
+Default.args = {}
+
+export const Tags = TagsTemplate.bind({})
 Default.args = {}
