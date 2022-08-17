@@ -27,7 +27,6 @@ const portrait = (
     url="photo.png"
   />
 )
-const smallIcon = <PersonIcon size={16} />
 
 const chipProps = {
   size: 'small',
@@ -315,23 +314,24 @@ function TagsTemplate() {
         <ComboBox
           isOpen={isOpen}
           inputValue={inputValue}
-          onSelectionChange={onSelectionChange}
+          onSelectionChange={selectedKey => {
+            if (selectedKey === '$$footer$$') {
+              setSelectedKeys(new Set([...selectedKeys, newKey]))
+              setInputValue('')
+              setIsOpen(false)
+            }
+            else {
+              onSelectionChange(selectedKey)
+            }
+          }}
           onInputChange={onInputChange}
           inputProps={{ placeholder: 'Pick something' }}
-          onOpenChange={(isOpen, trigger) => {
+          onOpenChange={(isOpen, _trigger) => {
             setIsOpen(isOpen)
           }}
-          dropdownFooterFixed={
+          dropdownFooter={
             newKey ? (
-              <ListBoxFooterPlus
-                onClick={() => {
-                  setSelectedKeys(new Set([...selectedKeys, newKey]))
-                  setInputValue('')
-                  setIsOpen(false)
-                }}
-              >
-                Create new tag, '{newKey}'
-              </ListBoxFooterPlus>
+              <ListBoxFooterPlus>Create new tag, '{newKey}'</ListBoxFooterPlus>
             ) : undefined
           }
           maxHeight={232}
