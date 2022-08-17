@@ -12,7 +12,6 @@ import {
   ListBoxFooterPlus,
   ListBoxItem,
   ListBoxItemChipList,
-  PersonIcon,
 } from '../index'
 
 export default {
