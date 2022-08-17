@@ -1,10 +1,12 @@
 import {
   HTMLAttributes,
   Key,
+  MouseEventHandler,
   ReactElement,
   ReactNode,
   RefObject,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -20,7 +22,7 @@ import { AriaButtonProps, useButton } from '@react-aria/button'
 import pick from 'lodash/pick'
 import omit from 'lodash/omit'
 import isUndefined from 'lodash/isUndefined'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { ExtendTheme, mergeTheme } from 'honorable'
 
 import { omitBy } from 'lodash'
@@ -77,6 +79,7 @@ type ComboBoxInputProps = {
   showArrow?: boolean
   isOpen?: boolean
   outerInputProps?: InputProps
+  onInputClick?: MouseEventHandler
 }
 
 const OpenButton = styled(({
@@ -143,7 +146,7 @@ function ComboBoxInput({
   buttonProps,
   showArrow = true,
   isOpen,
-  manualOpen,
+  onInputClick,
 }: ComboBoxInputProps & InputProps) {
   outerInputProps = {
     ...outerInputProps,
@@ -152,6 +155,7 @@ function ComboBoxInput({
       'onChange' | 'onFocus' | 'onBlur' | 'onKeyDown' | 'onKeyUp'
     >),
   }
+  const theme = useTheme()
   // Need to filter out undefined properties so they won't override
   // outerInputProps for honorable <Input> component
   const innerInputProps = useMemo(() => omitBy(omit(inputProps, honorableInputPropNames), isUndefined),
@@ -162,10 +166,20 @@ function ComboBoxInput({
   if (startIcon) {
     themeExtension = mergeTheme(themeExtension, {
       Input: {
-        Root: [{ paddingLeft: 0 }],
+        Root: [
+          {
+            position: 'relative',
+            paddingLeft: 0,
+          },
+        ],
+        InputBase: [{ paddingLeft: theme.spacing.xxlarge }],
         StartIcon: [
           {
-            ...comboBoxLeftRightStyles,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            bottom: 0,
+            pointerEvents: 'none',
           },
         ],
       },
@@ -200,11 +214,8 @@ function ComboBoxInput({
         }
         inputProps={{
           ref: inputRef,
+          onClick: onInputClick,
           ...innerInputProps,
-        }}
-        onClick={() => {
-          if (manualOpen) manualOpen()
-          inputRef?.current?.focus()
         }}
         {...outerInputProps}
       />
@@ -220,8 +231,9 @@ function ComboBox({
   inputValue,
   onSelectionChange,
   onFocusChange,
-  isOpen,
   onOpenChange,
+  onInputChange,
+  isOpen,
   dropdownHeader,
   dropdownFooter,
   dropdownHeaderFixed,
@@ -239,6 +251,7 @@ function ComboBox({
   const nextFocusedKeyRef = useRef<Key>(null)
   const stateRef = useRef<ComboBoxState<object> | null>(null)
   const [isOpenUncontrolled, setIsOpen] = useState(false)
+  const previousInputValue = useRef(inputValue)
 
   if (typeof isOpen !== 'boolean') {
     isOpen = isOpenUncontrolled
@@ -250,38 +263,40 @@ function ComboBox({
         typeof newKey === 'string' ? newKey : '',
         ...args,
       ])
-      if (stateRef?.current?.isOpen) {
-        stateRef.current.close()
-      }
+      setIsOpen(false)
     }
   },
   [onSelectionChange])
 
-  const wrappedOnOpenChange: typeof onOpenChange = useCallback((isOpen, menuTrigger) => {
-    // Don't reopen after inputValue is reset by making a selection
-    if (isOpen && menuTrigger === 'input' && !inputValue) {
-      stateRef?.current?.close()
+  const wrappedOnOpenChange: typeof onOpenChange = useCallback((nextIsOpen, menuTrigger) => {
+    if (nextIsOpen !== isOpen) {
+      setIsOpen(nextIsOpen)
     }
-    else if (onOpenChange) onOpenChange(isOpen, menuTrigger)
+    if (onOpenChange) onOpenChange(nextIsOpen, menuTrigger)
   },
-  [onOpenChange, inputValue])
+  [isOpen, onOpenChange])
 
   const wrappedOnFocusChange: typeof onFocusChange = useCallback((isFocused, ...args) => {
     // Enforce open on focus
-    if (isFocused && stateRef.current && !stateRef.current.isOpen) {
-      stateRef.current.open(null, 'focus')
+    if (isFocused && !isOpen) {
+      setIsOpen(true)
     }
     if (onFocusChange) {
       onFocusChange(isFocused, ...args)
     }
   },
-  [onFocusChange])
+  [isOpen, onFocusChange])
 
-  const manualOpen: (...args: any[]) => void = useCallback(() => {
-    if (stateRef.current && !stateRef.current.isOpen) {
-      stateRef.current.open(null, 'manual')
+  const wrappedOnInputChange: typeof onInputChange = useCallback((input, ...args) => {
+    if (input !== previousInputValue.current) {
+      previousInputValue.current = input
+      setIsOpen(true)
     }
-  }, [])
+    if (onInputChange) {
+      onInputChange(input, ...args)
+    }
+  },
+  [onInputChange])
 
   const comboStateBaseProps = useSelectComboStateProps<ComboBoxProps>({
     dropdownHeader,
@@ -296,11 +311,12 @@ function ComboBox({
     nextFocusedKeyRef,
   })
 
-  const comboStateProps: AriaComboBoxProps<object> = {
+  const comboStateProps: ComboBoxStateOptions<object> = {
     ...comboStateBaseProps,
-    menuTrigger: 'focus',
+    menuTrigger: 'manual',
     selectedKey: selectedKey || null,
     onFocusChange: wrappedOnFocusChange,
+    onInputChange: wrappedOnInputChange,
     inputValue,
     ...props,
   }
@@ -310,6 +326,17 @@ function ComboBox({
   })
 
   setNextFocusedKey({ nextFocusedKeyRef, state, stateRef })
+
+  useEffect(() => {
+    if (isOpen !== state.isOpen) {
+      if (isOpen) {
+        state.open(null, 'manual')
+      }
+      else {
+        state.close()
+      }
+    }
+  }, [state, isOpen])
 
   const buttonRef = useRef(null)
   const inputRef = useRef(null)
@@ -342,9 +369,15 @@ function ComboBox({
         buttonProps={buttonProps}
         showArrow={showArrow}
         isOpen={state.isOpen}
-        manualOpen={manualOpen}
+        setIsOpen={setIsOpen}
         startIcon={startIcon}
         outerInputProps={outerInputProps}
+        onInputClick={() => {
+          setIsOpen(true)
+          // Need to also manually open with state to override
+          // default close behavior
+          state.open(null, 'manual')
+        }}
       />
       <PopoverListBox
         isOpen={state.isOpen}
