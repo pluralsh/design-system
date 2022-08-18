@@ -13,8 +13,6 @@ import {
   useRef,
 } from 'react'
 
-import theme from 'honorable-theme-default'
-
 import { useTheme } from 'styled-components'
 
 import Tab from './Tab'
