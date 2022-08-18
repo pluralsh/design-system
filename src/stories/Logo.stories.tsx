@@ -1,4 +1,4 @@
-import { Flex } from 'honorable'
+import { Div, Flex } from 'honorable'
 
 import Logo, { LogoProps, LogoType } from '../components/Logo'
 
@@ -18,10 +18,39 @@ export default {
 function Template(args: LogoProps) {
   return (
     <Flex
-      grow={1}
       justify="center"
+      gap="large"
+      direction="column"
     >
-      <Logo {...args} />
+      <div>
+        <h3>Default size</h3>
+        <Logo {...args} />
+      </div>
+
+      <div>
+        <h3>Height: 150px</h3>
+        <Logo
+          height={150}
+          {...args}
+        />
+      </div>
+
+      <div>
+        <h3>Width: 150px</h3>
+        <Logo
+          width={150}
+          {...args}
+        />
+      </div>
+
+      <div>
+        <h3>Width: 150px, Height: 150px</h3>
+        <Logo
+          width={150}
+          height={150}
+          {...args}
+        />
+      </div>
     </Flex>
   )
 }
@@ -30,6 +59,5 @@ export const Default = Template.bind({})
 
 Default.args = {
   isDark: false,
-  scale: 1,
   type: LogoType.Full,
 }
