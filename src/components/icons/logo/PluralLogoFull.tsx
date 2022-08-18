@@ -6,7 +6,12 @@ export type PluralLogoProps = ComponentPropsWithRef<'svg'> & {
   height?: string | number;
 }
 
-export default function PluralLogoFull({ width = '320', height = '79', color = 'currentColor' }: PluralLogoProps): JSX.Element {
+export default function PluralLogoFull({ width, height, color = 'currentColor' }: PluralLogoProps): JSX.Element {
+  if (!width && !height) {
+    width = 320
+    height = 79
+  }
+
   return (
     <svg
       width={width}

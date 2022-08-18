@@ -1,6 +1,11 @@
 import { PluralLogoProps } from './PluralLogoFull'
 
-export default function PluralLogoMark({ width = '224', height = '80', color = 'currentColor' }: PluralLogoProps): JSX.Element {
+export default function PluralLogoMark({ width, height, color = 'currentColor' }: PluralLogoProps): JSX.Element {
+  if (!width && !height) {
+    width = 224
+    height = 80
+  }
+
   return (
     <svg
       width={width}

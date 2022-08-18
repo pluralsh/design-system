@@ -26,9 +26,6 @@ const Logo = forwardRef<HTMLDivElement, LogoProps & HTMLAttributes<HTMLDivElemen
 },
 ref): JSX.Element => {
   const color = isDark ? '#000' : '#FFF'
-  const hasSize = !!width && !!height
-  const hasWidth = !!width
-  const hasHeight = !!height
 
   return (
     <div
@@ -38,25 +35,22 @@ ref): JSX.Element => {
       {type === LogoType.Full && (
         <PluralLogoFull
           color={color}
-          {...(!hasSize && hasWidth ? { width, height: null } : {})}
-          {...(!hasSize && hasHeight ? { height, width: null } : {})}
-          {...(hasSize ? { width, height } : {})}
+          width={width}
+          height={height}
         />
       )}
       {type === LogoType.Word && (
         <PluralLogoWord
           color={color}
-          {...(!hasSize && hasWidth ? { width, height: null } : {})}
-          {...(!hasSize && hasHeight ? { height, width: null } : {})}
-          {...(hasSize ? { width, height } : {})}
+          width={width}
+          height={height}
         />
       )}
       {type === LogoType.Mark && (
         <PluralLogoMark
           color={color}
-          {...(!hasSize && hasWidth ? { width, height: null } : {})}
-          {...(!hasSize && hasHeight ? { height, width: null } : {})}
-          {...(hasSize ? { width, height } : {})}
+          width={width}
+          height={height}
         />
       )}
     </div>
