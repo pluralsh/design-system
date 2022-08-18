@@ -36,10 +36,9 @@ ref: Ref<any>) {
       borderRight={
         vertical ? `1px solid ${active ? 'border-primary' : 'border'}` : null
       }
-      zIndex={theme.zIndexes.base + 0}
       _focusVisible={{
-        outline: '1px solid border-outline-focused',
         zIndex: theme.zIndexes.base + 1,
+        ...theme.partials.focus.default,
       }}
       {...props}
     >

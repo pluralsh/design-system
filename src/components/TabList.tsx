@@ -13,6 +13,10 @@ import {
   useRef,
 } from 'react'
 
+import theme from 'honorable-theme-default'
+
+import { useTheme } from 'styled-components'
+
 import Tab from './Tab'
 import SubTab from './SubTab'
 
@@ -100,6 +104,7 @@ function TabRenderer({
 }: TabRendererProps) {
   const ref = useRef(null)
   const { tabProps: props } = useTab({ key: item.key }, state, ref)
+  const theme = useTheme()
 
   const TabComponent = tabStyle === 'subtab' ? SubTab : Tab
 
@@ -120,7 +125,11 @@ function TabRenderer({
     return item.props.renderer({
       ...{
         cursor: 'pointer',
-        _focusVisible: { outline: '1px solid border-outline-focused' },
+        _focusVisible: { ...theme.partials.focus.default },
+        position: 'relative',
+        '&:focus, &:focus-visible': {
+          zIndex: theme.zIndexes.base + 1,
+        },
       },
       ...props,
     },
@@ -134,6 +143,12 @@ function TabRenderer({
       {...props}
       active={state.selectedKey === item.key}
       vertical={stateProps.orientation === 'vertical'}
+      position="relative"
+      {...{
+        '&:focus, &:focus-visible': {
+          zIndex: theme.zIndexes.base + 1,
+        },
+      }}
       {...item.props}
     >
       {item.rendered}
