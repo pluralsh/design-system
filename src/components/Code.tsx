@@ -39,6 +39,7 @@ function Highlight({ language, children } : HighlightProps) {
       padding="0"
       background="none"
       fontFamily={fontFamilies.mono}
+      lineHeight="22px"
       className={(language && `language-${language}`) || 'nohighlight'}
       ref={codeRef}
     >
