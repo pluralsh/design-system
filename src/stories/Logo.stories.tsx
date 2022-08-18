@@ -1,4 +1,4 @@
-import { Div, Flex } from 'honorable'
+import { Flex } from 'honorable'
 
 import Logo, { LogoProps, LogoType } from '../components/Logo'
 
