@@ -17,7 +17,7 @@ export enum LogoType {
   Mark = 'mark',
 }
 
-const LoopingLogo = forwardRef<HTMLDivElement, LogoProps & HTMLAttributes<HTMLDivElement>>(({
+const Logo = forwardRef<HTMLDivElement, LogoProps & HTMLAttributes<HTMLDivElement>>(({
   isDark = false,
   width,
   height,
@@ -63,4 +63,4 @@ ref): JSX.Element => {
   )
 })
 
-export default LoopingLogo
+export default Logo
