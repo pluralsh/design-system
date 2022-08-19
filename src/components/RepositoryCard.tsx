@@ -1,5 +1,5 @@
 import {
-  Div, DivProps, Flex, H1, H3, Img, P, Span, useMediaQuery,
+  Div, DivProps, Flex, H1, H3, Img, P, Span,
 } from 'honorable'
 import PropTypes from 'prop-types'
 import { Ref, forwardRef } from 'react'
@@ -42,34 +42,27 @@ function RepositoryCardRef({
   description,
   imageUrl,
   tags = [],
+  size = 'small',
   ...props
 }: RepositoryCardProps,
 ref: Ref<any>) {
-  const isDesktopLargeDown = useMediaQuery('down', 'desktopLarge')
-
   return (
     <Card
       ref={ref}
       clickable
       flexDirection="column"
       padding="large"
-      width={697}
-      width-desktop-up={777}
-      width-desktopLarge-up={801}
-      maxWidth={697}
-      maxWidth-desktop-up={777}
-      maxWidth-desktopLarge-up={801}
+      width={size === 'small' ? 697 : size === 'medium' ? 777 : 801}
+      maxWidth={size === 'small' ? 697 : size === 'medium' ? 777 : 801}
       {...props}
     >
       <Flex align="flex-start">
         <Img
           src={imageUrl}
-          width={140}
-          height={140}
-          width-desktopLarge-up={160}
-          height-desktopLarge-up={160}
+          width={size === 'medium' ? 140 : 160}
+          height={size === 'medium' ? 140 : 160}
+          display={size === 'small' ? 'none' : 'block'}
           padding="xlarge"
-          display-desktop-down="none"
           backgroundColor="fill-two"
           borderRadius="medium"
           border="1px solid border-fill-two"
@@ -82,23 +75,22 @@ ref: Ref<any>) {
               width={64}
               height={64}
               padding="xsmall"
-              display-desktop-up="none"
+              display={size === 'small' ? 'block' : 'none'}
               backgroundColor="fill-two"
               borderRadius="medium"
               border="1px solid border-fill-two"
             />
             <Flex
               direction="row"
-              marginLeft="small"
-              marginLeft-desktop-up={0}
+              marginLeft={size === 'small' ? 'small' : 0}
               width="100%"
             >
               <Flex direction="column">
                 <H1
                   color="text"
-                  title2={isDesktopLargeDown}
-                  title1={!isDesktopLargeDown}
-                  marginBottom={isDesktopLargeDown ? 0 : 'xsmall'}
+                  title2={size !== 'large'}
+                  title1={size === 'large'}
+                  marginBottom={size === 'large' ? 'xsmall' : 0}
                 >
                   {title}
                   {!!verified && (

@@ -14,8 +14,17 @@ function Template(args: any) {
       direction="column"
       maxWidth={697}
     >
-      Click the second button on the top right to view the component in a webpage and see it grow responsively.
       <RepositoryCard
+        {...args}
+      />
+      <RepositoryCard
+        size="medium"
+        mt={1}
+        {...args}
+      />
+      <RepositoryCard
+        size="large"
+        mt={1}
         {...args}
       />
     </Flex>
