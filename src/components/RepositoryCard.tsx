@@ -53,7 +53,7 @@ ref: Ref<any>) {
       flexDirection="column"
       padding="large"
       width="100%"
-      minWidth={size === 'small' ? 697 : size === 'medium' ? 777 : 801}
+      // minWidth={size === 'small' ? 697 : size === 'medium' ? 777 : 801}
       {...props}
     >
       <Flex align="flex-start">
