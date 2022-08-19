@@ -36,10 +36,29 @@ function Template() {
         {jsCode}
       </Code>
       <Code
+        language="js"
+        width="600px"
+        height="200px"
+      >
+        {jsCode}
+      </Code>
+      <Code
+        width="600px"
+        height="100px"
+      >
+        {jsCode}
+      </Code>
+      <Code
         language="go"
         width="400px"
       >
         {goCode}
+      </Code>
+      <Code
+        width="400px"
+        language="js"
+      >
+        console.log('test')
       </Code>
       <Code width="400px">
         One line

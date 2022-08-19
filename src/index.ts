@@ -146,12 +146,13 @@ export {
   SidecarItem,
   SidecarButton,
 } from './components/Sidecar'
+export { default as SubTab } from './components/SubTab'
 export { default as Tab } from './components/Tab'
 export {
   TabList,
-  TabListItem,
   TabListStateProps,
   TabPanel,
+  TabBaseProps,
 } from './components/TabList'
 export { default as TipCarousel } from './components/TipCarousel'
 export { default as Token } from './components/Token'
@@ -178,3 +179,4 @@ export { default as ListBoxItemChipList } from './components/ListBoxItemChipList
 export { Select, SelectButton } from './components/Select'
 export { default as LoadingSpinner } from './components/LoadingSpinner'
 export { default as LoopingLogo } from './components/LoopingLogo'
+export { ComboBox } from './components/ComboBox'

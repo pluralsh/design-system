@@ -2,7 +2,7 @@ import {
   forwardRef, useEffect, useRef, useState,
 } from 'react'
 import {
-  Button, Flex, FlexProps, Pre,
+  Button, Div, Flex, FlexProps, Pre,
 } from 'honorable'
 import hljs from 'highlight.js'
 
@@ -36,9 +36,10 @@ function Highlight({ language, children } : HighlightProps) {
   return (
     <Pre
       margin="0"
-      padding="0"
+      padding="large"
       background="none"
       fontFamily={fontFamilies.mono}
+      lineHeight="22px"
       className={(language && `language-${language}`) || 'nohighlight'}
       ref={codeRef}
     >
@@ -67,32 +68,46 @@ function CodeRef({ children, language, ...props }: CodeProps) {
     <Card
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      minHeight="90px"
       {...props}
     >
-      <Flex position="relative">
-        {hover && (
-          <Button
-            position="absolute"
-            right="24px"
-            top="24px"
-            tertiary
-            backgroundColor="fill-three"
-            _hover={{ backgroundColor: 'fill-one-hover' }}
-            startIcon={copied ? <CheckIcon /> : <CopyIcon />}
-            onClick={handleCopy}
+      <Flex
+        position="relative"
+        direction="column"
+        height="100%"
+      >
+        {!!language && (
+          <Div
+            paddingHorizontal="large"
+            paddingVertical="medium"
+            borderBottom="1px solid border"
+            overline
+            color="text-light"
           >
-            {copied ? 'Copied' : 'Copy'}
-          </Button>
+            {language}
+          </Div>
         )}
-        <Flex
+        <Div
           minHeight="90px"
-          overflowX="auto"
-          padding="large"
+          height="100%"
+          overflow="auto"
           alignItems="center"
         >
+          {hover && (
+            <Button
+              position="absolute"
+              right="24px"
+              top={language ? '73px' : '24px'}
+              tertiary
+              backgroundColor="fill-three"
+              _hover={{ backgroundColor: 'fill-one-hover' }}
+              startIcon={copied ? <CheckIcon /> : <CopyIcon />}
+              onClick={handleCopy}
+            >
+              {copied ? 'Copied' : 'Copy'}
+            </Button>
+          )}
           <Highlight language={language}>{children}</Highlight>
-        </Flex>
+        </Div>
       </Flex>
     </Card>
   )
