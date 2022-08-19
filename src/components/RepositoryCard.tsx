@@ -52,8 +52,8 @@ ref: Ref<any>) {
       clickable
       flexDirection="column"
       padding="large"
-      width={size === 'small' ? 697 : size === 'medium' ? 777 : 801}
-      maxWidth={size === 'small' ? 697 : size === 'medium' ? 777 : 801}
+      width="100%"
+      minWidth={size === 'small' ? 697 : size === 'medium' ? 777 : 801}
       {...props}
     >
       <Flex align="flex-start">
@@ -68,7 +68,7 @@ ref: Ref<any>) {
           border="1px solid border-fill-two"
           marginRight="large"
         />
-        <Div>
+        <Div flexGrow={1}>
           <Flex align="center">
             <Img
               src={imageUrl}
@@ -84,6 +84,7 @@ ref: Ref<any>) {
               direction="row"
               marginLeft={size === 'small' ? 'small' : 0}
               width="100%"
+              justify="space-between"
             >
               <Flex direction="column">
                 <H1
@@ -113,6 +114,7 @@ ref: Ref<any>) {
               <Flex
                 justifyContent="end"
                 flexGrow={1}
+                marginLeft="medium"
               >
                 {!!installed && (
                   <Chip
