@@ -2,24 +2,22 @@ import { ReactNode, Ref, forwardRef } from 'react'
 import {
   Div, DivProps, Flex, Icon,
 } from 'honorable'
-import PropTypes from 'prop-types'
 import { useTheme } from 'styled-components'
 
-type TagProps = DivProps & {
-  active?: boolean
-  startIcon?: ReactNode
-  vertical?: boolean
-}
+import { TabBaseProps } from './TabList'
 
-const propTypes = {
-  active: PropTypes.bool,
-  startIcon: PropTypes.node,
-  vertical: PropTypes.bool,
+type TabProps = DivProps & TabBaseProps & {
+  startIcon?: ReactNode
 }
 
 function TabRef({
-  startIcon, active, children, vertical, ...props
-}: TagProps,
+  startIcon,
+  active,
+  children,
+  vertical,
+  textValue: _textValue,
+  ...props
+}: TabProps,
 ref: Ref<any>) {
   const theme = useTheme()
 
@@ -71,8 +69,7 @@ ref: Ref<any>) {
   )
 }
 
-TabRef.propTypes = propTypes
-
 const Tab = forwardRef(TabRef)
 
 export default Tab
+export { TabProps }

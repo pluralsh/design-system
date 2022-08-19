@@ -2,10 +2,10 @@ import { ReactNode, Ref, forwardRef } from 'react'
 import { DivProps, Flex, Icon } from 'honorable'
 import { useTheme } from 'styled-components'
 
-type SubTabProps = DivProps & {
-  active?: boolean
+import { TabBaseProps } from './TabList'
+
+type SubTabProps = TabBaseProps & DivProps & {
   startIcon?: ReactNode
-  vertical?: boolean
 }
 
 const SubTab = forwardRef(({
