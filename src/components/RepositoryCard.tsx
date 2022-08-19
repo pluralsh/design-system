@@ -90,7 +90,6 @@ ref: Ref<any>) {
                   color="text"
                   title2={size !== 'large'}
                   title1={size === 'large'}
-                  marginBottom={size === 'large' ? 'xsmall' : 0}
                 >
                   {title}
                   {!!verified && (
@@ -106,6 +105,7 @@ ref: Ref<any>) {
                 <H3
                   body2
                   color="text-xlight"
+                  marginBottom={size === 'large' ? 'small' : 0}
                 >
                   {publisher}
                 </H3>
