@@ -49,12 +49,14 @@ type ChildrenType = ReactElement<TabBaseProps> | ReactElement<TabBaseProps>[]
 type TabListProps = {
   stateRef: TabStateRef
   renderer?: Renderer
+  as?: ReactElement
   children?: ChildrenType
 }
 function TabList({
   stateRef,
   stateProps,
   renderer,
+  as,
   ...props
 }: TabListProps & FlexProps) {
   const wrappedChildren = useItemWrappedChildren(props.children)
@@ -87,6 +89,15 @@ function TabList({
       stateProps={finalStateProps}
     />
   ))
+
+  if (as) {
+    return cloneElement(as, {
+      ...tabListProps,
+      ...as.props,
+      ...{ children: tabChildren },
+      ref,
+    })
+  }
 
   if (renderer) {
     return renderer({ ...props, ...tabListProps, ...{ children: tabChildren } },
@@ -188,7 +199,11 @@ function WrappedTabPanel({
   const { tabPanelProps } = useTabPanel(stateProps, state, ref)
 
   if (as) {
-    return cloneElement(as, { ...tabPanelProps, ...props, ...as.props })
+    return cloneElement(as, {
+      ...tabPanelProps,
+      ...as.props,
+      children: props.children,
+    })
   }
 
   if (renderer) {
@@ -204,13 +219,22 @@ function WrappedTabPanel({
   )
 }
 
-function TabPanel(props: TabPanelProps) {
-  if (props.stateRef.current) {
-    return <WrappedTabPanel {...props} />
+function TabPanel({
+  as, renderer, stateRef, ...props
+}: TabPanelProps) {
+  if (stateRef.current) {
+    return (
+      <WrappedTabPanel
+        as={as}
+        renderer={renderer}
+        stateRef={stateRef}
+        {...props}
+      />
+    )
   }
 
-  if (props.renderer) {
-    return props.renderer({ ...props }, null, null)
+  if (renderer) {
+    return renderer({ ...props }, null, null)
   }
 
   return <Div {...props} />

@@ -182,14 +182,12 @@ function TemplateComplex() {
         <TabList
           stateRef={tabStateRef}
           stateProps={tabListStateProps}
-          flexShrink={0}
-          marginRight={orientation === 'vertical' ? 'large' : 0}
-          marginBottom={orientation === 'vertical' ? 0 : 'xlarge'}
-          width={orientation === 'vertical' ? '200px' : '100%'}
-          renderer={(props, ref) => (
+          as={(
             <Div
-              ref={ref}
-              {...props}
+              flexShrink={0}
+              marginRight={orientation === 'vertical' ? 'large' : 0}
+              marginBottom={orientation === 'vertical' ? 0 : 'xlarge'}
+              width={orientation === 'vertical' ? '200px' : '100%'}
               padding="10px"
               border="1px solid"
               borderColor={
