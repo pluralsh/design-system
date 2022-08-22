@@ -252,15 +252,10 @@ function TemplateComplex() {
             paddingBottom="large"
             borderTop="1px solid border"
             borderBottom="1px solid border"
-            renderer={(props, ref) => (
-              <Button
-                ref={ref}
-                {...props}
-              >
-                {tabs[selectedKey]?.content}
-              </Button>
-            )}
-          />
+            as={<Button />}
+          >
+            {tabs[selectedKey]?.content}
+          </TabPanel>
         </Div>
       </Flex>
     </Div>

@@ -173,6 +173,7 @@ function TabRenderer({ item, state, stateProps }: TabRendererProps) {
 type TabPanelProps = DivProps & {
   stateRef: TabStateRef
   renderer?: Renderer
+  as?: ReactElement
 }
 
 function WrappedTabPanel({
@@ -180,10 +181,15 @@ function WrappedTabPanel({
     current: { state, stateProps },
   },
   renderer,
+  as,
   ...props
 }: TabPanelProps) {
   const ref = useRef()
   const { tabPanelProps } = useTabPanel(stateProps, state, ref)
+
+  if (as) {
+    return cloneElement(as, { ...tabPanelProps, ...props, ...as.props })
+  }
 
   if (renderer) {
     return renderer({ ...tabPanelProps, ...props }, ref, state)
