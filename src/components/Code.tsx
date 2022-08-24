@@ -12,6 +12,8 @@ import CopyIcon from './icons/CopyIcon'
 import Card from './Card'
 import CheckIcon from './icons/CheckIcon'
 
+import './code.css'
+
 type CodeProps = FlexProps & {
   children: string,
   language?: string,
@@ -47,6 +49,8 @@ function Highlight({ language, children } : HighlightProps) {
     </Pre>
   )
 }
+
+// <link rel='stylesheet' href='https://highlightjs.org/static/demo/styles/base16/rebecca.css'/>
 
 function CodeRef({ children, language, ...props }: CodeProps) {
   const [copied, setCopied] = useState(false)
