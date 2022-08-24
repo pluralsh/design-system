@@ -87,8 +87,6 @@ ref: Ref<any>) {
       paddingHorizontal={size === 'small' ? 'xsmall' : 'small'}
       alignItems="center"
       display="inline-flex"
-      height="min-content"
-      width="min-content"
       {...props}
     >
       {loading && (
@@ -112,8 +110,6 @@ ref: Ref<any>) {
         fontWeight={size === 'small' ? 400 : 600}
         lineHeight={size === 'small' ? '16px' : '20px'}
         gap={4}
-        height="min-content"
-        width="min-content"
       >
         {children}
       </Flex>
