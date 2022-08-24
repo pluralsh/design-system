@@ -1,5 +1,8 @@
 import { Div, DivProps } from 'honorable'
 import { forwardRef } from 'react'
+import { CSSObject } from 'styled-components'
+
+import { styledTheme as theme } from '../theme'
 
 type CardSize = 'medium' | 'large' | string
 type CardHue = 'default' | 'lighter' | 'lightest' | string
@@ -48,6 +51,14 @@ const cornerSizeToBorderRadius: {
   large: 'large',
 }
 
+const hueToScroll: {
+  [key in CardHue]: CSSObject
+} = {
+  default: theme.partials.scrollBar({ hue: 'default' }),
+  lighter: theme.partials.scrollBar({ hue: 'lighter' }),
+  lightest: theme.partials.scrollBar({ hue: 'lighter' }),
+}
+
 const Card = forwardRef<HTMLDivElement, CardProps>(({
   cornerSize: size = 'large', hue = 'default', selected = false, clickable = false, ...props
 }, ref) => (
@@ -62,6 +73,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(({
     {...(clickable && !selected && {
       _hover: { backgroundColor: hueToHoverBGColor[hue] },
     })}
+    {...hueToScroll[hue]}
     {...props}
   />
 ))
