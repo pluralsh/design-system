@@ -87,6 +87,8 @@ ref: Ref<any>) {
       paddingHorizontal={size === 'small' ? 'xsmall' : 'small'}
       alignItems="center"
       display="inline-flex"
+      height="min-content"
+      width="min-content"
       {...props}
     >
       {loading && (
