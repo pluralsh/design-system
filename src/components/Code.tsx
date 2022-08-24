@@ -25,7 +25,6 @@ code.hljs {
 
 .hljs {
   color: #ebeff0;
-  background: none;
   font-family: ${theme.fontFamilies.mono};
 }
 
@@ -149,6 +148,7 @@ function Highlight({ language, children } : HighlightProps) {
 
   return (
     <Pre
+      background="none"
       margin="0"
       padding="large"
       lineHeight="22px"
