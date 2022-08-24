@@ -1,6 +1,5 @@
 import { Div, DivProps } from 'honorable'
 import { forwardRef } from 'react'
-import { CSSObject } from '@emotion/styled'
 
 import { styledTheme as theme } from '../theme'
 

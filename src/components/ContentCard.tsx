@@ -1,4 +1,4 @@
-import { Div, DivProps, Flex } from 'honorable'
+import { Div, DivProps } from 'honorable'
 import { forwardRef } from 'react'
 
 import { Card } from '../index'
