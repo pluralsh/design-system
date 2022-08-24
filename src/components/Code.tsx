@@ -50,8 +50,6 @@ function Highlight({ language, children } : HighlightProps) {
   )
 }
 
-// <link rel='stylesheet' href='https://highlightjs.org/static/demo/styles/base16/rebecca.css'/>
-
 function CodeRef({ children, language, ...props }: CodeProps) {
   const [copied, setCopied] = useState(false)
   const [hover, setHover] = useState(false)
