@@ -1,13 +1,17 @@
 import styled, { useTheme } from 'styled-components'
 
 import ArrowLeftIcon from '../components/icons/ArrowLeftIcon'
+import ArrowRightIcon from '../components/icons/ArrowRightIcon'
 import ArrowTopRightIcon from '../components/icons/ArrowTopRightIcon'
 import BellIcon from '../components/icons/BellIcon'
 import BotIcon from '../components/icons/BotIcon'
 import BrowserIcon from '../components/icons/BrowserIcon'
 import BundleIcon from '../components/icons/BundleIcon'
 import CameraIcon from '../components/icons/CameraIcon'
+import CaretUpIcon from '../components/icons/CaretUpIcon'
 import CaretDownIcon from '../components/icons/CaretDownIcon'
+import CaretLeftIcon from '../components/icons/CaretLeftIcon'
+import CaretRightIcon from '../components/icons/CaretRightIcon'
 import CertificateIcon from '../components/icons/CertificateIcon'
 import CheckIcon from '../components/icons/CheckIcon'
 import CheckOutlineIcon from '../components/icons/CheckOutlineIcon'
@@ -115,13 +119,17 @@ import WebhooksIcon from '../components/icons/WebhooksIcon'
 
 const icons = {
   ArrowLeftIcon,
+  ArrowRightIcon,
   ArrowTopRightIcon,
   BellIcon,
   BotIcon,
   BrowserIcon,
   BundleIcon,
   CameraIcon,
+  CaretUpIcon,
   CaretDownIcon,
+  CaretLeftIcon,
+  CaretRightIcon,
   CertificateIcon,
   CheckIcon,
   CheckOutlineIcon,
