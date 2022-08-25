@@ -133,7 +133,7 @@ ref: Ref<any>) {
                     marginLeft={8}
                     paddingHorizontal={8}
                     paddingVertical={8}
-                    backgroundColor="transpanrent"
+                    backgroundColor="transparent"
                     border="none"
                   >
                     <PadlockLockedIcon />
