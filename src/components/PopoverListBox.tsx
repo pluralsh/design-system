@@ -29,7 +29,6 @@ function PopoverListBox({
   popoverRef,
   dropdownHeaderFixed,
   dropdownFooterFixed,
-  width,
   placement,
 }: PopoverListBoxProps) {
   const theme = useTheme()

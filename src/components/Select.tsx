@@ -136,7 +136,7 @@ const SelectInner = styled.div<{
   $isOpen: boolean
   $maxHeight: string | number
   $placement: Placement
-  $width: string | number
+  $width?: string | number
 }>(({ $maxHeight: maxHeight, $placement: placement, $width: width }) => ({
   position: 'relative',
   '.popover': {
