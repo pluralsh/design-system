@@ -72,6 +72,7 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
   },
   '.center-content': {
     flexGrow: 1,
+    width: 'max-content',
   },
   '.label': {
     ...theme.partials.text.body2,

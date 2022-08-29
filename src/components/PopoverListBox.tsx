@@ -57,9 +57,8 @@ function PopoverListBox({
       timeout={150}
     >
       <PopoverWrapper
-        isOpen={isOpen}
-        width={width}
-        placement={placement}
+        $isOpen={isOpen}
+        $placement={placement}
         className="popoverWrapper"
       >
         {transitions((styles, item) => item && (
