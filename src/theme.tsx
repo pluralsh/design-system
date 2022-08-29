@@ -135,6 +135,7 @@ export const semanticColors = {
   border: grey[800],
   'border-input': grey[700],
   'border-fill-two': grey[750],
+  'border-fill-three': grey[700],
   'border-disabled': grey[700],
   'border-outline-focused': blue[300],
   'border-primary': purple[300],
@@ -1017,6 +1018,17 @@ const honorableTheme = mergeTheme(defaultTheme, {
           },
           '& *': {
             fill: 'action-primary-hover',
+          },
+        },
+      },
+      ({ checked }: any) => checked && {
+        color: 'text',
+        '> span': {
+          border: '1px solid text',
+        },
+        ':hover': {
+          '> span': {
+            border: '1px solid text',
           },
         },
       },
