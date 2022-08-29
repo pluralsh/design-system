@@ -30,10 +30,11 @@ type ListBoxItemProps = {
   leftContent?: ReactNode
   rightContent?: ReactNode
   reserveSelectedIndicatorSpace?: boolean
+  destructive?: boolean
 } & ListBoxItemBaseProps
 
 const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
-  theme, disabled, selected, focused,
+  theme, disabled, selected, focused, destructive,
 }) => ({
   display: 'flex',
   flexDirection: 'row',
@@ -76,7 +77,9 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(({
     ...theme.partials.text.body2,
     color: disabled
       ? theme.colors['text-primary-disabled']
-      : theme.colors.text,
+      : destructive
+        ? theme.colors['text-error']
+        : theme.colors.text,
   },
   '.description': {
     ...theme.partials.text.caption,
