@@ -7,8 +7,8 @@ import {
 } from '../index'
 
 export default {
-  title: 'Content Card',
-  component: null,
+  title: 'Icon Frame',
+  component: IconFrame,
 }
 
 const hues: IconFrameProps['hue'][] = ['none', 'default', 'lighter', 'lightest']
