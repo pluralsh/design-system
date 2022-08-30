@@ -29,7 +29,7 @@ function Template({
   ...props
 }: Partial<IconFrameProps>) {
   return hues.map(hue => (
-    <Div>
+    <Div key={hue}>
       <H1
         caption
         marginBottom="xxsmall"
@@ -44,6 +44,7 @@ function Template({
       >
         {sizes.map(size => (
           <Card
+            key={size}
             display="flex"
             width="max-content"
             paddingVertical="xsmall"
