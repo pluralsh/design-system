@@ -8,7 +8,7 @@ import MultilineCode from './Code'
 
 type MarkdownProps = {
   text: string
-  gitUrl: string
+  gitUrl?: string
   mainBranch?: string
 }
 
@@ -169,7 +169,6 @@ const MdHr = styled.hr.withConfig(commonCfg)(({ theme }) => ({
   border: 0,
   padding: 0,
   margin: `${theme.spacing.xlarge}px ${theme.spacing.large}px`,
-
 }))
 
 function MarkdownImage({
