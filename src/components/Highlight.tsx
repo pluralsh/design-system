@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useRef } from 'react'
 import { FlexProps, Pre } from 'honorable'
-import hljs from 'highlight.js'
+import hljs from 'highlight.js/lib/core'
 
 import styled from 'styled-components'
 
