@@ -73,7 +73,12 @@ function CodeRef({ children, language, ...props }: CodeProps) {
               {copied ? 'Copied' : 'Copy'}
             </Button>
           )}
-          <Highlight language={language}>{children}</Highlight>
+          <Highlight
+            language={language}
+            padding="large"
+          >
+            {children}
+          </Highlight>
         </Div>
       </Flex>
     </Card>

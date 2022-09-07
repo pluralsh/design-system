@@ -1,10 +1,11 @@
 import { forwardRef, useEffect, useRef } from 'react'
-import { FlexProps, Pre } from 'honorable'
+import { Pre, PreProps } from 'honorable'
 import hljs from 'highlight.js/lib/core'
+import '../hljs'
 
 import styled from 'styled-components'
 
-const StyledCode = styled.div(({ theme }) => `
+const StyledHighlight = styled.div(({ theme }) => `
 pre code.hljs {
   display: block;
   overflow-x: auto;
@@ -117,13 +118,13 @@ code.hljs {
   font-weight: 700;
 }`)
 
-type HighlightProps = FlexProps & {
+type HighlightProps = PreProps & {
   language: string
 }
 
 const propTypes = {}
 
-function HighlightRef({ language, children } : HighlightProps) {
+function HighlightRef({ language, children, ...props } : HighlightProps) {
   if (typeof children !== 'string') throw new Error('Highlight component expects a string as its children')
 
   const codeRef = useRef()
@@ -136,18 +137,19 @@ function HighlightRef({ language, children } : HighlightProps) {
   }, [language, children])
 
   return (
-    <StyledCode>
+    <StyledHighlight>
       <Pre
         background="none"
         margin="0"
-        padding="large"
+        padding="0"
         lineHeight="22px"
-        className={(language && `language-${language}`) || 'nohighlight'}
+        className={language ? `language-${language}` : 'nohighlight'}
         ref={codeRef}
+        {...props}
       >
         {children}
       </Pre>
-    </StyledCode>
+    </StyledHighlight>
   )
 }
 
