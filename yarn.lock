@@ -2805,7 +2805,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/combobox@npm:^3.4.0":
+"@react-aria/combobox@npm:3.4.0":
   version: 3.4.0
   resolution: "@react-aria/combobox@npm:3.4.0"
   dependencies:
@@ -2847,7 +2847,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/i18n@npm:^3.5.0, @react-aria/i18n@npm:^3.5.1":
+"@react-aria/i18n@npm:^3.5.0":
   version: 3.5.1
   resolution: "@react-aria/i18n@npm:3.5.1"
   dependencies:
@@ -3054,7 +3054,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/utils@npm:^3.13.2":
+"@react-aria/utils@npm:3.13.2, @react-aria/utils@npm:^3.13.2":
   version: 3.13.2
   resolution: "@react-aria/utils@npm:3.13.2"
   dependencies:
@@ -3227,7 +3227,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-stately/combobox@npm:^3.2.0":
+"@react-stately/combobox@npm:3.2.0, @react-stately/combobox@npm:^3.2.0":
   version: 3.2.0
   resolution: "@react-stately/combobox@npm:3.2.0"
   dependencies:
@@ -16140,19 +16140,17 @@ __metadata:
     "@floating-ui/react-dom-interactions": 0.8.1
     "@pluralsh/eslint-config-typescript": 2.3.0
     "@react-aria/button": 3.6.0
-    "@react-aria/combobox": ^3.4.0
+    "@react-aria/combobox": 3.4.0
     "@react-aria/focus": 3.7.0
-    "@react-aria/i18n": ^3.5.1
     "@react-aria/listbox": 3.6.0
     "@react-aria/overlays": 3.10.0
     "@react-aria/select": 3.8.0
     "@react-aria/tabs": 3.3.0
-    "@react-aria/utils": ^3.13.2
+    "@react-aria/utils": 3.13.2
     "@react-stately/collections": 3.4.2
-    "@react-stately/combobox": ^3.2.0
+    "@react-stately/combobox": 3.2.0
     "@react-stately/overlays": 3.4.0
     "@react-stately/tabs": 3.2.0
-    "@react-types/combobox": ^3.5.2
     "@react-types/shared": 3.14.0
     "@storybook/addon-actions": 6.5.9
     "@storybook/addon-docs": 6.5.9
