@@ -18,6 +18,25 @@ const jsCode = `function reverseString(str) {
   return newString;
 }`
 
+const tfCode = `vpc_name = {{ .Values.vpc_name | quote }}
+cluster_name = {{ .Cluster | quote }}
+
+map_roles = [
+  {
+    rolearn = "arn:aws:iam::{{ .Project }}:role/{{ .Cluster }}-console"
+    username = "console"
+    groups = ["system:masters"]
+  }
+]
+
+
+{{- if .Values.database_subnets }}
+database_subnets = yamldecode(<<EOT
+{{ .Values.database_subnets | toYaml }}
+EOT
+)
+{{- end }}`
+
 export default {
   title: 'Highlight',
   component: Highlight,
@@ -30,20 +49,12 @@ function Template() {
       direction="column"
       gap="medium"
     >
-      <Divider text="JavaScript" />
-      <Highlight
-        language="js"
-        width="600px"
-      >
-        {jsCode}
-      </Highlight>
       <Divider text="Go" />
-      <Highlight
-        language="go"
-        width="400px"
-      >
-        {goCode}
-      </Highlight>
+      <Highlight language="go">{goCode}</Highlight>
+      <Divider text="JavaScript" />
+      <Highlight language="js">{jsCode}</Highlight>
+      <Divider text="Terraform" />
+      <Highlight language="tf">{tfCode}</Highlight>
     </Flex>
   )
 }
