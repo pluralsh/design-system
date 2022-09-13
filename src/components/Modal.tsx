@@ -21,7 +21,7 @@ const sizeToWidth: { [key in 'medium' | 'large']: number } = {
 
 function ModalRef({
   children,
-  header = null,
+  header,
   actions,
   form = false,
   open = false,
