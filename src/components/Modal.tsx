@@ -59,23 +59,6 @@ ref: Ref<any>) {
             >
               {header}
             </P>
-            {/* {typeof onClose === 'function' && ( */}
-            {/*  <Flex */}
-            {/*    align="center" */}
-            {/*    justify="center" */}
-            {/*    padding="xsmall" */}
-            {/*    margin={-12} */}
-            {/*    borderRadius="medium" */}
-            {/*    cursor="pointer" */}
-            {/*    _hover={{ backgroundColor: 'fill-two-hover' }} */}
-            {/*    onClick={onClose} */}
-            {/*  > */}
-            {/*     <CloseIcon */}
-            {/*      size={14} */}
-            {/*      color="text-light" */}
-            {/*     /> */}
-            {/*  </Flex> */}
-            {/* )} */}
           </Flex>
         )}
         {children}
