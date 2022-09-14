@@ -75,6 +75,7 @@ ref: Ref<any>) {
                 <H1
                   subtitle1
                   color="text"
+                  marginBottom="xxsmall"
                 >
                   {title}
                 </H1>
