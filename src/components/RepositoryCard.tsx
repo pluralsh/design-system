@@ -50,7 +50,7 @@ function RepositoryCardRef({
   ...props
 }: RepositoryCardProps,
 ref: Ref<any>) {
-  const maxTags = trending ? 4 : 5
+  const maxTags = trending ? 5 : 6
 
   return (
     <Card
@@ -178,12 +178,13 @@ ref: Ref<any>) {
                   <Span
                     color="action-link-inline"
                     marginLeft="xxsmall"
-                  >Trending
+                  >
+                    Trending
                   </Span>
                 </Chip>
               )}
               {tags
-                .filter((_x, i) => i <= maxTags)
+                .filter((_x, i) => i < maxTags)
                 .map(tag => (
                   <Chip
                     size="small"
