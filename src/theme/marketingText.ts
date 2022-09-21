@@ -74,7 +74,7 @@ const marketingTextPartials = asElementTypes<CSSObject>()({
   body2: {
     fontFamily: fontFamilies.sans,
     fontSize: 16,
-    lineHeight: '150%',
+    lineHeight: '160%',
     fontWeight: 300,
     letterSpacing: '0.5px',
     color: semanticColors['text-xlight'],
