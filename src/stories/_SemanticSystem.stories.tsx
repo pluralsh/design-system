@@ -267,6 +267,7 @@ function Spacing() {
         'xxlarge',
         'xxxlarge',
         'xxxxlarge',
+        'xxxxxlarge',
       ].map(key => (
         <BlockWrapper key={key}>
           <SpacingBox space={key} />

@@ -1,4 +1,5 @@
 export const spacing = {
+  'minus-xxxxxlarge': -128,
   'minus-xxxxlarge': -96,
   'minus-xxxlarge': -64,
   'minus-xxlarge': -48,
@@ -20,4 +21,5 @@ export const spacing = {
   xxlarge: 48,
   xxxlarge: 64,
   xxxxlarge: 96,
+  xxxxxlarge: 128,
 }
