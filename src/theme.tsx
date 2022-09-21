@@ -24,6 +24,7 @@ import { scrollBar } from './theme/scrollBar'
 import { zIndexes } from './theme/zIndexes'
 import { focusPartials } from './theme/focus'
 import { resetPartials } from './theme/resets'
+import { marketingTextPartials } from './theme/marketingText'
 
 const spacers = {
   margin: ['margin'],
@@ -744,6 +745,7 @@ export const styledTheme = {
     portals,
     partials: {
       text: textPartials,
+      marketingText: marketingTextPartials,
       focus: focusPartials,
       scrollBar,
       reset: resetPartials,

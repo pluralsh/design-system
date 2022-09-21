@@ -61,6 +61,11 @@ function Template({ exampleText }: { exampleText?: string }) {
         marginVertical="xxlarge"
       />
       <Typography exampleText={exampleText} />
+      <Divider
+        text="Marketing Typography"
+        marginVertical="xxlarge"
+      />
+      <MarketingTypography exampleText={exampleText} />
     </>
   )
 }
@@ -303,6 +308,42 @@ function Typography({
       <SemanticText typeStyle="buttonLarge">Large Button - {txt}</SemanticText>
       <SemanticText typeStyle="buttonSmall">Small Button - {txt}</SemanticText>
       <SemanticText typeStyle="overline">Overline - {txt}</SemanticText>
+    </>
+  )
+}
+
+const MktgText = styled.div<{
+  typeStyle?: keyof typeof styledTheme.partials.marketingText
+}>(({ theme, typeStyle }) => ({
+  ...theme.partials.marketingText[typeStyle],
+  marginBottom: theme.spacing.large,
+}))
+
+function MarketingTypography({
+  exampleText: txt = 'Lorem ipsum dolor sit amet',
+}: {
+  exampleText: string
+}) {
+  return (
+    <>
+      <MktgText typeStyle="bigHeader">Big Header - {txt}</MktgText>
+      <MktgText typeStyle="hero1">Hero 1 - {txt}</MktgText>
+      <MktgText typeStyle="hero2">Hero 2 - {txt}</MktgText>
+      <MktgText typeStyle="title1">Title 1 - {txt}</MktgText>
+      <MktgText typeStyle="title2">Title 2 - {txt}</MktgText>
+      <MktgText typeStyle="subtitle1">Subtitle 1 - {txt}</MktgText>
+      <MktgText typeStyle="subtitle2">Subtitle 2 - {txt}</MktgText>
+      <MktgText typeStyle="body1Bold">Body 1 (Bold) - {txt}</MktgText>
+      <MktgText typeStyle="body1">Body 1 - {txt}</MktgText>
+      <MktgText typeStyle="body2Bold">Body 2 (Bold) - {txt}</MktgText>
+      <MktgText typeStyle="body2">Body 2 - {txt}</MktgText>
+      <MktgText typeStyle="standaloneLink">Standalone link - {txt}</MktgText>
+      <MktgText typeStyle="componentText">Component text - {txt}</MktgText>
+      <MktgText typeStyle="componentLink">Component link - {txt}</MktgText>
+      <MktgText typeStyle="componentLinkSmall">
+        Small component link- {txt}
+      </MktgText>
+      <MktgText typeStyle="label">Label - {txt}</MktgText>
     </>
   )
 }
