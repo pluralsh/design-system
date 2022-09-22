@@ -20,6 +20,9 @@ export default function Button({ pulse = false, ...props }: ButtonProps) {
         Root: [{
           boxShadow: '0 0 7px 2px #fff1',
           animation: 'pulse 4s infinite',
+          ':hover': {
+            animation: 'none',
+          },
         }],
       },
     })
