@@ -3,7 +3,6 @@ import { CSSObject } from 'styled-components'
 import { asElementTypes } from '../utils/asElementTypes'
 
 import { fontFamilies } from './fonts'
-
 import { semanticColors } from './colors'
 
 const marketingTextPartials = asElementTypes<CSSObject>()({
@@ -156,6 +155,7 @@ const marketingTextPartials = asElementTypes<CSSObject>()({
   },
   bodyBold: {
     fontWeight: 700,
+    color: semanticColors['text-light'],
   },
   body1Bold: {},
   body2Bold: {},

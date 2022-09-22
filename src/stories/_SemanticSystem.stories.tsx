@@ -332,24 +332,63 @@ function MarketingTypography({
 }) {
   return (
     <>
-      <MktgText typeStyle="bigHeader">Big Header (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}</MktgText>
-      <MktgText typeStyle="hero1">Hero 1 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}</MktgText>
-      <MktgText typeStyle="hero2">Hero 2 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}</MktgText>
-      <MktgText typeStyle="title1">Title 1 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}</MktgText>
-      <MktgText typeStyle="title2">Title 2 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}</MktgText>
-      <MktgText typeStyle="subtitle1">Subtitle 1 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}</MktgText>
-      <MktgText typeStyle="subtitle2">Subtitle 2 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}</MktgText>
-      <MktgText typeStyle="body1Bold">Body 1 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) (Bold) - {txt}</MktgText>
-      <MktgText typeStyle="body1">Body 1 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}</MktgText>
-      <MktgText typeStyle="body2Bold">Body 2 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) (Bold) - {txt}</MktgText>
-      <MktgText typeStyle="body2">Body 2 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}</MktgText>
+      <MktgText typeStyle="bigHeader">
+        Big Header (
+        <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
+      </MktgText>
+      <MktgText typeStyle="hero1">
+        Hero 1 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>)
+        - {txt}
+      </MktgText>
+      <MktgText typeStyle="hero2">
+        Hero 2 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>)
+        - {txt}
+      </MktgText>
+      <MktgText typeStyle="title1">
+        Title 1 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>
+        ) - {txt}
+      </MktgText>
+      <MktgText typeStyle="title2">
+        Title 2 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>
+        ) - {txt}
+      </MktgText>
+      <MktgText typeStyle="subtitle1">
+        Subtitle 1 (
+        <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
+      </MktgText>
+      <MktgText typeStyle="subtitle2">
+        Subtitle 2 (
+        <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
+      </MktgText>
+      <MktgText typeStyle="body1Bold">
+        Body 1 (Bold) (
+        <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
+      </MktgText>
+      <MktgText typeStyle="body1">
+        Body 1 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>)
+        - {txt}
+      </MktgText>
+      <MktgText typeStyle="body2Bold">
+        Body 2 (Bold) (
+        <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
+      </MktgText>
+      <MktgText typeStyle="body2">
+        Body 2 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>)
+        - {txt}
+      </MktgText>
       <MktgText typeStyle="standaloneLink">Standalone link - {txt}</MktgText>
-      <MktgText typeStyle="componentText">Component text (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}</MktgText>
+      <MktgText typeStyle="componentText">
+        Component text (
+        <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
+      </MktgText>
       <MktgText typeStyle="componentLink">Component link - {txt}</MktgText>
       <MktgText typeStyle="componentLinkSmall">
         Small component link - {txt}
       </MktgText>
-      <MktgText typeStyle="label">Label (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}</MktgText>
+      <MktgText typeStyle="label">
+        Label (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>)
+        - {txt}
+      </MktgText>
       <MktgText typeStyle="navLink">Nav link - {txt}</MktgText>
     </>
   )
