@@ -6,9 +6,9 @@ export type ButtonProps = HonorableButtonProps & {pulse?: boolean}
 
 const ButtonWrapper = styled.div`
 @keyframes pulse {
-  0% { box-shadow: 0 0 8px 1px #fff1; }
-  70% { box-shadow: 0 0 8px 3px #fff2; }
-  100% { box-shadow: 0 0 8px 1px #fff1; }
+  0% { box-shadow: 0 0 7px 2px #fff1; }
+  70% { box-shadow: 0 0 7px 4px #fff2; }
+  100% { box-shadow: 0 0 7px 2px #fff1; }
 }`
 
 export default function Button({ pulse = false, ...props }: ButtonProps) {
@@ -18,7 +18,7 @@ export default function Button({ pulse = false, ...props }: ButtonProps) {
     themeExtension = mergeTheme(themeExtension, {
       Button: {
         Root: [{
-          boxShadow: '0 0 8px 1px #fff1',
+          boxShadow: '0 0 7px 2px #fff1',
           animation: 'pulse 4s infinite',
         }],
       },
