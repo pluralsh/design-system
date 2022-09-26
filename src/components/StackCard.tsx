@@ -1,5 +1,5 @@
 import {
-  Div, DivProps, Flex, H1, H3, P, Span,
+  Div, DivProps, Flex, H1, H3, P,
 } from 'honorable'
 import PropTypes from 'prop-types'
 import { Ref, forwardRef } from 'react'
