@@ -183,18 +183,16 @@ ref: Ref<any>) {
                   </Span>
                 </Chip>
               )}
-              {tags
-                .filter((_x, i) => i < maxTags)
-                .map(tag => (
-                  <Chip
-                    size="small"
-                    hue="lighter"
-                    key={tag}
-                    _last={{ marginRight: 0 }}
-                  >
-                    {tag}
-                  </Chip>
-                ))}
+              {tags?.filter((_x, i) => i < maxTags).map(tag => (
+                <Chip
+                  size="small"
+                  hue="lighter"
+                  key={tag}
+                  _last={{ marginRight: 0 }}
+                >
+                  {tag}
+                </Chip>
+              ))}
             </Flex>
           )}
         </Div>
