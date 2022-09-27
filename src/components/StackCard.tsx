@@ -115,7 +115,7 @@ ref: Ref<any>) {
             </P>
           )}
           <Div flexGrow={1} />
-          {apps && apps.length > 0 && (
+          {apps?.length > 0 && (
             <Flex
               marginTop="medium"
               gap="xsmall"
