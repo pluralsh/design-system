@@ -61,7 +61,10 @@ ref: Ref<any>) {
       width="100%"
       {...props}
     >
-      <Flex align="flex-start">
+      <Flex
+        height="100%"
+        align="flex-start"
+      >
         <Img
           src={imageUrl}
           width={size === 'medium' ? 140 : 160}
@@ -73,7 +76,11 @@ ref: Ref<any>) {
           border="1px solid border-fill-two"
           marginRight="large"
         />
-        <Div flexGrow={1}>
+        <Flex
+          flexGrow={1}
+          direction="column"
+          height="100%"
+        >
           <Flex align="center">
             <Img
               src={imageUrl}
@@ -195,7 +202,7 @@ ref: Ref<any>) {
               ))}
             </Flex>
           )}
-        </Div>
+        </Flex>
       </Flex>
     </Card>
   )
