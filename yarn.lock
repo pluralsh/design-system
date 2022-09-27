@@ -8679,6 +8679,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.3.1":
+  version: 2.3.2
+  resolution: "classnames@npm:2.3.2"
+  checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e
+  languageName: node
+  linkType: hard
+
 "clean-css@npm:^4.2.3":
   version: 4.2.4
   resolution: "clean-css@npm:4.2.4"
@@ -16776,6 +16783,7 @@ __metadata:
     honorable-theme-default: 0.65.0
     prop-types: 15.8.1
     react: 18.2.0
+    react-animate-height: 3.0.4
     react-dom: 18.2.0
     react-markdown: 8.0.3
     react-merge-refs: 2.0.1
@@ -18132,6 +18140,18 @@ __metadata:
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
   checksum: 51cc1b0d0e8c37c4336b5318f3b2c9c51d6998ad6f56ea09612afcfefc9c1f596341309e934a744ae907177f28efc9f1654eacd62151e82853fcc6d37450e795
+  languageName: node
+  linkType: hard
+
+"react-animate-height@npm:3.0.4":
+  version: 3.0.4
+  resolution: "react-animate-height@npm:3.0.4"
+  dependencies:
+    classnames: ^2.3.1
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 3efa212b41bb1c424c4b5390c1b0e34e85eec799f5ca76fab3223ccb0dff215febc5fd95a07188db85e5a06661ed9f6f3f9b8c68de744d8daad912f298d1bfc2
   languageName: node
   linkType: hard
 

@@ -36,6 +36,7 @@
     "grommet": "2.25.3",
     "highlight.js": "11.6.0",
     "prop-types": "15.8.1",
+    "react-animate-height": "3.0.4",
     "react-markdown": "8.0.3",
     "react-merge-refs": "2.0.1",
     "react-spring": "9.5.2",

@@ -220,6 +220,7 @@ export const borders = {
   'fill-two': `${borderWidths.default}px ${borderStyles.default} ${semanticColors['border-fill-two']}`,
   'fill-three': `${borderWidths.default}px ${borderStyles.default} ${semanticColors['border-input']}`,
   input: `${borderWidths.default}px ${borderStyles.default} ${semanticColors['border-input']}`,
+  'outline-focused': `${borderWidths.default}px ${borderStyles.default} ${semanticColors['border-outline-focused']}`,
 }
 
 export const borderRadiuses = {
@@ -725,6 +726,7 @@ const honorableTheme = mergeTheme(defaultTheme, {
         paddingBottom: spacing.xxsmall - 1,
         paddingRight: spacing.medium - 1,
         paddingLeft: spacing.medium - 1,
+        minHeight: 32,
       },
     ],
     StartIcon: [
