@@ -64,9 +64,7 @@ function CodeRef({ children, language, ...props }: CodeProps) {
               position="absolute"
               right="24px"
               top={language ? '73px' : '24px'}
-              tertiary
-              backgroundColor="fill-three"
-              _hover={{ backgroundColor: 'fill-one-hover' }}
+              floating
               startIcon={copied ? <CheckIcon /> : <CopyIcon />}
               onClick={handleCopy}
             >

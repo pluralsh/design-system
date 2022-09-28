@@ -1,4 +1,4 @@
-import { H1 } from 'honorable'
+import { Flex, H1 } from 'honorable'
 
 import Button from '../components/Button'
 import DownloadIcon from '../components/icons/DownloadIcon'
@@ -10,41 +10,39 @@ export default {
 
 function TemplateBase(args: any) {
   return (
-    <>
+    <Flex
+      direction="row"
+      gap="medium"
+      wrap="wrap"
+      alignItems="center"
+    >
       <Button
         large
         {...args}
       />
       <Button
-        marginTop="medium"
         large
         startIcon={<DownloadIcon />}
         endIcon={<DownloadIcon />}
         {...args}
       />
+      <Button {...args} />
       <Button
-        marginTop="medium"
-        {...args}
-      />
-      <Button
-        marginTop="medium"
         startIcon={<DownloadIcon />}
         endIcon={<DownloadIcon />}
         {...args}
       />
       <Button
-        marginTop="medium"
         small
         {...args}
       />
       <Button
-        marginTop="medium"
         small
         startIcon={<DownloadIcon />}
         endIcon={<DownloadIcon />}
         {...args}
       />
-    </>
+    </Flex>
   )
 }
 
@@ -54,15 +52,16 @@ function Template(args: any) {
       <H1
         subtitle2
         marginBottom="small"
-      >Enabled
+      >
+        Enabled
       </H1>
-
       <TemplateBase {...args} />
       <H1
         subtitle2
         marginTop="large"
         marginBottom="small"
-      >Disabled
+      >
+        Disabled
       </H1>
       <TemplateBase
         {...args}
@@ -106,4 +105,13 @@ Destructive.args = {
   loading: false,
   children: 'Destructive Button',
   destructive: true,
+}
+
+export const Floating = Template.bind({})
+
+Floating.args = {
+  disabled: false,
+  loading: false,
+  children: 'Floating Button',
+  floating: true,
 }
