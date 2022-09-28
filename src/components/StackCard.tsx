@@ -7,6 +7,8 @@ import { Ref, forwardRef } from 'react'
 import Card from './Card'
 import AppIcon from './AppIcon'
 import Tooltip from './Tooltip'
+import Chip from './Chip'
+import StackIcon from './icons/StackIcon'
 
 type StackCardProps = DivProps & {
   title?: string
@@ -62,8 +64,15 @@ ref: Ref<any>) {
       borderColor={hueToColor[hue]}
       {...props}
     >
-      <Flex align="flex-start">
-        <Div flexGrow={1}>
+      <Flex
+        height="100%"
+        align="flex-start"
+      >
+        <Flex
+          flexGrow={1}
+          direction="column"
+          height="100%"
+        >
           <Flex align="center">
             <Flex
               direction="row"
@@ -88,6 +97,12 @@ ref: Ref<any>) {
                   {apps?.length || 0} APP{apps?.length !== 1 && 'S'}
                 </H3>
               </Flex>
+              <Chip
+                hue="lighter"
+                icon={<StackIcon />}
+              >
+                Stack
+              </Chip>
             </Flex>
           </Flex>
           {description && (
@@ -107,7 +122,7 @@ ref: Ref<any>) {
             </P>
           )}
           <Div flexGrow={1} />
-          {apps && apps.length > 0 && (
+          {apps?.length > 0 && (
             <Flex
               marginTop="medium"
               gap="xsmall"
@@ -130,7 +145,7 @@ ref: Ref<any>) {
                 ))}
             </Flex>
           )}
-        </Div>
+        </Flex>
       </Flex>
     </Card>
   )
