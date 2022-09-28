@@ -283,9 +283,6 @@ function ChecklistUnstyled({
     const maxStepContainerHeight = Math.max(stepContainerHeight, stepsContainerRef.current.getBoundingClientRect().height)
     const maxFinishedContainerHeight = Math.max(finishedContainerHeight, finishedContainerRef.current.getBoundingClientRect().height)
 
-    console.log(stepsContainerRef.current.getBoundingClientRect().height)
-    console.log((finishedContainerRef.current.firstChild as HTMLDivElement).getBoundingClientRect().height)
-
     setStepContainerHeight(maxStepContainerHeight)
     setFinishedContainerHeight(maxFinishedContainerHeight)
   }, [stepsContainerRef, finishedContainerRef, setStepContainerHeight, setFinishedContainerHeight, stepContainerHeight, finishedContainerHeight])
