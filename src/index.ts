@@ -131,6 +131,7 @@ export { default as VolumesIcon } from './components/icons/VolumesIcon'
 export { default as WebhooksIcon } from './components/icons/WebhooksIcon'
 export { default as WindowsLogoIcon } from './components/icons/WindowsLogoIcon'
 export { default as SuccessIcon } from './components/icons/SuccessIcon'
+export { default as SourcererIcon } from './components/icons/SourcererIcon'
 // Components
 export { default as Alert } from './components/Alert'
 export { default as Banner } from './components/Banner'

@@ -40,6 +40,21 @@ const Checklist = styled(ChecklistUnstyled)(({ theme }) => ({
     flexDirection: 'column',
   },
 
+  '.finishContainer': {
+    paddingTop: `${theme.spacing.large}px`,
+    paddingBottom: `${theme.spacing.medium}px`,
+  },
+
+  '.shrink': {
+    opacity: 0,
+    visibility: 'hidden',
+    transition: 'opacity 333ms linear, max-height 333ms linear',
+  },
+
+  '.grow': {
+    transition: 'opacity 333ms linear, max-height 333ms linear',
+  },
+
   '.arrowUp': {
     ...theme.partials.dropdown.arrowTransition({ isOpen: true }),
   },
@@ -65,17 +80,35 @@ const ChecklistItemInner = styled(ChecklistItemInnerUnstyled)(({ theme, complete
       color: theme.colors['action-link-active'],
 
       '.stepCircle': {
-        // borderColor: theme.colors['action-link-active'],
+        '&:before': {
+          borderTopColor: theme.colors['action-link-active'],
+          borderRightColor: theme.colors['action-link-active'],
+          borderBottomColor: theme.colors['action-link-active'],
+
+          transition: `
+            border-top-color 0.1s linear,
+            border-right-color 0.1s linear 0.1s,
+            border-bottom-color 0.1s linear 0.2s`,
+        },
+
         '&:after': {
-          position: 'absolute',
-          content: '""',
-          borderColor: theme.colors['action-link-active'],
+          borderTop: `1px solid ${theme.colors['action-link-active']}`,
+          borderLeftWidth: '1px',
+          borderRightWidth: '1px',
+          transform: 'rotate(270deg)',
+          transition: `
+            transform 0.4s linear 0s,
+            border-left-width 0s linear 0.3s`,
         },
       },
     },
 
     ':hover': {
       background: theme.colors['fill-two-hover'],
+    },
+
+    ':not(.active) .stepCircle': {
+      border: theme.borders['fill-three'],
     },
 
     '.stepCircle': {
@@ -86,7 +119,6 @@ const ChecklistItemInner = styled(ChecklistItemInnerUnstyled)(({ theme, complete
       width: 32,
       height: 32,
       borderRadius: '100%',
-      border: theme.borders['fill-three'],
       background: theme.colors['fill-three'],
       ...theme.partials.text.body2,
 
@@ -97,6 +129,24 @@ const ChecklistItemInner = styled(ChecklistItemInnerUnstyled)(({ theme, complete
 
       '> div': {
         opacity: completed ? 0 : 1,
+      },
+
+      '&::after, &::before': {
+        content: '""',
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        top: 0,
+        left: 0,
+        borderRadius: '100%',
+      },
+
+      '&:before': {
+        border: '1px solid transparent',
+      },
+
+      '&:after': {
+        border: '0 solid transparent',
       },
     },
 
@@ -159,41 +209,54 @@ export type ChecklistProps = ComponentPropsWithRef<'div'> & {
   completed?: number,
   onSelectionChange?: Dispatch<number>
   dismiss?: boolean
-  footerChildren?: ReactElement<ChecklistFooterProps> | ReactElement<ChecklistFooterProps>[]
+  footerChildren: ReactElement<ChecklistFooterProps> | ReactElement<ChecklistFooterProps>[]
+  completeChildren: ReactElement
   children: ReactElement<ChecklistItemProps>[]
 }
 
 function ChecklistUnstyled({
   headerTitle,
+  isOpen = true,
   active = 0,
   completed,
-  isOpen = true,
   dismiss,
   onSelectionChange,
   children,
   footerChildren,
+  completeChildren,
   ...props
 }: ChecklistProps): JSX.Element {
   const [selected, setSelected] = useState(active)
   const [open, setOpen] = useState(isOpen)
+  const [finished, setFinished] = useState(false)
+  const [steps, setSteps] = useState(0)
   const prevCompletedRef = useRef<number>(active)
+  const stepsContainerRef = useRef<HTMLDivElement>(null)
+  const finishedContainerRef = useRef<HTMLDivElement>(null)
+  const isFirstRender = useRef(true)
+  const [stepContainerHeight, setStepContainerHeight] = useState<number>(-1)
+  const [finishedContainerHeight, setFinishedContainerHeight] = useState<number>(-1)
 
   const setSelectedWrapper = useCallback((idx: number) => {
     setSelected(idx)
     onSelectionChange(idx)
   }, [setSelected, onSelectionChange])
 
-  const checklistItemInnerWrapper = useMemo(() => children.map((child, index) => (
-    <ChecklistItemInner
-      key={index}
-      index={index}
-      active={selected === index}
-      setActive={setSelectedWrapper}
-      completed={completed >= index}
-      {...child.props}
-    >{child}
-    </ChecklistItemInner>
-  )), [children, selected, setSelectedWrapper, completed])
+  const checklistItemInnerWrapper = useMemo(() => children.map((child, index) => {
+    setSteps(children.length)
+
+    return (
+      <ChecklistItemInner
+        key={index}
+        index={index}
+        active={selected === index}
+        setActive={setSelectedWrapper}
+        completed={completed >= index}
+        {...child.props}
+      >{child}
+      </ChecklistItemInner>
+    )
+  }), [children, selected, setSelectedWrapper, completed, setSteps])
 
   const next = useCallback(() => setSelectedWrapper(selected + 1), [setSelectedWrapper, selected])
 
@@ -202,8 +265,30 @@ function ChecklistUnstyled({
       next()
     }
 
+    setFinished(completed === steps - 1)
     prevCompletedRef.current = completed
-  }, [completed, next])
+  }, [completed, next, steps, setFinished, active, selected])
+
+  useEffect(() => {
+    setSelected(active)
+  }, [active, setSelected])
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+    }
+  })
+
+  useEffect(() => {
+    const maxStepContainerHeight = Math.max(stepContainerHeight, stepsContainerRef.current.getBoundingClientRect().height)
+    const maxFinishedContainerHeight = Math.max(finishedContainerHeight, finishedContainerRef.current.getBoundingClientRect().height)
+
+    console.log(stepsContainerRef.current.getBoundingClientRect().height)
+    console.log((finishedContainerRef.current.firstChild as HTMLDivElement).getBoundingClientRect().height)
+
+    setStepContainerHeight(maxStepContainerHeight)
+    setFinishedContainerHeight(maxFinishedContainerHeight)
+  }, [stepsContainerRef, finishedContainerRef, setStepContainerHeight, setFinishedContainerHeight, stepContainerHeight, finishedContainerHeight])
 
   return (
     <AnimateHeight
@@ -211,23 +296,36 @@ function ChecklistUnstyled({
       {...props}
     >
       <div
-        className="header"
-        onClick={() => setOpen(!open)}
+        className={finished ? 'stepsContainer shrink' : 'stepsContainer grow'}
+        style={finished ? { maxHeight: 0 } : { maxHeight: stepContainerHeight }}
+        ref={stepsContainerRef}
       >
-        <div>{headerTitle}</div>
-        <DropdownArrowIcon
-          className={open ? 'arrowUp' : 'arrowDown'}
-        />
-      </div>
-      <AnimateHeight
-        height={open ? 'auto' : 0}
-        duration={heightAnimationDuration}
-      >
-        <div className="content">
-          {checklistItemInnerWrapper}
+        <div
+          className="header"
+          onClick={() => setOpen(!open)}
+        >
+          <div>{headerTitle}</div>
+          <DropdownArrowIcon
+            className={open ? 'arrowUp' : 'arrowDown'}
+          />
         </div>
-        <ChecklistFooter>{footerChildren}</ChecklistFooter>
-      </AnimateHeight>
+        <AnimateHeight
+          height={open ? 'auto' : 0}
+          duration={heightAnimationDuration}
+        >
+          <div className="content">
+            {checklistItemInnerWrapper}
+          </div>
+          <ChecklistFooter>{footerChildren}</ChecklistFooter>
+        </AnimateHeight>
+      </div>
+      <div
+        className={finished ? 'finishContainer grow' : 'finishContainer shrink'}
+        style={isFirstRender.current || finished ? { maxHeight: finishedContainerHeight } : { maxHeight: 0, padding: 0 }}
+        ref={finishedContainerRef}
+      >
+        {completeChildren}
+      </div>
     </AnimateHeight>
   )
 }

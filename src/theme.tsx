@@ -688,6 +688,23 @@ const honorableTheme = mergeTheme(defaultTheme, {
           },
         },
       },
+      ({ tertiary, padding }: any) => tertiary && padding === 'none' && {
+        color: 'text-light',
+        backgroundColor: 'transparent',
+        border: '1px solid transparent',
+        paddingHorizontal: '0',
+        ':hover': {
+          backgroundColor: 'transparent',
+          textDecoration: 'underline',
+        },
+        ':active': {
+          textDecoration: 'underline',
+        },
+        ':focus': {
+          backgroundColor: 'transparent',
+          textDecoration: 'underline',
+        },
+      },
       ({ destructive }: any) => destructive && {
         color: 'text-error',
         backgroundColor: 'transparent',
