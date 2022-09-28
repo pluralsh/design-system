@@ -61,6 +61,7 @@ function CodeRef({ children, language, ...props }: CodeProps) {
         >
           {hover && (
             <Button
+              small
               position="absolute"
               right="24px"
               top={language ? '73px' : '24px'}
