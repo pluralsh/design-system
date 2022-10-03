@@ -1,4 +1,4 @@
-import { Div, FlexProps } from 'honorable'
+import { Div, DivProps } from 'honorable'
 import { forwardRef, useRef, useState } from 'react'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import styled from 'styled-components'
@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import Button from './Button'
 import CaretUpIcon from './icons/CaretUpIcon'
 
-export type TableProps = FlexProps
+export type TableProps = DivProps
 
 const propTypes = {}
 
