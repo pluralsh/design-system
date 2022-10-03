@@ -28,7 +28,11 @@ const Tbody = styled.tbody(() => ({
   overflow: 'scroll',
 }))
 
-const Tr = styled.tr(() => ({}))
+const Tr = styled.tr(({ theme }) => ({
+  '&:nth-child(even)': {
+    backgroundColor: theme.colors['fill-one-hover'],
+  },
+}))
 
 const Th = styled.th(({ theme }) => ({
   height: 48,
