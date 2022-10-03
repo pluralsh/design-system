@@ -69,7 +69,7 @@ export default {
 function Template(args: any) {
   return (
     <Table
-      data={defaultData}
+      data={Array(70).fill(defaultData).flat()}
       columns={columns}
       {...args}
     />

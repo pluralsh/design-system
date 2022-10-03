@@ -52,7 +52,7 @@ const Td = styled.td(({ theme }) => ({
 }))
 
 function TableRef({
-  data, columns, width, ...props
+  data, columns, scrollTopMargin = 2500, width, ...props
 }: any) {
   const ref = useRef<HTMLDivElement>()
   const [hover, setHover] = useState(false)
@@ -103,7 +103,7 @@ function TableRef({
           </Tbody>
         </T>
       </Div>
-      {hover && !!scrollTop && (
+      {hover && scrollTop > scrollTopMargin && (
         <Button
           small
           position="absolute"
