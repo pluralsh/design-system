@@ -26,6 +26,7 @@ const Thead = styled.thead(({ theme }) => ({
   boxShadow: `inset 0 -1px ${theme.colors['border-fill-three']}`,
   position: 'sticky',
   top: 0,
+  zIndex: 1,
 }))
 
 const Tbody = styled.tbody(() => ({}))
