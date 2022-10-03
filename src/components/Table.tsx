@@ -1,6 +1,8 @@
 import { Div, DivProps } from 'honorable'
 import { forwardRef, useRef, useState } from 'react'
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import {
+  flexRender, getCoreRowModel, getExpandedRowModel, useReactTable,
+} from '@tanstack/react-table'
 import styled from 'styled-components'
 
 import Button from './Button'
@@ -51,13 +53,27 @@ const Td = styled.td(({ theme }) => ({
   padding: '16px 12px',
 }))
 
+const TdExpand = styled.td(({ theme }) => ({
+  backgroundColor: theme.colors['fill-two'],
+  color: theme.colors.text,
+  height: 52,
+  minHeight: 52,
+  padding: '16px 12px',
+}))
+
 function TableRef({
-  data, columns, scrollTopMargin = 2500, width, ...props
+  data, columns, getRowCanExpand, renderExpanded, scrollTopMargin = 2500, width, ...props
 }: any) {
   const ref = useRef<HTMLDivElement>()
   const [hover, setHover] = useState(false)
   const [scrollTop, setScrollTop] = useState(0)
-  const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() })
+  const table = useReactTable({
+    data,
+    columns,
+    getRowCanExpand,
+    getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+  })
 
   return (
     <Div
@@ -92,13 +108,22 @@ function TableRef({
           </Thead>
           <Tbody>
             {table.getRowModel().rows.map(row => (
-              <Tr key={row.id}>
-                {row.getVisibleCells().map(cell => (
-                  <Td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Td>
-                ))}
-              </Tr>
+              <>
+                <Tr key={row.id}>
+                  {row.getVisibleCells().map(cell => (
+                    <Td key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </Td>
+                  ))}
+                </Tr>
+                {row.getIsExpanded() && (
+                  <Tr>
+                    <TdExpand colSpan={row.getVisibleCells().length}>
+                      {renderExpanded({ row })}
+                    </TdExpand>
+                  </Tr>
+                )}
+              </>
             ))}
           </Tbody>
         </T>
