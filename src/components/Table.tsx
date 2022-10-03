@@ -35,6 +35,7 @@ const Th = styled.th(({ theme }) => ({
   minHeight: 48,
   padding: '14px 12px',
   color: theme.colors.text,
+  borderBottom: theme.borders['fill-two'],
 }))
 
 const Td = styled.td(({ theme }: any) => ({

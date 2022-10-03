@@ -39,9 +39,10 @@ const defaultData: Person[] = [
 const columnHelper = createColumnHelper<Person>()
 
 const columns = [
-  columnHelper.accessor('function', {
+  columnHelper.accessor(row => row.function, {
+    id: 'function',
     cell: (info: any) => info.getValue(),
-    footer: (info: any) => info.column.id,
+    header: () => <span>Function</span>,
   }),
   columnHelper.accessor(row => row.inputType, {
     id: 'inputType',
