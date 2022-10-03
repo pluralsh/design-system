@@ -1,5 +1,5 @@
 import { Div, FlexProps } from 'honorable'
-import { forwardRef, useState } from 'react'
+import { forwardRef, useRef, useState } from 'react'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import styled from 'styled-components'
 
@@ -44,7 +44,7 @@ const Th = styled.th(({ theme }) => ({
   color: theme.colors.text,
 }))
 
-const Td = styled.td(({ theme }: any) => ({
+const Td = styled.td(({ theme }) => ({
   color: theme.colors.text,
   height: 52,
   minHeight: 52,
@@ -54,7 +54,9 @@ const Td = styled.td(({ theme }: any) => ({
 function TableRef({
   data, columns, width, ...props
 }: any) {
+  const ref = useRef<HTMLDivElement>()
   const [hover, setHover] = useState(false)
+  const [scrollTop, setScrollTop] = useState(0)
   const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() })
 
   return (
@@ -69,6 +71,8 @@ function TableRef({
         border="1px solid border"
         borderRadius="large"
         overflow="auto"
+        ref={ref}
+        onScroll={({ target }: {target: HTMLDivElement}) => setScrollTop(target?.scrollTop)}
         width={width}
         {...props}
       >
@@ -97,22 +101,25 @@ function TableRef({
               </Tr>
             ))}
           </Tbody>
-          {hover && ( // TODO: Show only if scrolled down.
-            <Button
-              small
-              position="absolute"
-              right="24px"
-              bottom="24px"
-              width="140px"
-              floating
-              endIcon={<CaretUpIcon />}
-              onClick={() => {}} // TODO: Add handler.
-            >
-              Back to top
-            </Button>
-          )}
         </T>
       </Div>
+      {hover && !!scrollTop && (
+        <Button
+          small
+          position="absolute"
+          right="24px"
+          bottom="24px"
+          width="140px"
+          floating
+          endIcon={<CaretUpIcon />}
+          onClick={() => ref?.current?.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          })}
+        >
+          Back to top
+        </Button>
+      )}
     </Div>
   )
 }
