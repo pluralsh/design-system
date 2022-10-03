@@ -45,69 +45,74 @@ const Th = styled.th(({ theme }) => ({
 }))
 
 const Td = styled.td(({ theme }: any) => ({
-
   color: theme.colors.text,
   height: 52,
   minHeight: 52,
   padding: '16px 12px',
 }))
 
-function TableRef({ data: initialData, columns, ...props }: any) {
-  const [data, _] = useState(() => [...initialData])
+function TableRef({
+  data, columns, width, ...props
+}: any) {
   const [hover, setHover] = useState(false)
   const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() })
 
   return (
     <Div
       position="relative"
-      overflow="auto"
-      backgroundColor="fill-two"
-      border="1px solid border"
-      borderRadius="large"
+      width={width}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      {...props}
     >
-      <T>
-        <Thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <Th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(header.column.columnDef.header, header.getContext())}
-                </Th>
-              ))}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody>
-          {table.getRowModel().rows.map(row => (
-            <Tr key={row.id}>
-              {row.getVisibleCells().map(cell => (
-                <Td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Td>
-              ))}
-            </Tr>
-          ))}
-        </Tbody>
-      </T>
-      {hover && ( // TODO: Show only if scrolled down.
-        <Button
-          small
-          position="absolute"
-          right="24px"
-          bottom="24px"
-          width="140px"
-          floating
-          endIcon={<CaretUpIcon />}
-          onClick={() => {}} // TODO: Add handler.
-        >
-          Back to top
-        </Button>
-      )}
+      <Div
+        backgroundColor="fill-two"
+        border="1px solid border"
+        borderRadius="large"
+        overflow="auto"
+        width={width}
+        {...props}
+      >
+        <T>
+          <Thead>
+            {table.getHeaderGroups().map(headerGroup => (
+              <Tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <Th key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
+                  </Th>
+                ))}
+              </Tr>
+            ))}
+          </Thead>
+          <Tbody>
+            {table.getRowModel().rows.map(row => (
+              <Tr key={row.id}>
+                {row.getVisibleCells().map(cell => (
+                  <Td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </Td>
+                ))}
+              </Tr>
+            ))}
+          </Tbody>
+          {hover && ( // TODO: Show only if scrolled down.
+            <Button
+              small
+              position="absolute"
+              right="24px"
+              bottom="24px"
+              width="140px"
+              floating
+              endIcon={<CaretUpIcon />}
+              onClick={() => {}} // TODO: Add handler.
+            >
+              Back to top
+            </Button>
+          )}
+        </T>
+      </Div>
     </Div>
   )
 }
