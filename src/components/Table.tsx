@@ -12,21 +12,21 @@ const propTypes = {}
 
 const T = styled.table(({ theme }) => ({
   backgroundColor: theme.colors['fill-one'],
-  border: theme.borders.default,
-  borderRadius: theme.borderRadiuses.large,
+  // Added to avoid sticky header jumping while scrolling table.
+  borderCollapse: 'collapse',
   borderSpacing: 0,
   width: '100%',
 }))
 
 const Thead = styled.thead(({ theme }) => ({
   backgroundColor: theme.colors['fill-two'],
+  // Using shadow instead of border to work well with "border-collapse: collapse" property.
+  boxShadow: `inset 0 -1px ${theme.colors['border-fill-three']}`,
   position: 'sticky',
   top: 0,
 }))
 
-const Tbody = styled.tbody(() => ({
-  overflow: 'scroll',
-}))
+const Tbody = styled.tbody(() => ({}))
 
 const Tr = styled.tr(({ theme }) => ({
   '&:nth-child(even)': {
@@ -39,15 +39,14 @@ const Th = styled.th(({ theme }) => ({
   minHeight: 48,
   padding: '14px 12px',
   color: theme.colors.text,
-  borderBottom: theme.borders['fill-two'],
 }))
 
 const Td = styled.td(({ theme }: any) => ({
   borderBottom: theme.borders['fill-one'], // TODO: Remove for last row.
+  color: theme.colors.text,
   height: 52,
   minHeight: 52,
   padding: '16px 12px',
-  color: theme.colors.text,
 }))
 
 function TableRef({ data: initialData, columns, ...props }: any) {
@@ -58,6 +57,10 @@ function TableRef({ data: initialData, columns, ...props }: any) {
   return (
     <Div
       position="relative"
+      overflow="auto"
+      backgroundColor="fill-two"
+      border="1px solid border"
+      borderRadius="large"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       {...props}

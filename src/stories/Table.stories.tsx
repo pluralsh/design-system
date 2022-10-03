@@ -79,5 +79,6 @@ function Template(args: any) {
 export const Default = Template.bind({})
 
 Default.args = {
-  width: '700px',
+  width: '800px',
+  height: '320px',
 }
