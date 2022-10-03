@@ -29,6 +29,9 @@ const Thead = styled.thead(({ theme }) => ({
 const Tbody = styled.tbody(() => ({}))
 
 const Tr = styled.tr(({ theme }) => ({
+  '&:not(:first-child)': {
+    borderTop: theme.borders['fill-one'],
+  },
   '&:nth-child(even)': {
     backgroundColor: theme.colors['fill-one-hover'],
   },
@@ -42,7 +45,7 @@ const Th = styled.th(({ theme }) => ({
 }))
 
 const Td = styled.td(({ theme }: any) => ({
-  borderBottom: theme.borders['fill-one'], // TODO: Remove for last row.
+
   color: theme.colors.text,
   height: 52,
   minHeight: 52,
@@ -83,10 +86,7 @@ function TableRef({ data: initialData, columns, ...props }: any) {
           {table.getRowModel().rows.map(row => (
             <Tr key={row.id}>
               {row.getVisibleCells().map(cell => (
-                <Td
-                  key={cell.id}
-                  // last={i == a.length}
-                >
+                <Td key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </Td>
               ))}
@@ -94,7 +94,7 @@ function TableRef({ data: initialData, columns, ...props }: any) {
           ))}
         </Tbody>
       </T>
-      {hover && (
+      {hover && ( // TODO: Show only if scrolled down.
         <Button
           small
           position="absolute"
@@ -103,7 +103,7 @@ function TableRef({ data: initialData, columns, ...props }: any) {
           width="140px"
           floating
           endIcon={<CaretUpIcon />}
-          onClick={() => {}}
+          onClick={() => {}} // TODO: Add handler.
         >
           Back to top
         </Button>
