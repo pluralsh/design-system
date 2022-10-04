@@ -210,3 +210,6 @@ export { default as LoopingLogo } from './components/LoopingLogo'
 export { ComboBox } from './components/ComboBox'
 export { Toast, GraphQLToast } from './components/Toast'
 export { default as WrapWithIf } from './components/WrapWithIf'
+export {
+  FillLevelContext, FillLevelProvider, useFillLevel, increaseFillLevel, decreaseFillLevel,
+} from './components/contexts/FillLevelContext'
