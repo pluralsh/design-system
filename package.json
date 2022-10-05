@@ -21,6 +21,7 @@
     "@react-aria/button": "3.6.1",
     "@react-aria/combobox": "3.4.1",
     "@react-aria/focus": "3.8.0",
+    "@react-aria/interactions": "3.12.0",
     "@react-aria/listbox": "3.6.1",
     "@react-aria/overlays": "3.10.1",
     "@react-aria/select": "3.8.1",

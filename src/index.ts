@@ -192,6 +192,8 @@ export { default as Sidebar } from './components/Sidebar'
 export { default as SidebarSection } from './components/SidebarSection'
 export { default as SidebarItem } from './components/SidebarItem'
 export { default as Modal } from './components/Modal'
+export { Checklist, ChecklistProps, ChecklistStateProps } from './components/Checklist'
+export { ChecklistItem, ChecklistItemProps } from './components/ChecklistItem'
 // Hooks
 export { default as usePrevious } from './hooks/usePrevious'
 // Theme

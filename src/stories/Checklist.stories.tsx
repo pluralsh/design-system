@@ -3,7 +3,8 @@ import {
 } from 'honorable'
 import { useCallback, useState } from 'react'
 
-import { Checklist, ChecklistItem } from '../components/Checklist'
+import { Checklist, ChecklistStateProps } from '../components/Checklist'
+import { ChecklistItem } from '../components/ChecklistItem'
 import DownloadIcon from '../components/icons/DownloadIcon'
 import GitHubLogoIcon from '../components/icons/GitHubLogoIcon'
 import MarketIcon from '../components/icons/MarketIcon'
@@ -19,15 +20,23 @@ function Template() {
   const [selected, setSelected] = useState<number>(0)
   const [completed, setCompleted] = useState<number>(-1)
   const [dismiss, setDismiss] = useState(false)
-  const setCompletedWrapper = useCallback((stepNr: number) => (stepNr >= completed ? setCompleted(stepNr) : null), [completed, setCompleted])
+  const checklistStateProps: ChecklistStateProps = {
+    onSelectionChange: setSelected,
+    selectedKey: selected,
+    completedKey: completed,
+    isDismissed: dismiss,
+  }
 
   const isCompleted = useCallback(() => completed >= selected, [completed, selected])
   const canComplete = useCallback(() => Math.abs(selected - completed) === 1, [selected, completed])
 
-  const doneButton = (
+  const completeButton = (
     <Button
       small
-      onClick={() => setCompletedWrapper(selected)}
+      onClick={() => {
+        setCompleted(selected)
+        setSelected(selected + 1)
+      }}
       disabled={isCompleted() || !canComplete()}
     >Mark as done
     </Button>
@@ -43,11 +52,8 @@ function Template() {
       }}
     >
       <Checklist
-        headerTitle="Getting Started"
-        onSelectionChange={idx => setSelected(idx)}
-        active={selected}
-        completed={completed}
-        dismiss={dismiss}
+        label="Getting Started"
+        stateProps={checklistStateProps}
         footerChildren={(
           <Flex
             gap="small"
@@ -147,8 +153,7 @@ function Template() {
                 startIcon={<TerminalIcon />}
               >Launch Cloud Shell
               </Button>
-
-              {doneButton}
+              {completeButton}
             </Flex>
           </Flex>
         </ChecklistItem>
@@ -167,7 +172,7 @@ function Template() {
               >Install
               </Button>
 
-              {doneButton}
+              {completeButton}
             </Flex>
           </Flex>
         </ChecklistItem>
@@ -182,7 +187,7 @@ function Template() {
             >View marketplace
             </Button>
 
-            {doneButton}
+            {completeButton}
           </Flex>
         </ChecklistItem>
       </Checklist>
