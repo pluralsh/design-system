@@ -75,7 +75,6 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(({
   children,
 },
 ref) => {
-  console.log('style', severity)
   const theme = useTheme()
   const text = styleToText[severity]
   const color = styleToColor(theme)[severity]
