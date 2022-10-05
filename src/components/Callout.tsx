@@ -7,7 +7,7 @@ import styled, { DefaultTheme, useTheme } from 'styled-components'
 import {
   FillLevel,
   FillLevelProvider,
-  increaseFillLevel,
+  toFillLevel,
   useFillLevel,
 } from './contexts/FillLevelContext'
 import Button, { ButtonProps } from './Button'
@@ -83,7 +83,7 @@ ref) => {
 
   fillLevel = typeof fillLevel === 'number' && fillLevel >= 0
     ? fillLevel
-    : increaseFillLevel[parentFillLevel]
+    : toFillLevel(parentFillLevel + 1)
 
   let iconTopMargin = size === 'full' ? 0 : 2
 

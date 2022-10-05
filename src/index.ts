@@ -211,5 +211,5 @@ export { ComboBox } from './components/ComboBox'
 export { Toast, GraphQLToast } from './components/Toast'
 export { default as WrapWithIf } from './components/WrapWithIf'
 export {
-  FillLevelContext, FillLevelProvider, useFillLevel, increaseFillLevel, decreaseFillLevel,
+  FillLevelContext, FillLevelProvider, useFillLevel, toFillLevel, isFillLevel,
 } from './components/contexts/FillLevelContext'

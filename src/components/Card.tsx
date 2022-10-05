@@ -6,7 +6,8 @@ import { styledTheme as theme } from '../theme'
 import {
   FillLevel,
   FillLevelProvider,
-  increaseFillLevel,
+  isFillLevel,
+  toFillLevel,
   useFillLevel,
 } from './contexts/FillLevelContext'
 
@@ -80,10 +81,10 @@ function useDecideFillLevel(hue: CardHue | null | undefined) {
   const fillLevel = hueToFillLevel[hue]
   const parentFillLevel = useFillLevel()
 
-  return useMemo(() => (typeof fillLevel === 'number' && fillLevel >= 0
-    ? fillLevel
-    : increaseFillLevel[parentFillLevel]),
-  [fillLevel, parentFillLevel])
+  const ret = useMemo(() => (isFillLevel(fillLevel) ? fillLevel : toFillLevel(parentFillLevel + 1)),
+    [fillLevel, parentFillLevel])
+
+  return ret
 }
 
 const Card = forwardRef<HTMLDivElement, CardProps>(({
@@ -103,7 +104,9 @@ ref) => {
         border={`1px solid ${fillLevelToBorderColor[fillLevel]}`}
         borderRadius={cornerSizeToBorderRadius[size]}
         backgroundColor={
-          selected ? fillLevelToSelectedBGColor[fillLevel] : fillLevelToBGColor[fillLevel]
+          selected
+            ? fillLevelToSelectedBGColor[fillLevel]
+            : fillLevelToBGColor[fillLevel]
         }
         {...(clickable && {
           cursor: 'pointer',
