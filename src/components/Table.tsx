@@ -39,7 +39,7 @@ const Tr = styled.tr(({ theme }) => ({
   },
 }))
 
-const Th = styled.th<any>(({ theme, stickyColumn }) => ({
+const Th = styled.th<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
   borderBottom: theme.borders['fill-three'],
   height: 48,
   minHeight: 48,
@@ -48,21 +48,22 @@ const Th = styled.th<any>(({ theme, stickyColumn }) => ({
   textAlign: 'left',
   '&:first-child': stickyColumn ? {
     backgroundColor: 'inherit',
-    borderRight: `1px solid ${theme.colors['border-fill-three']}`, // TODO: Fix.
+    boxShadow: theme.boxShadows.slight,
     position: 'sticky',
     left: 0,
     zIndex: 5,
+    overflow: 'hidden',
   } : {},
 }))
 
-const Td = styled.td<any>(({ theme, stickyColumn }) => ({
+const Td = styled.td<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
   color: theme.colors.text,
   height: 52,
   minHeight: 52,
   padding: '16px 12px',
   '&:first-child': stickyColumn ? {
     backgroundColor: 'inherit',
-    borderRight: `1px solid ${theme.colors['border-fill-three']}`, // TODO: Fix.
+    boxShadow: theme.boxShadows.slight,
     position: 'sticky',
     left: 0,
     zIndex: 1,
