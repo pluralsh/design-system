@@ -14,8 +14,6 @@ const propTypes = {}
 
 const T = styled.table(({ theme }) => ({
   backgroundColor: theme.colors['fill-one'],
-  // Added to avoid sticky header jumping while scrolling table.
-  borderCollapse: 'collapse',
   borderSpacing: 0,
   width: '100%',
 }))
@@ -42,16 +40,15 @@ const Tr = styled.tr(({ theme }) => ({
 }))
 
 const Th = styled.th<any>(({ theme, stickyColumn }) => ({
+  borderBottom: theme.borders['fill-three'],
   height: 48,
-  // Using shadow instead of border to work well with "border-collapse: collapse" property.
-  boxShadow: `inset 0 -1px ${theme.colors['border-fill-three']}`,
   minHeight: 48,
   padding: '14px 12px',
   color: theme.colors.text,
   textAlign: 'left',
   '&:first-child': stickyColumn ? {
     backgroundColor: 'inherit',
-    borderRight: '1px solid red', // TODO: Fix.
+    borderRight: `1px solid ${theme.colors['border-fill-three']}`, // TODO: Fix.
     position: 'sticky',
     left: 0,
     zIndex: 5,
@@ -65,7 +62,7 @@ const Td = styled.td<any>(({ theme, stickyColumn }) => ({
   padding: '16px 12px',
   '&:first-child': stickyColumn ? {
     backgroundColor: 'inherit',
-    borderRight: '1px solid red', // TODO: Fix.
+    borderRight: `1px solid ${theme.colors['border-fill-three']}`, // TODO: Fix.
     position: 'sticky',
     left: 0,
     zIndex: 1,
