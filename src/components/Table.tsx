@@ -64,7 +64,7 @@ const TdExpand = styled.td(({ theme }) => ({
 }))
 
 function TableRef({
-  data, columns, getRowCanExpand, renderExpanded, scrollTopMargin = 2500, width, ...props
+  data, columns, getRowCanExpand, renderExpanded, scrollTopMargin = 500, width, ...props
 }: any) {
   const ref = useRef<HTMLDivElement>()
   const [hover, setHover] = useState(false)
