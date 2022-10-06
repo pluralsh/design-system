@@ -51,7 +51,7 @@ export type CalloutProps = PropsWithChildren<{
   title?: string
   severity?: CalloutSeverity
   size?: CalloutSize
-  buttonProps: ButtonProps
+  buttonProps?: ButtonProps
   fillLevel?: FillLevel
   className?: string
 }>

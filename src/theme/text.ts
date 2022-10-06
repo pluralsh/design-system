@@ -6,6 +6,9 @@ import { fontFamilies } from './fonts'
 
 import { semanticColors } from './colors'
 
+export const INLINE_CODE_PIXEL_SIZE = 14
+export const INLINE_CODE_SIZE_REFERENCE = 14
+
 const bodyBaseStyle = {
   fontFamily: fontFamilies.sans,
   fontWeight: 400,
@@ -146,6 +149,17 @@ const textPartials = asElementTypes<CSSObject>()({
     '&:visited, &:active': {
       color: semanticColors['action-link-inline-visited'],
     },
+  },
+  code: {
+    fontFamily: fontFamilies.mono,
+    fontSize: 14,
+    lineHeight: '22px',
+    letterSpacing: '.25px',
+  },
+  inlineCode: {
+    fontFamily: fontFamilies.mono,
+    fontSize: `${INLINE_CODE_PIXEL_SIZE / INLINE_CODE_SIZE_REFERENCE}em`,
+    letterSpacing: '.25px',
   },
   // These empty entries make sure the props show up in autocompletion.
   // Actual values must be set below, since they're based on other entries
