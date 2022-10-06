@@ -127,6 +127,16 @@ Default.args = {
   columns,
 }
 
+export const StickyColumn = Template.bind({})
+
+StickyColumn.args = {
+  width: '400px',
+  height: '400px',
+  data: Array(25).fill(data).flat(),
+  columns,
+  stickyColumn: true,
+}
+
 export const Expandable = Template.bind({})
 
 Expandable.args = {

@@ -22,16 +22,17 @@ const T = styled.table(({ theme }) => ({
 
 const Thead = styled.thead(({ theme }) => ({
   backgroundColor: theme.colors['fill-two'],
-  // Using shadow instead of border to work well with "border-collapse: collapse" property.
-  boxShadow: `inset 0 -1px ${theme.colors['border-fill-three']}`,
   position: 'sticky',
   top: 0,
-  zIndex: 1,
+  zIndex: 3,
 }))
 
-const Tbody = styled.tbody(() => ({}))
+const Tbody = styled.tbody(({ theme }) => ({
+  backgroundColor: theme.colors['fill-one'],
+}))
 
 const Tr = styled.tr(({ theme }) => ({
+  backgroundColor: 'inherit',
   '&:not(:first-child)': {
     borderTop: theme.borders['fill-one'],
   },
@@ -40,19 +41,35 @@ const Tr = styled.tr(({ theme }) => ({
   },
 }))
 
-const Th = styled.th(({ theme }) => ({
+const Th = styled.th<any>(({ theme, stickyColumn }) => ({
   height: 48,
+  // Using shadow instead of border to work well with "border-collapse: collapse" property.
+  boxShadow: `inset 0 -1px ${theme.colors['border-fill-three']}`,
   minHeight: 48,
   padding: '14px 12px',
   color: theme.colors.text,
   textAlign: 'left',
+  '&:first-child': stickyColumn ? {
+    backgroundColor: 'inherit',
+    borderRight: '1px solid red', // TODO: Fix.
+    position: 'sticky',
+    left: 0,
+    zIndex: 5,
+  } : {},
 }))
 
-const Td = styled.td(({ theme }) => ({
+const Td = styled.td<any>(({ theme, stickyColumn }) => ({
   color: theme.colors.text,
   height: 52,
   minHeight: 52,
   padding: '16px 12px',
+  '&:first-child': stickyColumn ? {
+    backgroundColor: 'inherit',
+    borderRight: '1px solid red', // TODO: Fix.
+    position: 'sticky',
+    left: 0,
+    zIndex: 1,
+  } : {},
 }))
 
 const TdExpand = styled.td(({ theme }) => ({
@@ -64,7 +81,8 @@ const TdExpand = styled.td(({ theme }) => ({
 }))
 
 function TableRef({
-  data, columns, getRowCanExpand, renderExpanded, scrollTopMargin = 500, width, ...props
+  data, columns, getRowCanExpand, renderExpanded, stickyColumn = false,
+  scrollTopMargin = 500, width, ...props
 }: any) {
   const ref = useRef<HTMLDivElement>()
   const [hover, setHover] = useState(false)
@@ -99,7 +117,10 @@ function TableRef({
             {table.getHeaderGroups().map(headerGroup => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => (
-                  <Th key={header.id}>
+                  <Th
+                    key={header.id}
+                    stickyColumn={stickyColumn}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.header, header.getContext())}
@@ -113,7 +134,10 @@ function TableRef({
               <>
                 <Tr key={row.id}>
                   {row.getVisibleCells().map(cell => (
-                    <Td key={cell.id}>
+                    <Td
+                      key={cell.id}
+                      stickyColumn={stickyColumn}
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </Td>
                   ))}
