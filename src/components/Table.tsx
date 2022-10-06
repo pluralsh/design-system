@@ -52,7 +52,6 @@ const Th = styled.th<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
     position: 'sticky',
     left: 0,
     zIndex: 5,
-    overflow: 'hidden',
   } : {},
 }))
 
