@@ -147,11 +147,24 @@ const textPartials = asElementTypes<CSSObject>()({
       color: semanticColors['action-link-inline-visited'],
     },
   },
+  // These empty entries make sure the props show up in autocompletion.
+  // Actual values must be set below, since they're based on other entries
+  // above.
   body1Bold: {},
   body2Bold: {},
+  body2LooseLineHeight: {},
+  body2LooseLineHeightBold: {},
 })
 
 textPartials.body1Bold = { ...textPartials.body1, ...textPartials.bodyBold }
 textPartials.body2Bold = { ...textPartials.body2, ...textPartials.bodyBold }
+textPartials.body2LooseLineHeight = {
+  ...textPartials.body2,
+  lineHeight: '22px',
+}
+textPartials.body2LooseLineHeightBold = {
+  ...textPartials.body2LooseLineHeight,
+  ...textPartials.bodyBold,
+}
 
 export { textPartials }

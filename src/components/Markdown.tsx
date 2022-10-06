@@ -83,7 +83,7 @@ const MdOl = styled.ol.withConfig(commonCfg)(({ theme }) => ({
   marginBottom: theme.spacing.small,
 }))
 const MdLi = styled.li.withConfig(commonCfg)(({ theme }) => ({
-  ...theme.partials.text.body2,
+  ...theme.partials.text.body2LooseLineHeight,
   marginTop: theme.spacing.xxsmall,
 }))
 const MdH1 = styled.h1.withConfig(commonCfg)(({ theme }) => ({
@@ -130,12 +130,11 @@ const MdH6 = styled.h6.withConfig(commonCfg)(({ theme }) => ({
 }))
 const MdImg = styled.img(() => ({ display: 'inline', maxWidth: '100%' }))
 const MdP = styled.p.withConfig(commonCfg)(({ theme }) => ({
-  ...theme.partials.text.body2,
-  color: theme.colors.text,
+  ...theme.partials.text.body2LooseLineHeight,
   marginBottom: theme.spacing.medium,
 }))
 const MdDiv = styled.div.withConfig(commonCfg)(({ theme }) => ({
-  ...theme.partials.text.body2,
+  ...theme.partials.text.body2LooseLineHeight,
   marginBottom: theme.spacing.medium,
 }))
 const MdA = styled.a.withConfig(commonCfg)(({ theme }) => ({

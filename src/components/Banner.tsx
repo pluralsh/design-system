@@ -105,7 +105,7 @@ ref: Ref<any>) {
           {children && (
             <P
               marginTop={heading ? 'xxsmall' : 'xxxsmall'}
-              body2
+              body2LooseLineHeight
               color="text-light"
             >
               {children}
