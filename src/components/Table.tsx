@@ -45,6 +45,7 @@ const Th = styled.th(({ theme }) => ({
   minHeight: 48,
   padding: '14px 12px',
   color: theme.colors.text,
+  textAlign: 'left',
 }))
 
 const Td = styled.td(({ theme }) => ({
