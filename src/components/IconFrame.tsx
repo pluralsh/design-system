@@ -5,6 +5,7 @@ import { ButtonBase, Flex, FlexProps } from 'honorable'
 import { useTheme } from 'styled-components'
 
 import Tooltip, { TooltipProps } from './Tooltip'
+import { useFillLevel } from './contexts/FillLevelContext'
 
 type Hue = 'none' | 'default' | 'lighter' | 'lightest'
 type Size = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'

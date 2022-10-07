@@ -1,7 +1,7 @@
 import { ComponentPropsWithRef, forwardRef } from 'react'
 import styled from 'styled-components'
 
-import { INLINE_CODE_PX_AT_REF } from '../theme/text'
+import { INLINE_CODE_MIN_PX, INLINE_CODE_PX_REF } from '../theme/text'
 
 import { FillLevel, useFillLevel } from './contexts/FillLevelContext'
 
@@ -30,14 +30,18 @@ const fillLevelToBorderColor: {
   3: 'border-fill-three',
 }
 
+const PAD_EXTRA = INLINE_CODE_PX_REF - INLINE_CODE_MIN_PX
+const PAD_EXTRA_TOP = PAD_EXTRA * 0.5
+const PAD_EXTRA_BOTTOM = 1 - PAD_EXTRA_TOP
+
 const Code = styled.code<{fillLevel: FillLevel}>(({ theme, fillLevel }) => ({
   ...theme.partials.text.inlineCode,
   border: theme.borders.default,
   borderRadius: theme.borderRadiuses.large,
   paddingRight: theme.spacing.xxsmall,
   paddingLeft: theme.spacing.xxsmall,
-  paddingTop: `${1.2 / INLINE_CODE_PX_AT_REF}em`,
-  paddingBottom: `${2.2 / INLINE_CODE_PX_AT_REF}em`,
+  paddingTop: `calc(${PAD_EXTRA_TOP}px - 0px)`,
+  paddingBottom: `calc(${PAD_EXTRA_BOTTOM}px + 1px)`,
   color: theme.colors['text-light'],
   borderColor: theme.colors[fillLevelToBorderColor[fillLevel]],
   backgroundColor: theme.colors['fill-one'],
