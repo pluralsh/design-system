@@ -1,5 +1,8 @@
 import { ComponentPropsWithRef, forwardRef } from 'react'
+
 import styled from 'styled-components'
+
+import { INLINE_CODE_MIN_PX } from '../theme/text'
 
 import { FillLevel, useFillLevel } from './contexts/FillLevelContext'
 
@@ -28,16 +31,21 @@ const fillLevelToBorderColor: {
   3: 'border-fill-three',
 }
 
+// Magic number to make the total height equal 20px when within 14px type
+// Proportional to that for larger text sizes
+// If INLINE_CODE_MIN_PX changes in them/text.ts, this needs to change too
+// I cannot for the life of me find a way to just calculate this in a way that's
+// consistent when INLINE_CODE_MIN_PX changes.
+const PADDING_EMS = 0.1669
+
 const Code = styled.code<{fillLevel: FillLevel}>(({ theme, fillLevel }) => ({
   ...theme.partials.text.inlineCode,
   border: theme.borders.default,
   borderRadius: theme.borderRadiuses.large,
   paddingRight: theme.spacing.xxsmall,
   paddingLeft: theme.spacing.xxsmall,
-  // Magic number to make the total height equal 20px when within 14px type
-  // Proportional to that for larger text sizes
-  paddingTop: '0.139em',
-  paddingBottom: '0.139em',
+  paddingTop: `${PADDING_EMS}em`,
+  paddingBottom: `${PADDING_EMS}em`,
   color: theme.colors['text-light'],
   borderColor: theme.colors[fillLevelToBorderColor[fillLevel]],
   backgroundColor: theme.colors['fill-one'],

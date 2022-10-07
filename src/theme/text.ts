@@ -7,7 +7,7 @@ import { fontFamilies } from './fonts'
 import { semanticColors } from './colors'
 
 export const INLINE_CODE_EMS = 0.8
-export const INLINE_CODE_MIN_PX = 12.6
+export const INLINE_CODE_MIN_PX = 12
 
 const bodyBaseStyle = {
   fontFamily: fontFamilies.sans,
