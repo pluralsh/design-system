@@ -9,10 +9,13 @@ import { INLINE_CODE_PIXEL_SIZE } from '../theme/text'
 const Spacer = styled.span(_ => ({
   fontSize: 1.5,
   display: 'inline',
+  lineHeight: 0,
   '&:after': {
     fontSize: 1.5,
+    lineHeight: 0,
     content: '"\u2001"', // em-space
     display: 'inline',
+    opacity: 0, // hides link underlines that can extend outside rectangle
   },
 }))
 
@@ -33,8 +36,8 @@ export default styled(InlineCode)(({ theme }) => ({
   borderRadius: theme.borderRadiuses.large,
   paddingRight: theme.spacing.xxsmall,
   paddingLeft: theme.spacing.xxsmall,
-  paddingTop: `${0 / INLINE_CODE_PIXEL_SIZE}em`,
-  paddingBottom: `${2 / INLINE_CODE_PIXEL_SIZE}em`,
+  paddingTop: 0,
+  paddingBottom: 2,
   color: theme.colors['text-light'],
   backgroundColor: theme.colors['fill-one'],
   'a:any-link &': {
