@@ -6,8 +6,9 @@ import { fontFamilies } from './fonts'
 
 import { semanticColors } from './colors'
 
-export const INLINE_CODE_PIXEL_SIZE = 14
-export const INLINE_CODE_SIZE_REFERENCE = 14
+export const INLINE_CODE_PX_AT_REF = 12.6
+export const INLINE_CODE_PX_REF = 14
+const INLINE_CODE_EMS = INLINE_CODE_PX_AT_REF / INLINE_CODE_PX_REF
 
 const bodyBaseStyle = {
   fontFamily: fontFamilies.sans,
@@ -158,7 +159,7 @@ const textPartials = asElementTypes<CSSObject>()({
   },
   inlineCode: {
     fontFamily: fontFamilies.mono,
-    fontSize: `${INLINE_CODE_PIXEL_SIZE / INLINE_CODE_SIZE_REFERENCE}em`,
+    fontSize: `${INLINE_CODE_EMS}em`,
     letterSpacing: '.25px',
   },
   // These empty entries make sure the props show up in autocompletion.
