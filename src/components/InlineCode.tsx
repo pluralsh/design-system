@@ -1,8 +1,6 @@
 import { ComponentPropsWithRef, forwardRef } from 'react'
 import styled from 'styled-components'
 
-import { INLINE_CODE_MIN_PX, INLINE_CODE_PX_REF } from '../theme/text'
-
 import { FillLevel, useFillLevel } from './contexts/FillLevelContext'
 
 // This nonsense is to reduce the chance of there being
@@ -30,18 +28,16 @@ const fillLevelToBorderColor: {
   3: 'border-fill-three',
 }
 
-const PAD_EXTRA = INLINE_CODE_PX_REF - INLINE_CODE_MIN_PX
-const PAD_EXTRA_TOP = PAD_EXTRA * 0.5
-const PAD_EXTRA_BOTTOM = 1 - PAD_EXTRA_TOP
-
 const Code = styled.code<{fillLevel: FillLevel}>(({ theme, fillLevel }) => ({
   ...theme.partials.text.inlineCode,
   border: theme.borders.default,
   borderRadius: theme.borderRadiuses.large,
   paddingRight: theme.spacing.xxsmall,
   paddingLeft: theme.spacing.xxsmall,
-  paddingTop: `calc(${PAD_EXTRA_TOP}px - 0px)`,
-  paddingBottom: `calc(${PAD_EXTRA_BOTTOM}px + 1px)`,
+  // Magic number to make the total height equal 20px when within 14px type
+  // Proportional to that for larger text sizes
+  paddingTop: '0.139em',
+  paddingBottom: '0.139em',
   color: theme.colors['text-light'],
   borderColor: theme.colors[fillLevelToBorderColor[fillLevel]],
   backgroundColor: theme.colors['fill-one'],
