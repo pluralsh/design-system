@@ -1,8 +1,6 @@
 import { ComponentPropsWithRef, forwardRef } from 'react'
 import styled from 'styled-components'
 
-import { INLINE_CODE_PIXEL_SIZE } from '../theme/text'
-
 // This nonsense is to reduce the chance of there being
 // a left margin when a <code> block is the first item in a line of text.
 // Put em space character in pseudo element so it won't ever get copied
