@@ -304,6 +304,7 @@ function Typography({
       <SemanticText typeStyle="body1">Body 1 - {txt}</SemanticText>
       <SemanticText typeStyle="body2Bold">Body 2 (Bold) - {txt}</SemanticText>
       <SemanticText typeStyle="body2">Body 2 - {txt}</SemanticText>
+      <SemanticText typeStyle="body2LooseLineHeight">Body 2 Loose Line Height - {txt}</SemanticText>
       <SemanticText typeStyle="caption">Caption - {txt}</SemanticText>
       <SemanticText typeStyle="badgeLabel">Badge Label - {txt}</SemanticText>
       <SemanticText typeStyle="buttonLarge">Large Button - {txt}</SemanticText>
