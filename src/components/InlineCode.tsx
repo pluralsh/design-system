@@ -2,8 +2,6 @@ import { ComponentPropsWithRef, forwardRef } from 'react'
 
 import styled from 'styled-components'
 
-import { INLINE_CODE_MIN_PX } from '../theme/text'
-
 import { FillLevel, useFillLevel } from './contexts/FillLevelContext'
 
 // This nonsense is to reduce the chance of there being
