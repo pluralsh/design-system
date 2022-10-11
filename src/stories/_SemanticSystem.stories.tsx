@@ -310,6 +310,7 @@ function Typography({
       <SemanticText typeStyle="buttonLarge">Large Button - {txt}</SemanticText>
       <SemanticText typeStyle="buttonSmall">Small Button - {txt}</SemanticText>
       <SemanticText typeStyle="overline">Overline - {txt}</SemanticText>
+      <SemanticText typeStyle="code">Code - {txt}</SemanticText>
     </>
   )
 }
