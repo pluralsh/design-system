@@ -141,7 +141,8 @@ function TableRef({
                 </Tr>
                 {row.getIsExpanded() && (
                   <Tr>
-                    <TdExpand colSpan={row.getVisibleCells().length}>
+                    <TdExpand />
+                    <TdExpand colSpan={row.getVisibleCells().length - 1}>
                       {renderExpanded({ row })}
                     </TdExpand>
                   </Tr>
