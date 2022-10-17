@@ -131,7 +131,7 @@ function TableRef({
                   {row.getVisibleCells().map(cell => (
                     <Td
                       key={cell.id}
-                      firstRow={i == 0}
+                      firstRow={i === 0}
                       lighter={i % 2 === 0}
                       stickyColumn={stickyColumn}
                     >
