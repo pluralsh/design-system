@@ -29,11 +29,8 @@ const Tbody = styled.tbody(({ theme }) => ({
   backgroundColor: theme.colors['fill-one'],
 }))
 
-const Tr = styled.tr(({ theme }) => ({
+const Tr = styled.tr(() => ({
   backgroundColor: 'inherit',
-  '&:not(:first-child)': {
-    borderTop: theme.borders['fill-one'],
-  },
 }))
 
 const Th = styled.th<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
@@ -52,8 +49,11 @@ const Th = styled.th<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
   } : {},
 }))
 
-const Td = styled.td<{lighter: boolean, stickyColumn: boolean}>(({ theme, lighter, stickyColumn }) => ({
+const Td = styled.td<{firstRow?: boolean, lighter: boolean, stickyColumn: boolean}>(({
+  theme, firstRow, lighter, stickyColumn,
+}) => ({
   backgroundColor: lighter ? theme.colors['fill-one'] : theme.colors['fill-one-hover'],
+  borderTop: firstRow ? '' : theme.borders.default,
   color: theme.colors.text,
   height: 52,
   minHeight: 52,
@@ -131,6 +131,7 @@ function TableRef({
                   {row.getVisibleCells().map(cell => (
                     <Td
                       key={cell.id}
+                      firstRow={i == 0}
                       lighter={i % 2 === 0}
                       stickyColumn={stickyColumn}
                     >
