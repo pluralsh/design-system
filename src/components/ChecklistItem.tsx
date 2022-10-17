@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import CaretDownIcon from './icons/CaretDownIcon'
 import SuccessIcon from './icons/SuccessIcon'
 
-const heightAnimationDuration = 666 // 666ms
+const heightAnimationDuration = 333 // 333ms
 
 const ChecklistItemInner = styled(ChecklistItemInnerUnstyled)(({ theme, completed, selected }) => ({
   display: 'flex',
@@ -89,8 +89,8 @@ const ChecklistItemInner = styled(ChecklistItemInnerUnstyled)(({ theme, complete
           borderRightWidth: '1px',
           transform: 'rotate(270deg)',
           transition: `
-            transform 0.4s linear 0s,
-            border-left-width 0s linear 0.3s`,
+            transform 0.3s linear 0s,
+            border-left-width 0.1s linear 0.3s`,
         }),
       },
     },
@@ -167,8 +167,10 @@ type ChecklistItemInnerProps = Omit<ChecklistItemProps, 'children'> & {
   children: ReactElement<ChecklistItemProps>
   index: number
   selected?: boolean
+  focused?: boolean
   completed?: boolean
   onSelectionChange: Dispatch<number>
+  onFocusChange: Dispatch<number>
 }
 
 function ChecklistItemInnerUnstyled({
@@ -176,19 +178,26 @@ function ChecklistItemInnerUnstyled({
   index,
   title,
   selected,
+  focused,
   onSelectionChange,
+  onFocusChange,
   ...props
 }: ChecklistItemInnerProps): JSX.Element {
   const headerRef = useRef<HTMLDivElement>()
-  const [focused, setFocused] = useState(false)
   const { keyboardProps } = useKeyboard({
     onKeyDown: e => {
       switch (e.key) {
       case KeyboardKey.ARROW_UP:
-        if (focused) onSelectionChange(index - 1)
+        if (focused) {
+          onSelectionChange(index - 1)
+          onFocusChange(index - 1)
+        }
         break
       case KeyboardKey.ARROW_DOWN:
-        if (focused) onSelectionChange(index + 1)
+        if (focused) {
+          onSelectionChange(index + 1)
+          onFocusChange(index + 1)
+        }
         break
       case KeyboardKey.ENTER:
       case KeyboardKey.SPACE:
@@ -198,10 +207,10 @@ function ChecklistItemInnerUnstyled({
   })
 
   useEffect(() => {
-    if (headerRef.current && selected) {
+    if (headerRef.current && focused) {
       setTimeout(() => headerRef.current.focus())
     }
-  }, [headerRef, selected])
+  }, [headerRef, focused])
 
   return (
     <div {...props}>
@@ -212,8 +221,8 @@ function ChecklistItemInnerUnstyled({
         tabIndex={0}
         ref={headerRef}
         onClick={() => onSelectionChange(selected ? null : index)}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        onFocus={() => onFocusChange(index)}
+        onBlur={() => onFocusChange(-1)}
       >
         <div className="itemCircle">
           <div>{index + 1}</div>

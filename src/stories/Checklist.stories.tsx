@@ -18,11 +18,14 @@ export default {
 
 function Template() {
   const [selected, setSelected] = useState<number>(0)
+  const [focused, setFocused] = useState<number>(-1)
   const [completed, setCompleted] = useState<number>(-1)
   const [dismiss, setDismiss] = useState(false)
   const checklistStateProps: ChecklistStateProps = {
     onSelectionChange: setSelected,
+    onFocusChange: setFocused,
     selectedKey: selected,
+    focusedKey: focused,
     completedKey: completed,
     isDismissed: dismiss,
   }
@@ -36,6 +39,7 @@ function Template() {
       onClick={() => {
         setCompleted(selected)
         setSelected(selected + 1)
+        setFocused(selected + 1)
       }}
       disabled={isCompleted() || !canComplete()}
     >Mark as done

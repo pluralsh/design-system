@@ -9,7 +9,7 @@ import { ChecklistFooter, ChecklistFooterProps } from './ChecklistFooter'
 import { ChecklistItemInner, ChecklistItemProps } from './ChecklistItem'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
 
-const heightAnimationDuration = 666 // 666ms
+const heightAnimationDuration = 333 // 333ms
 
 const Checklist = styled(ChecklistUnstyled)(({ theme }) => ({
   background: theme.colors['fill-two'],
@@ -75,9 +75,11 @@ type ChecklistProps = ComponentPropsWithRef<'div'> & {
   children: ReactElement<ChecklistItemProps>[]
 }
 
-type ChecklistStateProps = DOMProps & {
+type ChecklistStateProps = {
   onSelectionChange?: Dispatch<number>
+  onFocusChange?: Dispatch<number>
   selectedKey?: number,
+  focusedKey?: number,
   completedKey?: number,
   isOpen?: boolean
   isDismissed?: boolean
@@ -92,7 +94,7 @@ function ChecklistUnstyled({
   ...props
 }: ChecklistProps): JSX.Element {
   const {
-    isOpen = true, isDismissed, selectedKey, completedKey, onSelectionChange,
+    isOpen = true, isDismissed, selectedKey, focusedKey, completedKey, onSelectionChange, onFocusChange,
   } = stateProps
   const [open, setOpen] = useState(isOpen)
   const [finished, setFinished] = useState(false)
@@ -106,6 +108,8 @@ function ChecklistUnstyled({
 
   const onSelectionChangeWrapper = useCallback((idx: number) => (idx < children.length && idx > -1 ? onSelectionChange(idx) : undefined),
     [children, onSelectionChange])
+  const onFocusChangeWrapper = useCallback((idx: number) => (idx < children.length && idx > -1 ? onFocusChange(idx) : undefined),
+    [children, onFocusChange])
 
   const checklistItemInnerWrapper = useMemo(() => children.map((child, index) => (
     <ChecklistItemInner
@@ -113,8 +117,10 @@ function ChecklistUnstyled({
       key={index}
       index={index}
       selected={selectedKey === index}
+      focused={focusedKey === index}
       completed={completedKey >= index}
       onSelectionChange={onSelectionChangeWrapper}
+      onFocusChange={onFocusChangeWrapper}
     >{child}
     </ChecklistItemInner>
   )), [children, selectedKey, completedKey, onSelectionChangeWrapper])
