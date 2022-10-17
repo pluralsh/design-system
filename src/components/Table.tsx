@@ -35,10 +35,11 @@ const Tr = styled.tr(() => ({
 
 const Th = styled.th<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
   borderBottom: theme.borders['fill-three'],
+  color: theme.colors.text,
   height: 48,
   minHeight: 48,
+  whiteSpace: 'nowrap',
   padding: '14px 12px',
-  color: theme.colors.text,
   textAlign: 'left',
   '&:first-child': stickyColumn ? {
     backgroundColor: 'inherit',
