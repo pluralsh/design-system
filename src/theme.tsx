@@ -123,6 +123,10 @@ const honorableTheme = mergeTheme(defaultTheme, {
       ...(body2 && textPartials.body2),
       ...((body1 || body2) && bold && textPartials.bodyBold),
     }),
+    ({ body2LooseLineHeight, bold }: any) => ({
+      ...(body2LooseLineHeight && textPartials.body2LooseLineHeight),
+      ...(body2LooseLineHeight && bold && textPartials.bodyBold),
+    }),
     ({ caption }: any) => caption && textPartials.caption,
     ({ badgeLabel }: any) => badgeLabel && textPartials.badgeLabel,
     ({ buttonMedium }: any) => buttonMedium && textPartials.buttonMedium,
@@ -270,6 +274,23 @@ const honorableTheme = mergeTheme(defaultTheme, {
           },
         },
       },
+      ({ tertiary, padding }: any) => tertiary && padding === 'none' && {
+        color: 'text-light',
+        backgroundColor: 'transparent',
+        border: '1px solid transparent',
+        paddingHorizontal: '0',
+        ':hover': {
+          backgroundColor: 'transparent',
+          textDecoration: 'underline',
+        },
+        ':active': {
+          textDecoration: 'underline',
+        },
+        ':focus': {
+          backgroundColor: 'transparent',
+          textDecoration: 'underline',
+        },
+      },
       ({ destructive }: any) => destructive && {
         color: 'text-error',
         backgroundColor: 'transparent',
@@ -340,6 +361,7 @@ const honorableTheme = mergeTheme(defaultTheme, {
         paddingBottom: spacing.xxsmall - 1,
         paddingRight: spacing.medium - 1,
         paddingLeft: spacing.medium - 1,
+        minHeight: 32,
       },
     ],
     StartIcon: [
