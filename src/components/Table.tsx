@@ -34,9 +34,6 @@ const Tr = styled.tr(({ theme }) => ({
   '&:not(:first-child)': {
     borderTop: theme.borders['fill-one'],
   },
-  '&:nth-child(even)': {
-    backgroundColor: theme.colors['fill-one-hover'],
-  },
 }))
 
 const Th = styled.th<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
@@ -55,13 +52,13 @@ const Th = styled.th<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
   } : {},
 }))
 
-const Td = styled.td<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
+const Td = styled.td<{lighter: boolean, stickyColumn: boolean}>(({ theme, lighter, stickyColumn }) => ({
+  backgroundColor: lighter ? theme.colors['fill-one'] : theme.colors['fill-one-hover'],
   color: theme.colors.text,
   height: 52,
   minHeight: 52,
   padding: '16px 12px',
   '&:first-child': stickyColumn ? {
-    backgroundColor: 'inherit',
     boxShadow: theme.boxShadows.slight,
     position: 'sticky',
     left: 0,
@@ -69,8 +66,8 @@ const Td = styled.td<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
   } : {},
 }))
 
-const TdExpand = styled.td(({ theme }) => ({
-  backgroundColor: theme.colors['fill-two'],
+const TdExpand = styled.td<{lighter: boolean}>(({ theme, lighter }) => ({
+  backgroundColor: lighter ? theme.colors['fill-one'] : theme.colors['fill-one-hover'],
   color: theme.colors.text,
   height: 52,
   minHeight: 52,
@@ -127,12 +124,13 @@ function TableRef({
             ))}
           </Thead>
           <Tbody>
-            {table.getRowModel().rows.map(row => (
+            {table.getRowModel().rows.map((row, i) => (
               <>
                 <Tr key={row.id}>
                   {row.getVisibleCells().map(cell => (
                     <Td
                       key={cell.id}
+                      lighter={i % 2 === 0}
                       stickyColumn={stickyColumn}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -141,8 +139,11 @@ function TableRef({
                 </Tr>
                 {row.getIsExpanded() && (
                   <Tr>
-                    <TdExpand />
-                    <TdExpand colSpan={row.getVisibleCells().length - 1}>
+                    <TdExpand lighter={i % 2 === 0} />
+                    <TdExpand
+                      colSpan={row.getVisibleCells().length - 1}
+                      lighter={i % 2 === 0}
+                    >
                       {renderExpanded({ row })}
                     </TdExpand>
                   </Tr>
