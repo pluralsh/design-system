@@ -50,15 +50,15 @@ const Th = styled.th<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
   } : {},
 }))
 
-const Td = styled.td<{firstRow?: boolean, lighter: boolean, stickyColumn: boolean}>(({
-  theme, firstRow, lighter, stickyColumn,
+const Td = styled.td<{firstRow?: boolean, lighter: boolean, loose?: boolean, stickyColumn: boolean}>(({
+  theme, firstRow, lighter, loose, stickyColumn,
 }) => ({
   backgroundColor: lighter ? theme.colors['fill-one'] : theme.colors['fill-one-hover'],
   borderTop: firstRow ? '' : theme.borders.default,
   color: theme.colors.text,
   height: 52,
   minHeight: 52,
-  padding: '16px 12px',
+  padding: loose ? '16px 12px' : '6px 12px',
   verticalAlign: 'top',
   '&:first-child': stickyColumn ? {
     boxShadow: theme.boxShadows.slight,
@@ -77,8 +77,8 @@ const TdExpand = styled.td<{lighter: boolean}>(({ theme, lighter }) => ({
 }))
 
 function TableRef({
-  data, columns, getRowCanExpand, renderExpanded, stickyColumn = false,
-  scrollTopMargin = 500, width, ...props
+  data, columns, getRowCanExpand, renderExpanded, loose = false,
+  stickyColumn = false, scrollTopMargin = 500, width, ...props
 }: any) {
   const ref = useRef<HTMLDivElement>()
   const [hover, setHover] = useState(false)
@@ -134,6 +134,7 @@ function TableRef({
                       key={cell.id}
                       firstRow={i === 0}
                       lighter={i % 2 === 0}
+                      loose={loose}
                       stickyColumn={stickyColumn}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

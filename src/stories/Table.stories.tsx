@@ -127,6 +127,16 @@ Default.args = {
   columns,
 }
 
+export const Loose = Template.bind({})
+
+Loose.args = {
+  width: '900px',
+  height: '400px',
+  data: Array(25).fill(data).flat(),
+  columns,
+  loose: true,
+}
+
 export const StickyColumn = Template.bind({})
 
 StickyColumn.args = {
