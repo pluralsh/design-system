@@ -16,6 +16,7 @@ const T = styled.table(({ theme }) => ({
   backgroundColor: theme.colors['fill-one'],
   borderSpacing: 0,
   width: '100%',
+  ...theme.partials.text.body2LooseLineHeight,
 }))
 
 const Thead = styled.thead(({ theme }) => ({
