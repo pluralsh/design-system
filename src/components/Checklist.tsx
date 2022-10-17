@@ -1,4 +1,3 @@
-import { DOMProps } from '@react-types/shared'
 import {
   ComponentPropsWithRef, Dispatch, ReactElement, useCallback, useEffect, useMemo, useRef, useState,
 } from 'react'
@@ -123,7 +122,7 @@ function ChecklistUnstyled({
       onFocusChange={onFocusChangeWrapper}
     >{child}
     </ChecklistItemInner>
-  )), [children, selectedKey, completedKey, onSelectionChangeWrapper])
+  )), [children, selectedKey, focusedKey, completedKey, onSelectionChangeWrapper, onFocusChangeWrapper])
 
   useEffect(() => {
     setFinished(completedKey === children.length - 1)
