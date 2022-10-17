@@ -305,6 +305,7 @@ const honorableTheme = mergeTheme(defaultTheme, {
         },
         ':focus': {
           boxShadow: 'none',
+          border: '1px solid border-outline-focused',
         },
         ':disabled': {
           color: 'text-disabled',
@@ -626,6 +627,11 @@ const honorableTheme = mergeTheme(defaultTheme, {
           },
           '& *': {
             fill: 'action-primary-hover',
+          },
+        },
+        ':focus': {
+          '> span': {
+            border: '1px solid border-outline-focused',
           },
         },
       },
