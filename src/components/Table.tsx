@@ -58,6 +58,7 @@ const Td = styled.td<{lighter: boolean, stickyColumn: boolean}>(({ theme, lighte
   height: 52,
   minHeight: 52,
   padding: '16px 12px',
+  verticalAlign: 'top',
   '&:first-child': stickyColumn ? {
     boxShadow: theme.boxShadows.slight,
     position: 'sticky',
