@@ -51,6 +51,7 @@ const Th = styled.th<{stickyColumn: boolean}>(({ theme, stickyColumn }) => ({
   } : {},
 }))
 
+// TODO: Set vertical align to top for tall cells (~3 lines of text or more). See ENG-683.
 const Td = styled.td<{firstRow?: boolean, lighter: boolean, loose?: boolean, stickyColumn: boolean}>(({
   theme, firstRow, lighter, loose, stickyColumn,
 }) => ({
@@ -60,7 +61,6 @@ const Td = styled.td<{firstRow?: boolean, lighter: boolean, loose?: boolean, sti
   height: 52,
   minHeight: 52,
   padding: loose ? '16px 12px' : '8px 12px',
-  verticalAlign: 'top',
   '&:first-child': stickyColumn ? {
     boxShadow: theme.boxShadows.slight,
     position: 'sticky',
