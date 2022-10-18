@@ -59,7 +59,7 @@ const Td = styled.td<{firstRow?: boolean, lighter: boolean, loose?: boolean, sti
   color: theme.colors.text,
   height: 52,
   minHeight: 52,
-  padding: loose ? '16px 12px' : '6px 12px',
+  padding: loose ? '16px 12px' : '8px 12px',
   verticalAlign: 'top',
   '&:first-child': stickyColumn ? {
     boxShadow: theme.boxShadows.slight,
@@ -101,7 +101,7 @@ function TableRef({
     >
       <Div
         backgroundColor="fill-two"
-        border="1px solid border"
+        border="1px solid border-fill-two"
         borderRadius="large"
         overflow="auto"
         ref={ref}
