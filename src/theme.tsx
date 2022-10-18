@@ -304,6 +304,8 @@ const honorableTheme = mergeTheme(defaultTheme, {
           border: '1px solid border-error',
         },
         ':focus': {
+          backgroundColor: 'action-input-hover',
+          border: '1px solid border-outline-focused',
           boxShadow: 'none',
         },
         ':disabled': {
@@ -660,6 +662,13 @@ const honorableTheme = mergeTheme(defaultTheme, {
             fill: 'action-primary-hover',
           },
         },
+        ':focus': {
+          color: 'text',
+          '> span': {
+            backgroundColor: 'action-input-hover',
+            border: '1px solid border-outline-focused',
+          },
+        },
       },
       ({ checked }: any) => checked && {
         color: 'text',
@@ -694,6 +703,15 @@ const honorableTheme = mergeTheme(defaultTheme, {
     Root: [
       {
         border: '1px solid border-input',
+      },
+    ],
+  },
+  Spinner: {
+    Root: [
+      {
+        '&:before': {
+          borderTop: '2px solid white',
+        },
       },
     ],
   },
