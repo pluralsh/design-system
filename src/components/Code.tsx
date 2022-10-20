@@ -1,6 +1,7 @@
 import {
   RefObject, forwardRef, useEffect, useState,
 } from 'react'
+import PropTypes from 'prop-types'
 import { Button, Div, Flex } from 'honorable'
 
 import styled from 'styled-components'
@@ -16,9 +17,14 @@ type CodeProps = Omit<CardProps, 'children'> & {
   children: string
   language?: string
   showLineNumbers?: boolean
+  showHeader?: boolean
 }
 
-const propTypes = {}
+const propTypes = {
+  language: PropTypes.string,
+  showLineNumbers: PropTypes.bool,
+  showHeader: PropTypes.bool,
+}
 
 const CodeHeader = styled.div<{ fillLevel: FillLevel }>(({ fillLevel, theme }) => ({
   ...theme.partials.text.overline,
@@ -65,7 +71,7 @@ const CopyButton = styled(CopyButtonBase)<{ verticallyCenter: boolean }>(({ vert
 }))
 
 function CodeRef({
-  children, language, showLineNumbers, ...props
+  children, language, showLineNumbers, showHeader, ...props
 }: CodeProps,
 ref: RefObject<any>) {
   const [copied, setCopied] = useState(false)
@@ -76,10 +82,9 @@ ref: RefObject<any>) {
     throw new Error('Code component expects a string as its children')
   }
 
-  const showHeader = !!language
-
-  children = children.trim()
-  const multiLine = !!children.match(/\r?\n/)
+  showHeader = showHeader === undefined ? !!language : showHeader
+  const codeString = children.trim()
+  const multiLine = !!codeString.match(/\r?\n/) || props.height
 
   useEffect(() => {
     if (copied) {
@@ -89,11 +94,12 @@ ref: RefObject<any>) {
     }
   }, [copied])
 
-  const handleCopy = () => window.navigator.clipboard.writeText(children).then(() => setCopied(true))
+  const handleCopy = () => window.navigator.clipboard.writeText(codeString).then(() => setCopied(true))
 
   return (
     <Card
       ref={ref}
+      overflow="hidden"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       {...props}
@@ -134,7 +140,7 @@ ref: RefObject<any>) {
                 showLineNumbers={showLineNumbers}
                 language={language}
               >
-                {children}
+                {codeString}
               </Highlight>
             </Div>
           </Div>
@@ -149,3 +155,4 @@ const Code = forwardRef(CodeRef)
 Code.propTypes = propTypes
 
 export default Code
+export { CodeProps }

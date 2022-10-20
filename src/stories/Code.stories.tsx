@@ -12,15 +12,14 @@ export default {
       control: {
         type: 'boolean', min: 0, max: 6000, step: 100,
       },
-      hue: {
-        options: ['default', 'lighter', 'lightest'],
-        control: {
-          type: 'select',
-        },
+    },
+    showHeader: {
+      options: [undefined, true, false],
+      control: {
+        type: 'select', min: 0, max: 6000, step: 100,
       },
     },
   },
-
 }
 
 function Template(args:any) {
@@ -73,6 +72,13 @@ function Template(args:any) {
       </Code>
       <Code
         width="400px"
+        height="300px"
+        {...args}
+      >
+        One line with `height` specified
+      </Code>
+      <Code
+        width="400px"
         {...args}
       >
         {'Two lines\nTwo lines'}
@@ -87,7 +93,7 @@ function Template(args:any) {
       <Card padding="medium">
         <Code
           language="javascript"
-          width="600px"
+          {...args}
         >
           {jsCode}
         </Code>
@@ -99,4 +105,5 @@ function Template(args:any) {
 export const Default = Template.bind({})
 Default.args = {
   showLineNumbers: true,
+  showHeader: undefined,
 }
