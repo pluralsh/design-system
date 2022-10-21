@@ -167,7 +167,7 @@ function HighlightRef({
     <MainWrap>
       {showLineNumbers && (
         <LineNumbers aria-hidden>
-          {lines.map((line, idx) => `${idx}${idx < lines.length - 1 ? '\n' : ''}`)}
+          {lines.map((line, idx) => `${idx + 1}${idx < lines.length - 1 ? '\n' : ''}`)}
         </LineNumbers>
       )}
       <StyledHighlight>
