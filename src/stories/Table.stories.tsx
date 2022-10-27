@@ -1,5 +1,6 @@
 import { Row, createColumnHelper } from '@tanstack/react-table'
 import { Flex, P } from 'honorable'
+import { ReactElement } from 'react'
 
 import {
   AppIcon,
@@ -14,7 +15,7 @@ import {
 type Method = {
   function: string
   inputType: string
-  returnedValue: ReactNode
+  returnedValue: ReactElement | string
   description: string
   expandable?: boolean
 }

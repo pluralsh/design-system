@@ -1,10 +1,9 @@
+import { StringObj } from 'src/theme'
 import { CSSObject } from 'styled-components'
 
 import { FillLevel } from '../components/contexts/FillLevelContext'
 
 import { semanticColors } from './colors'
-
-type StringObj = { [key: string]: string | StringObj }
 
 export const scrollBar = ({ fillLevel }: { fillLevel: FillLevel }) => {
   const trackColor
