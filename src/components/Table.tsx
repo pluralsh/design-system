@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import Button from './Button'
 import CaretUpIcon from './icons/CaretUpIcon'
+import { FillLevelProvider } from './contexts/FillLevelContext'
 
 export type TableProps = DivProps
 
@@ -19,16 +20,32 @@ const T = styled.table(({ theme }) => ({
   ...theme.partials.text.body2LooseLineHeight,
 }))
 
-const Thead = styled.thead(({ theme }) => ({
+const TheadBase = styled.thead(({ theme }) => ({
   backgroundColor: theme.colors['fill-two'],
   position: 'sticky',
   top: 0,
   zIndex: 3,
 }))
 
-const Tbody = styled.tbody(({ theme }) => ({
+function Thead(props) {
+  return (
+    <FillLevelProvider value={2}>
+      <TheadBase {...props} />
+    </FillLevelProvider>
+  )
+}
+
+const TbodyBase = styled.tbody(({ theme }) => ({
   backgroundColor: theme.colors['fill-one'],
 }))
+
+function Tbody(props) {
+  return (
+    <FillLevelProvider value={1}>
+      <TbodyBase {...props} />
+    </FillLevelProvider>
+  )
+}
 
 const Tr = styled.tr(() => ({
   backgroundColor: 'inherit',
