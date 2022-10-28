@@ -2,11 +2,7 @@ import { ComponentPropsWithRef, forwardRef } from 'react'
 
 import styled from 'styled-components'
 
-import {
-  FillLevel,
-  toFillLevel,
-  useFillLevel,
-} from './contexts/FillLevelContext'
+import { FillLevel, useFillLevel } from './contexts/FillLevelContext'
 
 // This nonsense is to reduce the chance of there being
 // a left margin when a <code> block is the first item in a line of text.
@@ -72,9 +68,10 @@ const InlineCode = forwardRef<HTMLElement, ComponentPropsWithRef<'code'>>(({ ...
   return (
     <>
       <Spacer />
+      {parentFillLevel}
       <Code
         ref={ref}
-        parentFillLevel={toFillLevel(parentFillLevel + 1)}
+        parentFillLevel={parentFillLevel}
         {...props}
       />
       <Spacer />
