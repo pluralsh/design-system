@@ -253,9 +253,10 @@ ref: RefObject<any>) {
         {tabs ? (
           tabs.map(tab => (
             <TabPanel
+              key={tab.key}
+              tabKey={tab.key}
               mode="multipanel"
               stateRef={tabStateRef}
-              tabKey={tab.key}
               as={(
                 <Div
                   position="relative"

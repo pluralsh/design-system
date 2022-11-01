@@ -79,9 +79,10 @@ function TemplateBasic(args: any) {
         {
           Object.entries(tabs).map(([key, tab]) => (
             <TabPanel
+              key={key}
+              tabKey={key}
               mode="multipanel"
               stateRef={tabStateRef}
-              tabKey={key}
               paddingTop="large"
               paddingBottom="large"
               borderTop="1px solid border"
