@@ -25,6 +25,7 @@ import { zIndexes } from './theme/zIndexes'
 import { focusPartials } from './theme/focus'
 import { resetPartials } from './theme/resets'
 import { marketingTextPartials } from './theme/marketingText'
+import gradients from './theme/gradients'
 
 export type StringObj = { [key: string]: string | StringObj }
 
@@ -813,6 +814,7 @@ export const styledTheme = {
     borderWidths,
     zIndexes,
     portals,
+    gradients,
     partials: {
       text: textPartials,
       marketingText: marketingTextPartials,
