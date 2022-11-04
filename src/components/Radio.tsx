@@ -1,87 +1,93 @@
-import { Radio as HonorableRadio } from 'honorable'
+import classNames from 'classnames'
+import { Radio as HonorableRadio, RadioProps as HonorableRadioProps } from 'honorable'
+import {
+  MutableRefObject, forwardRef, memo, useState,
+} from 'react'
+import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
-// Imported into Honorable theme in theme.tsx
-export const RadioHonorableStyles = {
-  Root: [
-    {
-      padding: 8,
-      color: 'action-link-inactive',
-      '> span': {
-        border: '1px solid border-input',
-      },
-      '& *': {
-        fill: 'action-primary',
-      },
-      ':hover': {
-        color: 'text',
-        '> span': {
-          backgroundColor: 'action-input-hover',
-          border: '1px solid border-input',
-        },
-        '& *': {
-          fill: 'action-primary-hover',
-        },
-      },
-      ':focus': {
-        color: 'text',
-        '> span': {
-          backgroundColor: 'action-input-hover',
-          border: '1px solid border-outline-focused',
-        },
-      },
+const HonorableRadioStyled = styled(HonorableRadio)<{
+  $small: boolean
+}>(({ $small, theme }) => ({
+  padding: theme.spacing.xsmall,
+  color: theme.colors['action-link-inactive'],
+  '> span': {
+    border: theme.borders.input,
+    width: $small ? theme.spacing.medium : theme.spacing.large,
+    height: $small ? theme.spacing.medium : theme.spacing.large,
+    borderRadius: '50%',
+  },
+  '*': {
+    fill: theme.colors['action-primary'],
+  },
+  ':hover': {
+    color: 'text',
+    '> span': {
+      backgroundColor: theme.colors['action-input-hover'],
     },
-    ({ checked }: any) => checked && {
-      color: 'text',
-      '> span': {
-        border: '1px solid text',
-      },
-      ':hover': {
-        '> span': {
-          border: '1px solid text',
-        },
-      },
+    '& *': {
+      fill: theme.colors['action-primary-hover'],
     },
-    ({ small }: any) => small && {
-      '> span': {
-        borderWidth: '.75px',
-      },
+  },
+  ':focus': {
+    outline: 'none',
+  },
+  ':focus-visible': {
+    '> span': {
+      ...theme.partials.focus.outline,
     },
-  ],
-  Control: [
-    {
-      width: 24,
-      height: 24,
-      borderRadius: '50%',
+    '*': {
+      fill: theme.colors['action-primary-hover'],
     },
-    ({ small }: any) => small && {
-      width: 16,
-      height: 16,
+  },
+  '&.checked': {
+    color: theme.colors.text,
+    '&:not(:focus-visible) > span': {
+      borderColor: theme.colors['border-selected'],
     },
-  ],
-}
+  },
+}))
 
-function Radio(props: any) {
+const RadioCheckIcon = memo(({ small }: { small: boolean }) => {
+  const checkWidth = small ? 10 : 16
+  const checkRadius = checkWidth / 2
+
   return (
-    <HonorableRadio
-      iconChecked={(
-        <svg
-          width={props.small ? '71%' : '74%'} // Not 75% to fix alignment in flex
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect
-            width="16"
-            height="16"
-            rx="8"
-            fill="currentColor"
-          />
-        </svg>
-      )}
+    <svg
+      width={checkWidth}
+      viewBox={`0 0 ${checkWidth} ${checkWidth}`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        cx={checkRadius}
+        cy={checkRadius}
+        r={checkRadius}
+      />
+    </svg>
+  )
+})
+
+export type RadioProps = { small: boolean } & HonorableRadioProps
+
+function Radio({ small, ...props }:RadioProps, ref:MutableRefObject<any>) {
+  const [checked, setChecked] = useState<boolean>(!!props?.defaultChecked)
+
+  return (
+    <HonorableRadioStyled
+      ref={ref}
+      onChange={(e: any) => setChecked(!!e?.target?.checked)}
+      className={classNames({ checked: checked || props.checked })}
+      $small={small}
+      iconChecked={<RadioCheckIcon small={small} />}
       iconUnchecked={null}
       {...props}
     />
   )
 }
 
-export default Radio
+Radio.propTypes = {
+  small: PropTypes.bool,
+}
+
+export default forwardRef(Radio)
