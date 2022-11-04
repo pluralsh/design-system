@@ -19,7 +19,7 @@ export const grey = {
   200: '#C5C9D3',
   100: '#DFE2E7',
   50: '#EBEFF0',
-}
+} as const
 
 export const purple = {
   950: '#020318',
@@ -35,7 +35,7 @@ export const purple = {
   200: '#9FA3F9',
   100: '#CFD1FC',
   50: '#F1F1FE',
-}
+} as const
 
 export const blue = {
   950: '#001019',
@@ -51,7 +51,7 @@ export const blue = {
   200: '#99DAFF',
   100: '#C2E9FF',
   50: '#F0F9FF',
-}
+} as const
 
 export const green = {
   950: '#032117',
@@ -66,7 +66,7 @@ export const green = {
   200: '#99F5D5',
   100: '#C7FAE8',
   50: '#F1FEF9',
-}
+} as const
 
 export const yellow = {
   950: '#242000',
@@ -81,7 +81,7 @@ export const yellow = {
   200: '#FFF59E',
   100: '#FFF9C2',
   50: '#FFFEF0',
-}
+} as const
 
 export const red = {
   950: '#130205',
@@ -96,7 +96,7 @@ export const red = {
   200: '#F599A8',
   100: '#FAC7D0',
   50: '#FFF0F2',
-}
+} as const
 
 export const semanticColors = {
   // Fill
@@ -174,4 +174,4 @@ export const semanticColors = {
   // Marketing
   'marketing-white': '#FFFFFF',
   'marketing-black': '#000000',
-}
+} as const
