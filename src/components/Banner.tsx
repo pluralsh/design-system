@@ -122,7 +122,7 @@ function BannerRef({
 ref: Ref<any>) {
   severity = useMemo(() => {
     if (!severityToIcon[severity]) {
-      console.warn(`Banner: Incorrect severity (${severity}) specified. Valid values are ${SEVERITIES.map(s => `"${s}"`).join(', ')}. Defaulting to "success".`)
+      console.warn(`Banner: Incorrect severity (${severity}) specified. Valid values are ${SEVERITIES.map(s => `"${s}"`).join(', ')}. Defaulting to "${DEFAULT_SEVERITY}".`)
 
       return DEFAULT_SEVERITY
     }

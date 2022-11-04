@@ -87,7 +87,7 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(({
 ref) => {
   severity = useMemo(() => {
     if (!severityToIconColorKey[severity]) {
-      console.warn(`Callout: Incorrect severity (${severity}) specified. Valid values are ${SEVERITIES.map(s => `"${s}"`).join(', ')}. Defaulting to "success".`)
+      console.warn(`Callout: Incorrect severity (${severity}) specified. Valid values are ${SEVERITIES.map(s => `"${s}"`).join(', ')}. Defaulting to "${DEFAULT_SEVERITY}".`)
 
       return DEFAULT_SEVERITY
     }
