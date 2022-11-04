@@ -6,14 +6,16 @@ export default {
 }
 
 function Template(args: any) {
+  console.log('args', args)
+
   return (
     <>
-      <Checkbox {...args}>
+      <Checkbox>
         Implement design system
       </Checkbox>
       <Checkbox
         defaultChecked
-        {...args}
+        // {...args}
       >
         Party hard
       </Checkbox>
