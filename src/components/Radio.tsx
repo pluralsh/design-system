@@ -1,5 +1,65 @@
 import { Radio as HonorableRadio } from 'honorable'
 
+// Imported into Honorable theme in theme.tsx
+export const RadioHonorableStyles = {
+  Root: [
+    {
+      padding: 8,
+      color: 'action-link-inactive',
+      '> span': {
+        border: '1px solid border-input',
+      },
+      '& *': {
+        fill: 'action-primary',
+      },
+      ':hover': {
+        color: 'text',
+        '> span': {
+          backgroundColor: 'action-input-hover',
+          border: '1px solid border-input',
+        },
+        '& *': {
+          fill: 'action-primary-hover',
+        },
+      },
+      ':focus': {
+        color: 'text',
+        '> span': {
+          backgroundColor: 'action-input-hover',
+          border: '1px solid border-outline-focused',
+        },
+      },
+    },
+    ({ checked }: any) => checked && {
+      color: 'text',
+      '> span': {
+        border: '1px solid text',
+      },
+      ':hover': {
+        '> span': {
+          border: '1px solid text',
+        },
+      },
+    },
+    ({ small }: any) => small && {
+      '> span': {
+        borderWidth: '.75px',
+      },
+    },
+  ],
+  Control: [
+    {
+      width: 24,
+      height: 24,
+      borderRadius: '50%',
+    },
+    ({ small }: any) => small && {
+      width: 16,
+      height: 16,
+    },
+  ],
+}
+
 function Radio(props: any) {
   return (
     <HonorableRadio

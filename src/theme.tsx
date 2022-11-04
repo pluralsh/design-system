@@ -25,6 +25,7 @@ import { zIndexes } from './theme/zIndexes'
 import { focusPartials } from './theme/focus'
 import { resetPartials } from './theme/resets'
 import { marketingTextPartials } from './theme/marketingText'
+import { RadioHonorableStyles } from './components/Radio'
 import gradients from './theme/gradients'
 
 export type StringObj = { [key: string]: string | StringObj }
@@ -640,64 +641,7 @@ const honorableTheme = mergeTheme(defaultTheme, {
       },
     ],
   },
-  Radio: {
-    Root: [
-      {
-        padding: 8,
-        color: 'action-link-inactive',
-        '> span': {
-          border: '1px solid border-input',
-        },
-        '& *': {
-          fill: 'action-primary',
-        },
-        ':hover': {
-          color: 'text',
-          '> span': {
-            backgroundColor: 'action-input-hover',
-            border: '1px solid border-input',
-          },
-          '& *': {
-            fill: 'action-primary-hover',
-          },
-        },
-        ':focus': {
-          color: 'text',
-          '> span': {
-            backgroundColor: 'action-input-hover',
-            border: '1px solid border-outline-focused',
-          },
-        },
-      },
-      ({ checked }: any) => checked && {
-        color: 'text',
-        '> span': {
-          border: '1px solid text',
-        },
-        ':hover': {
-          '> span': {
-            border: '1px solid text',
-          },
-        },
-      },
-      ({ small }: any) => small && {
-        '> span': {
-          borderWidth: '.75px',
-        },
-      },
-    ],
-    Control: [
-      {
-        width: 24,
-        height: 24,
-        borderRadius: '50%',
-      },
-      ({ small }: any) => small && {
-        width: 16,
-        height: 16,
-      },
-    ],
-  },
+  Radio: RadioHonorableStyles,
   Select: {
     Root: [
       {
