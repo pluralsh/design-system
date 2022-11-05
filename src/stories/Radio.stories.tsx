@@ -34,7 +34,7 @@ function Template(args: any) {
           <Radio
             value={value}
             checked={selectedValue === value}
-            onChange={({ target: checked }: any) => {
+            onChange={({ target: { checked } }: any) => {
               if (checked) setSelectedValue(value)
             }}
             {...args}
@@ -45,19 +45,14 @@ function Template(args: any) {
       </RadioGroup>
       <h1>Uncontrolled</h1>
       <RadioGroup>
-        <Radio
-          value="0"
-          {...args}
-        >
-          Implement design system
-        </Radio>
-        <Radio
-          value="1"
-          defaultChecked
-          {...args}
-        >
-          Party hard
-        </Radio>
+        {radios.map(({ value, label }) => (
+          <Radio
+            value={value}
+            {...args}
+          >
+            {label}
+          </Radio>
+        ))}
       </RadioGroup>
     </>
   )

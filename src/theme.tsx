@@ -418,17 +418,7 @@ const honorableTheme = mergeTheme(defaultTheme, {
   },
   Checkbox: {
     Root: [
-      ({ checked }: any) => checked && {
-        color: 'text',
-        '> span': {
-          backgroundColor: 'action-primary',
-        },
-        ':hover': {
-          '> span': {
-            backgroundColor: 'action-primary-hover',
-          },
-        },
-      },
+
       ({ small }: any) => small && {
         '> span': {
           borderWidth: '.75px',
