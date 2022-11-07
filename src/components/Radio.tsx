@@ -62,6 +62,8 @@ const HonorableLabelStyled = styled(Label)<{
     width: $small ? theme.spacing.medium : theme.spacing.large,
     height: $small ? theme.spacing.medium : theme.spacing.large,
     display: 'flex',
+    flexShrink: 0,
+    flexGrow: 0,
     alignItems: 'center',
     justifyContent: 'center',
     ...($isFocusVisible
@@ -74,7 +76,9 @@ const HonorableLabelStyled = styled(Label)<{
       : theme.colors['border-input'],
     backgroundColor: $disabled
       ? theme.colors['action-primary-disabled']
-      : 'transparent',
+      : $isFocusVisible
+        ? theme.colors['action-input-hover']
+        : 'transparent',
     '.icon': {
       display: 'flex',
       alignItems: 'center',

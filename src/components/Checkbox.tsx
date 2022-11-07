@@ -107,6 +107,8 @@ const HonorableLabelStyled = styled(Label)<{
     '.icon': {
       zIndex: 2,
       display: 'flex',
+      flexShrink: 0,
+      flexGrow: 0,
       alignItems: 'center',
       justifyContent: 'center',
       color: !$disabled

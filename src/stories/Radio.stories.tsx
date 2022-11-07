@@ -1,5 +1,8 @@
-import { Div } from 'honorable'
+import {
+  Button, Div,
+} from 'honorable'
 import { useState } from 'react'
+import styled, { useTheme } from 'styled-components'
 
 import Radio from '../components/Radio'
 import RadioGroup from '../components/RadioGroup'
@@ -24,13 +27,21 @@ const radios = [
   },
 ]
 
+const H1 = styled.h1(({ theme }) => ({
+  ...theme.partials.text.subtitle1,
+  '&:not(:first-child)': {
+    marginTop: theme.spacing.xxlarge,
+  },
+}))
+
 function Template(args: any) {
   const [selectedValueRG, setSelectedValueRG] = useState(undefined)
   const [selectedValueManual, setSelectedValueManual] = useState(undefined)
+  const theme = useTheme()
 
   return (
     <>
-      <h1>Controlled by RadioGroup</h1>
+      <H1>Controlled by RadioGroup</H1>
       <RadioGroup
         name="radio-group-controlled"
         value={selectedValueRG}
@@ -45,8 +56,16 @@ function Template(args: any) {
           </Radio>
         ))}
       </RadioGroup>
+      <Button
+        marginTop={theme.spacing.medium}
+        onClick={() => {
+          setSelectedValueRG(null)
+        }}
+      >
+        Reset
+      </Button>
 
-      <h1>Manually Controlled</h1>
+      <H1>Manually Controlled</H1>
       <Div>
         {radios.map(({ value, label }) => (
           <Radio
@@ -60,22 +79,16 @@ function Template(args: any) {
           >
             {label}
           </Radio>
-
         ))}
       </Div>
-
-      <h1>Uncontrolled</h1>
-      <Div>
-        {radios.map(({ value, label }) => (
-          <Radio
-            name="uncontrolled"
-            value={value}
-            {...args}
-          >
-            {label}
-          </Radio>
-        ))}
-      </Div>
+      <Button
+        marginTop={theme.spacing.medium}
+        onClick={() => {
+          setSelectedValueManual(null)
+        }}
+      >
+        Reset
+      </Button>
     </>
   )
 }
