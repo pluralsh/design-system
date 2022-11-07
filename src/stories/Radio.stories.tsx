@@ -29,7 +29,7 @@ function Template(args: any) {
   return (
     <>
       <h1>Controlled</h1>
-      <RadioGroup>
+      <RadioGroup tabIndex={-1}>
         {radios.map(({ value, label }) => (
           <Radio
             value={value}
@@ -44,9 +44,10 @@ function Template(args: any) {
         ))}
       </RadioGroup>
       <h1>Uncontrolled</h1>
-      <RadioGroup>
+      <RadioGroup tabIndex={-1}>
         {radios.map(({ value, label }) => (
           <Radio
+            name="uncontrolled"
             value={value}
             {...args}
           >

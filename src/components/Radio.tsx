@@ -1,54 +1,22 @@
-import classNames from 'classnames'
-import { Radio as HonorableRadio, RadioProps as HonorableRadioProps } from 'honorable'
 import {
-  MutableRefObject, forwardRef, memo, useState,
+  MutableRefObject,
+  forwardRef,
+  memo,
+  useEffect,
+  useId,
+  useRef,
+  useState,
 } from 'react'
+import { InputProps, Label } from 'honorable'
+import classNames from 'classnames'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import { useRadio } from '@react-aria/radio'
+import { VisuallyHidden } from '@react-aria/visually-hidden'
+import { useFocusRing } from '@react-aria/focus'
+import { flexRender } from '@tanstack/react-table'
 
-const HonorableRadioStyled = styled(HonorableRadio)<{
-  $small: boolean
-}>(({ $small, theme }) => ({
-  padding: theme.spacing.xsmall,
-  color: theme.colors['action-link-inactive'],
-  '> span': {
-    border: theme.borders.input,
-    width: $small ? theme.spacing.medium : theme.spacing.large,
-    height: $small ? theme.spacing.medium : theme.spacing.large,
-    borderRadius: '50%',
-  },
-  '*': {
-    fill: theme.colors['action-primary'],
-  },
-  ':hover': {
-    color: 'text',
-    '> span': {
-      backgroundColor: theme.colors['action-input-hover'],
-    },
-    '& *': {
-      fill: theme.colors['action-primary-hover'],
-    },
-  },
-  ':focus': {
-    outline: 'none',
-  },
-  ':focus-visible': {
-    '> span': {
-      ...theme.partials.focus.outline,
-    },
-    '*': {
-      fill: theme.colors['action-primary-hover'],
-    },
-  },
-  '&.checked': {
-    color: theme.colors.text,
-    '&:not(:focus-visible) > span': {
-      borderColor: theme.colors['border-selected'],
-    },
-  },
-}))
-
-const RadioCheckIcon = memo(({ small }: { small: boolean }) => {
+const CheckedIcon = memo(({ small }: { small: boolean }) => {
   const checkWidth = small ? 10 : 16
   const checkRadius = checkWidth / 2
 
@@ -63,26 +31,190 @@ const RadioCheckIcon = memo(({ small }: { small: boolean }) => {
         cx={checkRadius}
         cy={checkRadius}
         r={checkRadius}
+        fill="currentColor"
       />
     </svg>
   )
 })
 
-export type RadioProps = { small: boolean } & HonorableRadioProps
+const HonorableLabelStyled = styled(Label)<{
+  $small: boolean
+  $isFocusVisible: boolean
+  $disabled: boolean
+}>(({
+  $small = false, $disabled = false, $isFocusVisible, theme,
+}) => ({
+  ...theme.partials.text.body2,
+  gap: theme.spacing.small,
+  alignItems: 'center',
+  padding: theme.spacing.xxsmall,
+  color: $disabled
+    ? theme.colors['text-input-disabled']
+    : theme.colors['text-light'],
+  cursor: $disabled ? 'not-allowed' : 'pointer',
+  margin: 0,
+  ':focus': {
+    outline: 'none',
+  },
+  '.box': {
+    width: $small ? theme.spacing.medium : theme.spacing.large,
+    height: $small ? theme.spacing.medium : theme.spacing.large,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...($isFocusVisible
+      ? { ...theme.partials.focus.outline, border: 'none' }
+      : {}),
+    borderRadius: '50%',
+    border: theme.borders.input,
+    borderColor: $disabled
+      ? theme.colors['border-disabled']
+      : theme.colors['border-input'],
+    backgroundColor: $disabled
+      ? theme.colors['action-primary-disabled']
+      : 'transparent',
+    '.icon': {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: !$disabled
+        ? theme.colors['action-primary']
+        : theme.colors['action-primary-disabled'],
+    },
+  },
+  ...(!$disabled
+    ? {
+      ':hover': {
+        color: theme.colors.text,
+        ':not(.checked) .box': {
+          backgroundColor: theme.colors['action-input-hover'],
+        },
+        '.icon': {
+          color: theme.colors['action-primary-hover'],
+        },
+      },
+      ...($isFocusVisible
+        ? {
+          color: theme.colors.text,
+          ':not(.checked) .box': {
+            backgroundColor: theme.colors['action-input-hover'],
+          },
+        }
+        : {}),
+      '&.checked': {
+        color: theme.colors.text,
+        ...(!$isFocusVisible
+          ? {
+            '.box': {
+              borderColor: theme.colors['border-selected'],
+            },
+          }
+          : {}),
+      },
+    }
+    : {}),
+}))
 
-function Radio({ small, ...props }:RadioProps, ref:MutableRefObject<any>) {
-  const [checked, setChecked] = useState<boolean>(!!props?.defaultChecked)
+export type RadioProps = {
+  small: boolean
+  disabled: boolean
+  defaultSelected: boolean
+  onChange: (e: { target: { checked: boolean } }) => any
+} & Omit<InputProps, 'onChange'>
+
+function Radio({
+  small,
+  value,
+  checked: checkedProp,
+  disabled,
+  defaultChecked,
+  'aria-describedby': ariaDescribedBy,
+  tabIndex,
+  onChange,
+  onBlur,
+  onClick,
+  onDragStart,
+  onFocus,
+  onKeyDown,
+  onKeyUp,
+  onMouseDown,
+  onPointerDown,
+  onPointerUp,
+  name,
+  ...props
+}: RadioProps,
+ref: MutableRefObject<any>) {
+  const [checked, setChecked] = useState(defaultChecked || checkedProp)
+
+  useEffect(() => {
+    setChecked(checkedProp)
+  }, [checkedProp])
+
+  const labelId = useId()
+  const inputRef = useRef<any>()
+  const { isFocusVisible, focusProps } = useFocusRing()
+  const { inputProps, isSelected, isDisabled } = useRadio({
+    value,
+    name,
+    'aria-describedby': ariaDescribedBy,
+    'aria-labelledby': labelId,
+    disabled,
+    tabIndex,
+    onBlur,
+    onClick,
+    onDragStart,
+    onFocus,
+    onKeyDown,
+    onKeyUp,
+    onMouseDown,
+    onPointerDown,
+    onPointerUp,
+  },
+  {
+    setSelectedValue: () => {},
+    selectedValue: checkedProp || checked ? value : undefined,
+  },
+  inputRef)
+
+  const icon = isSelected ? <CheckedIcon small={small} /> : null
+
+  console.log('inputProps', inputProps)
 
   return (
-    <HonorableRadioStyled
+    <HonorableLabelStyled
+      htmlFor={inputProps.id}
+      id={labelId}
       ref={ref}
-      onChange={(e: any) => setChecked(!!e?.target?.checked)}
-      className={classNames({ checked: checked || props.checked })}
+      className={classNames({ checked: isSelected })}
+      $isFocusVisible={isFocusVisible}
       $small={small}
-      iconChecked={<RadioCheckIcon small={small} />}
-      iconUnchecked={null}
+      $disabled={isDisabled}
+      display="flex"
+      marginBottom="0"
       {...props}
-    />
+    >
+      <VisuallyHidden>
+        <input
+          {...inputProps}
+          {...focusProps}
+          name={name}
+          onChange={e => {
+            console.log(e.target, ' changed to ', e.target.checked)
+            if (typeof onChange === 'function') {
+              onChange(e)
+            }
+            console.log('setSelected', !checked)
+            setChecked(!checked)
+            inputProps.onChange(e)
+          }}
+          ref={inputRef}
+        />
+      </VisuallyHidden>
+      <div className="box">
+        <div className="icon">{icon}</div>
+      </div>
+      <div className="label"> {props.children}</div>
+    </HonorableLabelStyled>
   )
 }
 
