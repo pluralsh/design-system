@@ -32,7 +32,7 @@ function Template(args: any) {
     <>
       <h1>Controlled by RadioGroup</h1>
       <RadioGroup
-        name="name"
+        name="radio-group-controlled"
         value={selectedValueRG}
         onChange={setSelectedValueRG}
       >
@@ -50,6 +50,7 @@ function Template(args: any) {
       <Div>
         {radios.map(({ value, label }) => (
           <Radio
+            name="manually-controlled"
             value={value}
             checked={selectedValueManual === value}
             onChange={({ target: { checked } }: any) => {

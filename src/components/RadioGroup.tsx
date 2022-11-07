@@ -31,7 +31,7 @@ function RadioGroup({
   ...props
 }: RadioGroupProps,
 ref: any) {
-  const state = useRadioGroupState({
+  const stateProps = {
     name,
     label,
     description,
@@ -44,8 +44,9 @@ ref: any) {
     onChange,
     validationState,
     isRequired,
-  })
-  const { radioGroupProps } = useRadioGroup(props, state)
+  }
+  const state = useRadioGroupState(stateProps)
+  const { radioGroupProps } = useRadioGroup(stateProps, state)
 
   return (
     <Div
