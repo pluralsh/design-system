@@ -3212,6 +3212,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-aria/focus@npm:3.9.0, @react-aria/focus@npm:^3.9.0":
+  version: 3.9.0
+  resolution: "@react-aria/focus@npm:3.9.0"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+    "@react-aria/interactions": ^3.12.0
+    "@react-aria/utils": ^3.14.0
+    "@react-types/shared": ^3.15.0
+    clsx: ^1.1.1
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: 3d9ad2efb05e0e411804c9ca3054ea2f2ba3f3b616865a8953a593a044d80a08c998448116eca0c32ccc8075a157687b97d734ad46056801188a0db1b67ba3f7
+  languageName: node
+  linkType: hard
+
 "@react-aria/focus@npm:^3.8.0":
   version: 3.8.0
   resolution: "@react-aria/focus@npm:3.8.0"
@@ -3224,21 +3239,6 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
   checksum: 2250e610c3753d008e01d39bed41d961bf795a4cec8873b76fda0adc3ad48811ae5cad0d2e222cca41c43454666d492e130113533e1609fd3cea8721108863a3
-  languageName: node
-  linkType: hard
-
-"@react-aria/focus@npm:^3.9.0":
-  version: 3.9.0
-  resolution: "@react-aria/focus@npm:3.9.0"
-  dependencies:
-    "@babel/runtime": ^7.6.2
-    "@react-aria/interactions": ^3.12.0
-    "@react-aria/utils": ^3.14.0
-    "@react-types/shared": ^3.15.0
-    clsx: ^1.1.1
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-  checksum: 3d9ad2efb05e0e411804c9ca3054ea2f2ba3f3b616865a8953a593a044d80a08c998448116eca0c32ccc8075a157687b97d734ad46056801188a0db1b67ba3f7
   languageName: node
   linkType: hard
 
@@ -3824,7 +3824,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-stately/radio@npm:^3.6.0":
+"@react-stately/radio@npm:3.6.0, @react-stately/radio@npm:^3.6.0":
   version: 3.6.0
   resolution: "@react-stately/radio@npm:3.6.0"
   dependencies:
@@ -17007,7 +17007,7 @@ __metadata:
     "@react-aria/button": 3.6.1
     "@react-aria/checkbox": 3.6.0
     "@react-aria/combobox": 3.4.1
-    "@react-aria/focus": ^3.9.0
+    "@react-aria/focus": 3.9.0
     "@react-aria/interactions": 3.12.0
     "@react-aria/listbox": 3.6.1
     "@react-aria/overlays": 3.10.1
@@ -17019,6 +17019,7 @@ __metadata:
     "@react-stately/collections": 3.4.3
     "@react-stately/combobox": 3.2.1
     "@react-stately/overlays": 3.4.1
+    "@react-stately/radio": 3.6.0
     "@react-stately/tabs": 3.2.1
     "@react-stately/toggle": 3.4.2
     "@react-types/shared": 3.14.1

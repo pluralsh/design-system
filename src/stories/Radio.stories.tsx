@@ -1,7 +1,8 @@
-import { RadioGroup } from 'honorable'
+import { Div } from 'honorable'
 import { useState } from 'react'
 
 import Radio from '../components/Radio'
+import RadioGroup from '../components/RadioGroup'
 
 export default {
   title: 'Radio',
@@ -10,41 +11,60 @@ export default {
 
 const radios = [
   {
-    value: 0,
+    value: '0',
     label: 'Implement design system',
   },
   {
-    value: 1,
+    value: '1',
     label: 'Fix a bug',
   },
   {
-    value: 2,
+    value: '2',
     label: 'Take a break',
   },
 ]
 
 function Template(args: any) {
-  const [selectedValue, setSelectedValue] = useState(0)
+  const [selectedValueRG, setSelectedValueRG] = useState(undefined)
+  const [selectedValueManual, setSelectedValueManual] = useState(undefined)
 
   return (
     <>
-      <h1>Controlled</h1>
-      <RadioGroup tabIndex={-1}>
+      <h1>Controlled by RadioGroup</h1>
+      <RadioGroup
+        name="name"
+        value={selectedValueRG}
+        onChange={setSelectedValueRG}
+      >
         {radios.map(({ value, label }) => (
           <Radio
             value={value}
-            checked={selectedValue === value}
-            onChange={({ target: { checked } }: any) => {
-              if (checked) setSelectedValue(value)
-            }}
             {...args}
           >
             {label}
           </Radio>
         ))}
       </RadioGroup>
+
+      <h1>Manually Controlled</h1>
+      <Div>
+        {radios.map(({ value, label }) => (
+          <Radio
+            value={value}
+            checked={selectedValueManual === value}
+            onChange={({ target: { checked } }: any) => {
+              if (checked) setSelectedValueManual(value)
+            }}
+            {...args}
+          >
+            {label}
+          </Radio>
+
+        ))}
+      </Div>
+
       <h1>Uncontrolled</h1>
-      <RadioGroup tabIndex={-1}>
+      <Div>
         {radios.map(({ value, label }) => (
           <Radio
             name="uncontrolled"
@@ -54,7 +74,7 @@ function Template(args: any) {
             {label}
           </Radio>
         ))}
-      </RadioGroup>
+      </Div>
     </>
   )
 }

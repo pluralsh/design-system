@@ -2,6 +2,7 @@ import {
   MutableRefObject,
   forwardRef,
   memo,
+  useContext,
   useEffect,
   useId,
   useRef,
@@ -11,9 +12,11 @@ import { InputProps, Label } from 'honorable'
 import classNames from 'classnames'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { useRadio } from '@react-aria/radio'
+import { AriaRadioProps, useRadio } from '@react-aria/radio'
 import { VisuallyHidden } from '@react-aria/visually-hidden'
 import { useFocusRing } from '@react-aria/focus'
+
+import { RadioContext } from './RadioGroup'
 
 const CheckedIcon = memo(({ small }: { small: boolean }) => {
   const checkWidth = small ? 10 : 16
@@ -116,12 +119,12 @@ const HonorableLabelStyled = styled(Label)<{
     : {}),
 }))
 
-export type RadioProps = {
+export type RadioProps = AriaRadioProps & {
   small: boolean
   disabled: boolean
   defaultSelected: boolean
   onChange: (e: { target: { checked: boolean } }) => any
-} & Omit<InputProps, 'onChange'>
+} & InputProps
 
 function Radio({
   small,
@@ -130,22 +133,20 @@ function Radio({
   disabled,
   defaultChecked,
   'aria-describedby': ariaDescribedBy,
-  tabIndex,
   onChange,
   onBlur,
-  onClick,
-  onDragStart,
   onFocus,
   onKeyDown,
   onKeyUp,
-  onMouseDown,
-  onPointerDown,
-  onPointerUp,
   name,
   ...props
 }: RadioProps,
 ref: MutableRefObject<any>) {
   const [checked, setChecked] = useState(defaultChecked || checkedProp)
+  const state = useContext(RadioContext) || {
+    setSelectedValue: () => {},
+    selectedValue: checkedProp || checked ? value : undefined,
+  }
 
   useEffect(() => {
     setChecked(checkedProp)
@@ -156,25 +157,15 @@ ref: MutableRefObject<any>) {
   const { isFocusVisible, focusProps } = useFocusRing()
   const { inputProps, isSelected, isDisabled } = useRadio({
     value,
-    name,
     'aria-describedby': ariaDescribedBy,
     'aria-labelledby': labelId,
-    disabled,
-    tabIndex,
+    isDisabled: disabled,
     onBlur,
-    onClick,
-    onDragStart,
     onFocus,
     onKeyDown,
     onKeyUp,
-    onMouseDown,
-    onPointerDown,
-    onPointerUp,
   },
-  {
-    setSelectedValue: () => {},
-    selectedValue: checkedProp || checked ? value : undefined,
-  },
+  state,
   inputRef)
 
   const icon = isSelected ? <CheckedIcon small={small} /> : null
@@ -196,7 +187,7 @@ ref: MutableRefObject<any>) {
         <input
           {...inputProps}
           {...focusProps}
-          name={name}
+          name={inputProps.name || name}
           onChange={e => {
             if (typeof onChange === 'function') {
               onChange(e)
