@@ -1,4 +1,5 @@
 import { Flex } from 'honorable'
+import { useTheme } from 'styled-components'
 
 import { Card, Code, WrapWithIf } from '..'
 
@@ -129,48 +130,70 @@ function Template({ onFillLevel, ...args }: any) {
   )
 }
 
+const tabs = [
+  {
+    key: 'go',
+    label: 'Go',
+    language: 'golang',
+    content: goCode,
+  },
+  {
+    key: 'tf',
+    label: 'Terraform',
+    language: 'terraform',
+    content: tfCode,
+  },
+  {
+    key: 'js',
+    label: 'Javascript',
+    language: 'javascript',
+    content: "const oneLine = 'Just one line'",
+  },
+]
+
 function WithTabsTemplate({ onFillLevel, title, ...args }: any) {
+  const theme = useTheme()
+
   return (
-    <WrapWithIf
-      condition={onFillLevel > 0}
-      wrapper={(
-        <Card
-          fillLevel={onFillLevel}
-          padding="medium"
-        />
-      )}
+    <Flex
+      flexDirection="column"
+      gap={theme.spacing.xxlarge}
+      width="100%"
+      maxWidth="500px"
     >
-      {' '}
-      <Flex
-        direction="column"
-        gap="medium"
+      <WrapWithIf
+        condition={onFillLevel > 0}
+        wrapper={(
+          <Card
+            fillLevel={onFillLevel}
+            padding="medium"
+          />
+        )}
       >
-        <Code
-          title={title}
-          tabs={[
-            {
-              key: 'go',
-              label: 'Go',
-              language: 'golang',
-              content: goCode,
-            },
-            {
-              key: 'tf',
-              label: 'Terraform',
-              language: 'terraform',
-              content: tfCode,
-            },
-            {
-              key: 'js',
-              label: 'Javascript',
-              language: 'javascript',
-              content: "const oneLine = 'Just one line'",
-            },
-          ]}
-          {...args}
-        />
-      </Flex>
-    </WrapWithIf>
+        <Flex
+          direction="column"
+          gap="medium"
+        >
+          <Code
+            title={title}
+            tabs={tabs.slice(0, 3)}
+            {...args}
+          />
+        </Flex>
+
+        <Flex
+          direction="column"
+          gap="medium"
+        >
+          <Code
+            title={title}
+            tabs={tabs.slice(0, 3)}
+            {...args}
+          />
+        </Flex>
+      </WrapWithIf>
+    </Flex>
+
   )
 }
 

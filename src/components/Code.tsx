@@ -3,15 +3,20 @@ import {
   Key,
   ReactNode,
   RefObject,
+  createContext,
   forwardRef,
   useCallback,
+  useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Div, Flex } from 'honorable'
 import styled, { useTheme } from 'styled-components'
+
+import useResizeObserver from '../hooks/useResizeObserver'
 
 import CopyIcon from './icons/CopyIcon'
 import Card, { CardProps } from './Card'
@@ -43,11 +48,44 @@ const propTypes = {
   showHeader: PropTypes.bool,
 }
 
-const CodeHeader = styled(({ fillLevel, ...props }) => (
-  <FillLevelProvider value={toFillLevel(fillLevel + 2)}>
-    <div {...props} />
-  </FillLevelProvider>
-))<{ fillLevel: FillLevel }>(({ fillLevel, theme }) => ({
+type Measurements = { headerWidth?: number; tabsWidth?: number }
+const CodeContext = createContext<{
+  props: Pick<
+    CodeProps,
+    'language' | 'showLineNumbers' | 'title' | 'showHeader'
+  >
+  measurements: Measurements
+  setMeasurements:(arg0: Partial<Measurements>) => void
+    }>({ props: {}, measurements: {}, setMeasurements: () => {} })
+const useCodeContext = () => useContext(CodeContext)
+
+const CodeHeader = styled(({ fillLevel, ...props }) => {
+  const { measurements, setMeasurements } = useCodeContext()
+  const ref = useRef<HTMLDivElement>()
+
+  useResizeObserver(ref,
+    useCallback(rect => {
+      if (measurements.headerWidth !== rect.width) {
+        console.log('settingMeasurements',
+          measurements.headerWidth,
+          rect.width)
+        setMeasurements({
+          ...measurements,
+          headerWidth: rect.width,
+        })
+      }
+    },
+    [measurements, setMeasurements]))
+
+  return (
+    <FillLevelProvider value={toFillLevel(fillLevel + 2)}>
+      <div
+        ref={ref}
+        {...props}
+      />
+    </FillLevelProvider>
+  )
+})<{ fillLevel: FillLevel }>(({ fillLevel, theme }) => ({
   ...theme.partials.text.overline,
   minHeight: theme.spacing.xlarge + theme.spacing.xsmall * 2,
   padding: `${theme.spacing.xsmall}px ${theme.spacing.medium}px`,
@@ -110,6 +148,8 @@ function CodeTabs({
   selectedKey: Key
   onSelectionChange: (key: Key) => any
 }) {
+  const { measurements, setMeasurements } = useCodeContext()
+  const ref = useRef<HTMLDivElement>()
   const tabListStateProps: TabListStateProps = {
     keyboardActivation: 'manual',
     orientation: 'horizontal',
@@ -117,10 +157,22 @@ function CodeTabs({
     onSelectionChange,
   }
 
+  useResizeObserver(ref,
+    useCallback(rect => {
+      if (measurements.headerWidth !== rect.width) {
+        setMeasurements({
+          ...measurements,
+          tabsWidth: rect.width,
+        })
+      }
+    },
+    [measurements, setMeasurements]))
+
   return (
     <TabList
       stateRef={tabStateRef}
       stateProps={tabListStateProps}
+      ref={ref}
     >
       {tabs.map(tab => {
         if (typeof tab.content !== 'string') {
@@ -204,91 +256,111 @@ ref: RefObject<any>) {
   const tabStateRef = useRef()
   const [selectedTabKey, setSelectedTabKey] = useState<Key>((tabs && tabs[0]?.key) || '')
   const theme = useTheme()
+  const [measurements, setMeasurements] = useState({})
+
+  console.log('measurements', measurements)
 
   props.height = props.height || undefined
   const hasSetHeight = !!props.height || !!props.minHeight
 
   showHeader = tabs ? true : showHeader === undefined ? !!language : showHeader
 
+  const context = useMemo(() => ({
+    props: {
+      tabs,
+      selectedTabKey,
+      title,
+      showLineNumbers,
+      language,
+    },
+    measurements,
+    setMeasurements,
+  }),
+  [language, selectedTabKey, showLineNumbers, tabs, title, measurements])
+
   return (
-    <Card
-      ref={ref}
-      overflow="hidden"
-      fillLevel={toFillLevel(Math.min(parentFillLevel + 1, 2))}
-      borderColor={
-        parentFillLevel >= 1
-          ? theme.colors['border-fill-three']
-          : theme.colors['border-fill-two']
-      }
-      {...props}
-    >
-      <Flex
-        position="relative"
-        direction="column"
-        height="100%"
+    <CodeContext.Provider value={context}>
+      <Card
+        ref={ref}
+        overflow="hidden"
+        fillLevel={toFillLevel(Math.min(parentFillLevel + 1, 2))}
+        borderColor={
+          parentFillLevel >= 1
+            ? theme.colors['border-fill-three']
+            : theme.colors['border-fill-two']
+        }
+        {...props}
       >
-        {showHeader && (
-          <CodeHeader fillLevel={parentFillLevel}>
-            {((tabs && title) || !tabs) && (
-              <Flex gap={theme.spacing.xsmall}>
-                <FileIcon />
-                {(title || language) && <div>{title || language}</div>}
-              </Flex>
-            )}
-            {tabs && (
-              <CodeTabs
-                tabs={tabs}
-                tabStateRef={tabStateRef}
-                selectedKey={selectedTabKey}
-                onSelectionChange={key => {
-                  setSelectedTabKey(key)
-                  if (onSelectedTabChange) onSelectedTabChange(key)
-                }}
-              />
-            )}
-          </CodeHeader>
-        )}
-        {tabs ? (
-          tabs.map(tab => (
-            <TabPanel
-              key={tab.key}
-              tabKey={tab.key}
-              mode="multipanel"
-              stateRef={tabStateRef}
-              as={(
-                <Div
-                  position="relative"
-                  height="100%"
-                  overflow="hidden"
+        <Flex
+          position="relative"
+          direction="column"
+          height="100%"
+        >
+          {showHeader && (
+            <CodeHeader fillLevel={parentFillLevel}>
+              {((tabs && title) || !tabs) && (
+                <Flex gap={theme.spacing.xsmall}>
+                  <FileIcon />
+                  {(title || language) && <div>{title || language}</div>}
+                </Flex>
+              )}
+              {tabs && (
+                <CodeTabs
+                  tabs={tabs}
+                  tabStateRef={tabStateRef}
+                  selectedKey={selectedTabKey}
+                  onSelectionChange={key => {
+                    setSelectedTabKey(key)
+                    if (typeof onSelectedTabChange === 'function') {
+                      onSelectedTabChange(key)
+                    }
+                  }}
                 />
               )}
+            </CodeHeader>
+          )}
+          {tabs ? (
+            tabs.map(tab => (
+              <TabPanel
+                key={tab.key}
+                tabKey={tab.key}
+                mode="multipanel"
+                stateRef={tabStateRef}
+                as={(
+                  <Div
+                    position="relative"
+                    height="100%"
+                    overflow="hidden"
+                  />
+                )}
+              >
+                <CodeContent
+                  language={tab.language}
+                  showLineNumbers={showLineNumbers}
+                  hasSetHeight={hasSetHeight}
+                >
+                  {tab.content}
+                </CodeContent>
+              </TabPanel>
+            ))
+          ) : (
+            <Div
+              position="relative"
+              height="100%"
+              overflow="hidden"
             >
               <CodeContent
-                language={tab.language}
+                language={language}
                 showLineNumbers={showLineNumbers}
                 hasSetHeight={hasSetHeight}
               >
-                {tab.content}
+                {children}
               </CodeContent>
-            </TabPanel>
-          ))
-        ) : (
-          <Div
-            position="relative"
-            height="100%"
-            overflow="hidden"
-          >
-            <CodeContent
-              language={language}
-              showLineNumbers={showLineNumbers}
-              hasSetHeight={hasSetHeight}
-            >
-              {children}
-            </CodeContent>
-          </Div>
-        )}
-      </Flex>
-    </Card>
+            </Div>
+          )}
+        </Flex>
+      </Card>
+    </CodeContext.Provider>
   )
 }
 

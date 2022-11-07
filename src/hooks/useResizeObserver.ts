@@ -17,6 +17,7 @@ const useResizeObserver = (ref: RefObject<HTMLElement>,
   [callback])
 
   useLayoutEffect(() => {
+    console.log('remade observer')
     if (!ref.current) {
       return
     }
