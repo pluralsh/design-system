@@ -11,36 +11,18 @@ import { VisuallyHidden } from '@react-aria/visually-hidden'
 import { useFocusRing } from '@react-aria/focus'
 
 const CheckedIcon = memo(({ small }: { small: boolean }) => {
-  if (small) {
-    return (
-      <svg
-        width="16"
-        height="16"
-        fill="none"
-        viewBox="0 0 16 16"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="m11 6-4 4-2-2"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-        />
-      </svg>
-    )
-  }
+  const width = small ? 16 : 24
 
   return (
     <svg
-      width="24"
-      height="24"
+      width={width}
+      height={width}
       fill="none"
-      viewBox="0 0 24 24"
+      viewBox={`0 0 ${width} ${width}`}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="m17 9-6 6-3-3"
+        d={small ? 'm11 6-4 4-2-2' : 'm17 9-6 6-3-3'}
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -90,37 +72,46 @@ const HonorableLabelStyled = styled(Label)<{
     : theme.colors['text-light'],
   cursor: $disabled ? 'not-allowed' : 'pointer',
   margin: 0,
+  ':focus': {
+    outline: 'none',
+  },
   '.box': {
     width: $small ? theme.spacing.medium : theme.spacing.large,
     height: $small ? theme.spacing.medium : theme.spacing.large,
-    backgroundColor: 'transparent',
     position: 'relative',
-    borderRadius: theme.borderRadiuses.medium,
-    ':before': {
+    ...($isFocusVisible
+      ? { ...theme.partials.focus.outline, border: 'none' }
+      : {}),
+    '::before, ::after, .icon': {
       position: 'absolute',
       content: '""',
       top: 0,
       left: 0,
       width: '100%',
       height: '100%',
-      border: theme.borders.input,
+    },
+    '::before, ::after, &': {
       borderRadius: theme.borderRadiuses.medium,
-      ...($isFocusVisible
-        ? { ...theme.partials.focus.outline, border: 'none' }
-        : {}),
+    },
+    /* before for the border */
+    '::before': {
+      zIndex: 0,
+      border: theme.borders.input,
       ...($disabled
         ? {
           borderColor: theme.colors['border-disabled'],
-          backgroundColor: theme.colors['action-primary-disabled'],
         }
         : {}),
     },
+    /* ::after for the background */
+    '::after': {
+      zIndex: 1,
+      backgroundColor: $disabled
+        ? theme.colors['action-primary-disabled']
+        : 'transparent',
+    },
     '.icon': {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
+      zIndex: 2,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -137,11 +128,8 @@ const HonorableLabelStyled = styled(Label)<{
           backgroundColor: theme.colors['action-input-hover'],
         },
       },
-      ':focus': {
-        outline: 'none',
-      },
       ':focus-visible': {
-        '.box': {
+        ' &': {
           ...theme.partials.focus.outline,
         },
         '*': {
@@ -152,14 +140,18 @@ const HonorableLabelStyled = styled(Label)<{
         color: theme.colors.text,
       },
       '&.checked, &.indeterminate': {
-        '.box:before': {
+        '.box::before': {
           border: 'none',
+        },
+        '.box::after': {
           backgroundColor: theme.colors['action-primary'],
         },
       },
       ':hover.checked, :hover.indeterminate': {
-        '.box:before': {
+        '.box::before': {
           border: 'none',
+        },
+        '.box::after': {
           backgroundColor: theme.colors['action-primary-hover'],
         },
       },

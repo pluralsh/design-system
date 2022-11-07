@@ -1,5 +1,5 @@
 import { Div } from 'honorable'
-import { useState } from 'react'
+import { Key, useState } from 'react'
 
 import { Button, Checkbox } from '..'
 
@@ -8,32 +8,35 @@ export default {
   component: Checkbox,
 }
 
-const checks = {
+type CheckedVal = 'checked' | 'unchecked' | 'indeterminate'
+type CheckedVals = Record<string, CheckedVal>
+
+const checks:Record<Key, {label: string, startVal:CheckedVal}> = {
   0: {
     label: 'Drawing',
+    startVal: 'indeterminate',
   },
   1: {
     label: 'Sports',
+    startVal: 'checked',
   },
   2: {
     label: 'Reading',
+    startVal: 'unchecked',
   },
   3: {
     label: 'Music',
+    startVal: 'indeterminate',
   },
 }
+const initialCheckedVals: CheckedVals = {}
 
-type CheckedVals = Record<string, 'checked' | 'unchecked' | 'indeterminate'>
+for (const [key, { startVal }] of Object.entries(checks)) {
+  initialCheckedVals[key] = startVal || 'indeterminate'
+}
 
 function Template(args: any) {
-  const initialCheckedVals: CheckedVals = {}
-
-  for (const [key] of Object.entries(checks)) {
-    initialCheckedVals[key] = 'indeterminate'
-  }
   const [checkedVals, setCheckedVals] = useState(initialCheckedVals)
-
-  console.log('checkedVals', checkedVals)
 
   return (
     <>
@@ -46,7 +49,6 @@ function Template(args: any) {
             value={value}
             checked={checkedVals[value] === 'checked'}
             onChange={({ target: { checked } }: any) => {
-              console.log('onChange outside', checked)
               setCheckedVals({
                 ...checkedVals,
                 [value]: checked ? 'checked' : 'unchecked',
