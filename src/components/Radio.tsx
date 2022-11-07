@@ -14,7 +14,6 @@ import PropTypes from 'prop-types'
 import { useRadio } from '@react-aria/radio'
 import { VisuallyHidden } from '@react-aria/visually-hidden'
 import { useFocusRing } from '@react-aria/focus'
-import { flexRender } from '@tanstack/react-table'
 
 const CheckedIcon = memo(({ small }: { small: boolean }) => {
   const checkWidth = small ? 10 : 16
@@ -77,9 +76,11 @@ const HonorableLabelStyled = styled(Label)<{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      color: !$disabled
-        ? theme.colors['action-primary']
-        : theme.colors['action-primary-disabled'],
+      color: $disabled
+        ? theme.colors['action-primary-disabled']
+        : $isFocusVisible
+          ? theme.colors['action-primary-hover']
+          : theme.colors['action-primary'],
     },
   },
   ...(!$disabled
@@ -178,8 +179,6 @@ ref: MutableRefObject<any>) {
 
   const icon = isSelected ? <CheckedIcon small={small} /> : null
 
-  console.log('inputProps', inputProps)
-
   return (
     <HonorableLabelStyled
       htmlFor={inputProps.id}
@@ -199,11 +198,9 @@ ref: MutableRefObject<any>) {
           {...focusProps}
           name={name}
           onChange={e => {
-            console.log(e.target, ' changed to ', e.target.checked)
             if (typeof onChange === 'function') {
               onChange(e)
             }
-            console.log('setSelected', !checked)
             setChecked(!checked)
             inputProps.onChange(e)
           }}
