@@ -17,8 +17,6 @@ import PropTypes from 'prop-types'
 import { Button, Div, Flex } from 'honorable'
 import styled, { useTheme } from 'styled-components'
 
-import theme from 'honorable-theme-default'
-
 import useResizeObserver from '../hooks/useResizeObserver'
 
 import CopyIcon from './icons/CopyIcon'
@@ -64,17 +62,10 @@ type TabsContext = {
   onSelectionChange?: any
 } & Pick<CodeProps, 'tabs'>
 
-type CodeContextT = Pick<
-  CodeProps,
-  'language' | 'showLineNumbers' | 'title' | 'showHeader' | 'tabs'
->
-
 const TabsContext = createContext<TabsContext>({
   setTabInterface: () => {},
   tabInterface: 'tabs',
 })
-
-const CodeContext = createContext<CodeContextT>({})
 
 function CodeHeaderUnstyled({
   fillLevel,
@@ -242,6 +233,7 @@ function CodeTabs() {
         stateRef={tabStateRef}
         stateProps={tabListStateProps}
         ref={tabsRef}
+        style={!tabInterface ? { opacity: 0 } : undefined}
       >
         {tabs.map(tab => {
           if (typeof tab.content !== 'string') {
@@ -363,21 +355,12 @@ ref: RefObject<any>) {
   const tabStateRef = useRef()
   const [selectedTabKey, setSelectedTabKey] = useState<string>((tabs && tabs[0]?.key) || '')
   const theme = useTheme()
-  const [tabInterface, setTabInterface] = useState<TabInterfaceT>('tabs')
+  const [tabInterface, setTabInterface] = useState<TabInterfaceT>()
 
   props.height = props.height || undefined
   const hasSetHeight = !!props.height || !!props.minHeight
 
   showHeader = tabs ? true : showHeader === undefined ? !!language : showHeader
-
-  const context: CodeContextT = useMemo(() => ({
-    tabs,
-    selectedTabKey,
-    title,
-    showLineNumbers,
-    language,
-  }),
-  [language, selectedTabKey, showLineNumbers, tabs, title])
 
   const uiContext: TabsContext = useMemo(() => ({
     tabInterface,
@@ -480,9 +463,7 @@ ref: RefObject<any>) {
   )
 
   return (
-    <TabsContext.Provider value={uiContext}>
-      <CodeContext.Provider value={context}>{content}</CodeContext.Provider>
-    </TabsContext.Provider>
+    <TabsContext.Provider value={uiContext}>{content}</TabsContext.Provider>
   )
 }
 
