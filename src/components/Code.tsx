@@ -55,8 +55,6 @@ const propTypes = {
 type TabInterfaceT = 'tabs' | 'dropdown'
 
 type TabsContext = {
-  // measurements: Measurements
-  // setMeasurements: (arg0: Partial<Measurements>) => void
   tabInterface: TabInterfaceT
   setTabInterface: (arg: TabInterfaceT) => void
   tabStateRef?: MutableRefObject<any>
@@ -70,8 +68,6 @@ type CodeContextT = Pick<
 >
 
 const TabsContext = createContext<TabsContext>({
-  // measurements: {},
-  // setMeasurements: () => { },
   setTabInterface: () => {},
   tabInterface: 'tabs',
 })
@@ -154,10 +150,9 @@ type CodeTabData = {
   content: string
 }
 
-const TitleArea = styled.div(({ theme }) => ({
+const TitleArea = styled.div<{ $shrinkable: boolean }>(({ $shrinkable, theme }) => ({
   display: 'flex',
-  minWidth: 100,
-  flexShrink: 0,
+  flexShrink: $shrinkable ? 1 : 0,
   flexGrow: 1,
   gap: theme.spacing.xsmall,
   ...theme.partials.text.overline,
@@ -224,8 +219,6 @@ function CodeTabs() {
       }
     }, [setTabInterface]))
 
-  console.log('isDisabled', tabListStateProps.isDisabled)
-
   return (
     <TabsWrap
       ref={tabsWrapRef}
@@ -291,8 +284,8 @@ function CodeSelectUnstyled({ className }: ComponentProps<'div'>) {
   )
 }
 const CodeSelect = styled(CodeSelectUnstyled)<{ $isDisabled?: boolean }>(({ $isDisabled: _, theme: _t }) => ({
-  minWidth: 150,
   display: 'flex',
+  flexGrow: 1,
   justifyContent: 'right',
 }))
 
@@ -390,7 +383,7 @@ ref: RefObject<any>) {
 
   const titleArea
     = (tabs && title) || !tabs ? (
-      <TitleArea>
+      <TitleArea $shrinkable={tabInterface === 'dropdown' || !tabs}>
         <FileIcon />
         {(title || language) && <div>{title || language}</div>}
       </TitleArea>
