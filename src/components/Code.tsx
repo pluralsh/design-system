@@ -32,6 +32,8 @@ import FileIcon from './icons/FileIcon'
 import { TabList, TabListStateProps } from './TabList'
 import { SubTab } from './SubTab'
 import TabPanel from './TabPanel'
+import { Select } from './Select'
+import { ListBoxItem } from './ListBoxItem'
 
 type CodeProps = Omit<CardProps, 'children'> & {
   children?: string
@@ -48,15 +50,26 @@ const propTypes = {
   showHeader: PropTypes.bool,
 }
 
-type Measurements = { headerWidth?: number; tabsWidth?: number }
-const CodeContext = createContext<{
+type Measurements = {
+  headerWidth?: number
+  tabsWidth?: number
+  tabsWrapWidth?: number
+}
+type CodeContextT = {
   props: Pick<
     CodeProps,
     'language' | 'showLineNumbers' | 'title' | 'showHeader'
   >
   measurements: Measurements
-  setMeasurements:(arg0: Partial<Measurements>) => void
-    }>({ props: {}, measurements: {}, setMeasurements: () => {} })
+  setMeasurements: (arg0: Partial<Measurements>) => void
+  tabInterface: 'tabs' | 'dropdown'
+}
+const CodeContext = createContext<CodeContextT>({
+  props: {},
+  measurements: {},
+  setMeasurements: () => {},
+  tabInterface: 'tabs',
+})
 const useCodeContext = () => useContext(CodeContext)
 
 const CodeHeader = styled(({ fillLevel, ...props }) => {
@@ -98,6 +111,8 @@ const CodeHeader = styled(({ fillLevel, ...props }) => {
   alignItems: 'center',
   justifyContent: 'space-between',
   gap: theme.spacing.medium,
+  borderTopLeftRadius: theme.borderRadiuses.medium + 2,
+  borderTopRightRadius: theme.borderRadiuses.medium + 2,
 }))
 
 function CopyButtonBase({
@@ -137,6 +152,32 @@ type CodeTabData = {
   content: string
 }
 
+const TitleArea = styled.div(({ theme }) => ({
+  display: 'flex',
+  minWidth: 100,
+  flexShrink: 0,
+  flexGrow: 1,
+  gap: theme.spacing.xsmall,
+}))
+
+const tabsWrapMargin = 5
+const TabsWrap = styled.div<{ $isDisabled: boolean }>(({ $isDisabled, theme }) => ({
+  flexShrink: 1,
+  overflow: 'hidden',
+  margin: -tabsWrapMargin,
+  padding: tabsWrapMargin,
+  ...($isDisabled ? { opacity: 0.0, height: 0 } : {}),
+}))
+
+const SelectWrap = styled.div<{ $isDisabled?: boolean }>(({ $isDisabled, theme }) => ({
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  paddingTop: theme.spacing.xxsmall - 1,
+  paddingRight: theme.spacing.medium,
+  minWidth: 150,
+}))
+
 function CodeTabs({
   tabStateRef,
   tabs,
@@ -148,48 +189,89 @@ function CodeTabs({
   selectedKey: Key
   onSelectionChange: (key: Key) => any
 }) {
-  const { measurements, setMeasurements } = useCodeContext()
-  const ref = useRef<HTMLDivElement>()
+  const { measurements, setMeasurements, tabInterface } = useCodeContext()
+  const tabsRef = useRef<HTMLDivElement>()
+  const tabsWrapRef = useRef<HTMLDivElement>()
   const tabListStateProps: TabListStateProps = {
     keyboardActivation: 'manual',
     orientation: 'horizontal',
     selectedKey,
     onSelectionChange,
+    isDisabled: tabInterface !== 'tabs',
   }
 
-  useResizeObserver(ref,
-    useCallback(rect => {
-      if (measurements.headerWidth !== rect.width) {
+  useResizeObserver(tabsRef,
+    useCallback(() => {
+      if (
+        typeof tabsRef?.current?.scrollWidth === 'number'
+        && typeof tabsRef?.current?.clientWidth === 'number'
+        && (tabsRef?.current.scrollWidth !== measurements.tabsWidth
+          || tabsRef?.current?.clientWidth !== measurements.tabsWrapWidth)
+      ) {
         setMeasurements({
           ...measurements,
-          tabsWidth: rect.width,
+          tabsWidth: tabsRef?.current?.scrollWidth || measurements.tabsWidth,
+          tabsWrapWidth:
+            tabsRef?.current?.clientWidth || measurements.tabsWrapWidth,
         })
       }
-    },
-    [measurements, setMeasurements]))
+    }, [measurements, setMeasurements]))
+
+  console.log('isDisabled', tabListStateProps.isDisabled)
 
   return (
-    <TabList
-      stateRef={tabStateRef}
-      stateProps={tabListStateProps}
-      ref={ref}
-    >
-      {tabs.map(tab => {
-        if (typeof tab.content !== 'string') {
-          throw new Error('Code component expects a string for tabs[].content')
-        }
+    <>
+      <TabsWrap
+        ref={tabsWrapRef}
+        $isDisabled={tabListStateProps.isDisabled}
+      >
+        <TabList
+          className="my-tab-list"
+          stateRef={tabStateRef}
+          stateProps={tabListStateProps}
+          ref={tabsRef}
+        >
+          {tabs.map(tab => {
+            if (typeof tab.content !== 'string') {
+              throw new Error('Code component expects a string for tabs[].content')
+            }
 
-        return (
-          <SubTab
-            key={tab.key}
-            size="small"
-            textValue={tab.label || tab.language}
+            return (
+              <SubTab
+                key={tab.key}
+                size="small"
+                textValue={tab.label || tab.language}
+              >
+                {tab.label || tab.language}
+              </SubTab>
+            )
+          })}
+        </TabList>
+      </TabsWrap>
+      {tabListStateProps.isDisabled && (
+        <SelectWrap>
+          <Select
+            selectedKey={selectedKey}
+            onSelectionChange={key => {
+              onSelectionChange(key)
+            }}
+            placement="right"
           >
-            {tab.label || tab.language}
-          </SubTab>
-        )
-      })}
-    </TabList>
+            {tabs.map(tab => {
+              console.log('tab', tab)
+
+              return (
+                <ListBoxItem
+                  key={tab.key}
+                  label={tab.label || tab.language}
+                  textValue={tab.label || tab.language}
+                />
+              )
+            })}
+          </Select>
+        </SelectWrap>
+      )}
+    </>
   )
 }
 
@@ -256,16 +338,27 @@ ref: RefObject<any>) {
   const tabStateRef = useRef()
   const [selectedTabKey, setSelectedTabKey] = useState<Key>((tabs && tabs[0]?.key) || '')
   const theme = useTheme()
-  const [measurements, setMeasurements] = useState({})
+  const [measurements, setMeasurements] = useState<Measurements>({})
+  const tabInterface
+    = measurements?.tabsWrapWidth
+    && measurements?.tabsWidth
+    && measurements.tabsWrapWidth - measurements.tabsWidth < 0
+      ? 'dropdown'
+      : 'tabs'
 
-  console.log('measurements', measurements)
+  console.log(
+    'tabInterface',
+    tabInterface,
+    measurements?.tabsWrapWidth,
+    measurements?.tabsWidth
+  )
 
   props.height = props.height || undefined
   const hasSetHeight = !!props.height || !!props.minHeight
 
   showHeader = tabs ? true : showHeader === undefined ? !!language : showHeader
 
-  const context = useMemo(() => ({
+  const context: CodeContextT = useMemo(() => ({
     props: {
       tabs,
       selectedTabKey,
@@ -275,14 +368,23 @@ ref: RefObject<any>) {
     },
     measurements,
     setMeasurements,
+    tabInterface,
   }),
-  [language, selectedTabKey, showLineNumbers, tabs, title, measurements])
+  [
+    tabs,
+    selectedTabKey,
+    title,
+    showLineNumbers,
+    language,
+    measurements,
+    tabInterface,
+  ])
 
   return (
     <CodeContext.Provider value={context}>
       <Card
         ref={ref}
-        overflow="hidden"
+        // overflow="hidden"
         fillLevel={toFillLevel(Math.min(parentFillLevel + 1, 2))}
         borderColor={
           parentFillLevel >= 1
@@ -299,10 +401,10 @@ ref: RefObject<any>) {
           {showHeader && (
             <CodeHeader fillLevel={parentFillLevel}>
               {((tabs && title) || !tabs) && (
-                <Flex gap={theme.spacing.xsmall}>
+                <TitleArea>
                   <FileIcon />
                   {(title || language) && <div>{title || language}</div>}
-                </Flex>
+                </TitleArea>
               )}
               {tabs && (
                 <CodeTabs

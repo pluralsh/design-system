@@ -10,13 +10,17 @@ import {
   MutableRefObject,
   ReactElement,
   ReactNode,
+  Ref,
   RefObject,
   cloneElement,
+  forwardRef,
   useEffect,
   useMemo,
   useRef,
 } from 'react'
 import styled, { useTheme } from 'styled-components'
+
+import { mergeRefs } from '@react-aria/utils'
 
 import { useItemWrappedChildren } from './ListBox'
 
@@ -55,13 +59,13 @@ type TabListProps = {
   as?: ReactElement & { ref?: MutableRefObject<any> }
   children?: ChildrenType
 }
-function TabList({
+function TabListRef({
   stateRef,
   stateProps,
   renderer,
   as,
   ...props
-}: TabListProps & FlexProps) {
+}: TabListProps & FlexProps, incomingRef:RefObject<HTMLElement>) {
   const wrappedChildren = useItemWrappedChildren(props.children)
   const finalStateProps: AriaTabListProps<object> = useMemo(() => ({
     ...{
@@ -89,6 +93,7 @@ function TabList({
   })
 
   const ref = useRef<HTMLDivElement>(null)
+  const mergedRef = mergeRefs(ref, incomingRef)
   const { tabListProps } = useTabList(finalStateProps, state, ref)
   const tabChildren = [...state.collection].map(item => (
     <TabRenderer
@@ -105,13 +110,13 @@ function TabList({
       ...tabListProps,
       ...as.props,
       ...{ children: tabChildren },
-      ref,
+      mergedRef,
     })
   }
 
   if (renderer) {
     return renderer({ ...props, ...tabListProps, ...{ children: tabChildren } },
-      ref,
+      mergedRef as any,
       state)
   }
 
@@ -123,12 +128,14 @@ function TabList({
       alignItems={
         stateProps.orientation === 'vertical' ? 'flex-start' : 'flex-end'
       }
-      ref={ref}
+      ref={mergedRef as Ref<any>}
     >
       {tabChildren}
     </Flex>
   )
 }
+
+const TabList = forwardRef(TabListRef)
 
 const TabClone = styled(({
   className, children, tabRef, ...props

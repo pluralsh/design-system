@@ -155,20 +155,20 @@ function WithTabsTemplate({ onFillLevel, title, ...args }: any) {
   const theme = useTheme()
 
   return (
-    <Flex
-      flexDirection="column"
-      gap={theme.spacing.xxlarge}
-      width="100%"
-      maxWidth="500px"
+    <WrapWithIf
+      condition={onFillLevel > 0}
+      wrapper={(
+        <Card
+          fillLevel={onFillLevel}
+          padding="medium"
+        />
+      )}
     >
-      <WrapWithIf
-        condition={onFillLevel > 0}
-        wrapper={(
-          <Card
-            fillLevel={onFillLevel}
-            padding="medium"
-          />
-        )}
+      {' '}
+      <Flex
+        flexDirection="column"
+        gap={theme.spacing.xxlarge}
+        width="100%"
       >
         <Flex
           direction="column"
@@ -191,9 +191,8 @@ function WithTabsTemplate({ onFillLevel, title, ...args }: any) {
             {...args}
           />
         </Flex>
-      </WrapWithIf>
-    </Flex>
-
+      </Flex>
+    </WrapWithIf>
   )
 }
 
