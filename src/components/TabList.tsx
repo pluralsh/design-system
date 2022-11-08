@@ -5,12 +5,12 @@ import { TabListState, useTabListState } from '@react-stately/tabs'
 import { Node } from '@react-types/shared'
 import {
   Children,
+  ForwardedRef,
   HTMLAttributes,
   Key,
   MutableRefObject,
   ReactElement,
   ReactNode,
-  Ref,
   RefObject,
   cloneElement,
   forwardRef,
@@ -29,7 +29,7 @@ export type MakeOptional<Type, Key extends keyof Type> = Omit<Type, Key> &
 
 export type Renderer = (
   props: HTMLAttributes<HTMLElement>,
-  ref: RefObject<any> | null | undefined,
+  ref: ForwardedRef<any>,
   state: TabListState<object> | null | undefined
 ) => JSX.Element
 
@@ -60,12 +60,9 @@ type TabListProps = {
   children?: ChildrenType
 }
 function TabListRef({
-  stateRef,
-  stateProps,
-  renderer,
-  as,
-  ...props
-}: TabListProps & FlexProps, incomingRef:RefObject<HTMLElement>) {
+  stateRef, stateProps, renderer, as, ...props
+}: TabListProps & FlexProps,
+incomingRef: RefObject<HTMLElement>) {
   const wrappedChildren = useItemWrappedChildren(props.children)
   const finalStateProps: AriaTabListProps<object> = useMemo(() => ({
     ...{
@@ -110,13 +107,13 @@ function TabListRef({
       ...tabListProps,
       ...as.props,
       ...{ children: tabChildren },
-      mergedRef,
+      ref: mergedRef,
     })
   }
 
   if (renderer) {
     return renderer({ ...props, ...tabListProps, ...{ children: tabChildren } },
-      mergedRef as any,
+      mergedRef,
       state)
   }
 
@@ -128,7 +125,7 @@ function TabListRef({
       alignItems={
         stateProps.orientation === 'vertical' ? 'flex-start' : 'flex-end'
       }
-      ref={mergedRef as Ref<any>}
+      ref={mergedRef as any}
     >
       {tabChildren}
     </Flex>
@@ -171,7 +168,8 @@ function TabRenderer({
   const ref = useRef(null)
   const { tabProps: props } = useTab({ key: item.key }, state, ref)
 
-  props['aria-controls'] = props['aria-controls'] || props.id.replace('-tab-', '-tabpanel-')
+  props['aria-controls']
+    = props['aria-controls'] || props.id.replace('-tab-', '-tabpanel-')
 
   stateRef.current.tabProps = {
     ...stateRef.current.tabProps,
