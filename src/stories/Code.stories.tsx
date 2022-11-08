@@ -3,7 +3,11 @@ import { useTheme } from 'styled-components'
 
 import { Card, Code, WrapWithIf } from '..'
 
-import { goCode, jsCode, tfCode } from '../constants'
+import {
+  cCode,
+  elixirCode,
+  goCode, jsCode, rustCode, tfCode,
+} from '../constants'
 
 export default {
   title: 'Code',
@@ -149,6 +153,25 @@ const tabs = [
     language: 'javascript',
     content: "const oneLine = 'Just one line'",
   },
+  {
+    key: 'elixir',
+    label: 'Elixir',
+    language: 'elixir',
+    content: elixirCode,
+  },
+  {
+    key: 'c',
+    label: 'C',
+    language: 'c',
+    content: cCode,
+  },
+  {
+    key: 'rust',
+    label: 'Rust',
+    language: 'rust',
+    content: rustCode,
+  },
+
 ]
 
 function WithTabsTemplate({ onFillLevel, title, ...args }: any) {
@@ -191,6 +214,18 @@ function WithTabsTemplate({ onFillLevel, title, ...args }: any) {
             {...args}
           />
         </Flex>
+
+        <Flex
+          direction="column"
+          gap="medium"
+        >
+          <Code
+            title={title}
+            tabs={tabs.slice(0, 6)}
+            {...args}
+          />
+        </Flex>
+
       </Flex>
     </WrapWithIf>
   )
@@ -204,7 +239,7 @@ Default.args = {
 }
 
 export const WithTabs = WithTabsTemplate.bind({})
-WithTabsTemplate.args = {
+WithTabs.args = {
   title: 'This is an optional title',
   showLineNumbers: true,
   showHeader: undefined,
