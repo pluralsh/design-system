@@ -17,6 +17,8 @@ import PropTypes from 'prop-types'
 import { Button, Div, Flex } from 'honorable'
 import styled, { useTheme } from 'styled-components'
 
+import theme from 'honorable-theme-default'
+
 import useResizeObserver from '../hooks/useResizeObserver'
 
 import CopyIcon from './icons/CopyIcon'
@@ -168,15 +170,26 @@ const TabsWrap = styled.div<{ $isDisabled: boolean }>(({ $isDisabled, theme: _ }
   ...($isDisabled ? { opacity: 0.0, height: 0 } : {}),
 }))
 
-const TabsDropdownButton = styled(forwardRef<any, any>((props, ref) => (
-  <Button
-    ref={ref}
-    medium
-    tertiary
-    endIcon={<DropdownArrowIcon className="dropdownIcon" />}
-    {...props}
-  />
-)))<{ isOpen?: boolean }>(({ isOpen = false, theme }) => ({
+const TabsDropdownButton = styled(forwardRef<any, any>((props, ref) => {
+  const fillLevel = useFillLevel()
+  const theme = useTheme()
+
+  return (
+    <Button
+      ref={ref}
+      small
+      tertiary
+      endIcon={<DropdownArrowIcon className="dropdownIcon" />}
+      {...{
+        '&, &:hover, &:focus, &:focus-visible': {
+          backgroundColor:
+              theme.colors[`fill-${fillLevel > 2 ? 'three' : 'two'}-selected`],
+        },
+      }}
+      {...props}
+    />
+  )
+}))<{ isOpen?: boolean }>(({ isOpen = false, theme }) => ({
   '.dropdownIcon': {
     transform: isOpen ? 'scaleY(-1)' : 'scaleY(1)',
     transition: 'transform 0.1s ease',
