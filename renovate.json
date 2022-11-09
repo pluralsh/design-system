@@ -2,6 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base",
+    ":semanticCommits",
     ":dependencyDashboard",
     ":prHourlyLimit4",
     ":prConcurrentLimit10"
@@ -17,16 +18,22 @@
       "enabled": true
     },
     {
-      "description": "Disable major update k8s client-go",
-      "matchPackagePatterns": [
-        "^k8s.io/client-go"
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchDepTypes": [
+        "devDependencies"
       ],
-      "matchUpdateTypes": [
-        "major"
-      ],
-      "enabled": false
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "matchManagers": ["npm"],
+      "bumpVersion": "minor"
     }
   ],
-  "separateMinorPatch": true,
-  "dependencyDashboardApproval": true
+  "separateMinorPatch": true
 }
