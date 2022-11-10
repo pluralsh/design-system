@@ -4,7 +4,6 @@ export {
 // Icons
 export * from './icons'
 // Components
-export { default as Alert } from './components/Alert'
 export { default as Banner } from './components/Banner'
 export { default as Button } from './components/Button'
 export { default as Card, CardProps } from './components/Card'
