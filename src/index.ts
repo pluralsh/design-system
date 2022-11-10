@@ -48,7 +48,6 @@ export {
 export { default as TabPanel } from './components/TabPanel'
 export { default as Table } from './components/Table'
 export { default as TipCarousel } from './components/TipCarousel'
-export { default as UserCard } from './components/UserCard'
 export { default as ValidatedInput } from './components/ValidatedInput'
 export { default as Tooltip, TooltipProps } from './components/Tooltip'
 export { default as FormTitle } from './components/FormTitle'
