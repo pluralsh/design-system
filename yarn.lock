@@ -11355,7 +11355,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import@npm:2.26.0, eslint-plugin-import@npm:^2.25.3":
+"eslint-plugin-import@npm:2.26.0, eslint-plugin-import@npm:^2.25.3, eslint-plugin-import@npm:^2.26.0":
   version: 2.26.0
   resolution: "eslint-plugin-import@npm:2.26.0"
   dependencies:
@@ -17622,6 +17622,7 @@ __metadata:
     chroma-js: 2.4.2
     classnames: 2.3.2
     eslint: 8.27.0
+    eslint-plugin-import: ^2.26.0
     eslint-plugin-storybook: 0.6.7
     fuse.js: 6.6.2
     grommet: 2.25.3
