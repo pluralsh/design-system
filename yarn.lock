@@ -6634,7 +6634,11 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "@typescript-eslint/eslint-plugin@npm:5.43.0, @typescript-eslint/eslint-plugin@npm:^5.41.0":
+=======
+"@typescript-eslint/eslint-plugin@npm:5.43.0":
+>>>>>>> @{-1}
   version: 5.43.0
   resolution: "@typescript-eslint/eslint-plugin@npm:5.43.0"
   dependencies:
@@ -6691,7 +6695,11 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "@typescript-eslint/parser@npm:5.43.0, @typescript-eslint/parser@npm:^5.41.0":
+=======
+"@typescript-eslint/parser@npm:5.43.0":
+>>>>>>> @{-1}
   version: 5.43.0
   resolution: "@typescript-eslint/parser@npm:5.43.0"
   dependencies:
