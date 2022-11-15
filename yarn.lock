@@ -12346,9 +12346,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"grommet@npm:2.25.3":
-  version: 2.25.3
-  resolution: "grommet@npm:2.25.3"
+"grommet@npm:2.27.0":
+  version: 2.27.0
+  resolution: "grommet@npm:2.27.0"
   dependencies:
     grommet-icons: ^4.7.0
     hoist-non-react-statics: ^3.2.0
@@ -12358,7 +12358,7 @@ __metadata:
     react: ^16.6.1 || ^17.0.0 || ^18.0.0
     react-dom: ^16.6.1 || ^17.0.0 || ^18.0.0
     styled-components: ">= 5.1"
-  checksum: 9164401f68ddb8c97e7ac0c076e255ed9d0067438f074337db9bffde7343bc79d97e14f0a8e3d468cf923e1cd0eaf82ad40cb679925e1969d2da4ed6f637803f
+  checksum: 6d43e25090877de0f994713d386ba8cf745c365799bbc5b2fd215d3a5b17b2d6910fe832f4f3a208c1d718ffad78746aaba8df9e1ba76c2c5e6c364f17a69b35
   languageName: node
   linkType: hard
 
@@ -17164,7 +17164,7 @@ __metadata:
     eslint: 8.20.0
     eslint-plugin-storybook: 0.6.7
     fuse.js: 6.6.2
-    grommet: 2.25.3
+    grommet: 2.27.0
     highlight.js: 11.6.0
     honorable: 0.147.0
     honorable-theme-default: 0.65.0
