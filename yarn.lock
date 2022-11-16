@@ -3387,7 +3387,7 @@ __metadata:
     "@react-aria/tabs": 3.3.3
     "@react-aria/utils": 3.14.1
     "@react-aria/visually-hidden": 3.5.0
-    "@react-stately/collections": 3.4.4
+    "@react-stately/collections": 3.5.0
     "@react-stately/combobox": 3.2.2
     "@react-stately/overlays": 3.4.3
     "@react-stately/radio": 3.6.1
@@ -4142,19 +4142,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-stately/collections@npm:3.4.4, @react-stately/collections@npm:^3.4.4":
-  version: 3.4.4
-  resolution: "@react-stately/collections@npm:3.4.4"
-  dependencies:
-    "@babel/runtime": ^7.6.2
-    "@react-types/shared": ^3.15.0
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-  checksum: f22fcac89fcff24d10c19ba0dff1211e57701d720ac88708dbf7d3cf8802abb0600911aa3ea2465a097b9d0fe70e2214e3a1fd57cc24766b150fac4927da0219
-  languageName: node
-  linkType: hard
-
-"@react-stately/collections@npm:^3.5.0":
+"@react-stately/collections@npm:3.5.0, @react-stately/collections@npm:^3.5.0":
   version: 3.5.0
   resolution: "@react-stately/collections@npm:3.5.0"
   dependencies:
@@ -4163,6 +4151,18 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
   checksum: 5375d40e73c3a4cb86a4106947fd916931d23b82d86cba5597a116d48594fbaef5bb33dea15e7233597049aeefa836c2bb8296c5f26f7a70334475ffa45174e8
+  languageName: node
+  linkType: hard
+
+"@react-stately/collections@npm:^3.4.4":
+  version: 3.4.4
+  resolution: "@react-stately/collections@npm:3.4.4"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+    "@react-types/shared": ^3.15.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: f22fcac89fcff24d10c19ba0dff1211e57701d720ac88708dbf7d3cf8802abb0600911aa3ea2465a097b9d0fe70e2214e3a1fd57cc24766b150fac4927da0219
   languageName: node
   linkType: hard
 
