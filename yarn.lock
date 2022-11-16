@@ -3381,7 +3381,7 @@ __metadata:
     "@react-aria/focus": 3.9.0
     "@react-aria/interactions": 3.12.0
     "@react-aria/listbox": 3.7.1
-    "@react-aria/overlays": 3.11.0
+    "@react-aria/overlays": 3.12.0
     "@react-aria/radio": 3.4.1
     "@react-aria/select": 3.8.3
     "@react-aria/tabs": 3.3.3
@@ -3613,24 +3613,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/i18n@npm:^3.6.1":
-  version: 3.6.1
-  resolution: "@react-aria/i18n@npm:3.6.1"
-  dependencies:
-    "@babel/runtime": ^7.6.2
-    "@internationalized/date": ^3.0.1
-    "@internationalized/message": ^3.0.9
-    "@internationalized/number": ^3.1.1
-    "@internationalized/string": ^3.0.0
-    "@react-aria/ssr": ^3.3.0
-    "@react-aria/utils": ^3.14.0
-    "@react-types/shared": ^3.15.0
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-  checksum: 9b116b5e1508c03d8b935735751d1b31575088d643b051a80edc649389b58fc4f97b41a42fb55423252845433aa35636909fc051bb5f01e2b7ad68d323856afa
-  languageName: node
-  linkType: hard
-
 "@react-aria/i18n@npm:^3.6.2":
   version: 3.6.2
   resolution: "@react-aria/i18n@npm:3.6.2"
@@ -3755,29 +3737,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/overlays@npm:3.11.0":
-  version: 3.11.0
-  resolution: "@react-aria/overlays@npm:3.11.0"
-  dependencies:
-    "@babel/runtime": ^7.6.2
-    "@react-aria/focus": ^3.9.0
-    "@react-aria/i18n": ^3.6.1
-    "@react-aria/interactions": ^3.12.0
-    "@react-aria/ssr": ^3.3.0
-    "@react-aria/utils": ^3.14.0
-    "@react-aria/visually-hidden": ^3.5.0
-    "@react-stately/overlays": ^3.4.2
-    "@react-types/button": ^3.6.2
-    "@react-types/overlays": ^3.6.4
-    "@react-types/shared": ^3.15.0
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-  checksum: 9ec9f4e94b2f6368115b3b0f26fe04daa2328c79c4184a6af69b875a25479d3390b138559554d42dec69d534c7327b10fe7931b81fe765f88b393a9ddc6d6376
-  languageName: node
-  linkType: hard
-
-"@react-aria/overlays@npm:^3.12.0":
+"@react-aria/overlays@npm:3.12.0, @react-aria/overlays@npm:^3.12.0":
   version: 3.12.0
   resolution: "@react-aria/overlays@npm:3.12.0"
   dependencies:
@@ -3966,7 +3926,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/visually-hidden@npm:3.5.0, @react-aria/visually-hidden@npm:^3.5.0":
+"@react-aria/visually-hidden@npm:3.5.0":
   version: 3.5.0
   resolution: "@react-aria/visually-hidden@npm:3.5.0"
   dependencies:
@@ -4457,17 +4417,6 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
   checksum: 732dea0f92493605c60d8233ccdcb12738f48522d46515e32187e29594f0e535713847e74507bb3221e499b9e27f7f945f04114094c768cf43e3f003b9a06b3c
-  languageName: node
-  linkType: hard
-
-"@react-types/button@npm:^3.6.2":
-  version: 3.6.2
-  resolution: "@react-types/button@npm:3.6.2"
-  dependencies:
-    "@react-types/shared": ^3.15.0
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-  checksum: 843058e8f070b072533d704b95fb55684e8cc6434257bd54cf400e8bc2d3a1b98d96a60a67496451b42a03b0c23c823998deff1869ad3c4873db9fb78328984e
   languageName: node
   linkType: hard
 
