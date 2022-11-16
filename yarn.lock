@@ -3378,7 +3378,7 @@ __metadata:
     "@react-aria/button": 3.6.3
     "@react-aria/checkbox": 3.6.0
     "@react-aria/combobox": 3.4.3
-    "@react-aria/focus": 3.9.0
+    "@react-aria/focus": 3.10.0
     "@react-aria/interactions": 3.12.0
     "@react-aria/listbox": 3.7.1
     "@react-aria/overlays": 3.11.0
@@ -3583,22 +3583,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/focus@npm:3.9.0, @react-aria/focus@npm:^3.9.0":
-  version: 3.9.0
-  resolution: "@react-aria/focus@npm:3.9.0"
-  dependencies:
-    "@babel/runtime": ^7.6.2
-    "@react-aria/interactions": ^3.12.0
-    "@react-aria/utils": ^3.14.0
-    "@react-types/shared": ^3.15.0
-    clsx: ^1.1.1
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-  checksum: 3d9ad2efb05e0e411804c9ca3054ea2f2ba3f3b616865a8953a593a044d80a08c998448116eca0c32ccc8075a157687b97d734ad46056801188a0db1b67ba3f7
-  languageName: node
-  linkType: hard
-
-"@react-aria/focus@npm:^3.10.0":
+"@react-aria/focus@npm:3.10.0, @react-aria/focus@npm:^3.10.0":
   version: 3.10.0
   resolution: "@react-aria/focus@npm:3.10.0"
   dependencies:
@@ -3610,6 +3595,21 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
   checksum: 6dea192f4f73103f753baec9199ae45fffe6d8d42926afb24687fc2e44002e897ec887180f9cefeada51ef344feffc953a126711a56b6e9777862a1db4fe9414
+  languageName: node
+  linkType: hard
+
+"@react-aria/focus@npm:^3.9.0":
+  version: 3.9.0
+  resolution: "@react-aria/focus@npm:3.9.0"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+    "@react-aria/interactions": ^3.12.0
+    "@react-aria/utils": ^3.14.0
+    "@react-types/shared": ^3.15.0
+    clsx: ^1.1.1
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: 3d9ad2efb05e0e411804c9ca3054ea2f2ba3f3b616865a8953a593a044d80a08c998448116eca0c32ccc8075a157687b97d734ad46056801188a0db1b67ba3f7
   languageName: node
   linkType: hard
 
