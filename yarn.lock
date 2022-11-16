@@ -3386,7 +3386,7 @@ __metadata:
     "@react-aria/select": 3.8.3
     "@react-aria/tabs": 3.3.3
     "@react-aria/utils": 3.14.1
-    "@react-aria/visually-hidden": 3.5.0
+    "@react-aria/visually-hidden": 3.6.0
     "@react-stately/collections": 3.4.4
     "@react-stately/combobox": 3.2.2
     "@react-stately/overlays": 3.4.3
@@ -3966,22 +3966,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/visually-hidden@npm:3.5.0, @react-aria/visually-hidden@npm:^3.5.0":
-  version: 3.5.0
-  resolution: "@react-aria/visually-hidden@npm:3.5.0"
-  dependencies:
-    "@babel/runtime": ^7.6.2
-    "@react-aria/interactions": ^3.12.0
-    "@react-aria/utils": ^3.14.0
-    "@react-types/shared": ^3.15.0
-    clsx: ^1.1.1
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-  checksum: 1d582f9919e5755f511f57d5951e4f0cf25cfb54c29e0505b3e4a3155d75f0a7048afc43db66d66a165549cb14ec4ec3eb87377461db4dcb3ddf84074a5cdb90
-  languageName: node
-  linkType: hard
-
-"@react-aria/visually-hidden@npm:^3.6.0":
+"@react-aria/visually-hidden@npm:3.6.0, @react-aria/visually-hidden@npm:^3.6.0":
   version: 3.6.0
   resolution: "@react-aria/visually-hidden@npm:3.6.0"
   dependencies:
@@ -3993,6 +3978,21 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
   checksum: b8a577fc15fd5d3853bd095f6750f277f80eef6cdc1d6423f979412be51f4fa86000b1ba746846416c3ee89b26e54a18f0994f49a9a070082ac20179c4b4e407
+  languageName: node
+  linkType: hard
+
+"@react-aria/visually-hidden@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "@react-aria/visually-hidden@npm:3.5.0"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+    "@react-aria/interactions": ^3.12.0
+    "@react-aria/utils": ^3.14.0
+    "@react-types/shared": ^3.15.0
+    clsx: ^1.1.1
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: 1d582f9919e5755f511f57d5951e4f0cf25cfb54c29e0505b3e4a3155d75f0a7048afc43db66d66a165549cb14ec4ec3eb87377461db4dcb3ddf84074a5cdb90
   languageName: node
   linkType: hard
 
