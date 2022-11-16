@@ -3379,7 +3379,7 @@ __metadata:
     "@react-aria/checkbox": 3.6.0
     "@react-aria/combobox": 3.4.3
     "@react-aria/focus": 3.9.0
-    "@react-aria/interactions": 3.12.0
+    "@react-aria/interactions": 3.13.0
     "@react-aria/listbox": 3.7.1
     "@react-aria/overlays": 3.11.0
     "@react-aria/radio": 3.4.1
@@ -3649,20 +3649,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-aria/interactions@npm:3.12.0, @react-aria/interactions@npm:^3.12.0":
-  version: 3.12.0
-  resolution: "@react-aria/interactions@npm:3.12.0"
-  dependencies:
-    "@babel/runtime": ^7.6.2
-    "@react-aria/utils": ^3.14.0
-    "@react-types/shared": ^3.15.0
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-  checksum: 38b78a3327c7687498270833a83f364dddea86aba393bc03026e476da6e8ea83c934f3d81e5e0df5442a7f29535ca015cb2f77f9e82f6e85c54c290d892c7e73
-  languageName: node
-  linkType: hard
-
-"@react-aria/interactions@npm:^3.13.0":
+"@react-aria/interactions@npm:3.13.0, @react-aria/interactions@npm:^3.13.0":
   version: 3.13.0
   resolution: "@react-aria/interactions@npm:3.13.0"
   dependencies:
@@ -3672,6 +3659,19 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
   checksum: caa72fe0fc59c370268c3341b7efc64852a32904837cac5c185e8afb3138dfb90d74e17de1049eddf1b667149c7051ad56356a1aca33cb27fc3421dc6be6c37c
+  languageName: node
+  linkType: hard
+
+"@react-aria/interactions@npm:^3.12.0":
+  version: 3.12.0
+  resolution: "@react-aria/interactions@npm:3.12.0"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+    "@react-aria/utils": ^3.14.0
+    "@react-types/shared": ^3.15.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: 38b78a3327c7687498270833a83f364dddea86aba393bc03026e476da6e8ea83c934f3d81e5e0df5442a7f29535ca015cb2f77f9e82f6e85c54c290d892c7e73
   languageName: node
   linkType: hard
 
