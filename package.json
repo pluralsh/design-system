@@ -96,8 +96,8 @@
   "peerDependencies": {
     "@emotion/react": ">=11.9.3",
     "@emotion/styled": ">=11.9.3",
-    "honorable": ">=0.128.0",
-    "honorable-theme-default": ">=0.63.0",
+    "honorable": ">=0.148.0",
+    "honorable-theme-default": ">=0.66.0",
     "react": ">=16.0.0",
     "react-dom": ">=16.0.0",
     "react-transition-group": ">=4.4.2",
