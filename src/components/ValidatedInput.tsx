@@ -1,10 +1,12 @@
-import React, {
+import {
   PropsWithChildren,
   ReactNode,
   Ref,
   forwardRef,
   useCallback,
   useState,
+  createElement,
+  ReactElement,
 } from 'react'
 import PropTypes from 'prop-types'
 import { Input, InputProps, Span } from 'honorable'
@@ -17,7 +19,7 @@ export type CaptionProps = {caption: string, color: string}
 export type ValidatedInputProps = InputProps & PropsWithChildren<{
   label?: ReactNode
   hint?: ReactNode
-  caption?: (props: CaptionProps) => React.ReactElement
+  caption?: (props: CaptionProps) => ReactElement
   validation?: (val: string) => ValidationResponse
 }>
 
@@ -28,7 +30,7 @@ const propTypes = {
   validation: PropTypes.func,
 }
 
-function defaultCaption({ caption, color }: CaptionProps) : React.ReactElement {
+function defaultCaption({ caption, color }: CaptionProps) : ReactElement {
   return (
     <Span color={color}>{caption}</Span>
   )
@@ -50,7 +52,7 @@ function ValidatedInputRef({
       ref={ref}
       label={label}
       hint={hint}
-      caption={error ? React.createElement(captionComp, { caption: error.message, color: error.error ? 'text-danger' : 'text-success' }) : null}
+      caption={error ? createElement(captionComp, { caption: error.message, color: error.error ? 'text-danger' : 'text-success' }) : null}
       width={width}
     >
       <Input
