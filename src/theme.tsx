@@ -98,8 +98,7 @@ const honorableTheme = mergeTheme(defaultTheme, {
       && Object.fromEntries(nextKeys.map(nextKey => [
         nextKey,
         spacing[props[key]] || props[key],
-      ]))
-    ),
+      ]))),
     ({ fill }: any) => fill === true && {
       // === true to prevent the `fill` css property to apply here
       width: '100%',
