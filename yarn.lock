@@ -3393,7 +3393,7 @@ __metadata:
     grommet-icons: 4.8.0
     highlight.js: 11.6.0
     honorable: 0.151.0
-    honorable-recipe-mapper: ^0.2.0
+    honorable-recipe-mapper: 0.2.0
     honorable-theme-default: 0.66.0
     prop-types: 15.8.1
     react: 18.2.0
@@ -12995,7 +12995,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"honorable-recipe-mapper@npm:^0.2.0":
+"honorable-recipe-mapper@npm:0.2.0":
   version: 0.2.0
   resolution: "honorable-recipe-mapper@npm:0.2.0"
   checksum: 86521c78ff616ceb76685a1117e90991670f789cb1e9efaed1963295b170ba1bcdeed2998408433e79c94315f1ba0cb9896272f2e2fb5e8495f06b8f715b351b
