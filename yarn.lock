@@ -3362,7 +3362,7 @@ __metadata:
     "@emotion/react": 11.10.5
     "@emotion/styled": 11.10.5
     "@floating-ui/react-dom-interactions": 0.11.0
-    "@pluralsh/eslint-config-typescript": ^2.5.3
+    "@pluralsh/eslint-config-typescript": 2.5.3
     "@react-aria/button": 3.6.3
     "@react-aria/checkbox": 3.7.0
     "@react-aria/combobox": 3.4.3
@@ -3409,7 +3409,7 @@ __metadata:
     highlight.js: 11.6.0
     honorable: 0.148.0
     honorable-theme-default: 0.66.0
-    jest-mock: ^29.3.1
+    jest-mock: 29.3.1
     prop-types: 15.8.1
     react: 18.2.0
     react-animate-height: 3.0.5
@@ -3426,7 +3426,7 @@ __metadata:
     storybook: 7.0.0-alpha.49
     styled-components: 5.3.6
     typescript: 4.9.3
-    vite: ^3.2.4
+    vite: 3.2.4
   peerDependencies:
     "@emotion/react": ">=11.9.3"
     "@emotion/styled": ">=11.9.3"
@@ -3454,7 +3454,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pluralsh/eslint-config-typescript@npm:^2.5.3":
+"@pluralsh/eslint-config-typescript@npm:2.5.3":
   version: 2.5.3
   resolution: "@pluralsh/eslint-config-typescript@npm:2.5.3"
   dependencies:
@@ -13880,17 +13880,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-mock@npm:^27.0.6, jest-mock@npm:^27.5.1":
-  version: 27.5.1
-  resolution: "jest-mock@npm:27.5.1"
-  dependencies:
-    "@jest/types": ^27.5.1
-    "@types/node": "*"
-  checksum: f5b5904bb1741b4a1687a5f492535b7b1758dc26534c72a5423305f8711292e96a601dec966df81bb313269fb52d47227e29f9c2e08324d79529172f67311be0
-  languageName: node
-  linkType: hard
-
-"jest-mock@npm:^29.3.1":
+"jest-mock@npm:29.3.1":
   version: 29.3.1
   resolution: "jest-mock@npm:29.3.1"
   dependencies:
@@ -13898,6 +13888,16 @@ __metadata:
     "@types/node": "*"
     jest-util: ^29.3.1
   checksum: 9098852cb2866db4a1a59f9f7581741dfc572f648e9e574a1b187fd69f5f2f6190ad387ede21e139a8b80a6a1343ecc3d6751cd2ae1ae11d7ea9fa1950390fb2
+  languageName: node
+  linkType: hard
+
+"jest-mock@npm:^27.0.6, jest-mock@npm:^27.5.1":
+  version: 27.5.1
+  resolution: "jest-mock@npm:27.5.1"
+  dependencies:
+    "@jest/types": ^27.5.1
+    "@types/node": "*"
+  checksum: f5b5904bb1741b4a1687a5f492535b7b1758dc26534c72a5423305f8711292e96a601dec966df81bb313269fb52d47227e29f9c2e08324d79529172f67311be0
   languageName: node
   linkType: hard
 
@@ -20978,7 +20978,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^3.1.3, vite@npm:^3.2.4":
+"vite@npm:3.2.4, vite@npm:^3.1.3":
   version: 3.2.4
   resolution: "vite@npm:3.2.4"
   dependencies:
