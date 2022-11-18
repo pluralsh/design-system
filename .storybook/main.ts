@@ -5,10 +5,11 @@ module.exports = {
     name: '@storybook/react-vite',
     options: {}
   },
-  core: {},
+  core: {
+    builder: '@storybook/builder-vite',
+  },
   docsPage: {
     docs: 'automatic',
-    builder: '@storybook/builder-vite',
   },
   async viteFinal(config) {
     return {
