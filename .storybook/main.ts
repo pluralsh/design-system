@@ -7,7 +7,8 @@ module.exports = {
   },
   core: {},
   docsPage: {
-    docs: 'automatic'
+    docs: 'automatic',
+    builder: '@storybook/builder-vite',
   },
   async viteFinal(config) {
     return {
