@@ -1,4 +1,6 @@
-module.exports = {
+import type { StorybookViteConfig } from '@storybook/builder-vite';
+
+const config: StorybookViteConfig = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: ['@storybook/addon-docs', '@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/preset-create-react-app'],
   framework: {
@@ -8,9 +10,9 @@ module.exports = {
   core: {
     builder: '@storybook/builder-vite',
   },
-  docsPage: {
-    docs: 'automatic',
-  },
+  // docsPage: {
+  //   docs: 'automatic',
+  // },
   async viteFinal(config) {
     return {
       ...config,
@@ -19,7 +21,7 @@ module.exports = {
         jsxInject: `import React from 'react'`,
       },
       rollupOptions: {
-        ...config.rollupOptions,
+        ...config,
         // Externalize deps that shouldn't be bundled
         external: ["react", "react-dom"],
         output: {
@@ -33,3 +35,5 @@ module.exports = {
     };
   },
 };
+
+export default config;
