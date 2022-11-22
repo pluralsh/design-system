@@ -2514,7 +2514,7 @@ __metadata:
     babel-loader: 9.1.0
     chroma-js: 2.4.2
     classnames: 2.3.2
-    eslint: 8.27.0
+    eslint: 8.28.0
     eslint-plugin-storybook: 0.6.7
     fuse.js: 6.6.2
     grommet: 2.27.0
