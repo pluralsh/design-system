@@ -512,6 +512,7 @@ const honorableTheme = mergeTheme(defaultTheme, {
     ],
     InputBase: [
       {
+        paddingTop: 0,
         width: '100%',
         flex: '1 1',
         height: '38px',
@@ -537,8 +538,14 @@ const honorableTheme = mergeTheme(defaultTheme, {
         },
       },
     ],
+    TextArea: [
+      {
+        paddingTop: 0,
+      },
+    ],
     StartIcon: [
       {
+        marginTop: 'xxxsmall',
         marginRight: 'xsmall',
       },
       ({ disabled }: any) => disabled && {
@@ -549,6 +556,7 @@ const honorableTheme = mergeTheme(defaultTheme, {
     ],
     EndIcon: [
       {
+        marginTop: 'xxxsmall',
         marginLeft: 'small',
       },
       ({ disabled }: any) => disabled && {
