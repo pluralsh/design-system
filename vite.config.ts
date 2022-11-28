@@ -5,6 +5,6 @@ import react from 'vite-preset-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'dist',
+    chunkSizeWarningLimit: 1000,
   },
 })
