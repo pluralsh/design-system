@@ -376,13 +376,13 @@ __metadata:
   linkType: hard
 
 "@babel/helpers@npm:^7.20.1, @babel/helpers@npm:^7.20.5":
-  version: 7.20.5
-  resolution: "@babel/helpers@npm:7.20.5"
+  version: 7.20.6
+  resolution: "@babel/helpers@npm:7.20.6"
   dependencies:
     "@babel/template": ^7.18.10
     "@babel/traverse": ^7.20.5
     "@babel/types": ^7.20.5
-  checksum: b058f668eba26abd7fcb100a40d7d5ac97a858dd2d4ff9b72078728e4c19b04574de4ba23754a97eb5f5bf2cb7545d694558502f24f85088d49f5a3f8edf5eca
+  checksum: f03ec6eb2bf8dc7cdfe2569ee421fd9ba6c7bac6c862d90b608ccdd80281ebe858bc56ca175fc92b3ac50f63126b66bbd5ec86f9f361729289a20054518f1ac5
   languageName: node
   linkType: hard
 
@@ -1449,12 +1449,12 @@ __metadata:
   linkType: hard
 
 "@babel/runtime-corejs3@npm:^7.10.2":
-  version: 7.20.5
-  resolution: "@babel/runtime-corejs3@npm:7.20.5"
+  version: 7.20.6
+  resolution: "@babel/runtime-corejs3@npm:7.20.6"
   dependencies:
     core-js-pure: ^3.25.1
     regenerator-runtime: ^0.13.11
-  checksum: 8bb436760deca326083fa35967ffc0e3232b08ed07e23cd8008c56a7f53b067dcb10c6176222d280f2d89854e649ad0635f082e67d87dd83eeb48030792ca702
+  checksum: d533d432216509426c4f9dad56db2fe453112b7d738433111944372fba4abd0b07bee3261f19a218530b435de46592121b2a6a57b98c0c7c3452d552ba009c3e
   languageName: node
   linkType: hard
 
@@ -1468,11 +1468,11 @@ __metadata:
   linkType: hard
 
 "@babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.18.9, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7":
-  version: 7.20.5
-  resolution: "@babel/runtime@npm:7.20.5"
+  version: 7.20.6
+  resolution: "@babel/runtime@npm:7.20.6"
   dependencies:
     regenerator-runtime: ^0.13.11
-  checksum: 9c4a1d07a4df8a5e3e208d4d7c349cd311af4e95ed345b4541b7f0bb5e226e2b748fa04f36b2f7be1f9bb08f5310c632f4702add9c64a200c39636cfe551c9ad
+  checksum: 42a8504db21031b1859fbc0f52d698a3d2f5ada9519eb76c6f96a7e657d8d555732a18fe71ef428a67cc9fc81ca0d3562fb7afdc70549c5fec343190cbaa9b03
   languageName: node
   linkType: hard
 
@@ -1623,7 +1623,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discoveryjs/json-ext@npm:^0.5.3, @discoveryjs/json-ext@npm:^0.5.7":
+"@discoveryjs/json-ext@npm:^0.5.3":
   version: 0.5.7
   resolution: "@discoveryjs/json-ext@npm:0.5.7"
   checksum: 2176d301cc258ea5c2324402997cf8134ebb212469c0d397591636cea8d3c02f2b3cf9fd58dcb748c7a0dade77ebdc1b10284fa63e608c033a1db52fddc69918
@@ -2367,11 +2367,10 @@ __metadata:
     "@typescript-eslint/parser": 5.44.0
     babel-loader: 9.1.0
     chroma-js: 2.4.2
-    chromatic: ^6.11.4
     classnames: 2.3.2
     eslint: 8.28.0
     eslint-plugin-storybook: 0.6.7
-    firebase-tools: ^11.16.1
+    firebase-tools: 11.16.1
     fuse.js: 6.6.2
     grommet: 2.27.0
     grommet-icons: 4.8.0
@@ -5185,7 +5184,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/webpack-env@npm:^1.16.0, @types/webpack-env@npm:^1.17.0":
+"@types/webpack-env@npm:^1.16.0":
   version: 1.18.0
   resolution: "@types/webpack-env@npm:1.18.0"
   checksum: ecf4daa31cb37d474ac0ce058d83a3cadeb9881ca8107ae93c2299eaa9954943aae09b43e143c62ccbe4288a14db00c918c9debd707afe17c3998f873eaabc59
@@ -6891,20 +6890,6 @@ __metadata:
   version: 2.4.2
   resolution: "chroma-js@npm:2.4.2"
   checksum: cf9884c02d406286e4370599bcd1afbf089384407df46b3a69edfedcba7bb99e8f959a5cfdbfec750b305c441c06ca40cd1f70ba3a6c2ce739ac09a92520ddae
-  languageName: node
-  linkType: hard
-
-"chromatic@npm:^6.11.4":
-  version: 6.11.4
-  resolution: "chromatic@npm:6.11.4"
-  dependencies:
-    "@discoveryjs/json-ext": ^0.5.7
-    "@types/webpack-env": ^1.17.0
-  bin:
-    chroma: bin/main.cjs
-    chromatic: bin/main.cjs
-    chromatic-cli: bin/main.cjs
-  checksum: 7af3302b410a42d7e4833be0c94830a4848ccd877920bbb32082554da7fd1bbf46af800bb9f66ee14fb24a124df2229102ddc5e5dc91237f6339dc7b1394fbe3
   languageName: node
   linkType: hard
 
@@ -9555,7 +9540,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-tools@npm:^11.16.1":
+"firebase-tools@npm:11.16.1":
   version: 11.16.1
   resolution: "firebase-tools@npm:11.16.1"
   dependencies:
