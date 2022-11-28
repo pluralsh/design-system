@@ -16,6 +16,5 @@
     "resolveJsonModule": true,
     "suppressImplicitAnyIndexErrors": true
   },
-  "include": ["src"],
-  "references": [{"path": "tsconfig.vite.json"}]
+  "include": ["src/**/*"],
 }

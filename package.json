@@ -13,8 +13,8 @@
     "storybook:serve-static": "yarn build:storybook && http-server storybook-static",
     "build": "npx tsc --declaration",
     "clean": "rimraf storybook-static dist",
-    "lint": "eslint src --ext ts,tsx,js,jsx",
-    "fix": "eslint src --ext ts,tsx,js,jsx --fix",
+    "lint": "eslint . --ext ts,tsx,js,jsx",
+    "fix": "eslint . --ext ts,tsx,js,jsx --fix",
     "prepublishOnly": "npm run build"
   },
   "engines": {
