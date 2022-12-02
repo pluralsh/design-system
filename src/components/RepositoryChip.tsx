@@ -1,4 +1,9 @@
-import { ReactNode, Ref, forwardRef } from 'react'
+import {
+  ReactNode,
+  Ref,
+  forwardRef,
+  useState,
+} from 'react'
 import {
   Div,
   Flex,
@@ -9,6 +14,7 @@ import {
 import PropTypes from 'prop-types'
 
 import CheckRoundedIcon from './icons/CheckRoundedIcon'
+import PlusIcon from './icons/PlusIcon'
 
 type TagProps = FlexProps & {
   label: string
@@ -40,6 +46,8 @@ function RepositoryChipRef({
   icon = null,
   ...props
 }: TagProps, ref: Ref<any>) {
+  const [hovered, setHovered] = useState(false)
+
   return (
     <Flex
       ref={ref}
@@ -51,6 +59,8 @@ function RepositoryChipRef({
       backgroundColor="fill-two"
       _hover={{ backgroundColor: 'fill-two-hover' }}
       transition="background-color 200ms ease"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       {...props}
     >
       {icon ? (
@@ -79,6 +89,12 @@ function RepositoryChipRef({
         color="border-outline-focused"
         visibility={checked ? 'visible' : 'hidden'}
         marginLeft="medium"
+      />
+      <PlusIcon
+        color="text-light"
+        display={hovered && !checked ? 'visible' : 'none'}
+        marginLeft="medium"
+        height={16}
       />
     </Flex>
   )
