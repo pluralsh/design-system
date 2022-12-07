@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -11,10 +12,12 @@ import Input from '../Input'
 import { SearchIcon } from '../../icons'
 import RepositoryChip from '../RepositoryChip'
 
+import Button from '../Button'
+
 import { StepConfig, WizardContext } from './context'
 import { usePicker } from './hooks'
 
-const Picker = styled(PickerUnstyled)(({ theme: _theme }) => ({
+const Picker = styled(PickerUnstyled)(({ theme }) => ({
   height: '100%',
   minHeight: 0,
 
@@ -32,6 +35,20 @@ const Picker = styled(PickerUnstyled)(({ theme: _theme }) => ({
   '.scrollable': {
     paddingRight: '8px',
   },
+
+  '.empty': {
+    marginTop: '16px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyItems: 'center',
+    flexDirection: 'column',
+
+    '.empty-message': {
+      ...(theme.partials.text.body2),
+      color: theme.colors['text-light'],
+      paddingBottom: theme.spacing.small,
+    },
+  },
 }))
 
 type PickerProps = {
@@ -46,6 +63,7 @@ function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
   const scrollRef = useRef<HTMLDivElement>(null)
   const isScrollbarVisible = (el: HTMLDivElement) => el?.scrollHeight > el?.clientHeight
   const selected = steps.filter(step => !step.isDefault && !step.isPlaceholder)
+  const filtered = useMemo(() => items.filter(item => (search ? item.label.toLowerCase().includes(search) : true)), [items, search])
 
   useEffect(() => {
     const { current } = scrollRef
@@ -63,13 +81,13 @@ function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
         value={search}
         onChange={({ target: { value } }) => setSearch(value.toLowerCase())}
       />
-      <div
-        className={scrollable ? 'grid scrollable' : 'grid'}
-        ref={scrollRef}
-      >
-        {items
-          .filter(item => (search ? item.label.toLowerCase().includes(search) : true))
-          .map(item => (
+      {filtered.length > 0
+      && (
+        <div
+          className={scrollable ? 'grid scrollable' : 'grid'}
+          ref={scrollRef}
+        >
+          {filtered.map(item => (
             <RepositoryChip
               label={item.label}
               imageUrl={item.imageUrl}
@@ -77,7 +95,18 @@ function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
               checked={selected.findIndex(s => s.label === item.label) > -1}
             />
           ))}
-      </div>
+        </div>
+      )}
+      {filtered.length === 0 && (
+        <div className="empty">
+          <span className="empty-message">No applications found for "{search}".</span>
+          <Button
+            secondary
+            onClick={() => setSearch('')}
+          >Clear search
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

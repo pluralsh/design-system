@@ -9,7 +9,7 @@ type StepProps<T = unknown> = {
   data: T
 }
 
-const Step = styled<StepProps>(UnstyledStep)(({ theme: _theme }) => ({
+const Step = styled<StepProps>(UnstyledStep)(() => ({
   maxHeight: '576px',
   height: '100%',
   overflow: 'auto',

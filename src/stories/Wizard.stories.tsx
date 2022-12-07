@@ -1,7 +1,7 @@
 import {
   Button,
   Flex,
-  Modal,
+  Modal as HonorableModal,
   P,
 } from 'honorable'
 
@@ -21,8 +21,10 @@ import { Navigation } from '../components/wizard/Navigation'
 import { Installer } from '../components/wizard/Installer'
 import { Step } from '../components/wizard/Step'
 import Input from '../components/Input'
-import { useActive, useNavigation } from '../components/wizard/hooks'
+import { useActive } from '../components/wizard/hooks'
 import { Toast } from '../components/Toast'
+import FormField from '../components/FormField'
+import Modal from '../components/Modal'
 
 export default {
   title: 'Wizard',
@@ -52,13 +54,19 @@ function Application({ ...props }: unknown): ReactElement {
       <P
         overline
         color="text-xlight"
+        paddingBottom="medium"
       >configure {active.label}
       </P>
-      <Input
-        placeholder={`${active.label} Domain`}
-        value={domain}
-        onChange={event => setDomain(event.target.value)}
-      />
+      <FormField
+        label="Domain"
+        required
+      >
+        <Input
+          placeholder="https://{domain}.onplural.sh"
+          value={domain}
+          onChange={event => setDomain(event.target.value)}
+        />
+      </FormField>
     </Step>
   )
 }
@@ -113,6 +121,7 @@ const INITIAL_STEPS: Array<StepConfig> = [
 
 function ModalTemplate() {
   const [open, setOpen] = useState(true)
+  const [confirmClose, setConfirmClose] = useState(false)
   const [visible, setVisible] = useState(false)
 
   return (
@@ -121,17 +130,18 @@ function ModalTemplate() {
         Open
       </Button>
 
-      <Modal
+      <HonorableModal
         open={open}
         form={false}
         fontSize={16}
-        onClose={() => setOpen(false)}
         width={768}
         maxWidth={768}
+        height={768}
         overflow="hidden"
       >
         <Wizard
-          onClose={() => setOpen(false)}
+          onClose={() => setConfirmClose(true)}
+          onNext={() => console.log('next')}
           steps={INITIAL_STEPS}
         >
           {{
@@ -143,6 +153,34 @@ function ModalTemplate() {
             />,
           }}
         </Wizard>
+      </HonorableModal>
+
+      <Modal
+        header="confirm cancellation"
+        open={confirmClose}
+        actions={(
+          <>
+            <Button
+              secondary
+              onClick={() => setConfirmClose(false)}
+            >Cancel
+            </Button>
+            <Button
+              destructive
+              marginLeft="medium"
+              onClick={() => {
+                setConfirmClose(false)
+                setOpen(false)
+              }}
+            >Continue
+            </Button>
+          </>
+        )}
+        style={{
+          padding: 0,
+        }}
+      >
+        <P>Are you sure you want to cancel installation? You will lose all progress.</P>
       </Modal>
 
       {visible

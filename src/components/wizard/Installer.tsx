@@ -15,6 +15,7 @@ import { WizardContext } from './context'
 import { useNavigation } from './hooks'
 
 const Installer = styled(InstallerUnstyled)(({ theme }) => ({
+  height: '100%',
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing.small,

@@ -10,6 +10,8 @@ import {
 import Button from '../Button'
 import InstallIcon from '../icons/InstallIcon'
 
+import { ReturnIcon } from '../../icons'
+
 import { WizardContext } from './context'
 import { useActive, useNavigation } from './hooks'
 
@@ -62,10 +64,14 @@ function NavigationUnstyled({ onInstall, ...props }: NavigationProps): ReactElem
   }, [isLast, setCompleted, selected])
 
   return (
-    <div {...props}>
+    <div
+      className={!isFirst ? 'divider' : ''}
+      {...props}
+    >
       {completed && stepCompleted && (
         <Button
           secondary
+          startIcon={<ReturnIcon />}
           disabled={!valid}
           onClick={() => onReturn()}
         >Return to install

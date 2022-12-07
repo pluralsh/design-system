@@ -1,9 +1,12 @@
 import styled from 'styled-components'
 import { Flex } from 'honorable'
 import {
+  Dispatch,
   MouseEventHandler,
   ReactElement,
   useCallback,
+  useContext,
+  useEffect,
   useMemo,
 } from 'react'
 
@@ -11,12 +14,11 @@ import IconFrame from '../IconFrame'
 import { CloseIcon } from '../../icons'
 
 import { NavigationProps } from './Navigation'
-import { StepperProps } from './Stepper'
 import { StepConfig } from './Picker'
 import { WizardContext } from './context'
-import { useActive, useWizard } from './hooks'
+import { useActive, useNavigation, useWizard } from './hooks'
 
-const Wizard = styled(WizardUnstyled)(({ theme: _theme }) => ({
+const Wizard = styled(WizardUnstyled)(({ theme }) => ({
   height: '100%',
   width: '100%',
   display: 'flex',
@@ -32,22 +34,35 @@ const Wizard = styled(WizardUnstyled)(({ theme: _theme }) => ({
 
   '.footer': {
     marginTop: '24px',
+
+    '&.divider': {
+      paddingTop: '24px',
+      borderTop: '1px solid',
+      borderColor: theme.colors.border,
+    },
   },
 }))
 
 type WizardProps = {
   children?: {
-    stepper?: ReactElement<StepperProps>,
+    stepper?: ReactElement,
     navigation?: ReactElement<NavigationProps>
   }
   steps: Array<StepConfig>
-  onClose: MouseEventHandler<void>
+  onClose?: MouseEventHandler<void>
+  onNext?: Dispatch<void>
 }
 
-function WizardUnstyled({ onClose, children, ...props }: WizardProps): ReactElement<WizardProps> {
+function WizardUnstyled({
+  onClose, onNext, children, ...props
+}: WizardProps): ReactElement<WizardProps> {
+  const { active: activeIdx } = useContext(WizardContext)
   const { active } = useActive()
+  const { isFirst } = useNavigation()
   const { stepper, navigation } = children
   const hasHeader = useCallback(() => stepper || onClose, [stepper, onClose])
+
+  useEffect(() => (!isFirst ? onNext && onNext() : undefined), [activeIdx, onNext, isFirst])
 
   return (
     <div {...props}>
@@ -71,7 +86,7 @@ function WizardUnstyled({ onClose, children, ...props }: WizardProps): ReactElem
       {active?.node}
       {/* Navigation */}
       {navigation && (
-        <div className="footer">
+        <div className={isFirst ? 'footer' : 'footer divider'}>
           {navigation}
         </div>
       )}
