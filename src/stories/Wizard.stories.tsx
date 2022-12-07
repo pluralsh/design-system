@@ -123,6 +123,7 @@ function ModalTemplate() {
   const [open, setOpen] = useState(true)
   const [confirmClose, setConfirmClose] = useState(false)
   const [visible, setVisible] = useState(false)
+  const [inProgress, setInProgress] = useState<boolean>(false)
 
   return (
     <Flex>
@@ -140,8 +141,8 @@ function ModalTemplate() {
         overflow="hidden"
       >
         <Wizard
-          onClose={() => setConfirmClose(true)}
-          onNext={() => console.log('next')}
+          onClose={() => (inProgress > 0 ? setConfirmClose(true) : setOpen(false))}
+          onComplete={(sCompleted, completed) => setInProgress(sCompleted || completed)}
           steps={INITIAL_STEPS}
         >
           {{

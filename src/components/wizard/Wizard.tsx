@@ -10,6 +10,8 @@ import {
   useMemo,
 } from 'react'
 
+import { act } from 'react-dom/test-utils'
+
 import IconFrame from '../IconFrame'
 import { CloseIcon } from '../../icons'
 
@@ -50,19 +52,22 @@ type WizardProps = {
   }
   steps: Array<StepConfig>
   onClose?: MouseEventHandler<void>
-  onNext?: Dispatch<void>
+  onStepChange?: Dispatch<number>
+  onComplete?: (sCompleted: boolean, completed: boolean) => void
 }
 
 function WizardUnstyled({
-  onClose, onNext, children, ...props
+  onClose, onStepChange, onComplete, children, ...props
 }: WizardProps): ReactElement<WizardProps> {
-  const { active: activeIdx } = useContext(WizardContext)
+  const { active: activeIdx, steps, completed } = useContext(WizardContext)
   const { active } = useActive()
   const { isFirst } = useNavigation()
   const { stepper, navigation } = children
   const hasHeader = useCallback(() => stepper || onClose, [stepper, onClose])
 
-  useEffect(() => (!isFirst ? onNext && onNext() : undefined), [activeIdx, onNext, isFirst])
+  useEffect(() => (onStepChange && onStepChange(activeIdx)), [activeIdx, onStepChange])
+  useEffect(() => onComplete && onComplete(steps.filter(s => !s.isDefault && !s.isPlaceholder).some(s => s.isCompleted), completed),
+    [steps, completed, onComplete])
 
   return (
     <div {...props}>
