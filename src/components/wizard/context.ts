@@ -1,62 +1,32 @@
 import { Dispatch, createContext } from 'react'
 
-import { Item } from './Picker'
+import createIcon from '../icons/createIcon'
 
-export type WizardState = {
-  steps: Array<Item>
-  setSteps: Dispatch<Array<Item>>
-} & PickerState & NavigationState & StepperState & StepState
+import { Step } from './Step'
 
-type PickerState = {
-  onSelect: Dispatch<Item>
+type ContextProps = {
+  steps: Array<StepConfig>
+  setSteps: Dispatch<Array<StepConfig>>
+  active: number
+  setActive: Dispatch<number>
+  completed: boolean
+  setCompleted: Dispatch<boolean>
 }
 
-type NavigationState = {
-  isFirst: boolean
-  isLast: boolean
-  current: Item
-
-  onEdit: Dispatch<Item>
-  onBack: Dispatch<void>
-  onNext: Dispatch<void>
-  onReset: Dispatch<void>
+type StepConfig<T = unknown> = {
+  key: string
+  label?: string
+  imageUrl?: string
+  Icon?: ReturnType<typeof createIcon>
+  isDefault?: boolean
+  isPlaceholder?: boolean
+  isCompleted?: boolean
+  isValid?: boolean
+  node?: Step
+  data?: T | null
 }
 
-type StepState = {
-  onActivate: Dispatch<Item>
-}
+const WizardContext = createContext<ContextProps>(null)
 
-type StepperState = {
-  // steps: StepperSteps
-}
-
-const next = (steps: Array<Item>, current: number): number => {
-  const currentItem = steps.at(current)
-  const idx = steps.findIndex(s => s.key === currentItem.key)
-  let nextIdx = idx + 1
-
-  if (idx < 0) return -1
-  if (idx === steps.length - 1) return idx
-
-  while (steps.at(nextIdx).isPlaceholder) nextIdx++
-
-  return nextIdx
-}
-
-const back = (steps: Array<Item>, current: number): number => {
-  const currentItem = steps.at(current)
-  const idx = steps.findIndex(s => s.key === currentItem.key)
-  let prevIdx = idx - 1
-
-  if (idx < 0) return -1
-  if (idx === 0) return idx
-
-  while (steps.at(prevIdx).isPlaceholder) prevIdx--
-
-  return prevIdx
-}
-
-const WizardContext = createContext<WizardState>({} as WizardState)
-
-export { back, next }
-export default WizardContext
+export type { ContextProps, StepConfig }
+export { WizardContext }

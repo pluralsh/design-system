@@ -1,25 +1,28 @@
 import styled from 'styled-components'
 import { Flex } from 'honorable'
 import {
-  Dispatch,
+  MouseEventHandler,
   ReactElement,
   useCallback,
-  useContext,
   useMemo,
-  useState,
 } from 'react'
 
 import IconFrame from '../IconFrame'
 import { CloseIcon } from '../../icons'
 
-import { Navigation, NavigationProps } from './Navigation'
-import WizardContext, { WizardState, back, next } from './context'
+import { NavigationProps } from './Navigation'
 import { StepperProps } from './Stepper'
-import { Step } from './Step'
-import { Item } from './Picker'
+import { StepConfig } from './Picker'
+import { WizardContext } from './context'
+import { useActive, useWizard } from './hooks'
 
 const Wizard = styled(WizardUnstyled)(({ theme: _theme }) => ({
-  '.top': {
+  height: '100%',
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+
+  '.header': {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -27,7 +30,7 @@ const Wizard = styled(WizardUnstyled)(({ theme: _theme }) => ({
     marginBottom: '24px',
   },
 
-  '.navigation': {
+  '.footer': {
     marginTop: '24px',
   },
 }))
@@ -37,90 +40,53 @@ type WizardProps = {
     stepper?: ReactElement<StepperProps>,
     navigation?: ReactElement<NavigationProps>
   }
-  steps: Array<Item>
-  onClose?: Dispatch<void>
+  steps: Array<StepConfig>
+  onClose: MouseEventHandler<void>
 }
 
 function WizardUnstyled({ onClose, children, ...props }: WizardProps): ReactElement<WizardProps> {
-  const { current } = useContext(WizardContext)
+  const { active } = useActive()
   const { stepper, navigation } = children
+  const hasHeader = useCallback(() => stepper || onClose, [stepper, onClose])
 
   return (
     <div {...props}>
       {/* Top bar */}
-      <div className="top">
-        {/* Stepper */}
-        {stepper && stepper}
-        <Flex flexGrow={1} />
-        {onClose && (
-          <IconFrame
-            icon={<CloseIcon color="icon-light" />}
-            onClick={onClose}
-            textValue="close"
-            clickable
-          />
-        )}
-      </div>
-      <Step>
-        {current?.node}
-      </Step>
+      {hasHeader && (
+        <div className="header">
+          {/* Stepper */}
+          {stepper && stepper}
+          <Flex flexGrow={1} />
+          {onClose && (
+            <IconFrame
+              icon={<CloseIcon color="icon-light" />}
+              onClick={onClose}
+              textValue="close"
+              clickable
+            />
+          )}
+        </div>
+      )}
+      {/* Step */}
+      {active?.node}
       {/* Navigation */}
-      <div className="navigation">
-        {navigation && navigation}
-      </div>
+      {navigation && (
+        <div className="footer">
+          {navigation}
+        </div>
+      )}
     </div>
   )
 }
 
-function ContextAwareWizard({ steps: initialSteps, ...props }: WizardProps): JSX.Element {
-  const [steps, setSteps] = useState<Array<Item>>(initialSteps)
-  const [current, setCurrent] = useState<number>(0)
-  const onSelect = useCallback((elem: Item) => {
-    const idx = steps.findIndex(s => s.label === elem.label)
-    const arr = Array.from(steps)
-
-    if (idx > -1) {
-      arr.splice(idx, 1)
-    }
-    else {
-      arr.splice(-2, 0, elem)
-    }
-
-    setSteps(arr)
-  }, [steps, setSteps])
-
-  const onReset = useCallback(() => {
-    setSteps(initialSteps)
-  }, [setSteps, initialSteps])
-
-  const onNext = useCallback(() => {
-    const idx = next(steps, current)
-
-    setCurrent(idx)
-  }, [setCurrent, steps, current])
-
-  const onBack = useCallback(() => {
-    const idx = back(steps, current)
-
-    setCurrent(idx)
-  }, [setCurrent, steps, current])
-
-  const onEdit = useCallback((item: Item) => {
-    const idx = steps.findIndex(s => s.key === item.key)
-
-    if (idx < 0) return
-
-    setCurrent(idx)
-  }, [steps])
-
-  const context = useMemo(() => ({
-    steps, setSteps, onSelect, onReset, isFirst: current === 0, isLast: current === steps.length - 1, current: steps.at(current), onNext, onBack, onEdit,
-  } as WizardState), [steps, setSteps, onSelect, onReset, current, onNext])
+function ContextAwareWizard({ steps: initialSteps, ...props }: WizardProps): ReactElement<WizardProps> {
+  const context = useWizard(initialSteps)
+  const memo = useMemo(() => context, [context])
 
   return (
-    <WizardContext.Provider value={context}>
+    <WizardContext.Provider value={memo}>
       <Wizard
-        steps={steps}
+        steps={memo?.steps}
         {...props}
       />
     </WizardContext.Provider>

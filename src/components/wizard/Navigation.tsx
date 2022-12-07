@@ -1,10 +1,17 @@
 import styled from 'styled-components'
-import { ReactElement, useContext } from 'react'
+import {
+  Dispatch,
+  ReactElement,
+  useContext,
+  useEffect,
+  useMemo,
+} from 'react'
 
 import Button from '../Button'
 import InstallIcon from '../icons/InstallIcon'
 
-import WizardContext from './context'
+import { WizardContext } from './context'
+import { useActive, useNavigation } from './hooks'
 
 const Navigation = styled(NavigationUnstyled)(({ theme }) => ({
   display: 'flex',
@@ -29,17 +36,41 @@ const Navigation = styled(NavigationUnstyled)(({ theme }) => ({
 }))
 
 type NavigationProps = {
-  children?: any,
+  onInstall: Dispatch<void>
 }
 
-function NavigationUnstyled({ ...props }: NavigationProps): ReactElement<NavigationProps> {
+function NavigationUnstyled({ onInstall, ...props }: NavigationProps): ReactElement<NavigationProps> {
+  const { steps, completed, setCompleted } = useContext(WizardContext)
+  const { active, setCompleted: setStepCompleted } = useActive()
   const {
-    steps, onReset, onNext, onBack, isFirst, isLast,
-  } = useContext(WizardContext)
+    isLast, isFirst, onReset, onBack, onNext, onReturn,
+  } = useNavigation()
   const selected = steps.filter(step => !step.isDefault && !step.isPlaceholder)
+  const valid = useMemo(() => active.isDefault || active.isValid, [active])
+  const stepCompleted = useMemo(() => !active.isDefault && active.isCompleted, [active])
+
+  useEffect(() => {
+    const stepsCompleted = selected.every(s => s.isCompleted)
+
+    if (!stepsCompleted) {
+      setCompleted(false)
+
+      return
+    }
+
+    return isLast ? setCompleted(true) : undefined
+  }, [isLast, setCompleted, selected])
 
   return (
     <div {...props}>
+      {completed && stepCompleted && (
+        <Button
+          secondary
+          disabled={!valid}
+          onClick={() => onReturn()}
+        >Return to install
+        </Button>
+      )}
       <div className="spacer" />
       {isFirst && <div className="text">{selected?.length || 0} selected</div>}
       {isFirst && (
@@ -58,16 +89,18 @@ function NavigationUnstyled({ ...props }: NavigationProps): ReactElement<Navigat
       )}
       {!isLast && (
         <Button
-          disabled={selected?.length === 0}
-          onClick={() => onNext()}
+          disabled={selected?.length === 0 || !valid}
+          onClick={() => {
+            setStepCompleted(true)
+            onNext()
+          }}
         >Continue
         </Button>
       )}
       {isLast && (
         <Button
           startIcon={<InstallIcon />}
-          disabled={selected?.length === 0}
-          onClick={() => onNext()}
+          onClick={() => onInstall()}
         >Install
         </Button>
       )}

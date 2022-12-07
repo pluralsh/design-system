@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import {
-  ReactElement,
   useContext,
   useEffect,
   useRef,
@@ -12,17 +11,21 @@ import Input from '../Input'
 import { SearchIcon } from '../../icons'
 import RepositoryChip from '../RepositoryChip'
 
-import createIcon from '../icons/createIcon'
-
-import WizardContext from './context'
+import { StepConfig, WizardContext } from './context'
+import { usePicker } from './hooks'
 
 const Picker = styled(PickerUnstyled)(({ theme: _theme }) => ({
+  height: '100%',
+  minHeight: 0,
+
   '.grid': {
     marginTop: '16px',
     display: 'grid',
-    gridTemplateColumns: '1fr 1fr 1fr',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(225px, 1fr))',
+    gridAutoRows: 'minmax(auto, 40px)',
     gap: '16px',
     maxHeight: '536px',
+    height: 'calc(100% - 56px)',
     overflow: 'auto',
   },
 
@@ -32,26 +35,16 @@ const Picker = styled(PickerUnstyled)(({ theme: _theme }) => ({
 }))
 
 type PickerProps = {
-  items: Array<Item>
-  children?: any,
-}
-
-type Item = {
-  key: string
-  label?: string
-  imageUrl?: string
-  Icon?: ReturnType<typeof createIcon>
-  isDefault?: boolean
-  isPlaceholder?: boolean
-  node?: ReactElement
+  items: Array<StepConfig>
 }
 
 function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
-  const { onSelect, steps } = useContext(WizardContext)
-  const [search, setSearch] = useState(undefined)
+  const { steps } = useContext(WizardContext)
+  const { onSelect } = usePicker()
+  const [search, setSearch] = useState<string>(undefined)
   const [scrollable, setScrollable] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const isScrollbarVisible = (el: HTMLDivElement) => el.scrollHeight > el.clientHeight
+  const isScrollbarVisible = (el: HTMLDivElement) => el?.scrollHeight > el?.clientHeight
   const selected = steps.filter(step => !step.isDefault && !step.isPlaceholder)
 
   useEffect(() => {
@@ -89,5 +82,5 @@ function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
   )
 }
 
-export type { PickerProps, Item }
+export type { PickerProps, StepConfig }
 export { Picker }

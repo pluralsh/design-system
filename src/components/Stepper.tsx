@@ -85,8 +85,8 @@ type StepperProps = FlexProps & {
 const propTypes = {
   stepIndex: PropTypes.number.isRequired,
   steps: PropTypes.arrayOf(PropTypes.shape({
-    stepTitle: PropTypes.node.isRequired,
-    IconComponent: PropTypes.elementType.isRequired,
+    stepTitle: PropTypes.node,
+    IconComponent: PropTypes.elementType,
     iconSize: PropTypes.number,
   }).isRequired).isRequired,
 }

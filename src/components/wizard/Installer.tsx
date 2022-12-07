@@ -11,7 +11,8 @@ import { ListBoxItem } from '../ListBoxItem'
 import { AppIcon } from '../../index'
 import PencilIcon from '../icons/PencilIcon'
 
-import WizardContext from './context'
+import { WizardContext } from './context'
+import { useNavigation } from './hooks'
 
 const Installer = styled(InstallerUnstyled)(({ theme }) => ({
   display: 'flex',
@@ -30,7 +31,8 @@ type InstallerProps = {
 }
 
 function InstallerUnstyled({ ...props }: InstallerProps): ReactElement<InstallerProps> {
-  const { steps, onEdit } = useContext(WizardContext)
+  const { steps } = useContext(WizardContext)
+  const { onEdit } = useNavigation()
   const apps = steps.filter(step => !step.isDefault && !step.isPlaceholder)
   const [_, setSelectedKey] = useState<Key>()
 
