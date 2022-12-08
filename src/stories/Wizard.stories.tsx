@@ -25,6 +25,7 @@ import { useActive } from '../components/wizard/hooks'
 import { Toast } from '../components/Toast'
 import FormField from '../components/FormField'
 import Modal from '../components/Modal'
+import GlobeIcon from '../components/icons/GlobeIcon'
 
 export default {
   title: 'Wizard',
@@ -96,6 +97,24 @@ const PICKER_ITEMS: Array<StepConfig> = [
     imageUrl: '/logos/crossplane-logo.png',
     node: <Application key="crossplane" />,
   },
+  {
+    key: 'grafana',
+    label: 'Grafana',
+    Icon: GlobeIcon,
+    node: <Application key="grafana" />,
+  },
+  {
+    key: 'mongodb',
+    label: 'MongoDB',
+    Icon: GlobeIcon,
+    node: <Application key="mongodb" />,
+  },
+  {
+    key: 'datadog',
+    label: 'Datadog',
+    Icon: GlobeIcon,
+    node: <Application key="datadog" />,
+  },
 ]
 
 const INITIAL_STEPS: Array<StepConfig> = [
@@ -144,6 +163,7 @@ function ModalTemplate() {
           onClose={() => (inProgress > 0 ? setConfirmClose(true) : setOpen(false))}
           onComplete={(sCompleted, completed) => setInProgress(sCompleted || completed)}
           steps={INITIAL_STEPS}
+          limit={5}
         >
           {{
             stepper: <Stepper />,

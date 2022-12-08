@@ -29,11 +29,7 @@ const Installer = styled(InstallerUnstyled)(({ theme }) => ({
   },
 }))
 
-type InstallerProps = {
-  children?: any,
-}
-
-function InstallerUnstyled({ ...props }: InstallerProps): ReactElement<InstallerProps> {
+function InstallerUnstyled({ ...props }: unknown): ReactElement {
   const { steps } = useContext(WizardContext)
   const { onEdit } = useNavigation()
   const apps = steps.filter(step => !step.isDefault && !step.isPlaceholder)
@@ -56,6 +52,7 @@ function InstallerUnstyled({ ...props }: InstallerProps): ReactElement<Installer
               <AppIcon
                 size="xsmall"
                 url={app.imageUrl}
+                icon={app.Icon && <app.Icon />}
               />
             )}
             rightContent={(
@@ -71,5 +68,4 @@ function InstallerUnstyled({ ...props }: InstallerProps): ReactElement<Installer
   )
 }
 
-export type { InstallerProps }
 export { Installer }

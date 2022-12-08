@@ -35,7 +35,9 @@ type NavigationProps = {
 }
 
 function NavigationUnstyled({ onInstall, ...props }: NavigationProps): ReactElement<NavigationProps> {
-  const { steps, completed, setCompleted } = useContext(WizardContext)
+  const {
+    steps, completed, setCompleted, limit,
+  } = useContext(WizardContext)
   const { active, setCompleted: setStepCompleted } = useActive()
   const {
     isLast, isFirst, onReset, onBack, onNext, onReturn,
@@ -68,7 +70,7 @@ function NavigationUnstyled({ onInstall, ...props }: NavigationProps): ReactElem
         </Button>
       )}
       <div className="spacer" />
-      {isFirst && <div className="text">{selected?.length || 0} selected</div>}
+      {isFirst && <div className="text">{selected?.length || 0} selected {selected?.length >= limit ? '(max)' : ''}</div>}
       {isFirst && (
         <Button
           secondary

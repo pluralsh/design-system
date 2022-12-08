@@ -280,8 +280,8 @@ ref: Ref<any>) {
             isActive={stepIndex === index}
             isComplete={stepIndex > index}
             stepTitle={step.stepTitle}
-            IconComponent={step?.IconComponent}
-            imageUrl={step?.imageUrl}
+            IconComponent={step.IconComponent}
+            imageUrl={step.imageUrl}
             iconSize={step.iconSize || 24}
             circleSize={step.circleSize || 48}
             vertical={step.vertical || vertical}

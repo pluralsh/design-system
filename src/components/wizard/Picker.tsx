@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import {
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -57,7 +58,7 @@ type PickerProps = {
 }
 
 function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
-  const { steps } = useContext(WizardContext)
+  const { steps, limit } = useContext(WizardContext)
   const { onSelect } = usePicker()
   const [search, setSearch] = useState<string>(undefined)
   const [scrollable, setScrollable] = useState(false)
@@ -65,6 +66,13 @@ function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
   const isScrollbarVisible = (el: HTMLDivElement) => el?.scrollHeight > el?.clientHeight
   const selected = steps.filter(step => !step.isDefault && !step.isPlaceholder)
   const filtered = useMemo(() => items.filter(item => (search ? item.label.toLowerCase().includes(search) : true)), [items, search])
+
+  const select = useCallback((item: StepConfig) => {
+    const isSelected = selected.includes(item)
+    const isMax = selected.length >= limit
+
+    return isSelected || !isMax ? onSelect(item) : undefined
+  }, [limit, selected, onSelect])
 
   useEffect(() => {
     const { current } = scrollRef
@@ -92,8 +100,10 @@ function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
             <RepositoryChip
               label={item.label}
               imageUrl={item.imageUrl}
-              onClick={() => onSelect(item)}
+              icon={item.Icon && <item.Icon />}
+              onClick={() => select(item)}
               checked={selected.findIndex(s => s.label === item.label) > -1}
+              disabled={selected.length >= limit}
             />
           ))}
         </div>

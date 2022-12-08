@@ -20,6 +20,7 @@ type TagProps = FlexProps & {
   label: string
   imageUrl?: string
   checked?: boolean
+  disabled? : boolean
   icon?: ReactNode
 }
 
@@ -27,6 +28,7 @@ const propTypes = {
   label: PropTypes.string.isRequired,
   imageUrl: PropTypes.string,
   checked: PropTypes.bool,
+  disabled: PropTypes.bool,
   icon: PropTypes.node,
 }
 
@@ -43,6 +45,7 @@ function RepositoryChipRef({
   label,
   imageUrl = '',
   checked = false,
+  disabled = false,
   icon = null,
   ...props
 }: TagProps, ref: Ref<any>) {
@@ -53,11 +56,12 @@ function RepositoryChipRef({
       ref={ref}
       padding="xsmall"
       align="center"
-      cursor="pointer"
+      cursor={disabled && !checked ? 'not-allowed' : 'pointer'}
+      opacity={disabled && !checked ? 0.5 : 1}
       borderRadius="large"
       border={`1px solid ${checked ? 'border-outline-focused' : 'border-fill-two'}`}
       backgroundColor="fill-two"
-      _hover={{ backgroundColor: 'fill-two-hover' }}
+      _hover={disabled ? {} : { backgroundColor: 'fill-two-hover' }}
       transition="background-color 200ms ease"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -92,7 +96,7 @@ function RepositoryChipRef({
       />
       <PlusIcon
         color="text-light"
-        display={hovered && !checked ? 'visible' : 'none'}
+        display={hovered && !checked && !disabled ? 'visible' : 'none'}
         marginLeft="medium"
         height={16}
       />

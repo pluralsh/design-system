@@ -11,6 +11,7 @@ type ContextProps = {
   setActive: Dispatch<number>
   completed: boolean
   setCompleted: Dispatch<boolean>
+  limit: number
 }
 
 type StepConfig<T = unknown> = {

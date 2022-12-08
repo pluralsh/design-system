@@ -50,6 +50,7 @@ type WizardProps = {
     navigation?: ReactElement<NavigationProps>
   }
   steps: Array<StepConfig>
+  limit?: number
   onClose?: MouseEventHandler<void>
   onStepChange?: Dispatch<number>
   onComplete?: (sCompleted: boolean, completed: boolean) => void
@@ -98,8 +99,8 @@ function WizardUnstyled({
   )
 }
 
-function ContextAwareWizard({ steps: initialSteps, ...props }: WizardProps): ReactElement<WizardProps> {
-  const context = useWizard(initialSteps)
+function ContextAwareWizard({ steps: initialSteps, limit, ...props }: WizardProps): ReactElement<WizardProps> {
+  const context = useWizard(initialSteps, limit)
   const memo = useMemo(() => context, [context])
 
   return (

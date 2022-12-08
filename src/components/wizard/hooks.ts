@@ -145,7 +145,7 @@ const usePicker = () => {
   }
 }
 
-const useWizard = (initialSteps: Array<StepConfig> = []): ContextProps => {
+const useWizard = (initialSteps: Array<StepConfig> = [], limit = -1): ContextProps => {
   const [steps, setSteps] = useState<Array<StepConfig>>(initialSteps)
   const [active, setActive] = useState<number>(0)
   const [completed, setCompleted] = useState<boolean>(false)
@@ -157,6 +157,7 @@ const useWizard = (initialSteps: Array<StepConfig> = []): ContextProps => {
     setActive,
     completed,
     setCompleted,
+    limit,
   }
 }
 
