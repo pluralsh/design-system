@@ -3,8 +3,8 @@ import { useContext } from 'react'
 import Stepper, { StepperSteps } from '../Stepper'
 
 import { StepConfig } from './Picker'
-import { WizardContext } from './context'
 import { useActive, useNavigation } from './hooks'
+import { WizardContext } from './context'
 
 const toStepperStep = (item : StepConfig, size = 40, canComplete = true): StepperSteps[number] => ({
   key: item.key,

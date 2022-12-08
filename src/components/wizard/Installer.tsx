@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { StyledProps } from 'styled-components'
 import {
   Key,
   ReactElement,
@@ -11,8 +11,8 @@ import { ListBoxItem } from '../ListBoxItem'
 import { AppIcon } from '../../index'
 import PencilIcon from '../icons/PencilIcon'
 
-import { WizardContext } from './context'
 import { useNavigation } from './hooks'
+import { WizardContext } from './context'
 
 const Installer = styled(InstallerUnstyled)(({ theme }) => ({
   display: 'flex',
@@ -29,7 +29,7 @@ const Installer = styled(InstallerUnstyled)(({ theme }) => ({
   },
 }))
 
-function InstallerUnstyled({ ...props }: unknown): ReactElement {
+function InstallerUnstyled({ ...props }: StyledProps<unknown>): ReactElement {
   const { steps } = useContext(WizardContext)
   const { onEdit } = useNavigation()
   const apps = steps.filter(step => !step.isDefault && !step.isPlaceholder)

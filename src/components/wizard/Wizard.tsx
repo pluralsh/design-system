@@ -15,8 +15,8 @@ import { CloseIcon } from '../../icons'
 
 import { NavigationProps } from './Navigation'
 import { StepConfig } from './Picker'
-import { WizardContext } from './context'
 import { useActive, useNavigation, useWizard } from './hooks'
+import { WizardContext } from './context'
 
 const Wizard = styled(WizardUnstyled)(({ theme }) => ({
   height: '100%',

@@ -1,12 +1,19 @@
-import { Dispatch, createContext } from 'react'
+import {
+  Dispatch,
+  ReactElement,
+  createContext,
+  useMemo,
+} from 'react'
 
 import createIcon from '../icons/createIcon'
 
 import { Step } from './Step'
+import { Picker } from './Picker'
+import { Installer } from './Installer'
 
-type ContextProps = {
-  steps: Array<StepConfig>
-  setSteps: Dispatch<Array<StepConfig>>
+type ContextProps<T = unknown> = {
+  steps: Array<StepConfig<T>>
+  setSteps: Dispatch<Array<StepConfig<T>>>
   active: number
   setActive: Dispatch<number>
   completed: boolean
@@ -23,11 +30,12 @@ type StepConfig<T = unknown> = {
   isPlaceholder?: boolean
   isCompleted?: boolean
   isValid?: boolean
-  node?: Step
+  node?: ReactElement<typeof Step | typeof Installer | typeof Picker>
   data?: T | null
 }
 
-const WizardContext = createContext<ContextProps>(null)
+const createWizardContext = <T = any>() => createContext<ContextProps<T>>(null)
+const WizardContext = createWizardContext()
 
 export type { ContextProps, StepConfig }
 export { WizardContext }

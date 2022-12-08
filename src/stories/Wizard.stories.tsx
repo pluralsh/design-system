@@ -12,6 +12,8 @@ import {
   useState,
 } from 'react'
 
+import { LayerPositionType } from 'grommet'
+
 import { Wizard } from '../components/wizard/Wizard'
 import { Picker, StepConfig } from '../components/wizard/Picker'
 import { Stepper } from '../components/wizard/Stepper'
@@ -36,7 +38,7 @@ interface FormData {
   domain: string
 }
 
-function Application({ ...props }: unknown): ReactElement {
+function Application({ ...props }: any): ReactElement {
   const { active, setData } = useActive<FormData>()
   const [domain, setDomain] = useState<string>(active?.data?.domain)
 
@@ -160,7 +162,7 @@ function ModalTemplate() {
         padding={24}
       >
         <Wizard
-          onClose={() => (inProgress > 0 ? setConfirmClose(true) : setOpen(false))}
+          onClose={() => (inProgress ? setConfirmClose(true) : setOpen(false))}
           onComplete={(sCompleted, completed) => setInProgress(sCompleted || completed)}
           steps={INITIAL_STEPS}
           limit={5}
@@ -207,7 +209,7 @@ function ModalTemplate() {
       {visible
         && (
           <Toast
-            position="bottom-right"
+            position={'bottom-right' as LayerPositionType}
             onClose={() => setVisible(false)}
             margin="large"
             severity="success"
@@ -242,7 +244,7 @@ function StandaloneTemplate() {
       {visible
         && (
           <Toast
-            position="bottom-right"
+            position={'bottom-right' as LayerPositionType}
             onClose={() => setVisible(false)}
             margin="large"
             severity="success"

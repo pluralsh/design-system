@@ -12,8 +12,8 @@ import InstallIcon from '../icons/InstallIcon'
 
 import { ReturnIcon } from '../../icons'
 
-import { WizardContext } from './context'
 import { useActive, useNavigation } from './hooks'
+import { WizardContext } from './context'
 
 const Navigation = styled(NavigationUnstyled)(({ theme }) => ({
   display: 'flex',

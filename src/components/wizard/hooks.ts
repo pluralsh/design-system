@@ -9,15 +9,15 @@ import isEqual from 'lodash/isEqual'
 import { ContextProps, StepConfig, WizardContext } from './context'
 
 const useActive = <T = unknown>() => {
-  const { steps, setSteps, active: activeIdx } = useContext(WizardContext)
-  const active = useMemo<StepConfig<T>>(() => steps?.at(activeIdx), [activeIdx, steps])
+  const { steps, setSteps, active: activeIdx } = useContext<ContextProps<T>>(WizardContext)
+  const active: StepConfig<T> = useMemo<StepConfig<T>>(() => steps?.at(activeIdx), [activeIdx, steps])
 
   const setValid = useCallback((valid: boolean) => {
     if (valid === active.isValid) {
       return
     }
 
-    const updated = { ...active, isValid: valid } as StepConfig
+    const updated = { ...active, isValid: valid } as StepConfig<T>
     const arr = Array.from(steps)
 
     arr[activeIdx] = updated
@@ -30,7 +30,7 @@ const useActive = <T = unknown>() => {
       return
     }
 
-    const updated = { ...active, isCompleted: completed } as StepConfig
+    const updated = { ...active, isCompleted: completed } as StepConfig<T>
     const arr = Array.from(steps)
 
     arr[activeIdx] = updated
@@ -43,7 +43,7 @@ const useActive = <T = unknown>() => {
       return
     }
 
-    const updated = { ...active, data } as StepConfig
+    const updated = { ...active, data } as StepConfig<T>
     const arr = Array.from(steps)
 
     arr[activeIdx] = updated
@@ -145,7 +145,7 @@ const usePicker = () => {
   }
 }
 
-const useWizard = (initialSteps: Array<StepConfig> = [], limit = -1): ContextProps => {
+const useWizard = (initialSteps: Array<StepConfig> = [], limit = 10): ContextProps => {
   const [steps, setSteps] = useState<Array<StepConfig>>(initialSteps)
   const [active, setActive] = useState<number>(0)
   const [completed, setCompleted] = useState<boolean>(false)
