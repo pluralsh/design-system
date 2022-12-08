@@ -7,7 +7,6 @@ import last from 'lodash/last'
 import { styledTheme as theme } from '../theme'
 
 import { FillLevel, useFillLevel } from './contexts/FillLevelContext'
-import createIcon from './icons/createIcon'
 
 type Hue = 'default' | 'lighter' | 'lightest'
 type Size = 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'

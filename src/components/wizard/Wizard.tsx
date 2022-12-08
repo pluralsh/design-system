@@ -53,7 +53,7 @@ type WizardProps = {
   limit?: number
   onClose?: MouseEventHandler<void>
   onStepChange?: Dispatch<number>
-  onComplete?: (sCompleted: boolean, completed: boolean) => void
+  onComplete?: (stepCompleted: boolean, completed: boolean) => void
 }
 
 function WizardUnstyled({

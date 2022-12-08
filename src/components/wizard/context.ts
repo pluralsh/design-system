@@ -1,9 +1,4 @@
-import {
-  Dispatch,
-  ReactElement,
-  createContext,
-  useMemo,
-} from 'react'
+import { Dispatch, ReactElement, createContext } from 'react'
 
 import createIcon from '../icons/createIcon'
 

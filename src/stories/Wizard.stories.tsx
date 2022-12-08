@@ -163,7 +163,7 @@ function ModalTemplate() {
       >
         <Wizard
           onClose={() => (inProgress ? setConfirmClose(true) : setOpen(false))}
-          onComplete={(sCompleted, completed) => setInProgress(sCompleted || completed)}
+          onComplete={(stepCompleted, completed) => setInProgress(stepCompleted || completed)}
           steps={INITIAL_STEPS}
           limit={5}
         >
