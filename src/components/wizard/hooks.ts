@@ -59,6 +59,7 @@ const useActive = <T = unknown>() => {
 const useNavigation = () => {
   const {
     steps, setSteps, active, setActive,
+    setCompleted,
   } = useContext(WizardContext)
 
   const onNext = useCallback(() => {
@@ -91,7 +92,8 @@ const useNavigation = () => {
     const initialSteps = steps.filter(step => step.isDefault || step.isPlaceholder)
 
     setSteps(initialSteps)
-  }, [setSteps, steps])
+    setCompleted(false)
+  }, [setSteps, steps, setCompleted])
 
   const onEdit = useCallback((step: StepConfig) => {
     const idx = steps.findIndex(s => s.key === step.key)

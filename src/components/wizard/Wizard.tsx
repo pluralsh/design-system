@@ -20,6 +20,7 @@ import { useActive, useNavigation, useWizard } from './hooks'
 
 const Wizard = styled(WizardUnstyled)(({ theme }) => ({
   height: '100%',
+  minHeight: '400px',
   width: '100%',
   display: 'flex',
   flexDirection: 'column',

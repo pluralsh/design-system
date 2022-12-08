@@ -138,7 +138,7 @@ function ModalTemplate() {
         width={768}
         maxWidth={768}
         height={768}
-        overflow="hidden"
+        padding={24}
       >
         <Wizard
           onClose={() => (inProgress > 0 ? setConfirmClose(true) : setOpen(false))}
@@ -205,7 +205,7 @@ function StandaloneTemplate() {
   return (
     <Flex
       width="100%"
-      height="400px"
+      height="500px"
     >
       <Wizard
         steps={INITIAL_STEPS}

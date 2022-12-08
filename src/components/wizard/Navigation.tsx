@@ -19,15 +19,8 @@ const Navigation = styled(NavigationUnstyled)(({ theme }) => ({
   display: 'flex',
   gap: theme.spacing.medium,
 
-  '.grid': {
-    marginTop: theme.spacing.medium,
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr 1fr',
-    gap: theme.spacing.medium,
-  },
-
   '.spacer': {
-    width: '100%',
+    flex: 1,
   },
 
   '.text': {
@@ -64,10 +57,7 @@ function NavigationUnstyled({ onInstall, ...props }: NavigationProps): ReactElem
   }, [isLast, setCompleted, selected])
 
   return (
-    <div
-      className={!isFirst ? 'divider' : ''}
-      {...props}
-    >
+    <div {...props}>
       {completed && stepCompleted && (
         <Button
           secondary

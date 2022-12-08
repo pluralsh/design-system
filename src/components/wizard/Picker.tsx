@@ -27,8 +27,9 @@ const Picker = styled(PickerUnstyled)(({ theme }) => ({
     gridTemplateColumns: 'repeat(auto-fill, minmax(225px, 1fr))',
     gridAutoRows: 'minmax(auto, 40px)',
     gap: '16px',
-    maxHeight: '536px',
+    maxHeight: '576px',
     height: 'calc(100% - 56px)',
+    minHeight: '200px',
     overflow: 'auto',
   },
 
