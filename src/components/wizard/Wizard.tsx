@@ -10,8 +10,6 @@ import {
   useMemo,
 } from 'react'
 
-import { act } from 'react-dom/test-utils'
-
 import IconFrame from '../IconFrame'
 import { CloseIcon } from '../../icons'
 
