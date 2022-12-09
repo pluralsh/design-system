@@ -2349,7 +2349,7 @@ __metadata:
     eslint-plugin-storybook: 0.6.7
     firebase-tools: 11.16.1
     fuse.js: 6.6.2
-    grommet: 2.27.0
+    grommet: 2.28.0
     grommet-icons: 4.8.0
     highlight.js: 11.6.0
     honorable: 0.191.0
@@ -10242,11 +10242,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"grommet@npm:2.27.0":
-  version: 2.27.0
-  resolution: "grommet@npm:2.27.0"
+"grommet@npm:2.28.0":
+  version: 2.28.0
+  resolution: "grommet@npm:2.28.0"
   dependencies:
-    grommet-icons: ^4.7.0
+    grommet-icons: ^4.8.0
     hoist-non-react-statics: ^3.2.0
     markdown-to-jsx: ^7.1.5
     prop-types: ^15.8.1
@@ -10254,7 +10254,7 @@ __metadata:
     react: ^16.6.1 || ^17.0.0 || ^18.0.0
     react-dom: ^16.6.1 || ^17.0.0 || ^18.0.0
     styled-components: ">= 5.1"
-  checksum: 6d43e25090877de0f994713d386ba8cf745c365799bbc5b2fd215d3a5b17b2d6910fe832f4f3a208c1d718ffad78746aaba8df9e1ba76c2c5e6c364f17a69b35
+  checksum: 5def847ca4b722b397e9084f6dbdced9875a4cff54f34629b8258be5c697feb97d1f1bf1ff3ae47342affd592e7269a137bb8e494ab85b9ee647c7cb0125b3c3
   languageName: node
   linkType: hard
 
