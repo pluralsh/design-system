@@ -68,7 +68,7 @@ function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
   const filtered = useMemo(() => items.filter(item => (search ? item.label.toLowerCase().includes(search) : true)), [items, search])
 
   const select = useCallback((item: StepConfig) => {
-    const isSelected = selected.includes(item)
+    const isSelected = !!selected.find(i => i.key === item.key)
     const isMax = selected.length >= limit
 
     return isSelected || !isMax ? onSelect(item) : undefined
@@ -98,6 +98,7 @@ function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
         >
           {filtered.map(item => (
             <RepositoryChip
+              key={item.key}
               label={item.label}
               imageUrl={item.imageUrl}
               icon={item.Icon && <item.Icon />}
