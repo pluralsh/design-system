@@ -65,6 +65,7 @@ function RepositoryChipRef({
       transition="background-color 200ms ease"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      whiteSpace="nowrap"
       {...props}
     >
       {icon ? (

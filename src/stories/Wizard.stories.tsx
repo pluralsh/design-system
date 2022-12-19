@@ -23,7 +23,7 @@ import { Navigation } from '../components/wizard/Navigation'
 import { Installer } from '../components/wizard/Installer'
 import { Step } from '../components/wizard/Step'
 import Input from '../components/Input'
-import { useActive } from '../components/wizard/hooks'
+import { useActive } from '../components/wizard'
 import { Toast } from '../components/Toast'
 import FormField from '../components/FormField'
 import Modal from '../components/Modal'
@@ -119,7 +119,7 @@ const PICKER_ITEMS: Array<StepConfig> = [
   },
 ]
 
-const INITIAL_STEPS: Array<StepConfig> = [
+const DEFAULT_STEPS: Array<StepConfig> = [
   {
     key: 'apps',
     label: 'Apps',
@@ -163,8 +163,8 @@ function ModalTemplate() {
       >
         <Wizard
           onClose={() => (inProgress ? setConfirmClose(true) : setOpen(false))}
-          onComplete={(stepCompleted, completed) => setInProgress(stepCompleted || completed)}
-          steps={INITIAL_STEPS}
+          onComplete={completed => setInProgress(completed)}
+          defaultSteps={DEFAULT_STEPS}
           limit={5}
         >
           {{
@@ -230,7 +230,7 @@ function StandaloneTemplate() {
       height="500px"
     >
       <Wizard
-        steps={INITIAL_STEPS}
+        defaultSteps={DEFAULT_STEPS}
       >
         {{
           stepper: <Stepper />,

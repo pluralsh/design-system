@@ -23,10 +23,12 @@ type StepConfig<T = unknown> = {
   Icon?: ReturnType<typeof createIcon>
   isDefault?: boolean
   isPlaceholder?: boolean
+  isDependency?: boolean
   isCompleted?: boolean
   isValid?: boolean
   node?: ReactElement<typeof Step | typeof Installer | typeof Picker>
   data?: T | null
+  dependencyOf?: Set<string>
 }
 
 const createWizardContext = <T = any>() => createContext<ContextProps<T>>(null)

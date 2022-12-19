@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import Stepper, { StepperSteps } from '../Stepper'
 
 import { StepConfig } from './Picker'
-import { useActive, useNavigation } from './hooks'
+import { useActive, useNavigation, usePicker } from './hooks'
 import { WizardContext } from './context'
 
 const toStepperStep = (item: StepConfig, size = 40, canComplete = true): StepperSteps[number] => ({
@@ -29,8 +29,8 @@ function ContextAwareStepper(): JSX.Element {
   const { steps: wizardSteps, limit } = useContext(WizardContext)
   const { isFirst } = useNavigation()
   const { active } = useActive()
-  const selected = wizardSteps.filter(step => !step.isDefault && !step.isPlaceholder)?.length || 0
-  const filteredWizardSteps = isFirst && selected < limit ? wizardSteps : wizardSteps.filter(i => !i.isPlaceholder)
+  const { selectedCount } = usePicker()
+  const filteredWizardSteps = isFirst && selectedCount < limit ? wizardSteps : wizardSteps.filter(i => !i.isPlaceholder)
   const stepperSteps: StepperSteps = Array.from(toStepperSteps(filteredWizardSteps))
 
   return (

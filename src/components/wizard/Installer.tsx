@@ -1,18 +1,13 @@
 import styled, { StyledProps } from 'styled-components'
-import {
-  Key,
-  ReactElement,
-  useContext,
-  useState,
-} from 'react'
+import { ReactElement } from 'react'
 
 import { ListBox } from '../ListBox'
 import { ListBoxItem } from '../ListBoxItem'
 import { AppIcon } from '../../index'
 import PencilIcon from '../icons/PencilIcon'
+import Chip from '../Chip'
 
-import { useNavigation } from './hooks'
-import { WizardContext } from './context'
+import { useNavigation, useStepper } from './hooks'
 
 const Installer = styled(InstallerUnstyled)(({ theme }) => ({
   display: 'flex',
@@ -27,22 +22,23 @@ const Installer = styled(InstallerUnstyled)(({ theme }) => ({
     whiteSpace: 'nowrap',
     ...theme.partials.text.body2Bold,
   },
+
+  '.item-right-content': {
+    display: 'flex',
+    alignItems: 'center',
+  },
 }))
 
 function InstallerUnstyled({ ...props }: StyledProps<unknown>): ReactElement {
-  const { steps } = useContext(WizardContext)
   const { onEdit } = useNavigation()
-  const apps = steps.filter(step => !step.isDefault && !step.isPlaceholder)
-  const [_, setSelectedKey] = useState<Key>()
+  const { selected: apps } = useStepper()
 
   return (
     <div {...props}>
       <div className="text">Apps to install ({apps.length}):</div>
       <ListBox
         selectedKey={null}
-        onSelectionChange={key => {
-          setSelectedKey(key)
-        }}
+        onSelectionChange={() => {}}
       >
         {apps.map(app => (
           <ListBoxItem
@@ -56,10 +52,20 @@ function InstallerUnstyled({ ...props }: StyledProps<unknown>): ReactElement {
               />
             )}
             rightContent={(
-              <PencilIcon
-                color="icon-light"
-                onClick={() => onEdit(app)}
-              />
+              <div className="item-right-content">
+                {app.isDependency && (
+                  <Chip
+                    marginRight="medium"
+                    hue="lightest"
+                    size="small"
+                  >Dependency
+                  </Chip>
+                )}
+                <PencilIcon
+                  color="icon-light"
+                  onClick={() => onEdit(app)}
+                />
+              </div>
             )}
           />
         ))}

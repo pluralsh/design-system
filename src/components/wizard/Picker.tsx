@@ -12,11 +12,10 @@ import {
 import Input from '../Input'
 import { SearchIcon } from '../../icons'
 import RepositoryChip from '../RepositoryChip'
-
 import Button from '../Button'
 
 import { StepConfig, WizardContext } from './context'
-import { usePicker } from './hooks'
+import { usePicker, useWindowSize } from './hooks'
 
 const Picker = styled(PickerUnstyled)(({ theme }) => ({
   height: '100%',
@@ -58,13 +57,13 @@ type PickerProps = {
 }
 
 function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
-  const { steps, limit } = useContext(WizardContext)
-  const { onSelect } = usePicker()
+  const { limit } = useContext(WizardContext)
+  const size = useWindowSize()
+  const { onSelect, selected } = usePicker()
   const [search, setSearch] = useState<string>(undefined)
   const [scrollable, setScrollable] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const isScrollbarVisible = (el: HTMLDivElement) => el?.scrollHeight > el?.clientHeight
-  const selected = steps.filter(step => !step.isDefault && !step.isPlaceholder)
   const filtered = useMemo(() => items.filter(item => (search ? item.label.toLowerCase().includes(search) : true)), [items, search])
 
   const select = useCallback((item: StepConfig) => {
@@ -80,7 +79,7 @@ function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
     if (!current) return
 
     setScrollable(isScrollbarVisible(current))
-  }, [scrollRef])
+  }, [scrollRef, size])
 
   return (
     <div {...props}>

@@ -4,16 +4,19 @@ import {
   ReactElement,
   useContext,
   useEffect,
-  useMemo,
 } from 'react'
 
 import Button from '../Button'
 import InstallIcon from '../icons/InstallIcon'
-
 import { ReturnIcon } from '../../icons'
 
-import { useActive, useNavigation } from './hooks'
-import { WizardContext } from './context'
+import {
+  useActive,
+  useNavigation,
+  usePicker,
+  useStepper,
+} from './hooks'
+import { ContextProps, StepConfig, WizardContext } from './context'
 
 const Navigation = styled(NavigationUnstyled)(({ theme }) => ({
   display: 'flex',
@@ -30,24 +33,23 @@ const Navigation = styled(NavigationUnstyled)(({ theme }) => ({
   },
 }))
 
-type NavigationProps = {
-  onInstall: Dispatch<void>
+type NavigationProps<T = unknown> = {
+  onInstall: Dispatch<Array<StepConfig<T>>>
 }
 
-function NavigationUnstyled({ onInstall, ...props }: NavigationProps): ReactElement<NavigationProps> {
+function NavigationUnstyled<T = unknown>({ onInstall, ...props }: NavigationProps<T>): ReactElement<NavigationProps<T>> {
   const {
-    steps, completed, setCompleted, limit,
-  } = useContext(WizardContext)
-  const { active, setCompleted: setStepCompleted } = useActive()
+    completed, setCompleted, limit,
+  } = useContext<ContextProps<T>>(WizardContext)
+  const { setCompleted: setStepCompleted, valid, completed: stepCompleted } = useActive()
   const {
     isLast, isFirst, onReset, onBack, onNext, onReturn,
   } = useNavigation()
-  const selected = steps.filter(step => !step.isDefault && !step.isPlaceholder)
-  const valid = useMemo(() => active.isDefault || active.isValid, [active])
-  const stepCompleted = useMemo(() => !active.isDefault && active.isCompleted, [active])
+  const { selected: stepperSteps } = useStepper<T>()
+  const { selected: pickerSteps } = usePicker()
 
   useEffect(() => {
-    const stepsCompleted = selected.every(s => s.isCompleted)
+    const stepsCompleted = stepperSteps.every(s => s.isCompleted)
 
     if (!stepsCompleted) {
       setCompleted(false)
@@ -56,7 +58,7 @@ function NavigationUnstyled({ onInstall, ...props }: NavigationProps): ReactElem
     }
 
     return isLast ? setCompleted(true) : undefined
-  }, [isLast, setCompleted, selected])
+  }, [isLast, setCompleted, stepperSteps])
 
   return (
     <div {...props}>
@@ -70,12 +72,12 @@ function NavigationUnstyled({ onInstall, ...props }: NavigationProps): ReactElem
         </Button>
       )}
       <div className="spacer" />
-      {isFirst && <div className="text">{selected?.length || 0} selected {selected?.length >= limit ? '(max)' : ''}</div>}
+      {isFirst && <div className="text">{pickerSteps?.length || 0} selected {pickerSteps?.length >= limit ? '(max)' : ''}</div>}
       {isFirst && (
         <Button
           secondary
           onClick={() => onReset()}
-        >Reset
+        >Clear
         </Button>
       )}
       {!isFirst && (
@@ -87,7 +89,7 @@ function NavigationUnstyled({ onInstall, ...props }: NavigationProps): ReactElem
       )}
       {!isLast && (
         <Button
-          disabled={selected?.length === 0 || !valid}
+          disabled={pickerSteps?.length === 0 || !valid}
           onClick={() => {
             setStepCompleted(true)
             onNext()
@@ -98,7 +100,7 @@ function NavigationUnstyled({ onInstall, ...props }: NavigationProps): ReactElem
       {isLast && (
         <Button
           startIcon={<InstallIcon />}
-          onClick={() => onInstall()}
+          onClick={() => onInstall(stepperSteps)}
         >Install
         </Button>
       )}

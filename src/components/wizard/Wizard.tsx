@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { Flex } from 'honorable'
 import {
-  Dispatch,
   MouseEventHandler,
   ReactElement,
   useCallback,
@@ -9,13 +8,20 @@ import {
   useEffect,
   useMemo,
 } from 'react'
+import IsEmpty from 'lodash/isEmpty'
 
 import IconFrame from '../IconFrame'
 import { CloseIcon } from '../../icons'
+import LoopingLogo from '../LoopingLogo'
 
 import { NavigationProps } from './Navigation'
 import { StepConfig } from './Picker'
-import { useActive, useNavigation, useWizard } from './hooks'
+import {
+  useActive,
+  useNavigation,
+  usePicker,
+  useWizard,
+} from './hooks'
 import { WizardContext } from './context'
 
 const Wizard = styled(WizardUnstyled)(({ theme }) => ({
@@ -24,6 +30,7 @@ const Wizard = styled(WizardUnstyled)(({ theme }) => ({
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
+  position: 'relative',
 
   '.header': {
     display: 'flex',
@@ -42,35 +49,69 @@ const Wizard = styled(WizardUnstyled)(({ theme }) => ({
       borderColor: theme.colors.border,
     },
   },
+
+  '.loader': {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    margin: '-24px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: theme.colors['fill-zero'],
+    opacity: 0.5,
+    zIndex: 999,
+  },
 }))
 
 type WizardProps = {
+  dependencySteps?: Array<StepConfig>
+  loading?: boolean
+  onClose?: MouseEventHandler<void>
+  onComplete?: (completed: boolean) => void
+  onSelect?: (selected: Array<StepConfig>) => void
   children?: {
     stepper?: ReactElement,
     navigation?: ReactElement<NavigationProps>
   }
-  steps: Array<StepConfig>
-  limit?: number
-  onClose?: MouseEventHandler<void>
-  onStepChange?: Dispatch<number>
-  onComplete?: (stepCompleted: boolean, completed: boolean) => void
 }
 
 function WizardUnstyled({
-  onClose, onStepChange, onComplete, children, ...props
+  dependencySteps, loading, onClose, onComplete, onSelect, children, ...props
 }: WizardProps): ReactElement<WizardProps> {
-  const { active: activeIdx, steps, completed } = useContext(WizardContext)
+  const { steps, setSteps, completed } = useContext(WizardContext)
   const { active } = useActive()
-  const { isFirst } = useNavigation()
+  const { isFirst, onReset } = useNavigation()
+  const { selected } = usePicker()
   const { stepper, navigation } = children
+
   const hasHeader = useCallback(() => stepper || onClose, [stepper, onClose])
 
-  useEffect(() => (onStepChange && onStepChange(activeIdx)), [activeIdx, onStepChange])
-  useEffect(() => onComplete && onComplete(steps.filter(s => !s.isDefault && !s.isPlaceholder).some(s => s.isCompleted), completed),
+  useEffect(() => onComplete && onComplete(steps.filter(s => !s.isDefault && !s.isPlaceholder).some(s => s.isCompleted) || completed),
     [steps, completed, onComplete])
+  useEffect(() => onSelect && onSelect(selected), [onSelect, selected])
+  useEffect(() => {
+    if (IsEmpty(dependencySteps)) {
+      if (steps.some(s => s.isDependency)) onReset()
+
+      return
+    }
+
+    const arr = steps.filter(step => !step.isDependency)
+
+    arr.splice(1, 0, ...dependencySteps)
+    setSteps(arr)
+  }, [dependencySteps])
 
   return (
     <div {...props}>
+      {loading && (
+        <div className="loader">
+          <LoopingLogo />
+        </div>
+      )}
       {/* Top bar */}
       {hasHeader && (
         <div className="header">
@@ -99,16 +140,20 @@ function WizardUnstyled({
   )
 }
 
-function ContextAwareWizard({ steps: initialSteps, limit, ...props }: WizardProps): ReactElement<WizardProps> {
-  const context = useWizard(initialSteps, limit)
+type WizardContextProps = {
+  defaultSteps: Array<StepConfig>
+  limit?: number
+} & WizardProps
+
+function ContextAwareWizard({
+  defaultSteps, limit, ...props
+}: WizardContextProps): ReactElement<WizardContextProps> {
+  const context = useWizard(defaultSteps, limit)
   const memo = useMemo(() => context, [context])
 
   return (
     <WizardContext.Provider value={memo}>
-      <Wizard
-        steps={memo?.steps}
-        {...props}
-      />
+      <Wizard {...props} />
     </WizardContext.Provider>
   )
 }
