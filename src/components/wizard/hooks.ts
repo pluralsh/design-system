@@ -132,12 +132,14 @@ const usePicker = () => {
 
   const onSelect = useCallback((elem: StepConfig) => {
     const idx = steps.findIndex(s => s.label === elem.label)
+    const isDependency = steps.at(idx)?.isDependency
     const arr = Array.from(steps)
 
     if (idx > -1) {
       arr.splice(idx, 1)
     }
-    else {
+
+    if (idx < 0 || (idx > -1 && isDependency)) {
       arr.splice(-2, 0, elem)
     }
 

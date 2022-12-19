@@ -99,7 +99,7 @@ function WizardUnstyled({
 
   const hasHeader = useCallback(() => stepper || onClose, [stepper, onClose])
 
-  useEffect(() => onComplete && onComplete(steps.filter(s => !s.isDefault && !s.isPlaceholder).some(s => s.isCompleted) || completed),
+  useEffect(() => onComplete && onComplete(completed || steps.filter(s => !s.isDefault && !s.isPlaceholder).some(s => s.isCompleted)),
     [steps, completed, onComplete])
   useEffect(() => onSelect && onSelect(selected), [onSelect, selected])
   useEffect(() => {
