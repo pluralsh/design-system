@@ -60,9 +60,19 @@ const Wizard = styled(WizardUnstyled)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: theme.colors['fill-zero'],
-    opacity: 0.5,
     zIndex: 999,
+
+    '.overlay': {
+      background: theme.colors['fill-zero'],
+      opacity: 0.5,
+      height: '100%',
+      width: '100%',
+      position: 'absolute',
+    },
+
+    '.logo': {
+      opacity: 0.8,
+    },
   },
 }))
 
@@ -109,7 +119,8 @@ function WizardUnstyled({
     <div {...props}>
       {loading && (
         <div className="loader">
-          <LoopingLogo />
+          <div className="overlay" />
+          <LoopingLogo className="logo" />
         </div>
       )}
       {/* Top bar */}
