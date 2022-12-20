@@ -1,5 +1,4 @@
 import { Flex, FlexProps } from 'honorable'
-import PropTypes from 'prop-types'
 import {
   Children,
   Ref,
