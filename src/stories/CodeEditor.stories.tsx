@@ -53,71 +53,66 @@ function Template({ onFillLevel, ...args }: any) {
       >
         <CodeEditor
           language="javascript"
+          value={jsCode}
           width="600px"
           {...args}
-        >
-          {jsCode}
-        </CodeEditor>
+        />
         <CodeEditor
-          language="terraform"
+          language="hcl"
+          value={tfCode}
           width="600px"
           height="200px"
           {...args}
-        >
-          {tfCode}
-        </CodeEditor>
+        />
         <CodeEditor
+          value={jsCode}
           width="600px"
           height="100px"
           {...args}
-        >
-          {jsCode}
-        </CodeEditor>
+        />
         <CodeEditor
           language="go"
+          value={goCode}
           width="400px"
           {...args}
-        >
-          {goCode}
-        </CodeEditor>
+        />
         <CodeEditor
-          width="400px"
           language="js"
-          {...args}
-        >
-          console.warn('test')
-        </CodeEditor>
-        <CodeEditor
+          value="console.warn('test')"
           width="400px"
           {...args}
-        >
-          One line
-        </CodeEditor>
+        />
         <CodeEditor
+          value="One line"
+          width="400px"
+          {...args}
+        />
+        <CodeEditor
+          value="One line with `height` specified"
           width="400px"
           height="300px"
           {...args}
-        >
-          One line with `height` specified
-        </CodeEditor>
+        />
         <CodeEditor
+          value={'Two lines\nTwo lines'}
           width="400px"
           {...args}
-        >
-          {'Two lines\nTwo lines'}
-        </CodeEditor>
+        />
         <CodeEditor
+          value={'Three lines\nThree lines\nThree lines'}
           width="400px"
           {...args}
-        >
-          {'Three lines\nThree lines\nThree lines'}
-        </CodeEditor>
+        />
+        <CodeEditor
+          height="100px"
+          width="400px"
+          {...args}
+        />
         <CodeEditor
           language="javascript"
+          value={jsCode}
           {...args}
-        >
-          {jsCode}
-        </CodeEditor>
+        />
       </Flex>
     </WrapWithIf>
   )
@@ -127,5 +122,4 @@ export const Default = Template.bind({})
 Default.args = {
   title: '',
   showLineNumbers: true,
-  showHeader: undefined,
 }

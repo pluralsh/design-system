@@ -1,31 +1,36 @@
-import {
-  ComponentProps,
-  RefObject,
-  forwardRef,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react'
+import { RefObject, forwardRef } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Div, Flex } from 'honorable'
+import { Button, Flex } from 'honorable'
 import styled, { useTheme } from 'styled-components'
+
+import Editor from '@monaco-editor/react'
 
 import CopyIcon from './icons/CopyIcon'
 import Card, { CardProps } from './Card'
 import CheckIcon from './icons/CheckIcon'
-import Highlight from './Highlight'
 import { toFillLevel, useFillLevel } from './contexts/FillLevelContext'
 
 type CodeEditorProps = Omit<CardProps, 'children'> & {
-  children?: string
   language?: string
-  showLineNumbers?: boolean
-  showHeader?: boolean
+  value?: string
+  onChange?: (value: string | undefined, ev: any) => void,
+  options?: any
 }
 
 const propTypes = {
   language: PropTypes.string,
   showLineNumbers: PropTypes.bool,
+}
+
+const defaultOptions = {
+  fontFamily: '"Monument Mono", monospace',
+  fontSize: '14px',
+  minimap: {
+    enabled: false,
+  },
+  scrollbar: {
+    verticalScrollbarSize: 5,
+  },
 }
 
 function CopyButtonBase({
@@ -58,64 +63,66 @@ const CopyButton = styled(CopyButtonBase)<{ verticallyCenter: boolean }>(({ vert
   boxShadow: theme.boxShadows.slight,
 }))
 
-function CodeContent({
-  children,
-  hasSetHeight,
-  ...props
-}: ComponentProps<typeof Highlight> & { hasSetHeight: boolean }) {
-  const [copied, setCopied] = useState(false)
-  const codeString = children?.trim() || ''
-  const multiLine = !!codeString.match(/\r?\n/) || hasSetHeight
-  const handleCopy = useCallback(() => window.navigator.clipboard
-    .writeText(codeString)
-    .then(() => setCopied(true)),
-  [codeString])
+// function CodeContent({
+//   children,
+//   hasSetHeight,
+//   ...props
+// }: ComponentProps<typeof Highlight> & { hasSetHeight: boolean }) {
+//   const [copied, setCopied] = useState(false)
 
-  useEffect(() => {
-    if (copied) {
-      const timeout = setTimeout(() => setCopied(false), 1000)
+//   const multiLine = !!codeString.match(/\r?\n/) || hasSetHeight
+//   const handleCopy = useCallback(() => window.navigator.clipboard
+//     .writeText(codeString)
+//     .then(() => setCopied(true)),
+//   [codeString])
 
-      return () => clearTimeout(timeout)
-    }
-  }, [copied])
+//   useEffect(() => {
+//     if (copied) {
+//       const timeout = setTimeout(() => setCopied(false), 1000)
 
-  if (typeof children !== 'string') {
-    throw new Error('Code component expects a string as its children')
-  }
+//       return () => clearTimeout(timeout)
+//     }
+//   }, [copied])
 
-  return (
-    <Div
-      height="100%"
-      overflow="auto"
-      alignItems="center"
-    >
-      <CopyButton
-        copied={copied}
-        handleCopy={handleCopy}
-        verticallyCenter={!multiLine}
-      />
-      <Div
-        paddingHorizontal="medium"
-        paddingVertical={multiLine ? 'medium' : 'small'}
-      >
-        <Highlight {...props}>{codeString}</Highlight>
-      </Div>
-    </Div>
-  )
-}
+//   if (typeof children !== 'string') {
+//     throw new Error('Code component expects a string as its children')
+//   }
+
+//   return (
+//     <Div
+//       height="100%"
+//       overflow="hidden"
+//       alignItems="center"
+//     >
+//       <CopyButton
+//         copied={copied}
+//         handleCopy={handleCopy}
+//         verticallyCenter={!multiLine}
+//       />
+//       {/* <Div
+//         paddingHorizontal="medium"
+//         paddingVertical={multiLine ? 'medium' : 'small'}
+//       > */}
+
+//       {/* <Highlight {...props}>{codeString}</Highlight> */}
+//       {/* </Div> */}
+//     </Div>
+//   )
+// }
 
 function CodeRef({
-  children,
+  value,
+  onChange,
   language,
-  showLineNumbers,
+  options,
   ...props
 }: CodeEditorProps,
 ref: RefObject<any>) {
   const parentFillLevel = useFillLevel()
   const theme = useTheme()
 
-  props.height = props.height || undefined
-  const hasSetHeight = !!props.height || !!props.minHeight
+  // props.height = props.height || undefined
+  // const hasSetHeight = !!props.height || !!props.minHeight
 
   return (
     <Card
@@ -129,23 +136,18 @@ ref: RefObject<any>) {
       {...props}
     >
       <Flex
+        overflow="hidden"
         position="relative"
         direction="column"
         height="100%"
       >
-        <Div
-          position="relative"
-          height="100%"
-          overflow="hidden"
-        >
-          <CodeContent
-            language={language}
-            showLineNumbers={showLineNumbers}
-            hasSetHeight={hasSetHeight}
-          >
-            {children}
-          </CodeContent>
-        </Div>
+        <Editor
+          defaultLanguage={language}
+          defaultValue={value}
+          onChange={onChange}
+          options={{ ...defaultOptions, ...options }}
+          theme="vs-dark"
+        />
       </Flex>
     </Card>
   )
