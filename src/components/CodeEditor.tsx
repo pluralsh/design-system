@@ -1,9 +1,17 @@
-import { RefObject, forwardRef } from 'react'
+import {
+  RefObject,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 import PropTypes from 'prop-types'
 import { Button, Flex } from 'honorable'
 import styled, { useTheme } from 'styled-components'
 
-import Editor from '@monaco-editor/react'
+import Editor, { useMonaco } from '@monaco-editor/react'
+
+import { editorTheme } from '../theme/editor'
 
 import CopyIcon from './icons/CopyIcon'
 import Card, { CardProps } from './Card'
@@ -11,15 +19,19 @@ import CheckIcon from './icons/CheckIcon'
 import { toFillLevel, useFillLevel } from './contexts/FillLevelContext'
 
 type CodeEditorProps = Omit<CardProps, 'children'> & {
-  language?: string
   value?: string
-  onChange?: (value: string | undefined, ev: any) => void,
-  options?: any
+  onChange?: (value: string | undefined) => void,
+  language?: string
+  options?: object
 }
 
 const propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func,
   language: PropTypes.string,
-  showLineNumbers: PropTypes.bool,
+
+  // eslint-disable-next-line react/forbid-prop-types
+  options: PropTypes.object,
 }
 
 const defaultOptions = {
@@ -29,8 +41,10 @@ const defaultOptions = {
     enabled: false,
   },
   scrollbar: {
+    useShadows: false,
     verticalScrollbarSize: 5,
   },
+  scrollBeyondLastLine: false,
 }
 
 function CopyButtonBase({
@@ -55,60 +69,12 @@ function CopyButtonBase({
     </Button>
   )
 }
-const CopyButton = styled(CopyButtonBase)<{ verticallyCenter: boolean }>(({ verticallyCenter, theme }) => ({
+const CopyButton = styled(CopyButtonBase)(({ theme }) => ({
   position: 'absolute',
   right: theme.spacing.medium,
-  top: verticallyCenter ? '50%' : theme.spacing.medium,
-  transform: verticallyCenter ? 'translateY(-50%)' : 'none',
+  top: theme.spacing.medium,
   boxShadow: theme.boxShadows.slight,
 }))
-
-// function CodeContent({
-//   children,
-//   hasSetHeight,
-//   ...props
-// }: ComponentProps<typeof Highlight> & { hasSetHeight: boolean }) {
-//   const [copied, setCopied] = useState(false)
-
-//   const multiLine = !!codeString.match(/\r?\n/) || hasSetHeight
-//   const handleCopy = useCallback(() => window.navigator.clipboard
-//     .writeText(codeString)
-//     .then(() => setCopied(true)),
-//   [codeString])
-
-//   useEffect(() => {
-//     if (copied) {
-//       const timeout = setTimeout(() => setCopied(false), 1000)
-
-//       return () => clearTimeout(timeout)
-//     }
-//   }, [copied])
-
-//   if (typeof children !== 'string') {
-//     throw new Error('Code component expects a string as its children')
-//   }
-
-//   return (
-//     <Div
-//       height="100%"
-//       overflow="hidden"
-//       alignItems="center"
-//     >
-//       <CopyButton
-//         copied={copied}
-//         handleCopy={handleCopy}
-//         verticallyCenter={!multiLine}
-//       />
-//       {/* <Div
-//         paddingHorizontal="medium"
-//         paddingVertical={multiLine ? 'medium' : 'small'}
-//       > */}
-
-//       {/* <Highlight {...props}>{codeString}</Highlight> */}
-//       {/* </Div> */}
-//     </Div>
-//   )
-// }
 
 function CodeRef({
   value,
@@ -120,9 +86,21 @@ function CodeRef({
 ref: RefObject<any>) {
   const parentFillLevel = useFillLevel()
   const theme = useTheme()
+  const monaco = useMonaco()
+  const [current, setCurrent] = useState<string>(value)
+  const [copied, setCopied] = useState<boolean>(false)
+  const handleCopy = useCallback(() => window.navigator.clipboard
+    .writeText(current).then(() => setCopied(true)), [current])
 
-  // props.height = props.height || undefined
-  // const hasSetHeight = !!props.height || !!props.minHeight
+  useEffect(() => {
+    if (copied) {
+      const timeout = setTimeout(() => setCopied(false), 1000)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [copied])
+
+  useEffect(() => monaco?.editor?.defineTheme('plural', editorTheme), [monaco])
 
   return (
     <Card
@@ -139,14 +117,21 @@ ref: RefObject<any>) {
         overflow="hidden"
         position="relative"
         direction="column"
-        height="100%"
+        // height="100%"
       >
         <Editor
           defaultLanguage={language}
           defaultValue={value}
-          onChange={onChange}
+          onChange={v => {
+            setCurrent(v)
+            onChange(v)
+          }}
           options={{ ...defaultOptions, ...options }}
-          theme="vs-dark"
+          theme="plural"
+        />
+        <CopyButton
+          copied={copied}
+          handleCopy={handleCopy}
         />
       </Flex>
     </Card>

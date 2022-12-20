@@ -11,11 +11,6 @@ export default {
     title: {
       control: 'text',
     },
-    showLineNumbers: {
-      control: {
-        type: 'boolean',
-      },
-    },
     onFillLevel: {
       options: [0, 1, 2, 3],
       control: {
@@ -55,62 +50,20 @@ function Template({ onFillLevel, ...args }: any) {
           language="javascript"
           value={jsCode}
           width="600px"
+          height="200px"
           {...args}
         />
         <CodeEditor
           language="hcl"
           value={tfCode}
           width="600px"
-          height="200px"
-          {...args}
-        />
-        <CodeEditor
-          value={jsCode}
-          width="600px"
-          height="100px"
+          height="400px"
           {...args}
         />
         <CodeEditor
           language="go"
           value={goCode}
           width="400px"
-          {...args}
-        />
-        <CodeEditor
-          language="js"
-          value="console.warn('test')"
-          width="400px"
-          {...args}
-        />
-        <CodeEditor
-          value="One line"
-          width="400px"
-          {...args}
-        />
-        <CodeEditor
-          value="One line with `height` specified"
-          width="400px"
-          height="300px"
-          {...args}
-        />
-        <CodeEditor
-          value={'Two lines\nTwo lines'}
-          width="400px"
-          {...args}
-        />
-        <CodeEditor
-          value={'Three lines\nThree lines\nThree lines'}
-          width="400px"
-          {...args}
-        />
-        <CodeEditor
-          height="100px"
-          width="400px"
-          {...args}
-        />
-        <CodeEditor
-          language="javascript"
-          value={jsCode}
           {...args}
         />
       </Flex>
@@ -120,6 +73,5 @@ function Template({ onFillLevel, ...args }: any) {
 
 export const Default = Template.bind({})
 Default.args = {
-  title: '',
-  showLineNumbers: true,
+  options: { lineNumbers: true },
 }
