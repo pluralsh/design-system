@@ -15,11 +15,6 @@ type SidebarSectionProps = FlexProps & {
   layout?: SidebarLayout
 }
 
-const propTypes = {
-  grow: PropTypes.number,
-  layout: PropTypes.string,
-}
-
 const styles = {
   ':last-of-type': {
     border: 'none',
@@ -50,7 +45,5 @@ function SidebarSectionRef({
 }
 
 const SidebarSection = forwardRef(SidebarSectionRef)
-
-SidebarSection.propTypes = propTypes
 
 export default SidebarSection

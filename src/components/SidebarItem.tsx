@@ -13,13 +13,6 @@ type SidebarItemProps = FlexProps & {
   layout?: SidebarLayout
 }
 
-const propTypes = {
-  clickable: PropTypes.bool,
-  tooltip: PropTypes.string,
-  href: PropTypes.string,
-  layout: PropTypes.string,
-}
-
 function SidebarItemRef({
   layout = 'vertical',
   children,
@@ -131,7 +124,5 @@ const SidebarItem = forwardRef(SidebarItemRef)
 const Item = forwardRef(ItemRef)
 const WithTooltip = forwardRef(withTooltipRef)
 const WithLink = forwardRef(withLinkRef)
-
-SidebarItem.propTypes = propTypes
 
 export default SidebarItem

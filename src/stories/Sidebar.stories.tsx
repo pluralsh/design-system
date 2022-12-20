@@ -123,6 +123,7 @@ function HorizontalTemplate() {
             href="https://discord.com/invite/qsUfBcC3Ru"
           >
             <IconFrame
+              textValue="Discord"
               type="secondary"
               icon={<DiscordIcon />}
             />
@@ -133,6 +134,7 @@ function HorizontalTemplate() {
             href="https://github.com/pluralsh/plural"
           >
             <IconFrame
+              textValue="GitHub"
               type="secondary"
               icon={<GitHubLogoIcon />}
             />
