@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Flex } from 'honorable'
+import { Button, Flex, P } from 'honorable'
 import styled, { useTheme } from 'styled-components'
 
 import Editor, { useMonaco } from '@monaco-editor/react'
@@ -23,15 +23,22 @@ type CodeEditorProps = Omit<CardProps, 'children'> & {
   onChange?: (value: string | undefined) => void,
   language?: string
   options?: object
+  save?: boolean
+  saving?: boolean
+  onSave?: () => void
+  saveLabel?: string
 }
 
 const propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
   language: PropTypes.string,
-
   // eslint-disable-next-line react/forbid-prop-types
   options: PropTypes.object,
+  save: PropTypes.bool,
+  saving: PropTypes.bool,
+  onSave: PropTypes.func,
+  saveLabel: PropTypes.string,
 }
 
 const defaultOptions = {
@@ -76,11 +83,16 @@ const CopyButton = styled(CopyButtonBase)(({ theme }) => ({
   boxShadow: theme.boxShadows.slight,
 }))
 
-function CodeRef({
+  // TODO: If height is unspecified then fit content.
+function CodeEditorRef({
   value,
   onChange,
   language,
   options,
+  save = false,
+  saving = false,
+  onSave,
+  saveLabel = 'Save',
   ...props
 }: CodeEditorProps,
 ref: RefObject<any>) {
@@ -91,6 +103,7 @@ ref: RefObject<any>) {
   const [copied, setCopied] = useState<boolean>(false)
   const handleCopy = useCallback(() => window.navigator.clipboard
     .writeText(current).then(() => setCopied(true)), [current])
+  const changed = current !== value
 
   useEffect(() => {
     if (copied) {
@@ -112,12 +125,16 @@ ref: RefObject<any>) {
           : theme.colors['border-fill-two']
       }
       {...props}
+      display="flex"
+      flexDirection="column"
     >
       <Flex
         overflow="hidden"
         position="relative"
         direction="column"
-        // height="100%"
+        basis="100%"
+        grow={1}
+        shrink={1}
       >
         <Editor
           defaultLanguage={language}
@@ -134,11 +151,29 @@ ref: RefObject<any>) {
           handleCopy={handleCopy}
         />
       </Flex>
+      {save && (
+        <Flex
+          align="center"
+          borderTop="1px solid border"
+          gap="medium"
+          justify="end"
+          padding="large"
+        >
+          {changed && <P color="text-light">Unsaved changes</P>}
+          <Button
+            disabled={!changed}
+            loading={saving}
+            onClick={onSave}
+          >
+            {saveLabel}
+          </Button>
+        </Flex>
+      )}
     </Card>
   )
 }
 
-const CodeEditor = styled(forwardRef(CodeRef))(_ => ({
+const CodeEditor = styled(forwardRef(CodeEditorRef))(_ => ({
   [CopyButton]: {
     opacity: 0,
     pointerEvents: 'none',

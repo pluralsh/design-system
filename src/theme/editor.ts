@@ -351,5 +351,7 @@ export const editorTheme = {
     'editor.inactiveSelectionBackground': semanticColors['fill-one-hover'],
     'editorCursor.foreground': semanticColors.text,
     'editorLineNumber.foreground': semanticColors.text,
+    'scrollbarSlider.background': semanticColors['fill-three'],
+    'scrollbarSlider.hoverBackground': semanticColors['fill-three'],
   },
 }

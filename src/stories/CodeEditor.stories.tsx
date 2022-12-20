@@ -8,9 +8,6 @@ export default {
   title: 'CodeEditor',
   component: CodeEditor,
   argTypes: {
-    title: {
-      control: 'text',
-    },
     onFillLevel: {
       options: [0, 1, 2, 3],
       control: {
@@ -50,14 +47,16 @@ function Template({ onFillLevel, ...args }: any) {
           language="javascript"
           value={jsCode}
           width="600px"
-          height="200px"
+          height="300px"
+          save
+          saveLabel="Commit"
           {...args}
         />
         <CodeEditor
           language="hcl"
           value={tfCode}
           width="600px"
-          height="400px"
+          height="300px"
           {...args}
         />
         <CodeEditor
