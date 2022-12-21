@@ -4,14 +4,11 @@ import {
   Dispatch,
   PropsWithChildren,
   forwardRef,
-  useCallback,
   useMemo,
 } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { ColorKey, Severity } from 'src/types'
-
 import { Flex } from 'honorable'
-
 import AnimateHeight from 'react-animate-height'
 
 import { CaretDownIcon } from '../icons'
@@ -106,7 +103,6 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(({
   className,
   buttonProps,
   children,
-  ...props
 },
 ref) => {
   severity = useMemo(() => {
