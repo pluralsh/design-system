@@ -10,6 +10,8 @@ import { useTheme } from 'styled-components'
 
 import Editor, { useMonaco } from '@monaco-editor/react'
 
+import { merge } from 'lodash'
+
 import { editorTheme } from '../theme/editor'
 
 import Card, { CardProps } from './Card'
@@ -103,7 +105,7 @@ ref: RefObject<any>) {
           setCurrent(v)
           onChange(v)
         }}
-        options={{ ...defaultOptions, ...options }}
+        options={merge(defaultOptions, options)}
         theme="plural"
       />
 
