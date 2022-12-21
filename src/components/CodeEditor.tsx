@@ -26,6 +26,7 @@ type CodeEditorProps = Omit<CardProps, 'children'> & {
   saving?: boolean
   onSave?: () => void
   saveLabel?: string
+  height?: string | number
 }
 
 const propTypes = {
@@ -38,6 +39,7 @@ const propTypes = {
   saving: PropTypes.bool,
   onSave: PropTypes.func,
   saveLabel: PropTypes.string,
+  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 const defaultOptions = {
@@ -54,7 +56,6 @@ const defaultOptions = {
   scrollBeyondLastLine: false,
 }
 
-  // TODO: If height is unspecified then fit content.
 function CodeEditorRef({
   value,
   onChange,
@@ -64,6 +65,7 @@ function CodeEditorRef({
   saving = false,
   onSave,
   saveLabel = 'Save',
+  height = '100%',
   ...props
 }: CodeEditorProps,
 ref: RefObject<any>) {
@@ -93,10 +95,12 @@ ref: RefObject<any>) {
           ? theme.colors['border-fill-three']
           : theme.colors['border-fill-two']
       }
-      {...props}
       display="flex"
       flexDirection="column"
+      flexGrow={1}
       overflow="hidden"
+      height={height}
+      {...props}
     >
       <Editor
         defaultLanguage={language}
@@ -108,7 +112,6 @@ ref: RefObject<any>) {
         options={merge(defaultOptions, options)}
         theme="plural"
       />
-
       {save && (
         <Flex
           align="center"

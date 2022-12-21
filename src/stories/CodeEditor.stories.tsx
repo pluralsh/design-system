@@ -1,4 +1,4 @@
-import { Flex } from 'honorable'
+import { Div, Flex } from 'honorable'
 
 import { Card, CodeEditor, WrapWithIf } from '..'
 
@@ -59,12 +59,14 @@ function Template({ onFillLevel, ...args }: any) {
           height="200px"
           {...args}
         />
-        <CodeEditor
-          language="go"
-          value={goCode}
-          width="400px"
-          {...args}
-        />
+        <Div height={200}>
+          <CodeEditor
+            language="go"
+            value={goCode}
+            width="400px"
+            {...args}
+          />
+        </Div>
       </Flex>
     </WrapWithIf>
   )
