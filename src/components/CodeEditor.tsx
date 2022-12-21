@@ -41,6 +41,10 @@ const propTypes = {
 const defaultOptions = {
   fontFamily: '"Monument Mono", monospace',
   fontSize: '14px',
+  padding: {
+    bottom: '16px',
+    top: '16px',
+  },
   scrollbar: {
     useShadows: false,
     verticalScrollbarSize: 5,
@@ -92,22 +96,17 @@ ref: RefObject<any>) {
       flexDirection="column"
       overflow="hidden"
     >
-      <Flex
-        basis="100%"
-        grow={1}
-        shrink={1}
-      >
-        <Editor
-          defaultLanguage={language}
-          defaultValue={value}
-          onChange={v => {
-            setCurrent(v)
-            onChange(v)
-          }}
-          options={{ ...defaultOptions, ...options }}
-          theme="plural"
-        />
-      </Flex>
+      <Editor
+        defaultLanguage={language}
+        defaultValue={value}
+        onChange={v => {
+          setCurrent(v)
+          onChange(v)
+        }}
+        options={{ ...defaultOptions, ...options }}
+        theme="plural"
+      />
+
       {save && (
         <Flex
           align="center"
