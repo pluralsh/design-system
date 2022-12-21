@@ -90,11 +90,9 @@ ref: RefObject<any>) {
       {...props}
       display="flex"
       flexDirection="column"
+      overflow="hidden"
     >
       <Flex
-        overflow="hidden"
-        position="relative"
-        direction="column"
         basis="100%"
         grow={1}
         shrink={1}
