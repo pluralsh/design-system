@@ -1,21 +1,18 @@
 import {
   RefObject,
   forwardRef,
-  useCallback,
   useEffect,
   useState,
 } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Flex, P } from 'honorable'
-import styled, { useTheme } from 'styled-components'
+import { useTheme } from 'styled-components'
 
 import Editor, { useMonaco } from '@monaco-editor/react'
 
 import { editorTheme } from '../theme/editor'
 
-import CopyIcon from './icons/CopyIcon'
 import Card, { CardProps } from './Card'
-import CheckIcon from './icons/CheckIcon'
 import { toFillLevel, useFillLevel } from './contexts/FillLevelContext'
 
 type CodeEditorProps = Omit<CardProps, 'children'> & {
@@ -44,44 +41,12 @@ const propTypes = {
 const defaultOptions = {
   fontFamily: '"Monument Mono", monospace',
   fontSize: '14px',
-  minimap: {
-    enabled: false,
-  },
   scrollbar: {
     useShadows: false,
     verticalScrollbarSize: 5,
   },
   scrollBeyondLastLine: false,
 }
-
-function CopyButtonBase({
-  copied,
-  handleCopy,
-  className,
-}: {
-  copied: boolean
-  handleCopy: () => any
-  className?: string
-}) {
-  return (
-    <Button
-      className={className}
-      position="absolute"
-      floating
-      small
-      startIcon={copied ? <CheckIcon /> : <CopyIcon />}
-      onClick={handleCopy}
-    >
-      {copied ? 'Copied' : 'Copy'}
-    </Button>
-  )
-}
-const CopyButton = styled(CopyButtonBase)(({ theme }) => ({
-  position: 'absolute',
-  right: theme.spacing.medium,
-  top: theme.spacing.medium,
-  boxShadow: theme.boxShadows.slight,
-}))
 
   // TODO: If height is unspecified then fit content.
 function CodeEditorRef({
@@ -101,8 +66,6 @@ ref: RefObject<any>) {
   const monaco = useMonaco()
   const [current, setCurrent] = useState<string>(value)
   const [copied, setCopied] = useState<boolean>(false)
-  const handleCopy = useCallback(() => window.navigator.clipboard
-    .writeText(current).then(() => setCopied(true)), [current])
   const changed = current !== value
 
   useEffect(() => {
@@ -146,10 +109,6 @@ ref: RefObject<any>) {
           options={{ ...defaultOptions, ...options }}
           theme="plural"
         />
-        <CopyButton
-          copied={copied}
-          handleCopy={handleCopy}
-        />
       </Flex>
       {save && (
         <Flex
@@ -173,18 +132,7 @@ ref: RefObject<any>) {
   )
 }
 
-const CodeEditor = styled(forwardRef(CodeEditorRef))(_ => ({
-  [CopyButton]: {
-    opacity: 0,
-    pointerEvents: 'none',
-    transition: 'opacity 0.2s ease',
-  },
-  [`&:hover ${CopyButton}`]: {
-    opacity: 1,
-    pointerEvents: 'auto',
-    transition: 'opacity 0.2s ease',
-  },
-}))
+const CodeEditor = forwardRef(CodeEditorRef)
 
 CodeEditor.propTypes = propTypes
 

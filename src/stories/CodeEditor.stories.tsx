@@ -44,8 +44,8 @@ function Template({ onFillLevel, ...args }: any) {
         gap="medium"
       >
         <CodeEditor
-          language="javascript"
-          value={jsCode}
+          language="hcl"
+          value={tfCode}
           width="600px"
           height="300px"
           save
@@ -53,10 +53,10 @@ function Template({ onFillLevel, ...args }: any) {
           {...args}
         />
         <CodeEditor
-          language="hcl"
-          value={tfCode}
+          language="javascript"
+          value={jsCode}
           width="600px"
-          height="300px"
+          height="200px"
           {...args}
         />
         <CodeEditor
