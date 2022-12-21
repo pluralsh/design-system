@@ -82,8 +82,8 @@ export default function CodeEditor({
       {...props}
     >
       <Editor
-        defaultLanguage={language}
-        defaultValue={value}
+        language={language}
+        value={value}
         onChange={v => {
           setCurrent(v)
           if (onChange) onChange(v)
