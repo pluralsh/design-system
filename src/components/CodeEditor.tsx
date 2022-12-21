@@ -1,10 +1,4 @@
-import {
-  RefObject,
-  forwardRef,
-  useEffect,
-  useState,
-} from 'react'
-import PropTypes from 'prop-types'
+import { useEffect, useState } from 'react'
 import { Button, Flex, P } from 'honorable'
 import { useTheme } from 'styled-components'
 
@@ -29,19 +23,6 @@ type CodeEditorProps = Omit<CardProps, 'children'> & {
   height?: string | number
 }
 
-const propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func,
-  language: PropTypes.string,
-  // eslint-disable-next-line react/forbid-prop-types
-  options: PropTypes.object,
-  save: PropTypes.bool,
-  saving: PropTypes.bool,
-  onSave: PropTypes.func,
-  saveLabel: PropTypes.string,
-  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-}
-
 const defaultOptions = {
   fontFamily: '"Monument Mono", monospace',
   fontSize: '14px',
@@ -56,7 +37,7 @@ const defaultOptions = {
   scrollBeyondLastLine: false,
 }
 
-function CodeEditorRef({
+export default function CodeEditor({
   value,
   onChange,
   language,
@@ -67,8 +48,7 @@ function CodeEditorRef({
   saveLabel = 'Save',
   height = '100%',
   ...props
-}: CodeEditorProps,
-ref: RefObject<any>) {
+}: CodeEditorProps) {
   const parentFillLevel = useFillLevel()
   const theme = useTheme()
   const monaco = useMonaco()
@@ -88,7 +68,6 @@ ref: RefObject<any>) {
 
   return (
     <Card
-      ref={ref}
       fillLevel={toFillLevel(Math.min(parentFillLevel + 1, 2))}
       borderColor={
         parentFillLevel >= 1
@@ -134,9 +113,4 @@ ref: RefObject<any>) {
   )
 }
 
-const CodeEditor = forwardRef(CodeEditorRef)
-
-CodeEditor.propTypes = propTypes
-
-export default CodeEditor
 export type { CodeEditorProps }
