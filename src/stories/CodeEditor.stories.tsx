@@ -5,7 +5,7 @@ import { Card, CodeEditor, WrapWithIf } from '..'
 import { goCode, jsCode, tfCode } from '../constants'
 
 export default {
-  title: 'CodeEditor',
+  title: 'Code Editor',
   component: CodeEditor,
   argTypes: {
     onFillLevel: {
