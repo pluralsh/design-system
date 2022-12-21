@@ -64,7 +64,10 @@ export default function CodeEditor({
     }
   }, [copied])
 
-  useEffect(() => monaco?.editor?.defineTheme('plural', editorTheme), [monaco])
+  useEffect(() => {
+    monaco?.editor?.defineTheme('plural', editorTheme)
+    monaco?.editor?.setTheme('plural')
+  }, [monaco])
 
   return (
     <Card
