@@ -140,6 +140,7 @@ ref) => {
         $borderColorKey={borderColorKey}
         $fillLevel={fillLevel}
         $size={size}
+        $expanded={expanded}
         ref={ref}
       >
         <div className="icon">
@@ -174,7 +175,7 @@ ref) => {
               size="small"
               clickable
               onClick={() => onExpand && onExpand(!expanded)}
-              icon={<CaretDownIcon className={expanded ? 'arrowUp' : 'arrowDown'} />}
+              icon={<CaretDownIcon className="expandIcon" />}
             />
           </Flex>
         )}
@@ -187,8 +188,9 @@ const CalloutWrap = styled.div<{
   $borderColorKey: string
   $size: CalloutSize
   $fillLevel: FillLevel
+  $expanded: boolean
 }>(({
-  theme, $size, $fillLevel, $borderColorKey,
+  theme, $size, $fillLevel, $borderColorKey, $expanded,
 }) => ({
   position: 'relative',
   display: 'flex',
@@ -260,13 +262,8 @@ const CalloutWrap = styled.div<{
   '& a, & a:any-link': {
     ...theme.partials.text.inlineLink,
   },
-
-  '.arrowUp': {
-    ...theme.partials.dropdown.arrowTransition({ isOpen: true }),
-  },
-
-  '.arrowDown': {
-    ...theme.partials.dropdown.arrowTransition({ isOpen: false }),
+  '.expandIcon': {
+    ...theme.partials.dropdown.arrowTransition({ isOpen: $expanded }),
   },
 }))
 
