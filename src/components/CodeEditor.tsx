@@ -18,7 +18,7 @@ type CodeEditorProps = Omit<CardProps, 'children'> & {
   options?: object
   save?: boolean
   saving?: boolean
-  onSave?: () => void
+  onSave?: (value: string | undefined) => void,
   saveLabel?: string
   height?: string | number
 }
@@ -86,7 +86,7 @@ export default function CodeEditor({
         defaultValue={value}
         onChange={v => {
           setCurrent(v)
-          onChange(v)
+          if (onChange) onChange(v)
         }}
         options={merge(defaultOptions, options)}
         theme="plural"
@@ -103,7 +103,9 @@ export default function CodeEditor({
           <Button
             disabled={!changed}
             loading={saving}
-            onClick={onSave}
+            onClick={() => {
+              if (onSave) onSave(current)
+            }}
           >
             {saveLabel}
           </Button>
