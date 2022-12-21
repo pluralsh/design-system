@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Dispatch, useEffect, useState } from 'react'
 import { Button, Flex, P } from 'honorable'
 import { useTheme } from 'styled-components'
 
@@ -13,12 +13,12 @@ import { toFillLevel, useFillLevel } from './contexts/FillLevelContext'
 
 type CodeEditorProps = Omit<CardProps, 'children'> & {
   value?: string
-  onChange?: (value: string | undefined) => void,
+  onChange?: Dispatch<string>,
   language?: string
   options?: object
   save?: boolean
   saving?: boolean
-  onSave?: (value: string | undefined) => void,
+  onSave?: Dispatch<string>,
   saveLabel?: string
   height?: string | number
 }
