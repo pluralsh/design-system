@@ -106,9 +106,7 @@ export default function CodeEditor({
           <Button
             disabled={!changed}
             loading={saving}
-            onClick={() => {
-              if (onSave) onSave(current)
-            }}
+            onClick={() => onSave && onSave(current)}
           >
             {saveLabel}
           </Button>
