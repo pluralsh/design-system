@@ -8,14 +8,6 @@ export const editorTheme = {
       foreground: semanticColors['text-xlight'],
       token: 'comment',
     },
-    {
-      foreground: '#3CECAF',
-      token: 'variable',
-    },
-    {
-      foreground: '#99F5D5',
-      token: 'keyword.js',
-    },
   ],
   colors: {
     'editor.foreground': semanticColors['text-light'],
