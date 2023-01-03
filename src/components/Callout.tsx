@@ -39,7 +39,6 @@ const severityToIconColorKey: Record<CalloutSeverity, ColorKey> = {
   success: 'icon-success',
   warning: 'icon-warning',
   danger: 'icon-danger',
-  error: 'icon-error',
 }
 
 const severityToBorderColorKey: Record<CalloutSeverity, ColorKey> = {
@@ -47,7 +46,6 @@ const severityToBorderColorKey: Record<CalloutSeverity, ColorKey> = {
   success: 'border-success',
   warning: 'border-warning',
   danger: 'border-danger',
-  error: 'border-error',
 }
 
 const severityToText: Record<CalloutSeverity, string> = {
@@ -55,7 +53,6 @@ const severityToText: Record<CalloutSeverity, string> = {
   success: 'Success',
   warning: 'Warning',
   danger: 'Danger',
-  error: 'Error',
 }
 
 const severityToIcon: Record<CalloutSeverity, any> = {
@@ -63,7 +60,6 @@ const severityToIcon: Record<CalloutSeverity, any> = {
   success: StatusOkIcon,
   warning: WarningIcon,
   danger: ErrorIcon,
-  error: ErrorIcon,
 }
 
 const sizeToIconSize: Record<CalloutSize, number> = {
@@ -171,6 +167,7 @@ ref) => {
             justify="end"
           >
             <IconFrame
+              textValue=""
               display="flex"
               size="small"
               clickable
