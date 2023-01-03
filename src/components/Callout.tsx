@@ -148,7 +148,7 @@ ref) => {
           />
         </div>
         <div>
-          <h6 className={classNames({ visuallyHidden: !title })}>
+          <h6 className={classNames({ visuallyHidden: !title, expandable })}>
             <span className="visuallyHidden">{`${text}: `}</span>
             {title}
           </h6>
@@ -208,6 +208,10 @@ const CalloutWrap = styled.div<{
     margin: 0,
     padding: 0,
     marginBottom: theme.spacing.small,
+
+    '&.expandable': {
+      marginBottom: $expanded ? theme.spacing.small : 0,
+    },
   },
   '.children *:first-child': {
     marginTop: '0',
