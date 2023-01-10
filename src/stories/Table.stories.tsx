@@ -13,6 +13,7 @@ import {
 } from '..'
 
 type Method = {
+  id?: string | number
   function: string
   inputType: string
   returnedValue: ReactElement | string
@@ -92,6 +93,11 @@ const columns = [
     id: 'function',
     cell: (info: any) => info.getValue(),
     header: () => <span>Function</span>,
+  }),
+  columnHelper.accessor(row => row.id, {
+    id: 'id',
+    cell: (info: any) => info.getValue(),
+    header: () => <span>ID</span>,
   }),
   columnHelper.accessor(row => row.inputType, {
     id: 'inputType',
@@ -180,12 +186,31 @@ function Template(args: any) {
   return <Table {...args} />
 }
 
+const repeatedData = Array(25)
+  .fill(data)
+  .flat()
+  .map((item, i) => ({ ...item, id: i }))
+
+const extremeLengthData = Array(2000)
+  .fill(data)
+  .flat()
+  .map((item, i) => ({ ...item, id: i }))
+
 export const Default = Template.bind({})
 
 Default.args = {
   width: '900px',
   height: '400px',
-  data: Array(25).fill(data).flat(),
+  data: repeatedData,
+  columns,
+}
+
+export const VirtualizedRows = Template.bind({})
+VirtualizedRows.args = {
+  virtualizeRows: true,
+  width: '900px',
+  height: '400px',
+  data: extremeLengthData,
   columns,
 }
 
@@ -194,7 +219,7 @@ export const Loose = Template.bind({})
 Loose.args = {
   width: '900px',
   height: '400px',
-  data: Array(25).fill(data).flat(),
+  data: repeatedData,
   columns,
   loose: true,
 }
@@ -204,7 +229,7 @@ export const StickyColumn = Template.bind({})
 StickyColumn.args = {
   width: '400px',
   height: '400px',
-  data: Array(25).fill(data).flat(),
+  data: repeatedData,
   columns,
   stickyColumn: true,
 }
@@ -214,7 +239,7 @@ export const Expandable = Template.bind({})
 Expandable.args = {
   width: '900px',
   height: '400px',
-  data: Array(25).fill(data).flat(),
+  data: repeatedData,
   columns: expandingColumns,
   getRowCanExpand: (row: Row<Method>) => row.original.expandable,
   renderExpanded: ({ row }: { row: Row<Method> }) => (

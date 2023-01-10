@@ -2,6 +2,7 @@ import { Div, DivProps } from 'honorable'
 import {
   ComponentProps,
   forwardRef,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -12,12 +13,46 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import styled from 'styled-components'
+import { useVirtual } from 'react-virtual'
+
+import type { VirtualItem } from 'react-virtual'
+import type { Row } from '@tanstack/react-table'
 
 import Button from './Button'
 import CaretUpIcon from './icons/CaretUpIcon'
 import { FillLevelProvider } from './contexts/FillLevelContext'
 
-export type TableProps = DivProps
+export type TableProps =
+  | Omit<
+      DivProps,
+      | 'data'
+      | 'columns'
+      | 'getRowCanExpand'
+      | 'renderExpanded'
+      | 'loose'
+      | 'stickyColumn'
+      | 'scrollTopMargin'
+      | 'virtualizeRows'
+      | 'virtualizerOptions'
+      | 'reactTableOptions'
+    > & {
+      data: any[]
+      columns: any[]
+      getRowCanExpand: any
+      renderExpanded: any
+      loose: boolean
+      stickyColumn: boolean
+      scrollTopMargin: number
+      virtualizeRows: boolean
+      reactVirtualOptions: Omit<
+        Parameters<typeof useVirtual>,
+        'parentRef' | 'size'
+      >
+      reactTableOptions: Omit<
+        Parameters<typeof useReactTable>,
+        'data' | 'columns'
+      >
+    }
 
 const propTypes = {}
 
@@ -123,6 +158,10 @@ const TdExpand = styled.td<{ lighter: boolean }>(({ theme, lighter }) => ({
   padding: '16px 12px',
 }))
 
+function isRow<T>(row: Row<T> | VirtualItem): row is Row<T> {
+  return typeof (row as Row<T>).getVisibleCells === 'function'
+}
+
 function TableRef({
   data,
   columns,
@@ -132,9 +171,12 @@ function TableRef({
   stickyColumn = false,
   scrollTopMargin = 500,
   width,
+  virtualizeRows = false,
+  reactVirtualOptions: virtualizerOptions,
+  reactTableOptions,
   ...props
-}: any) {
-  const ref = useRef<HTMLDivElement>()
+}: TableProps) {
+  const tableContainerRef = useRef<HTMLDivElement>()
   const [hover, setHover] = useState(false)
   const [scrollTop, setScrollTop] = useState(0)
   const table = useReactTable({
@@ -142,8 +184,40 @@ function TableRef({
     columns,
     getRowCanExpand,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
+    ...reactTableOptions,
   })
+  const dataHasId = data && data.length > 0 && !!data[0]?.id
+
+  console.log('dataHasId', dataHasId)
+
+  const { rows: tableRows } = table.getRowModel()
+  const rowVirtualizer = useVirtual({
+    parentRef: tableContainerRef,
+    size: tableRows.length,
+    overscan: 40,
+    ...virtualizerOptions,
+  })
+  const { virtualItems: virtualRows, totalSize } = rowVirtualizer
+
+  console.log('totalSize', totalSize)
+
+  const { paddingTop, paddingBottom } = useMemo(() => ({
+    paddingTop:
+        virtualizeRows && virtualRows.length > 0
+          ? virtualRows?.[0]?.start || 0
+          : 0,
+    paddingBottom:
+        virtualizeRows && virtualRows.length > 0
+          ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
+          : 0,
+  }),
+  [totalSize, virtualRows, virtualizeRows])
+
+  const headerGroups = useMemo(() => table.getHeaderGroups(), [table])
+
+  const rows = virtualizeRows ? virtualRows : tableRows
 
   return (
     <Div
@@ -157,14 +231,14 @@ function TableRef({
         border="1px solid border-fill-two"
         borderRadius="large"
         overflow="auto"
-        ref={ref}
+        ref={tableContainerRef}
         onScroll={({ target }: { target: HTMLDivElement }) => setScrollTop(target?.scrollTop)}
         width={width}
         {...props}
       >
         <T>
           <Thead>
-            {table.getHeaderGroups().map(headerGroup => (
+            {headerGroups.map(headerGroup => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => (
                   <Th
@@ -181,35 +255,80 @@ function TableRef({
             ))}
           </Thead>
           <Tbody>
-            {table.getRowModel().rows.map((row, i) => (
+            {paddingTop > 0 && (
               <>
-                <Tr key={row.id}>
-                  {row.getVisibleCells().map(cell => (
-                    <Td
-                      key={cell.id}
-                      firstRow={i === 0}
-                      lighter={i % 2 === 0}
-                      loose={loose}
-                      stickyColumn={stickyColumn}
-                    >
-                      {flexRender(cell.column.columnDef.cell,
-                        cell.getContext())}
-                    </Td>
-                  ))}
+                <Tr>
+                  {/* Extra row to ensure any :nth-child() styling remains stable */}
+                  <Td
+                    stickyColumn={stickyColumn}
+                    lighter={rows[0].index % 2 === 0}
+                    style={{ height: '0' }}
+                  />
                 </Tr>
-                {row.getIsExpanded() && (
-                  <Tr>
-                    <TdExpand lighter={i % 2 === 0} />
-                    <TdExpand
-                      colSpan={row.getVisibleCells().length - 1}
-                      lighter={i % 2 === 0}
-                    >
-                      {renderExpanded({ row })}
-                    </TdExpand>
-                  </Tr>
-                )}
+                <Tr>
+                  <Td
+                    stickyColumn={stickyColumn}
+                    lighter={rows[0].index % 2 !== 0}
+                    style={{ height: `${paddingTop}px` }}
+                  />
+                </Tr>
               </>
-            ))}
+            )}
+            {rows.map(maybeRow => {
+              const row: Row<unknown> = isRow(maybeRow)
+                ? maybeRow
+                : tableRows[maybeRow.index]
+              const i = row.index
+
+              return (
+                <>
+                  <Tr key={row.id}>
+                    {row.getVisibleCells().map(cell => (
+                      <Td
+                        key={cell.id}
+                        firstRow={i === 0}
+                        lighter={i % 2 === 0}
+                        loose={loose}
+                        stickyColumn={stickyColumn}
+                      >
+                        {flexRender(cell.column.columnDef.cell,
+                          cell.getContext())}
+                      </Td>
+                    ))}
+                  </Tr>
+                  {row.getIsExpanded() && (
+                    <Tr>
+                      <TdExpand lighter={i % 2 === 0} />
+                      <TdExpand
+                        colSpan={row.getVisibleCells().length - 1}
+                        lighter={i % 2 === 0}
+                      >
+                        {renderExpanded({ row })}
+                      </TdExpand>
+                    </Tr>
+                  )}
+                </>
+              )
+            })}
+            {paddingBottom > 0 && (
+              <>
+                <Tr>
+                  <Td
+                    stickyColumn={stickyColumn}
+                    lighter={rows[rows.length - 1].index % 2 !== 0}
+                    style={{ height: `${paddingBottom}px` }}
+                  />
+                </Tr>
+                <Tr>
+                  {/* Extra row to ensure any :nth-child() styling remains stable */}
+                  <Td
+                    stickyColumn={stickyColumn}
+                    lighter={rows[rows.length - 1].index % 2 === 0}
+                    style={{ height: '0' }}
+                  />
+                </Tr>
+              </>
+            )}
           </Tbody>
         </T>
       </Div>
@@ -222,7 +341,7 @@ function TableRef({
           width="140px"
           floating
           endIcon={<CaretUpIcon />}
-          onClick={() => ref?.current?.scrollTo({
+          onClick={() => tableContainerRef?.current?.scrollTo({
             top: 0,
             behavior: 'smooth',
           })}

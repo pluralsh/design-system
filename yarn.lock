@@ -2372,7 +2372,7 @@ __metadata:
     "@storybook/react": 7.0.0-alpha.54
     "@storybook/react-vite": 7.0.0-alpha.54
     "@storybook/testing-library": 0.0.14-next.0
-    "@tanstack/react-table": 8.7.4
+    "@tanstack/react-table": 8.7.6
     "@types/chroma-js": 2.1.4
     "@types/react-transition-group": 4.4.5
     "@types/styled-components": 5.1.26
@@ -2402,6 +2402,7 @@ __metadata:
     react-router-dom: 6.5.0
     react-spring: 9.6.1
     react-transition-group: 4.4.5
+    react-virtual: 2.10.4
     rehype-raw: 6.1.1
     resize-observer-polyfill: 1.5.1
     rimraf: 3.0.2
@@ -2543,6 +2544,13 @@ __metadata:
   version: 1.1.0
   resolution: "@protobufjs/utf8@npm:1.1.0"
   checksum: f9bf3163d13aaa3b6f5e6fbf37a116e094ea021c0e1f2a7ccd0e12a29e2ce08dafba4e8b36e13f8ed7397e1591610ce880ed1289af4d66cf4ace8a36a9557278
+  languageName: node
+  linkType: hard
+
+"@reach/observe-rect@npm:^1.1.0":
+  version: 1.2.0
+  resolution: "@reach/observe-rect@npm:1.2.0"
+  checksum: 7dd903eeaad0e22c6d973bd26265d91eadba56ab5134701ceb3e85214db75339fae94aa7e8b88a65e8daa64bc7cf1b915d4ffcdfd324466b561dc6adc3c6e070
   languageName: node
   linkType: hard
 
@@ -4805,22 +4813,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-table@npm:8.7.4":
-  version: 8.7.4
-  resolution: "@tanstack/react-table@npm:8.7.4"
+"@tanstack/react-table@npm:8.7.6":
+  version: 8.7.6
+  resolution: "@tanstack/react-table@npm:8.7.6"
   dependencies:
-    "@tanstack/table-core": 8.7.4
+    "@tanstack/table-core": 8.7.6
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: d850aa51f4b7f5e01a02d3645e7b54e3e4726b90eedca757ceecd7c8bd0029e06401b5b38a43c6c5a796bfce29b3070a66f18caa9073d98406b8676f1d6d28fe
+  checksum: 20b10ace9ff32bab79e7fa6cedbde44b74b1760b510e3b67766eaec6d4f55a741b77f3ec458fa5908119397d3ee1e37b0628653a71aa25cb45a7787349b4b392
   languageName: node
   linkType: hard
 
-"@tanstack/table-core@npm:8.7.4":
-  version: 8.7.4
-  resolution: "@tanstack/table-core@npm:8.7.4"
-  checksum: 39e2b38ce6a08f3bdc0fea8d16eb92696283de33e17c756b5fec3d875a7f84512edc94edaf90a64e378a08c5681ed4843814f56841933a95ba7d60253c614e2d
+"@tanstack/table-core@npm:8.7.6":
+  version: 8.7.6
+  resolution: "@tanstack/table-core@npm:8.7.6"
+  checksum: edba55731245a5a1a46a9a69a1ca2a7d7ae24377ed478f6622d043b80b6f8fbcb19605843e0feb85b99b4a7d5407633be4e440e71c82a4bf876f05a62e8005ae
   languageName: node
   linkType: hard
 
@@ -14979,6 +14987,17 @@ __metadata:
     react: ">=16.6.0"
     react-dom: ">=16.6.0"
   checksum: 75602840106aa9c6545149d6d7ae1502fb7b7abadcce70a6954c4b64a438ff1cd16fc77a0a1e5197cdd72da398f39eb929ea06f9005c45b132ed34e056ebdeb1
+  languageName: node
+  linkType: hard
+
+"react-virtual@npm:2.10.4":
+  version: 2.10.4
+  resolution: "react-virtual@npm:2.10.4"
+  dependencies:
+    "@reach/observe-rect": ^1.1.0
+  peerDependencies:
+    react: ^16.6.3 || ^17.0.0
+  checksum: 1bebc741b01057829a7d7f29256114caecf0597d41b187cb41e75af77f24a87c780bc1a81ec11205b78ee2e9c801fc5e36b20a9e1ab7ddc70a18dd95417795f8
   languageName: node
   linkType: hard
 
