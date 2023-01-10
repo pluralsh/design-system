@@ -162,6 +162,10 @@ function isRow<T>(row: Row<T> | VirtualItem): row is Row<T> {
   return typeof (row as Row<T>).getVisibleCells === 'function'
 }
 
+function isValidId(id: unknown) {
+  return typeof id === 'number' || (typeof id === 'string' && id.length > 0)
+}
+
 function TableRef({
   data,
   columns,
@@ -186,22 +190,25 @@ function TableRef({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
+    getRowId: (originalRow, i, parent) => {
+      if (isValidId(originalRow.id)) {
+        return originalRow.id
+      }
+
+      return (parent?.id ? `${parent.id}.` : '') + i
+    },
     ...reactTableOptions,
   })
-  const dataHasId = data && data.length > 0 && !!data[0]?.id
-
-  console.log('dataHasId', dataHasId)
 
   const { rows: tableRows } = table.getRowModel()
   const rowVirtualizer = useVirtual({
     parentRef: tableContainerRef,
     size: tableRows.length,
     overscan: 40,
+
     ...virtualizerOptions,
   })
   const { virtualItems: virtualRows, totalSize } = rowVirtualizer
-
-  console.log('totalSize', totalSize)
 
   const { paddingTop, paddingBottom } = useMemo(() => ({
     paddingTop:
