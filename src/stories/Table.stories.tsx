@@ -201,8 +201,6 @@ const expandingColumns = [
   }),
 ]
 
-console.log('columnDefs', columns)
-
 export default {
   title: 'Table',
   component: Table,
