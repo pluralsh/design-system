@@ -14,5 +14,4 @@ export default createIcon(({ size, color }) => (
       strokeLinejoin="round"
     />
   </svg>
-
 ))
