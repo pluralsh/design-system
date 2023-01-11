@@ -215,11 +215,14 @@ const Td = styled.td<{
 }))
 
 const TdExpand = styled.td<{ lighter: boolean }>(({ theme, lighter }) => ({
+  '&:last-child': {
+    gridColumn: '2 / -1',
+  },
   backgroundColor: lighter
     ? theme.colors['fill-one']
     : theme.colors['fill-one-hover'],
   color: theme.colors.text,
-  height: 52,
+  height: 'auto',
   minHeight: 52,
   padding: '16px 12px',
 }))
@@ -282,20 +285,20 @@ function FillerRow({
 }) {
   return (
     <Tr aria-hidden="true">
-      {columns.map(() => (
-        <Td
-          aria-hidden="true"
-          stickyColumn={stickyColumn}
-          lighter={index % 2 === 0}
-          style={{
-            height,
-            minHeight: height,
-            maxHeight: height,
-            padding: 0,
-          }}
-          truncateColumn={false}
-        />
-      ))}
+      <Td
+        aria-hidden="true"
+        stickyColumn={stickyColumn}
+        lighter={index % 2 === 0}
+        style={{
+          height,
+          minHeight: height,
+          maxHeight: height,
+          padding: 0,
+          gridColumn: '1 / -1',
+        }}
+        colSpan={columns.length}
+        truncateColumn={false}
+      />
     </Tr>
   )
 }
