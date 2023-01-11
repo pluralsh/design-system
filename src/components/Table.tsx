@@ -139,32 +139,55 @@ const Th = styled.th<{
   stickyColumn: boolean
   cursor?: CSSProperties['cursor']
 }>(({ theme, stickyColumn, cursor }) => ({
-  backgroundColor: theme.colors['fill-two'],
+  padding: 0,
   position: 'sticky',
   top: 0,
-  zIndex: 3,
-
-  borderBottom: theme.borders['fill-three'],
-  color: theme.colors.text,
-  height: 48,
-  minHeight: 48,
-  whiteSpace: 'nowrap',
-  padding: '14px 12px',
-  textAlign: 'left',
-  ...(cursor ? { cursor } : {}),
-  '& > div': {
-    display: 'flex',
-    gap: theme.spacing.xsmall,
+  zIndex: 4,
+  '.thOuterWrap': {
+    position: 'relative',
+    backgroundColor: theme.colors['fill-two'],
+    zIndex: 4,
+    borderBottom: theme.borders['fill-three'],
+    color: theme.colors.text,
+    height: 48,
+    minHeight: 48,
+    whiteSpace: 'nowrap',
+    padding: '14px 12px',
+    textAlign: 'left',
+    ...(cursor ? { cursor } : {}),
+    '.thSortIndicatorWrap': {
+      display: 'flex',
+      gap: theme.spacing.xsmall,
+    },
   },
-  '&:first-child': stickyColumn
-    ? {
-      backgroundColor: 'inherit',
-      boxShadow: theme.boxShadows.slight,
-      position: 'sticky',
-      left: 0,
-      zIndex: 5,
-    }
-    : {},
+  '&:last-child': {
+   /* Hackery to hide unpredictable visible gap between columns */
+    zIndex: 3,
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      width: 10000,
+      backgroundColor: theme.colors['fill-two'],
+      borderBottom: theme.borders['fill-three'],
+    },
+  },
+  '&:first-child': {
+    ...(stickyColumn
+      ? {
+        backgroundColor: 'inherit',
+        position: 'sticky',
+        left: 0,
+        zIndex: 5,
+        '.thOuterWrap': {
+          boxShadow: theme.boxShadows.slight,
+          zIndex: 5,
+        },
+      }
+      : {}),
+  },
 }))
 
 // TODO: Set vertical align to top for tall cells (~3 lines of text or more). See ENG-683.
@@ -406,7 +429,8 @@ function TableRef({
   const headerGroups = useMemo(() => table.getHeaderGroups(), [table])
 
   const rows = virtualizeRows ? virtualRows : tableRows
-  const gridTemplateColumns = useMemo(() => getGridTemplateCols(columns), [columns])
+  const gridTemplateColumns = useMemo(() => getGridTemplateCols(columns),
+    [columns])
 
   return (
     <Div
@@ -422,7 +446,7 @@ function TableRef({
         overflow="auto"
         ref={tableContainerRef}
         onScroll={({ target }: { target: HTMLDivElement }) => setScrollTop(target?.scrollTop)}
-        width={width}
+        width="100%"
         {...props}
       >
         <T gridTemplateColumns={gridTemplateColumns}>
@@ -445,14 +469,18 @@ function TableRef({
                       }
                       : {})}
                   >
-                    <div>
-                      <div>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(header.column.columnDef.header,
-                            header.getContext())}
+                    <div className="thOuterWrap">
+                      <div className="thSortIndicatorWrap">
+                        <div>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(header.column.columnDef.header,
+                              header.getContext())}
+                        </div>
+                        <SortIndicator
+                          direction={header.column.getIsSorted()}
+                        />
                       </div>
-                      <SortIndicator direction={header.column.getIsSorted()} />
                     </div>
                   </Th>
                 ))}
@@ -485,9 +513,7 @@ function TableRef({
                         lighter={i % 2 === 0}
                         loose={loose}
                         stickyColumn={stickyColumn}
-                        truncateColumn={
-                          cell.column?.columnDef?.meta?.truncate
-                        }
+                        truncateColumn={cell.column?.columnDef?.meta?.truncate}
                       >
                         {flexRender(cell.column.columnDef.cell,
                           cell.getContext())}

@@ -269,7 +269,7 @@ const repeatedData = Array(25)
   .flat()
   .map((item, i) => ({ ...item, id: i }))
 
-const extremeLengthData = Array(2000)
+const extremeLengthData = Array(200)
   .fill(data)
   .flat()
   .map((item, i) => ({ ...item, id: i }))
