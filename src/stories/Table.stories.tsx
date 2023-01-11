@@ -1,6 +1,13 @@
-import { Row, createColumnHelper } from '@tanstack/react-table'
-import { Flex, P } from 'honorable'
-import { ReactElement } from 'react'
+import { createColumnHelper } from '@tanstack/react-table'
+import {
+  Div,
+  Flex,
+  Input,
+  InputProps,
+  P,
+} from 'honorable'
+import React, { ReactElement, useEffect } from 'react'
+import type { Row } from '@tanstack/react-table'
 
 import {
   AppIcon,
@@ -91,6 +98,7 @@ const columnHelper = createColumnHelper<Method>()
 const columns = [
   columnHelper.accessor(row => row.function, {
     id: 'function',
+    enableGlobalFilter: true,
     cell: (info: any) => info.getValue(),
     header: () => <span>Function</span>,
   }),
@@ -111,6 +119,7 @@ const columns = [
   }),
   columnHelper.accessor(row => row.description, {
     id: 'description',
+    enableGlobalFilter: true,
     cell: (info: any) => <span>{info.getValue()}</span>,
     header: () => (
       <Flex
@@ -186,6 +195,73 @@ function Template(args: any) {
   return <Table {...args} />
 }
 
+// A debounced input react component
+function DebouncedInput({
+  initialValue,
+  onChange,
+  debounce = 200,
+  ...props
+}: {
+  initialValue: string | number
+  onChange: (value: string | number) => void
+  debounce?: number
+} & Omit<InputProps, 'onChange' | 'value'>) {
+  const [value, setValue] = React.useState(initialValue)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value)
+    }, debounce)
+
+    return () => clearTimeout(timeout)
+  }, [debounce, onChange, value])
+
+  return (
+    <Input
+      {...props}
+      value={value}
+      onChange={e => setValue(e.target.value)}
+    />
+  )
+}
+
+// const globalFilterFn: FilterFn<any> = (
+//   row, columnId, value, addMeta
+// ) => {
+//   console.log('filter function outside', value, row)
+
+//   // Rank the item
+//   const itemRank = rankItem(row.getValue(columnId), value)
+
+//   // Store the ranking info
+//   addMeta(itemRank)
+
+//   // Return if the item should be filtered in/out
+//   return itemRank.passed
+// }
+
+function FilterableTemplate(args: any) {
+  const [globalFilter, setGlobalFilter] = React.useState('')
+
+  return (
+    <Div maxWidth="900px">
+      <DebouncedInput
+        initialValue={globalFilter}
+        onChange={value => setGlobalFilter(String(value))}
+        marginBottom="small"
+        placeholder="Search"
+      />
+      <Table
+        reactTableOptions={{
+          // globalFilterFn,
+          state: { globalFilter },
+        }}
+        {...args}
+      />
+    </Div>
+  )
+}
+
 const repeatedData = Array(25)
   .fill(data)
   .flat()
@@ -245,4 +321,13 @@ Expandable.args = {
   renderExpanded: ({ row }: { row: Row<Method> }) => (
     <P>{row.original.description}</P>
   ),
+}
+
+export const Filterable = FilterableTemplate.bind({})
+Filterable.args = {
+  virtualizeRows: true,
+  width: 'auto',
+  height: '400px',
+  data: extremeLengthData,
+  columns,
 }

@@ -10,13 +10,19 @@ import {
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  sortingFns,
   useReactTable,
 } from '@tanstack/react-table'
-import styled from 'styled-components'
+import { compareItems, rankItem } from '@tanstack/match-sorter-utils'
 import { useVirtual } from 'react-virtual'
 
+import styled from 'styled-components'
+
+import type { FilterFn, Row, SortingFn } from '@tanstack/react-table'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import type { VirtualItem } from 'react-virtual'
-import type { Row } from '@tanstack/react-table'
 
 import Button from './Button'
 import CaretUpIcon from './icons/CaretUpIcon'
@@ -166,6 +172,32 @@ function isValidId(id: unknown) {
   return typeof id === 'number' || (typeof id === 'string' && id.length > 0)
 }
 
+const defaultGlobalFilterFn:FilterFn<any> = (
+  row, columnId, value, addMeta
+) => {
+  // Rank the item
+  const itemRank = rankItem(row.getValue(columnId), value)
+
+  // Store the ranking info
+  addMeta(itemRank)
+
+  // Return if the item should be filtered in/out
+  return itemRank.passed
+}
+
+// const defaultSortingFn:SortingFn<any> = (rowA, rowB, columnId) => {
+//   let dir = 0
+
+//   // Only sort by rank if the column has ranking information
+//   if (rowA.columnFiltersMeta[columnId]) {
+//     dir = compareItems(rowA.columnFiltersMeta[columnId]!,
+//       rowB.columnFiltersMeta[columnId]!)
+//   }
+
+//   // Provide an alphanumeric fallback for when the item ranks are equal
+//   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir
+// }
+
 function TableRef({
   data,
   columns,
@@ -188,7 +220,12 @@ function TableRef({
     columns,
     getRowCanExpand,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
+    // getFacetedRowModel: getFacetedRowModel(),
+    // getFacetedUniqueValues: getFacetedUniqueValues(),
+    // getFacetedMinMaxValues: getFacetedMinMaxValues(),
     getExpandedRowModel: getExpandedRowModel(),
     getRowId: (originalRow, i, parent) => {
       if (isValidId(originalRow.id)) {
@@ -196,6 +233,12 @@ function TableRef({
       }
 
       return (parent?.id ? `${parent.id}.` : '') + i
+    },
+    globalFilterFn: defaultGlobalFilterFn,
+    defaultColumn: {
+      enableColumnFilter: false,
+      enableGlobalFilter: false,
+      sortingFn: 'alphanumeric',
     },
     ...reactTableOptions,
   })

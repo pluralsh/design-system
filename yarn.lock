@@ -2372,6 +2372,7 @@ __metadata:
     "@storybook/react": 7.0.0-alpha.54
     "@storybook/react-vite": 7.0.0-alpha.54
     "@storybook/testing-library": 0.0.14-next.0
+    "@tanstack/match-sorter-utils": 8.7.6
     "@tanstack/react-table": 8.7.6
     "@types/chroma-js": 2.1.4
     "@types/react-transition-group": 4.4.5
@@ -4810,6 +4811,15 @@ __metadata:
   dependencies:
     defer-to-connect: ^2.0.1
   checksum: fc9cb993e808806692e4a3337c90ece0ec00c89f4b67e3652a356b89730da98bc824273a6d67ca84d5f33cd85f317dcd5ce39d8cc0a2f060145a608a7cb8ce92
+  languageName: node
+  linkType: hard
+
+"@tanstack/match-sorter-utils@npm:8.7.6":
+  version: 8.7.6
+  resolution: "@tanstack/match-sorter-utils@npm:8.7.6"
+  dependencies:
+    remove-accents: 0.4.2
+  checksum: 3f3dda277e6e55ca1224a28b38a2deb3ac912c2f2f5263a32fa0d9126c6b6d05feb475539729fd248f1eb88b612109db90b847ec8fdfc05d0f4073c900a2d3f6
   languageName: node
   linkType: hard
 
@@ -15314,6 +15324,13 @@ __metadata:
     mdast-util-to-string: ^1.0.0
     unist-util-visit: ^2.0.0
   checksum: 81fff0dcfaf6d6117ef1293bb1d26c3e25483d99c65c22434298eed93583a89ea5d7b94063d9a7f47c0647a708ce84f00ff62d274503f248feec03c344cabb20
+  languageName: node
+  linkType: hard
+
+"remove-accents@npm:0.4.2":
+  version: 0.4.2
+  resolution: "remove-accents@npm:0.4.2"
+  checksum: 84a6988555dea24115e2d1954db99509588d43fe55a1590f0b5894802776f7b488b3151c37ceb9e4f4b646f26b80b7325dcea2fae58bc3865df146e1fa606711
   languageName: node
   linkType: hard
 
