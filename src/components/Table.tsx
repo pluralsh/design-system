@@ -1,5 +1,6 @@
 import { Div, DivProps } from 'honorable'
 import {
+  CSSProperties,
   ComponentProps,
   forwardRef,
   useMemo,
@@ -20,12 +21,20 @@ import { useVirtual } from 'react-virtual'
 
 import styled from 'styled-components'
 
-import type { FilterFn, Row, SortingFn } from '@tanstack/react-table'
+import type {
+  FilterFn,
+  Row,
+  SortDirection,
+  SortingFn,
+} from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import type { VirtualItem } from 'react-virtual'
 
 import Button from './Button'
+import IconFrame from './IconFrame'
+
 import CaretUpIcon from './icons/CaretUpIcon'
+import ArrowRightIcon from './icons/ArrowRightIcon'
 import { FillLevelProvider } from './contexts/FillLevelContext'
 
 export type TableProps =
@@ -108,7 +117,10 @@ const Tr = styled.tr(() => ({
   backgroundColor: 'inherit',
 }))
 
-const Th = styled.th<{ stickyColumn: boolean }>(({ theme, stickyColumn }) => ({
+const Th = styled.th<{
+  stickyColumn: boolean
+  cursor?: CSSProperties['cursor']
+}>(({ theme, stickyColumn, cursor }) => ({
   borderBottom: theme.borders['fill-three'],
   color: theme.colors.text,
   height: 48,
@@ -116,6 +128,11 @@ const Th = styled.th<{ stickyColumn: boolean }>(({ theme, stickyColumn }) => ({
   whiteSpace: 'nowrap',
   padding: '14px 12px',
   textAlign: 'left',
+  ...(cursor ? { cursor } : {}),
+  '& > div': {
+    display: 'flex',
+    gap: theme.spacing.xsmall,
+  },
   '&:first-child': stickyColumn
     ? {
       backgroundColor: 'inherit',
@@ -172,8 +189,11 @@ function isValidId(id: unknown) {
   return typeof id === 'number' || (typeof id === 'string' && id.length > 0)
 }
 
-const defaultGlobalFilterFn:FilterFn<any> = (
-  row, columnId, value, addMeta
+const defaultGlobalFilterFn: FilterFn<any> = (
+  row,
+  columnId,
+  value,
+  addMeta
 ) => {
   // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value)
@@ -185,18 +205,26 @@ const defaultGlobalFilterFn:FilterFn<any> = (
   return itemRank.passed
 }
 
-// const defaultSortingFn:SortingFn<any> = (rowA, rowB, columnId) => {
-//   let dir = 0
+const sortDirToIcon = {
+  asc: <ArrowRightIcon
+    size={12}
+    transform="rotate(-90deg)"
+  />,
+  desc: <ArrowRightIcon
+    size={12}
+    transform="rotate(90deg)"
+  />,
+}
 
-//   // Only sort by rank if the column has ranking information
-//   if (rowA.columnFiltersMeta[columnId]) {
-//     dir = compareItems(rowA.columnFiltersMeta[columnId]!,
-//       rowB.columnFiltersMeta[columnId]!)
-//   }
+function SortIndicator({
+  direction = false,
+}: {
+  direction: false | SortDirection
+}) {
+  if (!direction) return null
 
-//   // Provide an alphanumeric fallback for when the item ranks are equal
-//   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir
-// }
+  return sortDirToIcon[direction]
+}
 
 function TableRef({
   data,
@@ -238,6 +266,7 @@ function TableRef({
     defaultColumn: {
       enableColumnFilter: false,
       enableGlobalFilter: false,
+      enableSorting: false,
       sortingFn: 'alphanumeric',
     },
     ...reactTableOptions,
@@ -294,11 +323,27 @@ function TableRef({
                   <Th
                     key={header.id}
                     stickyColumn={stickyColumn}
+                    {...(header.column.getCanSort()
+                      ? {
+                        cursor:
+                            header.column.getIsSorted() === 'asc'
+                              ? 's-resize'
+                              : header.column.getIsSorted() === 'desc'
+                                ? 'ns-resize'
+                                : 'n-resize',
+                        onClick: header.column.getToggleSortingHandler(),
+                      }
+                      : {})}
                   >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header,
-                        header.getContext())}
+                    <div>
+                      <div>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(header.column.columnDef.header,
+                            header.getContext())}
+                      </div>
+                      <SortIndicator direction={header.column.getIsSorted()} />
+                    </div>
                   </Th>
                 ))}
               </Tr>

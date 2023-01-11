@@ -99,16 +99,19 @@ const columns = [
   columnHelper.accessor(row => row.function, {
     id: 'function',
     enableGlobalFilter: true,
+    enableSorting: true,
     cell: (info: any) => info.getValue(),
     header: () => <span>Function</span>,
   }),
   columnHelper.accessor(row => row.id, {
     id: 'id',
+    enableSorting: true,
     cell: (info: any) => info.getValue(),
     header: () => <span>ID</span>,
   }),
   columnHelper.accessor(row => row.inputType, {
     id: 'inputType',
+    enableSorting: true,
     cell: (info: any) => <span>{info.getValue()}</span>,
     header: () => <span>Input (type)</span>,
   }),
@@ -225,21 +228,6 @@ function DebouncedInput({
   )
 }
 
-// const globalFilterFn: FilterFn<any> = (
-//   row, columnId, value, addMeta
-// ) => {
-//   console.log('filter function outside', value, row)
-
-//   // Rank the item
-//   const itemRank = rankItem(row.getValue(columnId), value)
-
-//   // Store the ranking info
-//   addMeta(itemRank)
-
-//   // Return if the item should be filtered in/out
-//   return itemRank.passed
-// }
-
 function FilterableTemplate(args: any) {
   const [globalFilter, setGlobalFilter] = React.useState('')
 
@@ -249,7 +237,7 @@ function FilterableTemplate(args: any) {
         initialValue={globalFilter}
         onChange={value => setGlobalFilter(String(value))}
         marginBottom="small"
-        placeholder="Search"
+        placeholder="Filter by Function or Description'"
       />
       <Table
         reactTableOptions={{
@@ -323,8 +311,8 @@ Expandable.args = {
   ),
 }
 
-export const Filterable = FilterableTemplate.bind({})
-Filterable.args = {
+export const FilterableAndSortable = FilterableTemplate.bind({})
+FilterableAndSortable.args = {
   virtualizeRows: true,
   width: 'auto',
   height: '400px',
