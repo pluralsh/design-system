@@ -17,6 +17,7 @@ import {
   InfoIcon,
   LogsIcon,
   Table,
+  Tooltip,
 } from '..'
 
 type Method = {
@@ -112,8 +113,19 @@ const columns = [
   columnHelper.accessor(row => row.inputType, {
     id: 'inputType',
     enableSorting: true,
-    cell: (info: any) => <span>{info.getValue()}</span>,
+    cell: (info: any) => (
+      <Tooltip
+        placement="top-start"
+        label={info.getValue()}
+      >
+        <span>{info.getValue()}</span>
+      </Tooltip>
+    ),
     header: () => <span>Input (type)</span>,
+    meta: {
+      truncate: true,
+      gridTemplate: 'minmax(150px, 1fr)',
+    },
   }),
   columnHelper.accessor(row => row.returnedValue, {
     id: 'returnedValue',
@@ -188,6 +200,8 @@ const expandingColumns = [
     header: () => <span>Description</span>,
   }),
 ]
+
+console.log('columnDefs', columns)
 
 export default {
   title: 'Table',

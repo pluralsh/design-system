@@ -13,25 +13,22 @@ import {
   getExpandedRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  sortingFns,
   useReactTable,
 } from '@tanstack/react-table'
-import { compareItems, rankItem } from '@tanstack/match-sorter-utils'
+import { rankItem } from '@tanstack/match-sorter-utils'
 import { useVirtual } from 'react-virtual'
 
 import styled from 'styled-components'
 
 import type {
+  ColumnDef,
   FilterFn,
   Row,
   SortDirection,
-  SortingFn,
 } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import type { VirtualItem } from 'react-virtual'
 
 import Button from './Button'
-import IconFrame from './IconFrame'
 
 import CaretUpIcon from './icons/CaretUpIcon'
 import ArrowRightIcon from './icons/ArrowRightIcon'
@@ -71,9 +68,27 @@ export type TableProps =
 
 const propTypes = {}
 
-const T = styled.table(({ theme }) => ({
+function getGridTemplateCols(columnDefs: ColumnDef<unknown>[] = []): string {
+  return columnDefs
+    .reduce((val: string[], columnDef): string[] => [
+      ...val,
+      columnDef.meta?.gridTemplate
+        ? columnDef.meta?.gridTemplate
+        : columnDef.meta?.truncate
+          ? 'minmax(100px, 1fr)'
+          : 'auto',
+    ],
+      [] as string[])
+    .join(' ')
+}
+
+const T = styled.table<{ gridTemplateColumns: string }>(({ theme, gridTemplateColumns }) => ({
+  gridTemplateColumns,
   backgroundColor: theme.colors['fill-one'],
   borderSpacing: 0,
+  display: 'grid',
+  borderCollapse: 'collapse',
+  minWidth: '100%',
   width: '100%',
   ...theme.partials.text.body2LooseLineHeight,
 }))
@@ -91,10 +106,11 @@ const TheadUnstyled = forwardRef<
 ))
 
 const Thead = styled(TheadUnstyled)(({ theme }) => ({
-  backgroundColor: theme.colors['fill-two'],
+  display: 'contents',
   position: 'sticky',
   top: 0,
   zIndex: 3,
+  backgroundColor: theme.colors['fill-two'],
 }))
 
 const TbodyUnstyled = forwardRef<
@@ -110,10 +126,12 @@ const TbodyUnstyled = forwardRef<
 ))
 
 const Tbody = styled(TbodyUnstyled)(({ theme }) => ({
+  display: 'contents',
   backgroundColor: theme.colors['fill-one'],
 }))
 
 const Tr = styled.tr(() => ({
+  display: 'contents',
   backgroundColor: 'inherit',
 }))
 
@@ -121,6 +139,11 @@ const Th = styled.th<{
   stickyColumn: boolean
   cursor?: CSSProperties['cursor']
 }>(({ theme, stickyColumn, cursor }) => ({
+  backgroundColor: theme.colors['fill-two'],
+  position: 'sticky',
+  top: 0,
+  zIndex: 3,
+
   borderBottom: theme.borders['fill-three'],
   color: theme.colors.text,
   height: 48,
@@ -150,16 +173,27 @@ const Td = styled.td<{
   lighter: boolean
   loose?: boolean
   stickyColumn: boolean
+  truncateColumn: boolean
 }>(({
-  theme, firstRow, lighter, loose, stickyColumn,
+  theme,
+  firstRow,
+  lighter,
+  loose,
+  stickyColumn,
+  truncateColumn = false,
 }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  height: 'auto',
+  minHeight: 52,
+
   backgroundColor: lighter
     ? theme.colors['fill-one']
     : theme.colors['fill-one-hover'],
   borderTop: firstRow ? '' : theme.borders.default,
   color: theme.colors.text,
-  height: 52,
-  minHeight: 52,
+
   padding: loose ? '16px 12px' : '8px 12px',
   '&:first-child': stickyColumn
     ? {
@@ -169,6 +203,15 @@ const Td = styled.td<{
       zIndex: 1,
     }
     : {},
+  ...(truncateColumn
+    ? {
+      '*': {
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+      },
+    }
+    : {}),
 }))
 
 const TdExpand = styled.td<{ lighter: boolean }>(({ theme, lighter }) => ({
@@ -226,6 +269,73 @@ function SortIndicator({
   return sortDirToIcon[direction]
 }
 
+function FillerRow({
+  columns,
+  height,
+  index,
+  stickyColumn,
+}: {
+  columns: unknown[]
+  height: number
+  index: number
+  stickyColumn: boolean
+}) {
+  return (
+    <Tr aria-hidden="true">
+      {columns.map(() => (
+        <Td
+          aria-hidden="true"
+          stickyColumn={stickyColumn}
+          lighter={index % 2 === 0}
+          style={{
+            height,
+            minHeight: height,
+            maxHeight: height,
+            padding: 0,
+          }}
+          truncateColumn={false}
+        />
+      ))}
+    </Tr>
+  )
+}
+
+function FillerRows({
+  rows,
+  height,
+  position,
+  ...props
+}: {
+  rows: Row<unknown>[] | VirtualItem[]
+  columns: unknown[]
+  height: number
+  position: 'top' | 'bottom'
+  stickyColumn: boolean
+}) {
+  return (
+    <>
+      <FillerRow
+        height={position === 'top' ? 0 : height}
+        index={
+          position === 'top'
+            ? rows[0].index - 2
+            : rows[rows.length - 1].index + 1
+        }
+        {...props}
+      />
+      <FillerRow
+        height={position === 'top' ? height : 0}
+        index={
+          position === 'top'
+            ? rows[0].index - 1
+            : rows[rows.length - 1].index + 2
+        }
+        {...props}
+      />
+    </>
+  )
+}
+
 function TableRef({
   data,
   columns,
@@ -250,10 +360,6 @@ function TableRef({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    // getPaginationRowModel: getPaginationRowModel(),
-    // getFacetedRowModel: getFacetedRowModel(),
-    // getFacetedUniqueValues: getFacetedUniqueValues(),
-    // getFacetedMinMaxValues: getFacetedMinMaxValues(),
     getExpandedRowModel: getExpandedRowModel(),
     getRowId: (originalRow, i, parent) => {
       if (isValidId(originalRow.id)) {
@@ -297,6 +403,7 @@ function TableRef({
   const headerGroups = useMemo(() => table.getHeaderGroups(), [table])
 
   const rows = virtualizeRows ? virtualRows : tableRows
+  const gridTemplateColumns = useMemo(() => getGridTemplateCols(columns), [columns])
 
   return (
     <Div
@@ -315,7 +422,7 @@ function TableRef({
         width={width}
         {...props}
       >
-        <T>
+        <T gridTemplateColumns={gridTemplateColumns}>
           <Thead>
             {headerGroups.map(headerGroup => (
               <Tr key={headerGroup.id}>
@@ -351,23 +458,13 @@ function TableRef({
           </Thead>
           <Tbody>
             {paddingTop > 0 && (
-              <>
-                <Tr>
-                  {/* Extra row to ensure any :nth-child() styling remains stable */}
-                  <Td
-                    stickyColumn={stickyColumn}
-                    lighter={rows[0].index % 2 === 0}
-                    style={{ height: '0' }}
-                  />
-                </Tr>
-                <Tr>
-                  <Td
-                    stickyColumn={stickyColumn}
-                    lighter={rows[0].index % 2 !== 0}
-                    style={{ height: `${paddingTop}px` }}
-                  />
-                </Tr>
-              </>
+              <FillerRows
+                columns={columns}
+                rows={rows}
+                height={paddingTop}
+                position="top"
+                stickyColumn={stickyColumn}
+              />
             )}
             {rows.map(maybeRow => {
               const row: Row<unknown> = isRow(maybeRow)
@@ -385,6 +482,9 @@ function TableRef({
                         lighter={i % 2 === 0}
                         loose={loose}
                         stickyColumn={stickyColumn}
+                        truncateColumn={
+                          cell.column?.columnDef?.meta?.truncate
+                        }
                       >
                         {flexRender(cell.column.columnDef.cell,
                           cell.getContext())}
@@ -406,23 +506,13 @@ function TableRef({
               )
             })}
             {paddingBottom > 0 && (
-              <>
-                <Tr>
-                  <Td
-                    stickyColumn={stickyColumn}
-                    lighter={rows[rows.length - 1].index % 2 !== 0}
-                    style={{ height: `${paddingBottom}px` }}
-                  />
-                </Tr>
-                <Tr>
-                  {/* Extra row to ensure any :nth-child() styling remains stable */}
-                  <Td
-                    stickyColumn={stickyColumn}
-                    lighter={rows[rows.length - 1].index % 2 === 0}
-                    style={{ height: '0' }}
-                  />
-                </Tr>
-              </>
+              <FillerRows
+                rows={rows}
+                columns={columns}
+                height={paddingBottom}
+                position="bottom"
+                stickyColumn={stickyColumn}
+              />
             )}
           </Tbody>
         </T>
