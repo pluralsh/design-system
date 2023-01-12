@@ -50,17 +50,17 @@ export type TableProps =
     > & {
       data: any[]
       columns: any[]
-      getRowCanExpand: any
-      renderExpanded: any
-      loose: boolean
-      stickyColumn: boolean
-      scrollTopMargin: number
-      virtualizeRows: boolean
-      reactVirtualOptions: Omit<
+      getRowCanExpand?: any
+      renderExpanded?: any
+      loose?: boolean
+      stickyColumn?: boolean
+      scrollTopMargin?: number
+      virtualizeRows?: boolean
+      reactVirtualOptions?: Omit<
         Parameters<typeof useVirtual>,
         'parentRef' | 'size'
       >
-      reactTableOptions: Omit<
+      reactTableOptions?: Omit<
         Parameters<typeof useReactTable>,
         'data' | 'columns'
       >
