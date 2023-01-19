@@ -11,7 +11,6 @@ import {
   Img,
   P,
 } from 'honorable'
-import PropTypes from 'prop-types'
 
 import CheckRoundedIcon from './icons/CheckRoundedIcon'
 import PlusIcon from './icons/PlusIcon'
