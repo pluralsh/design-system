@@ -1,6 +1,7 @@
 import { Div, DivProps } from 'honorable'
 import {
   ComponentProps,
+  Ref,
   forwardRef,
   useRef,
   useState,
@@ -133,7 +134,7 @@ function TableRef({
   scrollTopMargin = 500,
   width,
   ...props
-}: any) {
+}: any, forwardRef: Ref<any>) {
   const ref = useRef<HTMLDivElement>()
   const [hover, setHover] = useState(false)
   const [scrollTop, setScrollTop] = useState(0)
@@ -151,6 +152,7 @@ function TableRef({
       width={width}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      ref={forwardRef}
     >
       <Div
         backgroundColor="fill-two"
