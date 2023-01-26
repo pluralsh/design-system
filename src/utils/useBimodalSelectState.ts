@@ -1,7 +1,8 @@
 /*
 Modified from:
 https://github.com/adobe/react-spectrum/blob/main/packages/%40react-stately/select/src/useSelectState.ts
-*;/
+*/
+
 /*
  * Copyright 2020 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -15,8 +16,8 @@ https://github.com/adobe/react-spectrum/blob/main/packages/%40react-stately/sele
  */
 
 import { useMenuTriggerState } from '@react-stately/menu'
-import { SelectProps } from '@react-types/select'
-import { useListState } from '@react-stately/list'
+import { AriaSelectProps } from '@react-types/select'
+import { ListProps, useListState } from '@react-stately/list'
 import {
   Key,
   useCallback,
@@ -24,7 +25,7 @@ import {
   useState,
 } from 'react'
 import { useControlledState } from '@react-stately/utils'
-import { Node, SelectionMode } from '@react-types/shared'
+import { Node } from '@react-types/shared'
 import type { SelectState } from '@react-stately/select'
 
 export type BimodalSelectState<T> = SelectState<T> & {
@@ -33,30 +34,21 @@ export type BimodalSelectState<T> = SelectState<T> & {
   selectedItems: Node<T>[]
 }
 
-export type BimodalSelectProps<T> = Omit<
-  SelectProps<T>,
-  'onSelectionChange'
-> & {
-  selectionMode?: SelectionMode
-  selectedKeys?: Iterable<Key>
-  onSelectionChange?: (keys: Key | Set<Key>) => any
-}
+export type BimodalSelectProps<T> = AriaSelectProps<T> & ListProps<T>
 
 /**
  * Provides state management for a select component. Handles building a collection
  * of items from props, handles the open state for the popup menu, and manages
  * multiple selection state.
  */
-export function useSelectState<T extends object>({
+export function useBimodalSelectState<T extends object>({
   selectionMode = 'single',
   onSelectionChange: onSelectChangeProp,
   ...props
 }: BimodalSelectProps<T>): BimodalSelectState<T> {
-  const [selectedKey, setSelectedKey] = useControlledState<Key>(selectionMode === 'multiple'
-    ? props.selectedKeys?.values()?.next()?.value
-    : props.selectedKey,
-  props.defaultSelectedKey ?? null,
-  selectionMode === 'single' ? onSelectChangeProp : undefined)
+  const [selectedKey, setSelectedKey] = useControlledState<Key>(selectionMode === 'single' ? props.selectedKey : undefined,
+    props.defaultSelectedKey ?? null,
+    selectionMode === 'single' ? onSelectChangeProp : undefined)
   const listStateRef = useRef<ReturnType<typeof useListState>>()
   const getAllKeys = useCallback(() => new Set<Key>(listStateRef.current?.collection?.getKeys() ?? []),
     [])
@@ -64,7 +56,7 @@ export function useSelectState<T extends object>({
     = selectionMode === 'multiple' ? props.selectedKeys : new Set([selectedKey])
   const triggerState = useMenuTriggerState(props)
 
-  const onSelectionChange = useCallback(keys => {
+  const onSelectionChange = useCallback<ListProps<object>['onSelectionChange']>(keys => {
     if (selectionMode === 'single' && keys !== 'all') {
       const key = keys.values().next().value
 
@@ -91,7 +83,6 @@ export function useSelectState<T extends object>({
   ])
 
   const listState = useListState({
-    disallowEmptySelection: true, // Is this what we really want?
     allowDuplicateSelectionEvents: true, // Find out what this does
     ...props,
     selectionMode,
