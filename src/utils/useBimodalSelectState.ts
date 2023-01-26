@@ -43,7 +43,7 @@ export interface SelectState<T>
  */
 export function useSelectState<T extends object>({
   selectionMode = 'single',
-  onSelectionChange,
+  onSelectionChange: onSelectChangeProp,
   ...props
 }: Omit<SelectProps<T>, 'onSelectionChange'> & {
   selectionMode?: SelectionMode
@@ -54,39 +54,39 @@ export function useSelectState<T extends object>({
     ? props.selectedKeys?.values()?.next()?.value
     : props.selectedKey,
   props.defaultSelectedKey ?? null,
-  selectionMode === 'single' ? onSelectionChange : undefined)
+  selectionMode === 'single' ? onSelectChangeProp : undefined)
   const listStateRef = useRef<ReturnType<typeof useListState>>()
-
   const getAllKeys = useCallback(() => new Set<Key>(listStateRef.current?.collection?.getKeys() ?? []),
     [])
-
   const selectedKeys
     = selectionMode === 'multiple' ? props.selectedKeys : new Set([selectedKey])
-
   const triggerState = useMenuTriggerState(props)
+
+  const onSelectionChange = useCallback(keys => {
+    if (selectionMode === 'single' && keys !== 'all') {
+      const key = keys.values().next().value
+
+      // Always fire onSelectionChange, even if the key is the same
+      // as the current key (useControlledState does not).
+      if (key === selectedKey && onSelectChangeProp) {
+        onSelectChangeProp(key)
+      }
+
+      setSelectedKey(key)
+      triggerState.close()
+    }
+    if (selectionMode === 'multiple') {
+      onSelectChangeProp(keys === 'all' ? getAllKeys() : keys)
+    }
+  }, [getAllKeys, onSelectChangeProp, selectedKey, selectionMode, setSelectedKey, triggerState])
+
   const listState = useListState({
-    disallowEmptySelection: true,
-    allowDuplicateSelectionEvents: true,
+    disallowEmptySelection: true, // Is this what we really want?
+    allowDuplicateSelectionEvents: true, // Find out what this does
     ...props,
     selectionMode,
     selectedKeys,
-    onSelectionChange: keys => {
-      if (selectionMode === 'single' && keys !== 'all') {
-        const key = keys.values().next().value
-
-        // Always fire onSelectionChange, even if the key is the same
-        // as the current key (useControlledState does not).
-        if (key === selectedKey && onSelectionChange) {
-          onSelectionChange(key)
-        }
-
-        setSelectedKey(key)
-        triggerState.close()
-      }
-      if (selectionMode === 'multiple') {
-        onSelectionChange(keys === 'all' ? getAllKeys() : keys)
-      }
-    },
+    onSelectionChange,
   })
 
   listStateRef.current = listState
@@ -104,9 +104,9 @@ export function useSelectState<T extends object>({
     selectedKey,
     setSelectedKey,
     selectedItem,
-    selectedKeys: listState.selectionManager.selectedKeys,
+    selectedKeys: listState.selectionManager.selectedKeys, // might not get updated every time
     selectedItems,
-    setSelectedKeys: listState.selectionManager.setSelectedKeys,
+    setSelectedKeys: listState.selectionManager.setSelectedKeys, // might not get updated every time
     open() {
       // Don't open if the collection is empty.
       if (listState.collection.size !== 0) {
