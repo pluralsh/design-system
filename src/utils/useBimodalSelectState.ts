@@ -14,9 +14,9 @@ https://github.com/adobe/react-spectrum/blob/main/packages/%40react-stately/sele
  * governing permissions and limitations under the License.
  */
 
-import { MenuTriggerState, useMenuTriggerState } from '@react-stately/menu'
+import { useMenuTriggerState } from '@react-stately/menu'
 import { SelectProps } from '@react-types/select'
-import { SingleSelectListState, useListState } from '@react-stately/list'
+import { useListState } from '@react-stately/list'
 import {
   Key,
   useCallback,
@@ -24,16 +24,22 @@ import {
   useState,
 } from 'react'
 import { useControlledState } from '@react-stately/utils'
-import { Node, Selection, SelectionMode } from '@react-types/shared'
+import { Node, SelectionMode } from '@react-types/shared'
+import type { SelectState } from '@react-stately/select'
 
-export interface SelectState<T>
-  extends SingleSelectListState<T>,
-    MenuTriggerState {
-  /** Whether the select is currently focused. */
-  readonly isFocused: boolean
+export type BimodalSelectState<T> = SelectState<T> & {
+  selectedKeys: Set<Key>
+  setSelectedKeys: any
+  selectedItems: Node<T>[]
+}
 
-  /** Sets whether the select is focused. */
-  setFocused(isFocused: boolean): void
+export type BimodalSelectProps<T> = Omit<
+  SelectProps<T>,
+  'onSelectionChange'
+> & {
+  selectionMode?: SelectionMode
+  selectedKeys?: Iterable<Key>
+  onSelectionChange?: (keys: Key | Set<Key>) => any
 }
 
 /**
@@ -45,11 +51,7 @@ export function useSelectState<T extends object>({
   selectionMode = 'single',
   onSelectionChange: onSelectChangeProp,
   ...props
-}: Omit<SelectProps<T>, 'onSelectionChange'> & {
-  selectionMode?: SelectionMode
-  selectedKeys?: Iterable<Key>
-  onSelectionChange?: (keys: Key | Set<Key>) => any
-}): SelectState<T> & { selectedKeys: Set<Key>; setSelectedKeys: any, selectedItems: Node<T>[], } {
+}: BimodalSelectProps<T>): BimodalSelectState<T> {
   const [selectedKey, setSelectedKey] = useControlledState<Key>(selectionMode === 'multiple'
     ? props.selectedKeys?.values()?.next()?.value
     : props.selectedKey,
@@ -66,8 +68,8 @@ export function useSelectState<T extends object>({
     if (selectionMode === 'single' && keys !== 'all') {
       const key = keys.values().next().value
 
-      // Always fire onSelectionChange, even if the key is the same
-      // as the current key (useControlledState does not).
+        // Always fire onSelectionChange, even if the key is the same
+        // as the current key (useControlledState does not).
       if (key === selectedKey && onSelectChangeProp) {
         onSelectChangeProp(key)
       }
@@ -78,7 +80,15 @@ export function useSelectState<T extends object>({
     if (selectionMode === 'multiple') {
       onSelectChangeProp(keys === 'all' ? getAllKeys() : keys)
     }
-  }, [getAllKeys, onSelectChangeProp, selectedKey, selectionMode, setSelectedKey, triggerState])
+  },
+  [
+    getAllKeys,
+    onSelectChangeProp,
+    selectedKey,
+    selectionMode,
+    setSelectedKey,
+    triggerState,
+  ])
 
   const listState = useListState({
     disallowEmptySelection: true, // Is this what we really want?
