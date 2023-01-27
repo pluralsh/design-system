@@ -5,7 +5,6 @@ import {
   useState,
 } from 'react'
 import {
-  Div,
   Flex,
   FlexProps,
   Img,
