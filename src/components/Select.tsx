@@ -237,14 +237,13 @@ function Select({
       rightContent={rightContent}
       isOpen={state.isOpen}
     >
-      {(props.selectionMode === 'single'
-        && state.selectedItem?.props?.children?.props?.label)
-        || (props.selectionMode === 'multiple'
-          && state.selectedItems.length > 0
-          && state.selectedItems
-            .map(item => item?.props?.children?.props?.label)
-            .filter(label => !!label)
-            .join(', '))
+      {(props.selectionMode === 'multiple'
+        && state.selectedItems.length > 0
+        && state.selectedItems
+          .map(item => item?.props?.children?.props?.label)
+          .filter(label => !!label)
+          .join(', '))
+        || state.selectedItem?.props?.children?.props?.label
         || label}
     </SelectButton>
   )
