@@ -442,15 +442,6 @@ function Template() {
           onOpenChange={open => {
             if (!open) setShownLimit(shownStep)
           }}
-          rightContent={
-            curItem && (
-              <ListBoxItemChipList
-                maxVisible={0}
-                showExtra
-                chips={curItem.chips}
-              />
-            )
-          }
           dropdownFooter={
             shownLimit < items.length && (
               <ListBoxFooterPlus>View more</ListBoxFooterPlus>
