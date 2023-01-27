@@ -28,24 +28,34 @@ import { useControlledState } from '@react-stately/utils'
 import { Node } from '@react-types/shared'
 import type { SelectState } from '@react-stately/select'
 
-export type BimodalSelectState<T> = SelectState<T> & {
+export type BimodalSelectState<T = object> = SelectState<T> & {
   selectedKeys: Set<Key>
   setSelectedKeys: any
   selectedItems: Node<T>[]
 }
 
-export type BimodalSelectProps<T> = AriaSelectProps<T> & ListProps<T>
+export type BimodalSelectProps<T> = Omit<
+  AriaSelectProps<T>,
+  'onSelectionChange'
+> &
+  Omit<ListProps<T>, 'onSelectionChange'>
 
 /**
  * Provides state management for a select component. Handles building a collection
  * of items from props, handles the open state for the popup menu, and manages
  * multiple selection state.
  */
-export function useBimodalSelectState<T extends object>({
+function useBimodalSelectState<T extends object>(
+  p: BimodalSelectProps<T> & Pick<AriaSelectProps<T>, 'onSelectionChange'>
+): BimodalSelectState<T>
+function useBimodalSelectState<T extends object>(
+  p: BimodalSelectProps<T> & Pick<ListProps<T>, 'onSelectionChange'>
+): BimodalSelectState<T>
+function useBimodalSelectState<T extends object>({
   selectionMode = 'single',
   onSelectionChange: onSelectChangeProp,
   ...props
-}: BimodalSelectProps<T>): BimodalSelectState<T> {
+}: BimodalSelectProps<T> & { onSelectionChange: (arg: any) => any }): BimodalSelectState<T> {
   const [selectedKey, setSelectedKey] = useControlledState<Key>(selectionMode === 'single' ? props.selectedKey : undefined,
     props.defaultSelectedKey ?? null,
     selectionMode === 'single' ? onSelectChangeProp : undefined)
@@ -124,3 +134,5 @@ export function useBimodalSelectState<T extends object>({
     setFocused,
   }
 }
+
+export { useBimodalSelectState }

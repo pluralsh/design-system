@@ -13,6 +13,10 @@ import { HiddenSelect, useSelect } from '@react-aria/select'
 import { useButton } from '@react-aria/button'
 import styled, { useTheme } from 'styled-components'
 
+import { ListProps } from '@react-stately/list'
+
+import { AriaSelectProps } from '@react-types/select'
+
 import { BimodalSelectProps, BimodalSelectState, useBimodalSelectState } from '../utils/useBimodalSelectState'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
@@ -44,6 +48,7 @@ export type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   placement?: Placement
   width?: string | number
   maxHeight?: string | number
+  onSelectionChange?: (arg:any) => any
 } & Omit<
     BimodalSelectProps<object>,
     'autoFocus' | 'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder'
@@ -147,6 +152,16 @@ const SelectInner = styled.div<{
   },
 }))
 
+function Select(
+  props: Omit<SelectProps, 'selectionMode' | 'selectedKeys' | 'onSelectionChange'> & {
+    selectionMode?: 'single'
+  } & Pick<AriaSelectProps<object>, 'onSelectionChange'>
+): ReactElement
+function Select(
+  props: Omit<SelectProps, 'selectionMode' | 'selectedKey' | 'onSelectionChange'> & {
+    selectionMode: 'multiple'
+  } & Pick<ListProps<object>, 'onSelectionChange'>
+): ReactElement
 function Select({
   children,
   selectedKey,
