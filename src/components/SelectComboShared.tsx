@@ -84,7 +84,6 @@ function useSelectComboStateProps<T extends TType>({
 
         newKey = diff.keys().next().value || ''
       }
-      console.log('newKey', newKey)
       switch (newKey) {
       case HEADER_KEY:
         temporarilyPreventClose.current = true
