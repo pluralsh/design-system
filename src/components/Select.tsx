@@ -13,8 +13,6 @@ import { HiddenSelect, useSelect } from '@react-aria/select'
 import { useButton } from '@react-aria/button'
 import styled, { useTheme } from 'styled-components'
 
-import { ListProps } from '@react-stately/list'
-
 import { AriaSelectProps } from '@react-types/select'
 
 import { BimodalSelectProps, BimodalSelectState, useBimodalSelectState } from '../utils/useBimodalSelectState'
@@ -160,11 +158,12 @@ function Select(
 function Select(
   props: Omit<SelectProps, 'selectionMode' | 'selectedKey' | 'onSelectionChange'> & {
     selectionMode: 'multiple'
-  } & Pick<ListProps<object>, 'onSelectionChange'>
+  } & {onSelectionChange: (keys:Set<Key>) => any}
 ): ReactElement
 function Select({
   children,
   selectedKey,
+  onSelectionChange,
   isOpen,
   onOpenChange,
   leftContent,
@@ -200,6 +199,7 @@ function Select({
     onFooterClick,
     onHeaderClick,
     onOpenChange,
+    onSelectionChange,
     children,
     setIsOpen,
     stateRef,

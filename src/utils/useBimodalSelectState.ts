@@ -70,8 +70,8 @@ function useBimodalSelectState<T extends object>({
     if (selectionMode === 'single' && keys !== 'all') {
       const key = keys.values().next().value
 
-        // Always fire onSelectionChange, even if the key is the same
-        // as the current key (useControlledState does not).
+      // Always fire onSelectionChange, even if the key is the same
+      // as the current key (useControlledState does not).
       if (key === selectedKey && onSelectChangeProp) {
         onSelectChangeProp(key)
       }
