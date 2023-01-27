@@ -184,6 +184,12 @@ function Template() {
     ? `You have selected ${curItem.label}`
     : 'Select an item please'
 
+  const curItems = items.filter(item => selectedKeys.has(item.key))
+  const customLabelMultiple
+    = curItems.length > 0
+      ? `Selections: ${curItems.map(item => item.label).join(', ')}`
+      : 'Select items'
+
   return (
     <Flex
       flexDirection="column"
@@ -399,7 +405,7 @@ function Template() {
           }
           triggerButton={(
             <SelectButton leftContent={curItem ? <CheckIcon /> : <InfoIcon />}>
-              {customLabel}
+              {customLabelMultiple}
             </SelectButton>
           )}
         >

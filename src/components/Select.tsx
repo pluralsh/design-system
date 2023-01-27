@@ -46,7 +46,7 @@ export type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   placement?: Placement
   width?: string | number
   maxHeight?: string | number
-  onSelectionChange?: (arg:any) => any
+  onSelectionChange?: (arg: any) => any
 } & Omit<
     BimodalSelectProps<object>,
     'autoFocus' | 'onLoadMore' | 'isLoading' | 'validationState' | 'placeholder'
@@ -151,14 +151,20 @@ const SelectInner = styled.div<{
 }))
 
 function Select(
-  props: Omit<SelectProps, 'selectionMode' | 'selectedKeys' | 'onSelectionChange'> & {
+  props: Omit<
+    SelectProps,
+    'selectionMode' | 'selectedKeys' | 'onSelectionChange'
+  > & {
     selectionMode?: 'single'
   } & Pick<AriaSelectProps<object>, 'onSelectionChange'>
 ): ReactElement
 function Select(
-  props: Omit<SelectProps, 'selectionMode' | 'selectedKey' | 'onSelectionChange'> & {
+  props: Omit<
+    SelectProps,
+    'selectionMode' | 'selectedKey' | 'onSelectionChange'
+  > & {
     selectionMode: 'multiple'
-  } & {onSelectionChange: (keys:Set<Key>) => any}
+  } & { onSelectionChange: (keys: Set<Key>) => any }
 ): ReactElement
 function Select({
   children,
@@ -231,7 +237,15 @@ function Select({
       rightContent={rightContent}
       isOpen={state.isOpen}
     >
-      {state.selectedItem?.props?.children?.props?.label || label}
+      {(props.selectionMode === 'single'
+        && state.selectedItem?.props?.children?.props?.label)
+        || (props.selectionMode === 'multiple'
+          && state.selectedItems.length > 0
+          && state.selectedItems
+            .map(item => item?.props?.children?.props?.label)
+            .filter(label => !!label)
+            .join(', '))
+        || label}
     </SelectButton>
   )
 
