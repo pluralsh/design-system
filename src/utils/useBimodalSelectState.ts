@@ -83,7 +83,8 @@ export function useBimodalSelectState<T extends object>({
   ])
 
   const listState = useListState({
-    allowDuplicateSelectionEvents: true, // Find out what this does
+    disallowEmptySelection: selectionMode === 'single',
+    allowDuplicateSelectionEvents: true,
     ...props,
     selectionMode,
     selectedKeys,
