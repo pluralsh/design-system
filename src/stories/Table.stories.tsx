@@ -321,6 +321,7 @@ Expandable.args = {
   renderExpanded: ({ row }: { row: Row<Method> }) => (
     <P>{row.original.description}</P>
   ),
+  onRowClick: () => {},
 }
 
 export const FilterableAndSortable = FilterableTemplate.bind({})
