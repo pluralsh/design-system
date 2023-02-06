@@ -45,22 +45,27 @@ function ChipList<TValue = string>({
           {transform ? transform(v) : `${v}`}
         </Chip>
       ))}
-      {collapsed ? (
-        <Chip
-          onClick={() => setCollapsed(false)}
-          {...props}
-          clickable
-          background={fillLevelClassName}
-        > {`+${values.length - limit}`}
-        </Chip>
-      ) : (
-        <Chip
-          onClick={() => setCollapsed(true)}
-          {...props}
-          clickable
-          background={fillLevelClassName}
-        ><HamburgerMenuCollapseIcon />
-        </Chip>
+      {values.length > limit && (
+        <>
+          {collapsed && (
+            <Chip
+              onClick={() => setCollapsed(false)}
+              {...props}
+              clickable
+              background={fillLevelClassName}
+            > {`+${values.length - limit}`}
+            </Chip>
+          )}
+          {!collapsed && (
+            <Chip
+              onClick={() => setCollapsed(true)}
+              {...props}
+              clickable
+              background={fillLevelClassName}
+            ><HamburgerMenuCollapseIcon />
+            </Chip>
+          )}
+        </>
       )}
     </Flex>
   )
