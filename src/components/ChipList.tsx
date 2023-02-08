@@ -1,12 +1,17 @@
 import { Flex, Span } from 'honorable'
-import { ReactElement, useMemo, useState } from 'react'
+import {
+  ComponentProps,
+  ReactElement,
+  useMemo,
+  useState,
+} from 'react'
 
 import { HamburgerMenuCollapseIcon } from '../icons'
 
 import Chip, { ChipProps } from './Chip'
 import { useFillLevel } from './contexts/FillLevelContext'
 
-type TransformFn<TValue> = (value: TValue) => string
+type TransformFn<TValue> = (value: TValue) => ComponentProps<typeof Chip>['children']
 
 export type ChipListProps<TValue> = {
   values: Array<TValue>
