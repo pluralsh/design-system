@@ -15,20 +15,23 @@ export type ChipListProps<TValue> = {
 } & ChipProps
 
 function ChipList<TValue = string>({
-  values = [], transform, limit = 4, ...props
+  values = [],
+  transform,
+  limit = 4,
+  ...props
 }: ChipListProps<TValue>): ReactElement {
   const [collapsed, setCollapsed] = useState(true)
   const parentFillLevel = useFillLevel()
   const fillLevelClassName = useMemo(() => {
     switch (parentFillLevel) {
-    case 0:
-      return 'fill-zero'
-    case 1:
-      return 'fill-one'
-    case 2:
-      return 'fill-two'
     case 3:
       return 'fill-three'
+    case 2:
+      return 'fill-two'
+    case 1:
+      return 'fill-one'
+    default:
+      return 'fill-zero'
     }
   }, [parentFillLevel])
 
@@ -56,7 +59,8 @@ function ChipList<TValue = string>({
               {...props}
               clickable
               background={fillLevelClassName}
-            > {`+${values.length - limit}`}
+            >
+              {`+${values.length - limit}`}
             </Chip>
           )}
           {!collapsed && (
@@ -65,7 +69,8 @@ function ChipList<TValue = string>({
               {...props}
               clickable
               background={fillLevelClassName}
-            ><HamburgerMenuCollapseIcon />
+            >
+              <HamburgerMenuCollapseIcon />
             </Chip>
           )}
         </>
