@@ -101,7 +101,7 @@ function LabelTemplate({ onFillLevel, ...args }: any) {
     >
       <ChipList<Label>
         values={VALUES}
-        transform={v => `${v.key?.concat(':') ?? ''} ${v.value}`}
+        transformValue={v => `${v.key?.concat(':') ?? ''} ${v.value}`}
         {...args}
       />
     </WrapWithIf>

@@ -11,17 +11,19 @@ import { HamburgerMenuCollapseIcon } from '../icons'
 import Chip, { ChipProps } from './Chip'
 import { useFillLevel } from './contexts/FillLevelContext'
 
-type TransformFn<TValue> = (value: TValue) => ComponentProps<typeof Chip>['children']
+type TransformFn<TValue> = (
+  value: TValue
+) => ComponentProps<typeof Chip>['children']
 
 export type ChipListProps<TValue> = {
-  values: Array<TValue>
-  transform?: TransformFn<TValue>
+  values: TValue[]
+  transformValue?: TransformFn<TValue>
   limit: number
 } & ChipProps
 
 function ChipList<TValue = string>({
   values = [],
-  transform,
+  transformValue,
   limit = 4,
   ...props
 }: ChipListProps<TValue>): ReactElement {
@@ -53,7 +55,7 @@ function ChipList<TValue = string>({
           key={(v as any).key || i}
           {...props}
         >
-          {transform ? transform(v) : `${v}`}
+          {transformValue ? transformValue(v) : `${v}`}
         </Chip>
       ))}
       {values.length > limit && (
