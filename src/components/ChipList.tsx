@@ -40,8 +40,11 @@ function ChipList<TValue = string>({
       {values.length === 0 && (
         <Span body2>There is nothing to display here.</Span>
       )}
-      {values.slice(0, collapsed ? limit : undefined).map(v => (
-        <Chip {...props}>
+      {values.slice(0, collapsed ? limit : undefined).map((v, i) => (
+        <Chip
+          key={(v as any).key || i}
+          {...props}
+        >
           {transform ? transform(v) : `${v}`}
         </Chip>
       ))}
