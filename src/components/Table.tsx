@@ -32,7 +32,6 @@ import Button from './Button'
 import CaretUpIcon from './icons/CaretUpIcon'
 import ArrowRightIcon from './icons/ArrowRightIcon'
 import { FillLevelProvider } from './contexts/FillLevelContext'
-import WrapWithIf from './WrapWithIf'
 
 export type TableProps =
   | Omit<
