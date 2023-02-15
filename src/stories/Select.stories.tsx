@@ -282,6 +282,7 @@ function Template() {
 
       <Flex justifyContent="right">
         <Select
+          isOpen
           label="Version"
           selectedKey={selectedKey}
           triggerButton={<CustomTriggerButton />}

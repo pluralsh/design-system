@@ -16,14 +16,7 @@ import styled, { useTheme } from 'styled-components'
 
 import { AriaSelectProps } from '@react-types/select'
 
-import {
-  autoUpdate,
-  flip,
-  offset,
-  shift,
-  size,
-  useFloating,
-} from '@floating-ui/react-dom-interactions'
+import { autoUpdate, size, useFloating } from '@floating-ui/react-dom-interactions'
 
 import { mergeRefs } from 'react-merge-refs'
 
@@ -253,19 +246,26 @@ function Select({
     placement: `bottom-${placement === 'left' ? 'start' : 'end'}`,
     strategy: 'fixed',
     middleware: [
-      // flip(),
-      // shift({ padding: 12 }),
       size({
         apply(args) {
           const { elements, availableHeight, availableWidth } = args
           // Do things with the data, e.g.
           const refBox = elements.reference.getBoundingClientRect()
-          const maxH = maxHeight ?? Math.min(availableHeight, 230)
+          const maxH
+            = typeof maxHeight === 'string'
+              ? maxHeight
+              : maxHeight
+                ? Math.min(availableHeight, maxHeight)
+                : Math.min(availableHeight, 230)
 
           console.log('maxHeight', maxHeight)
           console.log('maxH', maxH)
+          console.log('KLINK width', width)
           Object.assign(elements.floating.style, {
-            maxWidth: `${refBox.width}px`,
+            maxWidth:
+              typeof width === 'string' && width
+                ? width
+                : `${typeof width === 'number' ? width : refBox.width}px`,
             maxHeight: `${maxH}px`,
           })
         },
@@ -275,8 +275,6 @@ function Select({
   })
   const triggerRef = useMemo(() => mergeRefs([floating.reference, ref]),
     [floating.reference])
-
-  console.log('floating', floating)
 
   return (
     <SelectInner className="selectInner">

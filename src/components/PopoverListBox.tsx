@@ -26,9 +26,10 @@ type PopoverListBoxProps = {
     'width' | 'placement' | 'dropdownHeaderFixed' | 'dropdownFooterFixed'
   >
 
-const Animated = styled(animated.div)(() => ({
-  height: '100%',
+const Animated = styled(animated.div)(({ theme }) => ({
   width: '100%',
+  maxHeight: '100%',
+  paddingTop: theme.spacing.xxsmall,
 }))
 
 function PopoverListBox({
@@ -83,7 +84,6 @@ function PopoverListBox({
           position: floating.strategy,
           left: floating.x ?? 0,
           top: floating.y ?? 0,
-          height: '100vh',
         }}
       >
         <Animated style={{ ...styles }}>
