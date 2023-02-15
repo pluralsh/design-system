@@ -1,7 +1,7 @@
 import { Button as HonorableButton } from 'honorable'
 import type { ButtonProps as HonorableButtonProps } from 'honorable'
 import { keyframes } from '@emotion/react'
-import { forwardRef } from 'react'
+import { MutableRefObject, forwardRef } from 'react'
 
 export type ButtonProps = HonorableButtonProps & {pulse?: boolean}
 
@@ -11,7 +11,7 @@ const pulseKeyframes = keyframes`
   100% { box-shadow: 0 0 7px 2px #fff1; }
 `
 
-function ButtonRef({ pulse = false, ...props }: ButtonProps, ref:Ref<any>) {
+function ButtonRef({ pulse = false, ...props }: ButtonProps, ref:MutableRefObject<any>) {
   return (
     <HonorableButton
       ref={ref}

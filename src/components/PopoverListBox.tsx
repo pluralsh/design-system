@@ -2,11 +2,8 @@ import { ListState } from '@react-stately/list'
 import { AriaListBoxOptions } from '@react-aria/listbox'
 import styled, { useTheme } from 'styled-components'
 import { animated, useTransition } from 'react-spring'
-import { mergeRefs } from 'react-merge-refs'
 
 import { FloatingPortal, UseFloatingReturn } from '@floating-ui/react-dom-interactions'
-
-import { RefObject, useMemo } from 'react'
 
 import { ListBoxUnmanaged, ListBoxUnmanagedProps } from './ListBox'
 import { Popover, PopoverProps } from './ReactAriaPopover'

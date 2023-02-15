@@ -242,30 +242,29 @@ function Select({
     </SelectButton>
   )
 
+  const theme = useTheme()
   const floating = useFloating({
     placement: `bottom-${placement === 'left' ? 'start' : 'end'}`,
     strategy: 'fixed',
     middleware: [
       size({
         apply(args) {
-          const { elements, availableHeight, availableWidth } = args
-          // Do things with the data, e.g.
-          const refBox = elements.reference.getBoundingClientRect()
+          const { elements, availableHeight, rects } = args
+
           const maxH
             = typeof maxHeight === 'string'
               ? maxHeight
               : maxHeight
-                ? Math.min(availableHeight, maxHeight)
-                : Math.min(availableHeight, 230)
+                ? Math.min(availableHeight - theme.spacing.xxsmall, maxHeight)
+                : Math.min(availableHeight - theme.spacing.xxsmall, 230)
 
-          console.log('maxHeight', maxHeight)
-          console.log('maxH', maxH)
-          console.log('KLINK width', width)
           Object.assign(elements.floating.style, {
             maxWidth:
               typeof width === 'string' && width
                 ? width
-                : `${typeof width === 'number' ? width : refBox.width}px`,
+                : `${
+                  typeof width === 'number' ? width : rects.reference.width
+                }px`,
             maxHeight: `${maxH}px`,
           })
         },

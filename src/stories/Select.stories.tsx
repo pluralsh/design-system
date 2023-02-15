@@ -201,7 +201,6 @@ function Template() {
         <h4>Single select</h4>
         <Select
           defaultOpen={false}
-          // isOpen
           label="Pick something"
           selectedKey={selectedKey}
           onSelectionChange={key => {
@@ -226,7 +225,6 @@ function Template() {
             setSelectedKey(key)
           }}
           defaultOpen={false}
-          // isOpen
           leftContent={<SearchIcon />}
           rightContent={<ListBoxItemChipList chips={curItem?.chips} />}
           dropdownFooterFixed={
@@ -282,7 +280,6 @@ function Template() {
 
       <Flex justifyContent="right">
         <Select
-          isOpen
           label="Version"
           selectedKey={selectedKey}
           triggerButton={<CustomTriggerButton />}
