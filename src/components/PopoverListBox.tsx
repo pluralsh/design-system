@@ -1,6 +1,6 @@
 import { ListState } from '@react-stately/list'
 import { AriaListBoxOptions } from '@react-aria/listbox'
-import { useTheme } from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { animated, useTransition } from 'react-spring'
 import { mergeRefs } from 'react-merge-refs'
 
@@ -25,6 +25,11 @@ type PopoverListBoxProps = {
     SelectProps,
     'width' | 'placement' | 'dropdownHeaderFixed' | 'dropdownFooterFixed'
   >
+
+const Animated = styled(animated.div)(() => ({
+  height: '100%',
+  width: '100%',
+}))
 
 function PopoverListBox({
   isOpen,
@@ -59,10 +64,6 @@ function PopoverListBox({
 
   const portalProps = {}
 
-  // Preserve the consumer's ref
-  const finalPopoverRef = useMemo(() => mergeRefs([floating.refs.floating, popoverRef]),
-    [floating.refs.floating, popoverRef])
-
   return transitions(styles => (
     <WrapWithIf
       condition
@@ -77,17 +78,17 @@ function PopoverListBox({
         $isOpen={isOpen}
         $placement={placement}
         className="popoverWrapper"
+        ref={floating.floating}
         style={{
           position: floating.strategy,
           left: floating.x ?? 0,
           top: floating.y ?? 0,
-          width: '500px',
-          height: '100px',
+          height: '100vh',
         }}
       >
-        <animated.div style={{ ...styles }}>
+        <Animated style={{ ...styles }}>
           <Popover
-            popoverRef={finalPopoverRef as unknown as RefObject<HTMLElement>}
+            popoverRef={popoverRef}
             isOpen={isOpen}
             onClose={onClose}
           >
@@ -103,7 +104,7 @@ function PopoverListBox({
               {...listBoxProps}
             />
           </Popover>
-        </animated.div>
+        </Animated>
       </PopoverWrapper>
     </WrapWithIf>
   ))

@@ -52,9 +52,10 @@ function Popover({ ...props }: PopoverProps) {
 
 const PopoverStyled = styled.div<{ $isOpen: boolean }>(({ $isOpen: isOpen }) => ({
   display: 'flex',
-  position: 'absolute',
   width: '100%',
+  maxHeight: '100%',
   marginTop: 4,
+  pointerEvents: 'auto',
   '> *': {
     flexGrow: 1,
   },

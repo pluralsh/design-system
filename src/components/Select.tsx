@@ -147,19 +147,8 @@ ref) => (
   </SelectButtonInner>
 ))
 
-const SelectInner = styled.div<{
-  $isOpen: boolean
-  $maxHeight: string | number
-  $placement: Placement
-  $width?: string | number
-}>(({ $maxHeight: maxHeight, $placement: placement, $width: width }) => ({
+const SelectInner = styled.div(_ => ({
   position: 'relative',
-  '.popover': {
-    maxHeight: maxHeight || 230,
-    width: width || '100%',
-    ...(placement === 'right' && { right: 0, left: 'auto' }),
-    pointerEvents: 'auto',
-  },
 }))
 
 function Select(
@@ -261,35 +250,36 @@ function Select({
   )
 
   const floating = useFloating({
-    placement: 'left',
-    // middleware: [offset(10), flip(), shift({ padding: 12 })],
+    placement: `bottom-${placement === 'left' ? 'start' : 'end'}`,
+    strategy: 'fixed',
     middleware: [
-      offset(10),
-      flip(),
+      // flip(),
       // shift({ padding: 12 }),
-      // size({
-      //   apply({ availableWidth, availableHeight, elements }) {
-      //     // Do things with the data, e.g.
-      //     Object.assign(elements.floating.style, {
-      //       maxWidth: `${availableWidth}px`,
-      //       maxHeight: `${availableHeight}px`,
-      //     })
-      //   },
-      // }),
+      size({
+        apply(args) {
+          const { elements, availableHeight, availableWidth } = args
+          // Do things with the data, e.g.
+          const refBox = elements.reference.getBoundingClientRect()
+          const maxH = maxHeight ?? Math.min(availableHeight, 230)
+
+          console.log('maxHeight', maxHeight)
+          console.log('maxH', maxH)
+          Object.assign(elements.floating.style, {
+            maxWidth: `${refBox.width}px`,
+            maxHeight: `${maxH}px`,
+          })
+        },
+      }),
     ],
     whileElementsMounted: autoUpdate,
   })
-  const triggerRef = useMemo(() => mergeRefs([floating.refs.reference, ref]),
-    [floating.refs.reference])
+  const triggerRef = useMemo(() => mergeRefs([floating.reference, ref]),
+    [floating.reference])
+
+  console.log('floating', floating)
 
   return (
-    <SelectInner
-      className="selectInner"
-      $isOpen={state.isOpen}
-      $maxHeight={maxHeight}
-      $width={width}
-      $placement={placement}
-    >
+    <SelectInner className="selectInner">
       <HiddenSelect
         state={state}
         triggerRef={ref}
@@ -322,6 +312,7 @@ export const PopoverWrapper = styled.div<{
   $placement: Placement
 }>(({ theme, $placement: placement }) => ({
   position: 'absolute',
+  display: 'flex',
   width: '100%',
   ...(placement === 'right' && { right: 0, left: 'auto' }),
   pointerEvents: 'none',
