@@ -2,7 +2,6 @@ import { ListState } from '@react-stately/list'
 import { AriaListBoxOptions } from '@react-aria/listbox'
 import { useTheme } from 'styled-components'
 import { animated, useTransition } from 'react-spring'
-import { CSSTransition } from 'react-transition-group'
 
 import { ListBoxUnmanaged, ListBoxUnmanagedProps } from './ListBox'
 import { Popover, PopoverProps } from './ReactAriaPopover'
@@ -32,7 +31,7 @@ function PopoverListBox({
   placement,
 }: PopoverListBoxProps) {
   const theme = useTheme()
-  const transitions = useTransition(isOpen, {
+  const transitions = useTransition(isOpen ? [true] : [], {
     from: { opacity: 0, translateY: '-150px' },
     enter: { opacity: 1, translateY: '0' },
     leave: { opacity: 0, translateY: '-150px' },
@@ -50,40 +49,33 @@ function PopoverListBox({
       },
   })
 
-  return (
-    <CSSTransition
-      in={isOpen}
-      timeout={150}
+  return transitions(styles => (
+    <PopoverWrapper
+      $isOpen={isOpen}
+      $placement={placement}
+      className="popoverWrapper"
     >
-      <PopoverWrapper
-        $isOpen={isOpen}
-        $placement={placement}
-        className="popoverWrapper"
-      >
-        {transitions((styles, item) => item && (
-          <animated.div style={{ ...styles }}>
-            <Popover
-              popoverRef={popoverRef}
-              isOpen={isOpen}
-              onClose={onClose}
-            >
-              <ListBoxUnmanaged
-                className="listBox"
-                state={listBoxState}
-                headerFixed={dropdownHeaderFixed}
-                footerFixed={dropdownFooterFixed}
-                extendStyle={{
-                  boxShadow: theme.boxShadows.moderate,
-                }}
-                listBoxRef={listBoxRef}
-                {...listBoxProps}
-              />
-            </Popover>
-          </animated.div>
-        ))}
-      </PopoverWrapper>
-    </CSSTransition>
-  )
+      <animated.div style={{ ...styles }}>
+        <Popover
+          popoverRef={popoverRef}
+          isOpen={isOpen}
+          onClose={onClose}
+        >
+          <ListBoxUnmanaged
+            className="listBox"
+            state={listBoxState}
+            headerFixed={dropdownHeaderFixed}
+            footerFixed={dropdownFooterFixed}
+            extendStyle={{
+              boxShadow: theme.boxShadows.moderate,
+            }}
+            listBoxRef={listBoxRef}
+            {...listBoxProps}
+          />
+        </Popover>
+      </animated.div>
+    </PopoverWrapper>
+  ))
 }
 
 export type { PopoverListBoxProps }
