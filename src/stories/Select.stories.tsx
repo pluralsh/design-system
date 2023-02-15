@@ -201,6 +201,7 @@ function Template() {
         <h4>Single select</h4>
         <Select
           defaultOpen={false}
+          isOpen
           label="Pick something"
           selectedKey={selectedKey}
           onSelectionChange={key => {

@@ -6,6 +6,7 @@ import {
   RefObject,
   cloneElement,
   forwardRef,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -14,6 +15,17 @@ import { useButton } from '@react-aria/button'
 import styled, { useTheme } from 'styled-components'
 
 import { AriaSelectProps } from '@react-types/select'
+
+import {
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  size,
+  useFloating,
+} from '@floating-ui/react-dom-interactions'
+
+import { mergeRefs } from 'react-merge-refs'
 
 import { BimodalSelectProps, BimodalSelectState, useBimodalSelectState } from '../utils/useBimodalSelectState'
 
@@ -248,6 +260,28 @@ function Select({
     </SelectButton>
   )
 
+  const floating = useFloating({
+    placement: 'left',
+    // middleware: [offset(10), flip(), shift({ padding: 12 })],
+    middleware: [
+      offset(10),
+      flip(),
+      // shift({ padding: 12 }),
+      // size({
+      //   apply({ availableWidth, availableHeight, elements }) {
+      //     // Do things with the data, e.g.
+      //     Object.assign(elements.floating.style, {
+      //       maxWidth: `${availableWidth}px`,
+      //       maxHeight: `${availableHeight}px`,
+      //     })
+      //   },
+      // }),
+    ],
+    whileElementsMounted: autoUpdate,
+  })
+  const triggerRef = useMemo(() => mergeRefs([floating.refs.reference, ref]),
+    [floating.refs.reference])
+
   return (
     <SelectInner
       className="selectInner"
@@ -263,7 +297,7 @@ function Select({
         name={name}
       />
       <Trigger
-        buttonRef={ref}
+        buttonRef={triggerRef as unknown as RefObject<HTMLElement>}
         buttonElt={triggerButton}
         isOpen={state.isOpen}
         {...triggerProps}
@@ -277,6 +311,7 @@ function Select({
         dropdownFooterFixed={dropdownFooterFixed}
         width={width}
         placement={placement}
+        floating={floating}
       />
     </SelectInner>
   )
