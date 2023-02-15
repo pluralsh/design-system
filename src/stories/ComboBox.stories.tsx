@@ -213,6 +213,7 @@ function Template() {
           onSelectionChange={onSelectionChange}
           onInputChange={onInputChange}
           inputProps={{ placeholder: 'Pick something' }}
+          isOpen
         >
           {searchResults.map(({ item, score: _score, refIndex: _refIndex }) => (
             <ListBoxItem

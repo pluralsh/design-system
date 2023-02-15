@@ -6,7 +6,6 @@ import {
   RefObject,
   cloneElement,
   forwardRef,
-  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -16,16 +15,13 @@ import styled, { useTheme } from 'styled-components'
 
 import { AriaSelectProps } from '@react-types/select'
 
-import { autoUpdate, size, useFloating } from '@floating-ui/react-dom-interactions'
-
-import { mergeRefs } from 'react-merge-refs'
-
 import { BimodalSelectProps, BimodalSelectState, useBimodalSelectState } from '../utils/useBimodalSelectState'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
 import { PopoverListBox } from './PopoverListBox'
 import { setNextFocusedKey, useSelectComboStateProps } from './SelectComboShared'
+import { useFloatingDropdown } from './useFloatingDropdown'
 
 type SelectButtonProps = {
   leftContent?: ReactNode
@@ -242,38 +238,7 @@ function Select({
     </SelectButton>
   )
 
-  const theme = useTheme()
-  const floating = useFloating({
-    placement: `bottom-${placement === 'left' ? 'start' : 'end'}`,
-    strategy: 'fixed',
-    middleware: [
-      size({
-        apply(args) {
-          const { elements, availableHeight, rects } = args
-
-          const maxH
-            = typeof maxHeight === 'string'
-              ? maxHeight
-              : maxHeight
-                ? Math.min(availableHeight - theme.spacing.xxsmall, maxHeight)
-                : Math.min(availableHeight - theme.spacing.xxsmall, 230)
-
-          Object.assign(elements.floating.style, {
-            maxWidth:
-              typeof width === 'string' && width
-                ? width
-                : `${
-                  typeof width === 'number' ? width : rects.reference.width
-                }px`,
-            maxHeight: `${maxH}px`,
-          })
-        },
-      }),
-    ],
-    whileElementsMounted: autoUpdate,
-  })
-  const triggerRef = useMemo(() => mergeRefs([floating.reference, ref]),
-    [floating.reference])
+  const { floating, triggerRef } = useFloatingDropdown({ triggerRef: ref, width, maxHeight })
 
   return (
     <SelectInner className="selectInner">

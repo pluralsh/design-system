@@ -2,6 +2,7 @@ import {
   HTMLAttributes,
   Key,
   MouseEventHandler,
+  MutableRefObject,
   ReactElement,
   ReactNode,
   RefObject,
@@ -29,6 +30,7 @@ import { setNextFocusedKey, useSelectComboStateProps } from './SelectComboShared
 import { PopoverListBox } from './PopoverListBox'
 import SearchIcon from './icons/SearchIcon'
 import { SelectInner } from './Select'
+import { useFloatingDropdown } from './useFloatingDropdown'
 
 type Placement = 'left' | 'right'
 
@@ -356,14 +358,12 @@ function ComboBox({
     startIcon = <SearchIcon />
   }
 
+  const { floating, triggerRef } = useFloatingDropdown({ triggerRef: inputRef, width, maxHeight })
+
   return (
-    <ComboBoxInner
-      $isOpen={state.isOpen}
-      $maxHeight={maxHeight}
-      $placement={placement}
-    >
+    <ComboBoxInner>
       <ComboBoxInput
-        inputRef={inputRef}
+        inputRef={triggerRef as any}
         inputProps={inputProps}
         buttonRef={buttonRef}
         buttonProps={buttonProps}
@@ -390,6 +390,7 @@ function ComboBox({
         dropdownFooterFixed={dropdownFooterFixed}
         width={width}
         placement={placement}
+        floating={floating}
       />
     </ComboBoxInner>
   )
