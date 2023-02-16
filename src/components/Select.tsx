@@ -269,22 +269,6 @@ function Select({
   )
 }
 
-export const PopoverWrapper = styled.div<{
-  $isOpen: boolean
-  $placement: Placement
-}>(({ theme, $placement: placement }) => ({
-  position: 'absolute',
-  display: 'flex',
-  width: '100%',
-  ...(placement === 'right' && { right: 0, left: 'auto' }),
-  pointerEvents: 'none',
-  zIndex: theme.zIndexes.selectPopover,
-  clipPath: 'polygon(-100px 0, -100px 99999px, 99999px 99999px, 99999px 0)',
-  '&.enter-done': {
-    clipPath: 'none',
-  },
-}))
-
 export {
   Select,
   SelectButton,

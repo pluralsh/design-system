@@ -1,9 +1,17 @@
 import { MutableRefObject, useMemo } from 'react'
 import { useTheme } from 'styled-components'
-import { autoUpdate, size, useFloating } from '@floating-ui/react-dom-interactions'
+import {
+  autoUpdate,
+  flip,
+  offset,
+  size,
+  useFloating,
+} from '@floating-ui/react-dom-interactions'
 import { mergeRefs } from 'react-merge-refs'
 
 import { SelectProps } from './Select'
+
+const DEFAULT_MAX_HEIGHT = 230
 
 export function useFloatingDropdown({
   placement,
@@ -19,16 +27,16 @@ export function useFloatingDropdown({
     placement: `bottom-${placement === 'left' ? 'start' : 'end'}`,
     strategy: 'fixed',
     middleware: [
+      offset(theme.spacing.xxsmall),
       size({
+        padding: theme.spacing.xxsmall,
         apply(args) {
           const { elements, availableHeight, rects } = args
-
+          const minH = 140
           const maxH
             = typeof maxHeight === 'string'
               ? maxHeight
-              : maxHeight
-                ? Math.min(availableHeight - theme.spacing.xxsmall, maxHeight)
-                : Math.min(availableHeight - theme.spacing.xxsmall, 230)
+              : Math.min(availableHeight, maxHeight || DEFAULT_MAX_HEIGHT)
 
           Object.assign(elements.floating.style, {
             maxWidth:
@@ -37,9 +45,17 @@ export function useFloatingDropdown({
                 : `${
                   typeof width === 'number' ? width : rects.reference.width
                 }px`,
-            maxHeight: `${maxH}px`,
+            height: `${maxH}px`,
+            minHeight: `${minH}px`,
           })
         },
+      }),
+      flip({
+        // flip() padding must be smaller than size() padding to prevent flickering
+        // back and forth. This makes padding off by one at some window sizes, but
+        // it's a decent trade off for not flickering.
+        padding: theme.spacing.xxsmall - 1,
+        fallbackStrategy: 'initialPlacement',
       }),
     ],
     whileElementsMounted: autoUpdate,

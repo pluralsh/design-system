@@ -33,17 +33,15 @@ export const PopoverWrapper = styled.div<{
   ...(placement === 'right' && { right: 0, left: 'auto' }),
   pointerEvents: 'none',
   zIndex: theme.zIndexes.selectPopover,
-  clipPath: 'polygon(-100px 0, -100px 99999px, 99999px 99999px, 99999px 0)',
+  clipPath: `polygon(-100px ${-theme.spacing.xxsmall}px, -100px 99999px, 99999px 99999px, 99999px ${-theme.spacing.xxsmall}px)`,
   '&.enter-done': {
     clipPath: 'none',
   },
-  minHeight: 165,
 }))
 
 const Animated = styled(animated.div)(({ theme }) => ({
   width: '100%',
   maxHeight: '100%',
-  paddingTop: theme.spacing.xxsmall,
 }))
 
 function PopoverListBox({
@@ -100,7 +98,10 @@ function PopoverListBox({
           top: floating.y ?? 0,
         }}
       >
-        <Animated style={{ ...styles }}>
+        <Animated
+          data-padded-box
+          style={{ ...styles }}
+        >
           <Popover
             popoverRef={popoverRef}
             isOpen={isOpen}
