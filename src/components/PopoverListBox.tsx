@@ -37,7 +37,7 @@ export const PopoverWrapper = styled.div<{
   '&.enter-done': {
     clipPath: 'none',
   },
-  minHeight: 200,
+  minHeight: 165,
 }))
 
 const Animated = styled(animated.div)(({ theme }) => ({
