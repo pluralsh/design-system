@@ -72,6 +72,13 @@ function useSelectComboStateProps<T extends TType>({
     onSelectionChange: (newKeyOrKeys: Key | Selection, ...args: any) => {
       let newKey: Key
 
+      if (!newKeyOrKeys) {
+        console.log('whoops, no key', newKeyOrKeys)
+
+        return
+      }
+      console.log('new key', newKeyOrKeys)
+
       if (
         typeof newKeyOrKeys === 'string'
         || typeof newKeyOrKeys === 'number'
@@ -80,6 +87,9 @@ function useSelectComboStateProps<T extends TType>({
       }
       else {
         const currentKeys = getCurrentKeys()
+
+        console.log('newKeyorkeys', newKeyOrKeys)
+        console.log('currentKeys', currentKeys)
         const diff = setDifference(newKeyOrKeys, currentKeys)
 
         newKey = diff.keys().next().value || ''

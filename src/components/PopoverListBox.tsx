@@ -3,11 +3,11 @@ import { AriaListBoxOptions } from '@react-aria/listbox'
 import styled, { useTheme } from 'styled-components'
 import { animated, useTransition } from 'react-spring'
 
-import { FloatingPortal, UseFloatingReturn } from '@floating-ui/react-dom-interactions'
+import { FloatingPortal, Placement, UseFloatingReturn } from '@floating-ui/react-dom-interactions'
 
 import { ListBoxUnmanaged, ListBoxUnmanagedProps } from './ListBox'
 import { Popover, PopoverProps } from './ReactAriaPopover'
-import { PopoverWrapper, SelectProps } from './Select'
+import { SelectProps } from './Select'
 import WrapWithIf from './WrapWithIf'
 
 type PopoverListBoxProps = {
@@ -22,6 +22,23 @@ type PopoverListBoxProps = {
     SelectProps,
     'width' | 'placement' | 'dropdownHeaderFixed' | 'dropdownFooterFixed'
   >
+
+export const PopoverWrapper = styled.div<{
+  $isOpen: boolean
+  $placement: Placement
+}>(({ theme, $placement: placement }) => ({
+  position: 'absolute',
+  display: 'flex',
+  width: '100%',
+  ...(placement === 'right' && { right: 0, left: 'auto' }),
+  pointerEvents: 'none',
+  zIndex: theme.zIndexes.selectPopover,
+  clipPath: 'polygon(-100px 0, -100px 99999px, 99999px 99999px, 99999px 0)',
+  '&.enter-done': {
+    clipPath: 'none',
+  },
+  minHeight: 200,
+}))
 
 const Animated = styled(animated.div)(({ theme }) => ({
   width: '100%',
