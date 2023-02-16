@@ -2,7 +2,6 @@ import {
   HTMLAttributes,
   Key,
   MouseEventHandler,
-  MutableRefObject,
   ReactElement,
   ReactNode,
   RefObject,
@@ -22,6 +21,8 @@ import styled, { useTheme } from 'styled-components'
 import { ExtendTheme, mergeTheme } from 'honorable'
 
 import { omitBy } from 'lodash'
+
+import { mergeRefs } from 'react-merge-refs'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
@@ -358,12 +359,22 @@ function ComboBox({
     startIcon = <SearchIcon />
   }
 
-  const { floating, triggerRef } = useFloatingDropdown({ triggerRef: inputRef, width, maxHeight })
+  const { floating, triggerRef } = useFloatingDropdown({
+    triggerRef: inputRef,
+    width,
+    maxHeight,
+  })
+
+  outerInputProps = {
+    ...outerInputProps,
+    ...(outerInputProps.ref
+      ? { ref: mergeRefs([outerInputProps.ref, triggerRef]) }
+      : { ref: triggerRef }),
+  }
 
   return (
     <ComboBoxInner>
       <ComboBoxInput
-        inputRef={triggerRef as any}
         inputProps={inputProps}
         buttonRef={buttonRef}
         buttonProps={buttonProps}
