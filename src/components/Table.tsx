@@ -207,13 +207,14 @@ const Td = styled.td<{
   loose?: boolean
   stickyColumn: boolean
   truncateColumn: boolean
+  center?: boolean
 }>(({
-  theme, firstRow, loose, stickyColumn, truncateColumn = false,
+  theme, firstRow, loose, stickyColumn, truncateColumn = false, center,
 }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  alignItems: 'center',
+  alignItems: center ? 'center' : 'flex-start',
   height: 'auto',
   minHeight: 52,
 
@@ -327,6 +328,7 @@ function FillerRow({
         }}
         colSpan={columns.length}
         truncateColumn={false}
+        center={false}
         {...props}
       />
     </Tr>
@@ -550,6 +552,7 @@ forwardRef: Ref<any>) {
                         loose={loose}
                         stickyColumn={stickyColumn}
                         truncateColumn={cell.column?.columnDef?.meta?.truncate}
+                        center={cell.column?.columnDef?.meta?.center}
                       >
                         {flexRender(cell.column.columnDef.cell,
                           cell.getContext())}
