@@ -213,6 +213,7 @@ const Td = styled.td<{
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
+  alignItems: 'center',
   height: 'auto',
   minHeight: 52,
 
@@ -232,6 +233,7 @@ const Td = styled.td<{
   ...(truncateColumn
     ? {
       '*': {
+        width: '100%',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
