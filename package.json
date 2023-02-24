@@ -29,7 +29,7 @@
     "@react-aria/checkbox": "3.7.1",
     "@react-aria/combobox": "3.4.4",
     "@react-aria/focus": "3.10.1",
-    "@react-aria/interactions": "3.13.1",
+    "@react-aria/interactions": "3.14.0",
     "@react-aria/listbox": "3.7.2",
     "@react-aria/overlays": "3.12.1",
     "@react-aria/radio": "3.4.2",
