@@ -60,6 +60,7 @@
     "react-markdown": "8.0.5",
     "react-merge-refs": "2.0.1",
     "react-spring": "9.6.1",
+    "react-use-measure": "2.1.1",
     "react-virtual": "2.10.4",
     "rehype-raw": "6.1.1",
     "resize-observer-polyfill": "1.5.1"

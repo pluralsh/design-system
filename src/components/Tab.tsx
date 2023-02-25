@@ -12,14 +12,19 @@ import { TabBaseProps } from './TabList'
 type TabProps = DivProps &
   TabBaseProps & {
     startIcon?: ReactNode
-  }
+    innerProps?: DivProps
+}
+
+export const TAB_INDICATOR_THICKNESS = 3
 
 function TabRef({
   startIcon,
   active,
+  activeSecondary,
   children,
   vertical,
   textValue: _textValue,
+  innerProps,
   ...props
 }: TabProps,
 ref: Ref<any>) {
@@ -54,25 +59,29 @@ ref: Ref<any>) {
       <Flex
         paddingHorizontal="medium"
         paddingTop="xsmall"
-        paddingBottom={theme.spacing.xsmall - 3}
+        paddingBottom="xsmall"
         align="center"
         borderBottom={
           vertical
             ? null
-            : `3px solid ${active ? 'border-primary' : 'transparent'}`
+            : `${TAB_INDICATOR_THICKNESS}px solid ${active ? 'border-primary' : 'transparent'}`
         }
         borderRight={
           vertical
-            ? `3px solid ${active ? 'border-primary' : 'transparent'}`
+            ? `${TAB_INDICATOR_THICKNESS}px solid ${active ? 'border-primary' : 'transparent'}`
             : null
         }
         {...borderRadiuses}
         color={active ? 'text' : 'text-xlight'}
+        backgroundColor={
+          activeSecondary ? theme.colors['fill-two'] : 'transparent'
+        }
         _hover={{
           color: 'text',
           backgroundColor: 'action-input-hover',
         }}
         transition="background-color 150ms ease, border-color 150ms ease, color 150ms ease"
+        {...innerProps}
       >
         {!!startIcon && <Icon marginRight="small">{startIcon}</Icon>}
         {children}
