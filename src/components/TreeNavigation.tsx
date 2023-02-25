@@ -27,7 +27,6 @@ import styled, { useTheme } from 'styled-components'
 import { Div } from 'honorable'
 
 import {
-  ArrowRightIcon,
   CaretRightIcon,
   Tab,
   useNavigationContext,
@@ -174,7 +173,7 @@ const CaretButton = styled(({
   justifyContent: 'center',
   paddingRight: theme.spacing.medium,
   paddingLeft: theme.spacing.medium,
-  marginRight: -(TAB_INDICATOR_THICKNESS),
+  marginRight: -TAB_INDICATOR_THICKNESS,
   cursor: 'pointer',
   color: theme.colors['text-light'],
   transition: 'color 0.1s ease',
@@ -195,14 +194,19 @@ const CaretButton = styled(({
     transform: isOpen ? 'rotate(-45deg)' : 'rotate(45deg)',
     transitionDuration: '0.2s',
   },
-
 }))
 
-function NavLinkUnstyled({
-  className,
+const BareLi = styled.li(({ _ }) => ({
+  margin: 0,
+  padding: 0,
+  listStyle: 'none',
+}))
+
+function NavLink({
   isSubSection = false,
   isOpen = false,
   childIsSelected = false,
+  onClick,
   onOpenChange,
   icon,
   isSelected,
@@ -223,13 +227,16 @@ function NavLinkUnstyled({
 
   // TODO: Figure out 'childIsSelected' styling for Tabs
   return (
-    <li className={className}>
+    <BareLi>
       <Tab
         active={isSelected}
         activeChildren={childIsSelected}
         vertical
         iconLeft={icon}
-        onClick={onOpenChange}
+        onClick={e => {
+          console.log('clicked tab')
+          onClick(e)
+        }}
         width="100%"
         innerProps={{
           display: 'flex',
@@ -262,15 +269,9 @@ function NavLinkUnstyled({
           />
         )}
       </Tab>
-    </li>
+    </BareLi>
   )
 }
-
-const NavLink = styled(NavLinkUnstyled)(({ desktop, theme }) => ({
-  margin: 0,
-  padding: 0,
-  listStyle: 'none',
-}))
 
 export const TopHeading = styled.h6(({ theme }) => ({
   margin: 0,
@@ -319,6 +320,7 @@ export function TreeNavEntry({
   toMenu,
   onOpenChange,
   label,
+  onClick,
   // isSelected = false,
   children,
   ...props
@@ -357,10 +359,6 @@ export function TreeNavEntry({
 
   const hasSections = children && Children.count(children) > 0
 
-  console.log(label, 'has sections', hasSections)
-  console.log('children', children)
-  console.log('children', Children.count(children))
-
   return (
     <>
       <NavLink
@@ -370,6 +368,10 @@ export function TreeNavEntry({
         desktop={desktop}
         isOpen={isOpen && hasSections}
         childIsSelected={defaultOpen}
+        onClick={e => {
+          onClick(e)
+          setIsOpen(true)
+        }}
         onOpenChange={toggleOpen}
         toMenu={toMenu}
         {...props}
@@ -406,115 +408,7 @@ export const NavPositionWrapper = styled.nav(({ theme: _theme }) => ({
   flexDirection: 'column',
 }))
 
-// const NavScrollContainer = styled.div<{
-//   $desktop: boolean
-//   $padTop: boolean
-//   $hide: boolean
-// }>(({
-//   $desktop: desktop, $padTop: padTop, $hide: hide = false, theme,
-// }) => ({
-//   position: 'absolute',
-//   top: 0,
-//   left: 0,
-//   right: 0,
-//   bottom: 0,
-//   overflowY: 'auto',
-//   backgroundColor: theme.colors['fill-one'],
-//   borderRight: desktop ? theme.borders['fill-one'] : 'none',
-//   paddingBottom: `calc(${theme.spacing.xlarge}px + var(--menu-extra-bpad))`,
-//   paddingTop: padTop ? theme.spacing.large : 0,
-//   paddingRight: desktop ? 0 : theme.spacing.medium,
-//   paddingLeft: desktop ? 0 : theme.spacing.medium,
-//   marginLeft: desktop ? -navLeftOffset : 0,
-//   display: hide ? 'none' : 'block',
-// }))
-
-// const Nav = styled.nav<{ $desktop: boolean }>(({ $desktop: desktop, theme: _theme }) => ({
-//   marginLeft: desktop ? navLeftOffset : 0,
-// }))
-
-// export function SideNav({
-//   navData,
-//   desktop,
-//   padTop = true,
-//   hide = false,
-//   menuId = '',
-//   setMenuId,
-// }: SideNavProps) {
-//   const router = useRouter()
-//   const [optimisticPathname, setOptimisticPathname] = useState<string | null>(null)
-//   const scrollRef = useRef<HTMLDivElement>(null)
-//   const contextValue = useMemo(() => ({
-//     scrollRef,
-//     desktop,
-//     setMenuId,
-//     // optimisticPathname:
-//     //     optimisticPathname === null
-//     //       ? getBarePathFromPath(router.asPath)
-//     //       : optimisticPathname,
-//   }),
-//   [desktop, setMenuId, optimisticPathname, router.asPath])
-
-//   useEffect(() => {
-//     if (!router?.events?.on) {
-//       return
-//     }
-//     const handleRouteChangeStart = url => {
-//       setOptimisticPathname(url)
-//     }
-//     const handleRouteChangeComplete = _url => {
-//       setOptimisticPathname(null)
-//     }
-//     const handleRouteChangeError = (_err, _url) => {
-//       setOptimisticPathname(null)
-//     }
-//     const handleHashChangeStart = _url => {
-//       console.debug('hashChangeStart', _url)
-//     }
-//     const handleHashChangeComplete = _url => {
-//       console.debug('handleHashChangeComplete', _url)
-//     }
-
-//     router.events.on('routeChangeStart', handleRouteChangeStart)
-//     router.events.on('routeChangeComplete', handleRouteChangeComplete)
-//     router.events.on('routeChangeError', handleRouteChangeError)
-//     router.events.on('hashChangeStart', handleHashChangeStart)
-//     router.events.on('hashChangeComplete', handleHashChangeComplete)
-
-//     return () => {
-//       router.events.off('routeChangeStart', handleRouteChangeStart)
-//       router.events.off('routeChangeComplete', handleRouteChangeComplete)
-//       router.events.off('routeChangeError', handleRouteChangeError)
-//     }
-//   }, [router.events])
-
-//   return (
-//     <NavContext.Provider value={contextValue}>
-//       <NavScrollContainer
-//         key={menuId}
-//         ref={scrollRef}
-//         $desktop={desktop}
-//         $padTop={padTop}
-//         $hide={hide}
-//       >
-//         <Nav $desktop={desktop}>
-//           {(navData || []).map(({ title, sections }) => (
-//             <TopSection
-//               title={title}
-//               key={title}
-//             >
-//               {sections && <SubSectionsList sections={sections} />}
-//             </TopSection>
-//           ))}
-//         </Nav>
-//       </NavScrollContainer>
-//     </NavContext.Provider>
-//   )
-// }
-
 export function TreeNav({ children }: PropsWithChildren) {
-  // const clonedChildren = Children.toArray(children).map(c => c)
-
   return (
     <NavDepthContext.Provider value={0}>
       <div role="navigation">{children}</div>

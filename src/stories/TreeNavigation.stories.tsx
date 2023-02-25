@@ -125,7 +125,10 @@ function Template() {
               <TreeNavEntry
                 key={entry.path}
                 label={entry.label}
-                onClick={() => setCurrentPath(entry.path)}
+                onClick={() => {
+                  console.log('clicked', entry.path)
+                  setCurrentPath(entry.path)
+                }}
                 defaultOpen={isCurrentPath}
                 isSelected={isExactCurrentPath}
               >
