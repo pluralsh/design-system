@@ -1,11 +1,11 @@
 import { Div } from 'honorable'
-import { useEffect, useState } from 'react'
+import { ComponentProps, useEffect, useState } from 'react'
+
+import { useNavigationContext } from '../components/contexts/NavigationContext'
 
 import { TreeNav, TreeNavEntry } from '../components/TreeNavigation'
 
-import { NavigationContextProvider } from '../components/contexts/NavigationContext'
-
-import * as navContextStub from './NavigationContextStub'
+import { NavContextProviderStub } from './NavigationContextStub'
 
 export default {
   title: 'Tree Navigation',
@@ -30,136 +30,224 @@ const getDirectory = () => [
     enabled: true,
   },
   {
-    path: 'docs',
     label: 'Airbyte docs',
     enabled: true,
-    subpaths: [
+    matchPath: (path: string) => path.startsWith('docs'),
+    subPaths: [
       {
-        path: 'page1',
+        path: 'docs/page1',
         label: 'Page 1',
       },
       {
-        path: 'page2',
+        path: 'docs/page2',
         label: 'Page 2',
       },
       {
-        path: 'page3',
+        path: 'docs/page3',
         label: 'Page 3',
       },
       {
-        path: 'page4',
+        path: 'docs/page4',
         label: 'Page 4',
       },
     ],
   },
 ]
 
-async function loadSubpathsOf(path: string) {
-  if (path.startsWith('docs')) {
-    await new Promise(resolve => {
-      setTimeout(resolve, 2000)
-    })
+const loadSubEntriesOf = async (path: string): Promise<{ id: string; label: string }[] | null> => {
+  console.log('loadSubPaths', path)
+  await new Promise(resolve => {
+    setTimeout(resolve, 2000)
+  })
 
-    return (
-      [
+  const ret
+    = {
+      'docs/page1': [
         {
-          'docs/page1': [
-            { label: 'A longer title' },
-            { label: 'Short one' },
-            { label: 'A yet even longer title' },
-          ],
-          'docs/page2': [
-            { label: 'A longer title' },
-            { label: 'Short one' },
-            { label: 'A yet even longer title' },
-          ],
-          'docs/page3': [
-            { label: 'A longer title' },
-            { label: 'Short one' },
-            { label: 'A yet even longer title' },
-          ],
-          'docs/page4': [
-            { label: 'A longer title' },
-            { label: 'Short one' },
-            { label: 'A yet even longer title' },
-          ],
+          id: '#id1',
+          label: 'A longer title',
         },
-      ][path] || null
-    )
-  }
+        {
+          id: '#id2',
+          label: 'Short one',
+        },
+        {
+          id: '#id3',
+          label: 'A yet even longer title',
+        },
+      ],
+      'docs/page2': [
+        {
+          id: '#id2',
+          label: 'Short one',
+        },
+        {
+          id: '#id3',
+          label: 'A yet even longer title',
+        },
+      ],
+      'docs/page3': [
+        {
+          id: '#id3',
+          label: 'A yet even longer title',
+        },
+      ],
+      'docs/page4': [
+        {
+          id: '#id1',
+          label: 'A longer title',
+        },
+        {
+          id: '#id3',
+          label: 'A yet even longer title',
+        },
+      ],
+    }[path] || null
 
-  return null
+  console.log('loadsubPaths ret', ret)
+
+  return ret
+}
+
+function NavEntryDoc({
+  path,
+  ...props
+}: { path: string } & Omit<
+  ComponentProps<typeof TreeNavEntry>,
+  'active' | 'defaultOpen'
+>) {
+  const { usePathname, useNavigate } = useNavigationContext()
+  const navigate = useNavigate()
+  const currentPath = usePathname()
+
+  const [loadingSubPaths, setLoadingSubPaths] = useState(false)
+  const [subPaths, setSubPaths] = useState<
+    { id: string; label: string }[] | null
+  >()
+  const [currentHash, setCurrentHash] = useState<string | undefined>()
+
+  const isCurrentPath = currentPath.startsWith(path)
+
+  // Simulate loading subpaths after selection
+  useEffect(() => {
+    if (isCurrentPath) {
+      console.log('useEffect')
+
+      let isSubscribed = true
+
+      setSubPaths(null)
+      loadSubEntriesOf(path).then(subPaths => {
+        console.log('finished loading subPaths', subPaths)
+        if (isSubscribed) {
+          setSubPaths(subPaths)
+          setLoadingSubPaths(false)
+        }
+      })
+
+      setLoadingSubPaths(true)
+
+      return () => {
+        isSubscribed = false
+        setLoadingSubPaths(false)
+        setSubPaths(null)
+      }
+    }
+  }, [path, isCurrentPath])
+
+  useEffect(() => {
+    if (!subPaths) {
+      if (currentHash) {
+        setCurrentHash(null)
+      }
+    }
+    else if (subPaths.length > 0 && !currentHash) {
+      setCurrentHash(subPaths[0].id)
+    }
+  }, [currentHash, subPaths])
+
+  console.log('subPaths', subPaths)
+
+  return (
+    <TreeNavEntry
+      // label={entry.label}
+      loading={loadingSubPaths}
+      onClick={() => navigate(path)}
+      // active={currentPath === path && !currentHash}
+      defaultOpen={currentPath.startsWith(path)}
+      {...props}
+    >
+      {subPaths?.map(subEntry => (
+        <TreeNavEntry
+          key={subEntry.id}
+          label={subEntry.label}
+          active={currentHash === subEntry.id}
+          onClick={() => {
+            // navigate(path)
+            setCurrentHash(subEntry.id)
+          }}
+        />
+      ))}
+    </TreeNavEntry>
+  )
+}
+
+function TemplateInner() {
+  const { usePathname, useNavigate } = useNavigationContext()
+  const navigate = useNavigate()
+  const currentPath = usePathname()
+
+  console.log('currentPath', currentPath)
+
+  return (
+    <Div maxWidth={200}>
+      <TreeNav>
+        {getDirectory().map(entry => {
+          const stuff = entry.matchPath
+            ? console.log('matchpath exists')
+            : console.log('matchpathdoesnt exist')
+
+          const isCurrentPath = entry.matchPath
+            ? entry.matchPath(currentPath)
+            : currentPath.startsWith(entry.path)
+          const isExactCurrentPath = currentPath === entry.path
+
+          console.log(entry.label, 'currentPath', currentPath)
+          console.log(entry.label, 'isCurrentPath', isCurrentPath)
+          console.log(entry.label, 'entry.path', entry.path)
+
+          return (
+            <TreeNavEntry
+              key={entry.path}
+              label={entry.label}
+              onClick={() => {
+                console.log('clicked', entry.path)
+                if (entry.path) {
+                  navigate(entry.path)
+                }
+              }}
+              defaultOpen={isCurrentPath}
+              active={isExactCurrentPath}
+            >
+              {entry.subPaths?.map(subEntry => (
+                <NavEntryDoc
+                  key={subEntry.path}
+                  path={subEntry.path}
+                  label={subEntry.label}
+                />
+              ))}
+            </TreeNavEntry>
+          )
+        })}
+      </TreeNav>
+    </Div>
+  )
 }
 
 function Template() {
-  const [currentPath, setCurrentPath] = useState('/')
-  const [loadingSubpaths, setLoadingSubpaths] = useState(false)
-  const [subpaths, setSubpaths] = useState<any[] | null | undefined>()
-
-  useEffect(() => {
-    console.log('useEffect')
-    let isSubscribed = true
-
-    loadSubpathsOf(currentPath).then(subpaths => {
-      if (isSubscribed) {
-        setSubpaths(subpaths)
-      }
-    })
-
-    setLoadingSubpaths(true)
-
-    return () => {
-      isSubscribed = false
-    }
-  }, [currentPath])
-
   return (
-    <NavigationContextProvider value={navContextStub}>
-      <Div maxWidth={200}>
-        <TreeNav>
-          {getDirectory().map(entry => {
-            const isCurrentPath = currentPath.startsWith(entry.path)
-            const isExactCurrentPath = currentPath === entry.path
-
-            return (
-              <TreeNavEntry
-                key={entry.path}
-                label={entry.label}
-                onClick={() => {
-                  console.log('clicked', entry.path)
-                  setCurrentPath(entry.path)
-                }}
-                defaultOpen={isCurrentPath}
-                isSelected={isExactCurrentPath}
-              >
-                {entry.subpaths?.map(entry => {
-                  const isCurrentPath = currentPath.startsWith(entry.path)
-
-                  return (
-                    <TreeNavEntry
-                      key={entry.path}
-                      label={entry.label}
-                      loading={isCurrentPath && loadingSubpaths}
-                      onClick={() => setCurrentPath(entry.path)}
-                    // defaultOpen={isCurrentPath}
-                    >
-                      {isCurrentPath
-                    && subpaths?.map(entry => (
-                      <TreeNavEntry
-                        key={entry.path}
-                        label={entry.label}
-                        onClick={() => setCurrentPath(entry.path)}
-                      />
-                    ))}
-                    </TreeNavEntry>
-                  )
-                })}
-              </TreeNavEntry>
-            )
-          })}
-        </TreeNav>
-      </Div>
-    </NavigationContextProvider>
+    <NavContextProviderStub>
+      <TemplateInner />
+    </NavContextProviderStub>
   )
 }
 

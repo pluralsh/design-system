@@ -15,7 +15,7 @@ type TabProps = DivProps &
     innerProps?: DivProps
 }
 
-export const TAB_INDICATOR_THICKNESS = 3
+export const TAB_INDICATOR_THICKNESS = 2
 
 function TabRef({
   startIcon,

@@ -70,7 +70,7 @@ const KeyboardNavContext = createContext<{
   keyboardNavigable: true,
 })
 
-const StyledLink = styled.a<{ $desktop: boolean }>(({ $desktop, theme }) => ({
+const StyledLink = styled.a(({ theme }) => ({
   display: 'flex',
   gap: theme.spacing.small,
   cursor: 'pointer',
@@ -196,7 +196,7 @@ const CaretButton = styled(({
   },
 }))
 
-const BareLi = styled.li(({ _ }) => ({
+const BareLi = styled.li(_ => ({
   margin: 0,
   padding: 0,
   listStyle: 'none',
@@ -205,32 +205,31 @@ const BareLi = styled.li(({ _ }) => ({
 function NavLink({
   isSubSection = false,
   isOpen = false,
-  childIsSelected = false,
+  active,
+  activeSecondary = false,
   onClick,
-  onOpenChange,
+  onClickCaret,
   icon,
-  isSelected,
   children,
   ...props
 }: {
   isSubSection?: boolean
   isOpen?: boolean
-  childIsSelected: boolean
+  activeSecondary: boolean
   icon?: ReactElement
   desktop: boolean
-  isSelected: boolean
-  onOpenChange?: () => void
+  active: boolean
+  onClickCaret?: () => void
 } & Partial<ComponentProps<typeof StyledLink>>) {
   const { Link } = useNavigationContext()
   const depth = useContext(NavDepthContext)
   const theme = useTheme()
 
-  // TODO: Figure out 'childIsSelected' styling for Tabs
   return (
     <BareLi>
       <Tab
-        active={isSelected}
-        activeChildren={childIsSelected}
+        active={active}
+        activeSecondary={activeSecondary}
         vertical
         iconLeft={icon}
         onClick={e => {
@@ -264,7 +263,7 @@ function NavLink({
             onClick={e => {
               e.stopPropagation()
               e.preventDefault()
-              onOpenChange()
+              onClickCaret()
             }}
           />
         )}
@@ -285,12 +284,6 @@ const SubSectionsListWrap = styled.ul<{ indentLevel: number }>(({ theme, indentL
   margin: 0,
   padding: 0,
   listStyle: 'none',
-  ...(indentLevel
-    ? {
-      paddingLeft:
-            indentLevel >= 2 ? theme.spacing.xsmall : theme.spacing.medium,
-    }
-    : {}),
 }))
 
 function SubSectionsListRef({ className, children, ...props }: PropsWithChildren<{ className?: string }>,
@@ -321,21 +314,35 @@ export function TreeNavEntry({
   onOpenChange,
   label,
   onClick,
-  // isSelected = false,
+  active,
   children,
   ...props
-}: PropsWithChildren<ComponentProps<typeof NavLink>> & {
+}: PropsWithChildren<Omit<ComponentProps<typeof NavLink>, 'isSubSection'>> & {
   indentLevel?: number
   defaultOpen?: boolean
   loading?: boolean
 }) {
   const [isOpen, setIsOpen] = useState(defaultOpen)
+  const prevDefaultOpen = usePrevious(defaultOpen)
+
+  const changeOpen = useCallback((open: boolean) => {
+    if (open !== isOpen) {
+      setIsOpen(open)
+      onOpenChange?.(open)
+    }
+  },
+  [isOpen, onOpenChange])
   const toggleOpen = useCallback(() => {
-    setIsOpen(!isOpen)
-    onOpenChange?.(!isOpen)
-  }, [isOpen, onOpenChange])
+    changeOpen(!isOpen)
+  }, [changeOpen, isOpen])
   const [measureRef, { height }] = useMeasure()
   const prevHeight = usePrevious(height)
+
+  useEffect(() => {
+    if (defaultOpen && defaultOpen !== prevDefaultOpen) {
+      changeOpen(true)
+    }
+  }, [changeOpen, defaultOpen, prevDefaultOpen, toggleOpen])
 
   const expand = useSpring({
     height: isOpen ? `${height}px` : '0px',
@@ -367,12 +374,18 @@ export function TreeNavEntry({
         icon={icon}
         desktop={desktop}
         isOpen={isOpen && hasSections}
-        childIsSelected={defaultOpen}
-        onClick={e => {
+        active={active}
+        activeSecondary={defaultOpen}
+        onClick={(e: Event) => {
           onClick(e)
-          setIsOpen(true)
+          if (defaultOpen) {
+            setIsOpen(true)
+          }
+          else {
+            toggleOpen()
+          }
         }}
-        onOpenChange={toggleOpen}
+        onClickCaret={toggleOpen}
         toMenu={toMenu}
         {...props}
       >

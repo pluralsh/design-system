@@ -7,23 +7,23 @@ import {
 
 export type LinkProps = Omit<ComponentProps<'a'>, 'ref'> & { ref?: any }
 
-export type MarkdocContextT = {
+export type NavigationContextT = {
   Link: (props: LinkProps) => ReactElement
   usePathname: (href?: string) => string
-  useNavigate: (location?: string) => void
+  useNavigate: ()=> (location?: string) => void
 }
 
-const MarkdocContext = createContext<MarkdocContextT | null>(null)
+const NavigationContext = createContext<NavigationContextT | null>(null)
 
 export function NavigationContextProvider({
   value,
   ...props
-}: { value: MarkdocContextT } & Omit<
-  ComponentProps<typeof MarkdocContext.Provider>,
+}: { value: NavigationContextT } & Omit<
+  ComponentProps<typeof NavigationContext.Provider>,
   'value'
 >) {
   return (
-    <MarkdocContext.Provider
+    <NavigationContext.Provider
       value={value}
       {...props}
     />
@@ -31,10 +31,10 @@ export function NavigationContextProvider({
 }
 
 export function useNavigationContext() {
-  const context = useContext(MarkdocContext)
+  const context = useContext(NavigationContext)
 
   if (!context) {
-    throw Error('You must wrap your content in a MarkdocContextProvider to use useMarkdocContext()')
+    throw Error('You must wrap your content in a NavigationContextProvider to use useNavigationContext()')
   }
 
   return context
