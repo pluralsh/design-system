@@ -16,9 +16,6 @@ import type {
   ReactElement,
 } from 'react'
 
-// import NextLink from 'next/link'
-// import { useRouter } from 'next/router'
-
 import classNames from 'classnames'
 import { animated, useSpring } from 'react-spring'
 import useMeasure from 'react-use-measure'
@@ -44,12 +41,10 @@ export function removeTrailingSlashes(str?: unknown) {
 }
 
 export type SideNavProps = {
-  //   navData: NavMenu
   desktop: boolean
   padTop?: boolean
   hide?: boolean
   menuId?: Key
-  //   setMenuId: Dispatch<SetStateAction<MenuId>>
 }
 
 const NavContext = createContext<{
@@ -96,36 +91,9 @@ const StyledLink = styled.a(({ theme }) => ({
   '&:focus-visible::after': {
     borderStartStartRadius: theme.borderRadiuses.medium,
     borderEndStartRadius: theme.borderRadiuses.medium,
-    borderStartEndRadius: $desktop ? 0 : theme.borderRadiuses.medium,
-    borderEndEndRadius: $desktop ? 0 : theme.borderRadiuses.medium,
     ...theme.partials.focus.insetAbsolute,
   },
 }))
-
-// type LinkBaseProps = Partial<ComponentProps<typeof StyledLink>> & {
-//   iconLeft?: ReactElement
-//   iconRight?: ReactElement
-// }
-
-// const LinkBase = forwardRef<HTMLAnchorElement, LinkBaseProps>(({
-//   className, children, iconLeft, iconRight, href, ...props
-// }, ref) => {
-//   const { keyboardNavigable } = useContext(KeyboardNavContext)
-
-//   return (
-//     <StyledLink
-//       href={href}
-//       className={className}
-//       tabIndex={keyboardNavigable ? 0 : -1}
-//       ref={ref}
-//       {...props}
-//     >
-//       {iconLeft && iconLeft}
-//       {children}
-//       <div className="iconRight">{iconRight && iconRight}</div>
-//     </StyledLink>
-//   )
-// })
 
 const CaretButton = styled(({
   isOpen = false,
@@ -243,9 +211,9 @@ function NavLink({
           paddingBottom: 0,
           paddingLeft: 0,
           paddingRight: 0,
-          // justifyContent: 'space-between',
         }}
-        {...(props.to ? { as: Link } : {})}
+        textDecoration="none"
+        {...(props.href ? { as: Link } : {})}
         {...props}
       >
         <Div
@@ -280,7 +248,7 @@ export const TopHeading = styled.h6(({ theme }) => ({
   ...theme.partials.marketingText.label,
 }))
 
-const SubSectionsListWrap = styled.ul<{ indentLevel: number }>(({ theme, indentLevel }) => ({
+const SubSectionsListWrap = styled.ul<{ indentLevel: number }>(_ => ({
   margin: 0,
   padding: 0,
   listStyle: 'none',
@@ -377,7 +345,7 @@ export function TreeNavEntry({
         active={active}
         activeSecondary={defaultOpen}
         onClick={(e: Event) => {
-          onClick(e)
+          onClick?.(e)
           if (defaultOpen) {
             setIsOpen(true)
           }
@@ -411,7 +379,6 @@ export function TreeNavEntry({
     </>
   )
 }
-// const navLeftOffset = 1000
 
 export const NavPositionWrapper = styled.nav(({ theme: _theme }) => ({
   position: 'sticky',

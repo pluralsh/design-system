@@ -202,10 +202,6 @@ function TemplateInner() {
     <Div maxWidth={200}>
       <TreeNav>
         {getDirectory().map(entry => {
-          const stuff = entry.matchPath
-            ? console.log('matchpath exists')
-            : console.log('matchpathdoesnt exist')
-
           const isCurrentPath = entry.matchPath
             ? entry.matchPath(currentPath)
             : currentPath.startsWith(entry.path)

@@ -13,7 +13,7 @@ type TabProps = DivProps &
   TabBaseProps & {
     startIcon?: ReactNode
     innerProps?: DivProps
-}
+  }
 
 export const TAB_INDICATOR_THICKNESS = 2
 
@@ -40,6 +40,8 @@ ref: Ref<any>) {
     <Div
       ref={ref}
       body2
+      display="block"
+      textDecoration="none"
       tabIndex={0}
       userSelect="none"
       cursor="pointer"
@@ -47,7 +49,7 @@ ref: Ref<any>) {
         vertical ? null : `1px solid ${active ? 'border-primary' : 'border'}`
       }
       borderRight={
-        vertical ? `1px solid ${active ? 'border-primary' : 'border'}` : null
+        vertical ? `1px solid ${active ? 'border-primary' : activeSecondary ? 'border-fill-two' : 'border'}` : null
       }
       {...borderRadiuses}
       _focusVisible={{
@@ -64,21 +66,29 @@ ref: Ref<any>) {
         borderBottom={
           vertical
             ? null
-            : `${TAB_INDICATOR_THICKNESS}px solid ${active ? 'border-primary' : 'transparent'}`
+            : `${TAB_INDICATOR_THICKNESS - 1}px solid ${
+              active ? 'border-primary' : 'transparent'
+            }`
         }
         borderRight={
           vertical
-            ? `${TAB_INDICATOR_THICKNESS}px solid ${active ? 'border-primary' : 'transparent'}`
+            ? `${TAB_INDICATOR_THICKNESS - 1}px solid ${
+              active
+                ? 'border-primary'
+                : activeSecondary
+                  ? 'border-fill-two'
+                  : 'transparent'
+            }`
             : null
         }
         {...borderRadiuses}
-        color={active ? 'text' : 'text-xlight'}
+        color={active || activeSecondary ? 'text' : 'text-xlight'}
         backgroundColor={
-          activeSecondary ? theme.colors['fill-two'] : 'transparent'
+          !active && activeSecondary ? theme.colors['fill-two'] : 'transparent'
         }
         _hover={{
           color: 'text',
-          backgroundColor: 'action-input-hover',
+          ...(!(!active && activeSecondary) ? { backgroundColor: 'fill-zero-hover' } : { }),
         }}
         transition="background-color 150ms ease, border-color 150ms ease, color 150ms ease"
         {...innerProps}
