@@ -32,14 +32,6 @@ import {
 
 import { TAB_INDICATOR_THICKNESS } from './Tab'
 
-export function removeTrailingSlashes(str?: unknown) {
-  if (typeof str !== 'string') {
-    return str
-  }
-
-  return str.replace(/\/+$/, '')
-}
-
 export type SideNavProps = {
   desktop: boolean
   padTop?: boolean
