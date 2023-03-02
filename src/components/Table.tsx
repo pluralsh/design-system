@@ -3,8 +3,11 @@ import {
   CSSProperties,
   ComponentProps,
   MouseEvent,
+  MutableRefObject,
   Ref,
   forwardRef,
+  useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -56,6 +59,7 @@ export type TableProps =
       stickyColumn?: boolean
       scrollTopMargin?: number
       virtualizeRows?: boolean
+      lockColumnsOnFirstScroll?: boolean
       reactVirtualOptions?: Omit<
         Parameters<typeof useVirtualizer>,
         'parentRef' | 'size'
@@ -207,12 +211,14 @@ const Td = styled.td<{
   loose?: boolean
   stickyColumn: boolean
   truncateColumn: boolean
+  center?: boolean
 }>(({
-  theme, firstRow, loose, stickyColumn, truncateColumn = false,
+  theme, firstRow, loose, stickyColumn, truncateColumn = false, center,
 }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
+  alignItems: center ? 'center' : 'flex-start',
   height: 'auto',
   minHeight: 52,
 
@@ -232,6 +238,7 @@ const Td = styled.td<{
   ...(truncateColumn
     ? {
       '*': {
+        width: '100%',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -325,6 +332,7 @@ function FillerRow({
         }}
         colSpan={columns.length}
         truncateColumn={false}
+        center={false}
         {...props}
       />
     </Tr>
@@ -368,6 +376,29 @@ function FillerRows({
   )
 }
 
+function useOnFirstScroll(ref: MutableRefObject<HTMLElement>,
+  onFirstScroll: () => void) {
+  const [hasScrolled, setHasScrolled] = useState(false)
+
+  useEffect(() => {
+    if (!hasScrolled && ref.current) {
+      const el = ref.current
+
+      const scrollHandler = () => {
+        setHasScrolled(true)
+
+        onFirstScroll()
+      }
+
+      el.addEventListener('scroll', scrollHandler, { passive: true })
+
+      return () => {
+        el.removeEventListener('scroll', scrollHandler)
+      }
+    }
+  }, [hasScrolled, onFirstScroll, ref])
+}
+
 function TableRef({
   data,
   columns,
@@ -378,6 +409,7 @@ function TableRef({
   scrollTopMargin = 500,
   width,
   virtualizeRows = false,
+  lockColumnsOnFirstScroll,
   reactVirtualOptions: virtualizerOptions,
   reactTableOptions,
   onRowClick,
@@ -411,6 +443,9 @@ forwardRef: Ref<any>) {
     },
     ...reactTableOptions,
   })
+  const [fixedGridTemplateColumns, setFixedGridTemplateColumns] = useState<
+    string | null
+  >(null)
 
   const { rows: tableRows } = table.getRowModel()
   const rowVirtualizer = useVirtualizer({
@@ -437,6 +472,29 @@ forwardRef: Ref<any>) {
   const virtualRows = rowVirtualizer.getVirtualItems()
   const virtualHeight = rowVirtualizer.getTotalSize()
 
+  lockColumnsOnFirstScroll = lockColumnsOnFirstScroll ?? virtualizeRows
+  useOnFirstScroll(tableContainerRef,
+    useCallback(() => {
+      if (lockColumnsOnFirstScroll) {
+        const thCells = tableContainerRef.current?.querySelectorAll('th')
+
+        const columns = Array.from(thCells)
+          .map(th => {
+            const { width } = th.getBoundingClientRect()
+
+            return `${width}px`
+          })
+          .join(' ')
+
+        setFixedGridTemplateColumns(columns)
+      }
+    }, [lockColumnsOnFirstScroll]))
+  useEffect(() => {
+    if (!lockColumnsOnFirstScroll) {
+      setFixedGridTemplateColumns(null)
+    }
+  }, [lockColumnsOnFirstScroll])
+
   const { paddingTop, paddingBottom } = useMemo(() => ({
     paddingTop:
         virtualizeRows && virtualRows.length > 0
@@ -452,8 +510,8 @@ forwardRef: Ref<any>) {
   const headerGroups = useMemo(() => table.getHeaderGroups(), [table])
 
   const rows = virtualizeRows ? virtualRows : tableRows
-  const gridTemplateColumns = useMemo(() => getGridTemplateCols(columns),
-    [columns])
+  const gridTemplateColumns = useMemo(() => fixedGridTemplateColumns ?? getGridTemplateCols(columns),
+    [columns, fixedGridTemplateColumns])
 
   return (
     <Div
@@ -548,6 +606,7 @@ forwardRef: Ref<any>) {
                         loose={loose}
                         stickyColumn={stickyColumn}
                         truncateColumn={cell.column?.columnDef?.meta?.truncate}
+                        center={cell.column?.columnDef?.meta?.center}
                       >
                         {flexRender(cell.column.columnDef.cell,
                           cell.getContext())}
