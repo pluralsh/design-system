@@ -55,7 +55,6 @@ const getDirectory = () => [
 ]
 
 const loadSubEntriesOf = async (path: string): Promise<{ id: string; label: string }[] | null> => {
-  console.log('loadSubPaths', path)
   await new Promise(resolve => {
     setTimeout(resolve, 2000)
   })
@@ -104,8 +103,6 @@ const loadSubEntriesOf = async (path: string): Promise<{ id: string; label: stri
       ],
     }[path] || null
 
-  console.log('loadsubPaths ret', ret)
-
   return ret
 }
 
@@ -131,13 +128,10 @@ function NavEntryDoc({
   // Simulate loading subpaths after selection
   useEffect(() => {
     if (isCurrentPath) {
-      console.log('useEffect')
-
       let isSubscribed = true
 
       setSubPaths(null)
       loadSubEntriesOf(path).then(subPaths => {
-        console.log('finished loading subPaths', subPaths)
         if (isSubscribed) {
           setSubPaths(subPaths)
           setLoadingSubPaths(false)
@@ -164,8 +158,6 @@ function NavEntryDoc({
       setCurrentHash(subPaths[0].id)
     }
   }, [currentHash, subPaths])
-
-  console.log('subPaths', subPaths)
 
   return (
     <TreeNavEntry
@@ -196,8 +188,6 @@ function TemplateInner() {
   const navigate = useNavigate()
   const currentPath = usePathname()
 
-  console.log('currentPath', currentPath)
-
   return (
     <Div maxWidth={200}>
       <TreeNav>
@@ -207,16 +197,11 @@ function TemplateInner() {
             : currentPath.startsWith(entry.path)
           const isExactCurrentPath = currentPath === entry.path
 
-          console.log(entry.label, 'currentPath', currentPath)
-          console.log(entry.label, 'isCurrentPath', isCurrentPath)
-          console.log(entry.label, 'entry.path', entry.path)
-
           return (
             <TreeNavEntry
               key={entry.path}
               label={entry.label}
               onClick={() => {
-                console.log('clicked', entry.path)
                 if (entry.path) {
                   navigate(entry.path)
                 }
