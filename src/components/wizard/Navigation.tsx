@@ -9,9 +9,7 @@ import {
 import Button from '../Button'
 import InstallIcon from '../icons/InstallIcon'
 import { ReturnIcon } from '../../icons'
-
 import InfoOutlineIcon from '../icons/InfoOutlineIcon'
-
 import Tooltip from '../Tooltip'
 
 import {
