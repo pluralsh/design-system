@@ -186,9 +186,6 @@ function TemplateInner() {
     <Div maxWidth={200}>
       <TreeNav>
         {getDirectory().map(entry => {
-          const isCurrentPath = entry.matchPath
-            ? entry.matchPath(currentPath)
-            : currentPath.startsWith(entry.path)
           const isExactCurrentPath = currentPath === entry.path
 
           return (

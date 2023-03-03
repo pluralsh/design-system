@@ -197,7 +197,6 @@ function NavLink({
         vertical
         iconLeft={icon}
         onClick={e => {
-          console.log('clicked tab')
           onClick(e)
         }}
         width="100%"
@@ -312,14 +311,12 @@ export function TreeNavEntry({
   loading?: boolean
 }) {
   const id = useId()
-  const { hasActiveDescendents, setActiveState }
-    = useActiveStates()
+  const { hasActiveDescendents, setActiveState } = useActiveStates()
   const { setIsActiveDescendant } = useContext(NavEntryContext)
-
-  console.log('hasActiveDesc', hasActiveDescendents)
-
   const prevHasActiveDescendents = usePrevious(hasActiveDescendents)
   const [isOpen, setIsOpen] = useState(hasActiveDescendents)
+  const navEntryContextVal = useMemo(() => ({ setIsActiveDescendant: setActiveState }),
+    [setActiveState])
 
   useEffect(() => {
     setIsActiveDescendant({ id, value: active || hasActiveDescendents })
@@ -374,9 +371,7 @@ export function TreeNavEntry({
   const hasSections = children && Children.count(children) > 0
 
   return (
-    <NavEntryContext.Provider
-      value={{ setIsActiveDescendant: setActiveState }}
-    >
+    <NavEntryContext.Provider value={navEntryContextVal}>
       <NavLink
         isSubSection={hasSections}
         href={href}
