@@ -87,6 +87,7 @@ export { default as WrapWithIf } from './components/WrapWithIf'
 
 // Hooks
 export { default as usePrevious } from './hooks/usePrevious'
+export { default as useUnmount } from './hooks/useUnmount'
 
 // Contexts
 export {
