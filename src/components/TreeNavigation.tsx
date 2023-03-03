@@ -6,6 +6,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useId,
   useMemo,
   useState,
 } from 'react'
@@ -20,8 +21,11 @@ import classNames from 'classnames'
 import { animated, useSpring } from 'react-spring'
 import useMeasure from 'react-use-measure'
 import styled, { useTheme } from 'styled-components'
+import { type ImmerReducer, useImmerReducer } from 'use-immer'
 
 import { Div } from 'honorable'
+
+import useUnmount from '../hooks/useUnmount'
 
 import {
   CaretRightIcon,
@@ -266,10 +270,36 @@ function SubSectionsListRef({ className, children, ...props }: PropsWithChildren
 
 export const SubSectionsList = forwardRef(SubSectionsListRef)
 
+const activeStatesReducer: ImmerReducer<
+  Record<string, boolean>,
+  { id: string; value: boolean }
+> = (activeStates, { value, id }) => {
+  if (!value) {
+    delete activeStates[id]
+  }
+  else {
+    activeStates[id] = true
+  }
+}
+
+const NavEntryContext = createContext<{
+  setIsActiveDescendant:(arg: { id: string; value: boolean }) => void
+    }>({ setIsActiveDescendant: () => {} })
+
+const useActiveStates = () => {
+  const [activeStates, setActiveDescendant] = useImmerReducer(activeStatesReducer,
+    {})
+
+  return {
+    setActiveState: setActiveDescendant,
+    hasActiveDescendents:
+      Object.entries(activeStates).findIndex(([_, value]) => !!value) >= 0,
+  }
+}
+
 export function TreeNavEntry({
   href,
   icon,
-  defaultOpen = false,
   toMenu,
   onOpenChange,
   label,
@@ -279,11 +309,25 @@ export function TreeNavEntry({
   ...props
 }: PropsWithChildren<Omit<ComponentProps<typeof NavLink>, 'isSubSection'>> & {
   indentLevel?: number
-  defaultOpen?: boolean
   loading?: boolean
 }) {
-  const [isOpen, setIsOpen] = useState(defaultOpen)
-  const prevDefaultOpen = usePrevious(defaultOpen)
+  const id = useId()
+  const { hasActiveDescendents, setActiveState }
+    = useActiveStates()
+  const { setIsActiveDescendant } = useContext(NavEntryContext)
+
+  console.log('hasActiveDesc', hasActiveDescendents)
+
+  const prevHasActiveDescendents = usePrevious(hasActiveDescendents)
+  const [isOpen, setIsOpen] = useState(hasActiveDescendents)
+
+  useEffect(() => {
+    setIsActiveDescendant({ id, value: active || hasActiveDescendents })
+  }, [active, hasActiveDescendents, id, setIsActiveDescendant])
+
+  useUnmount(() => {
+    setIsActiveDescendant({ id, value: false })
+  })
 
   const changeOpen = useCallback((open: boolean) => {
     if (open !== isOpen) {
@@ -299,10 +343,13 @@ export function TreeNavEntry({
   const prevHeight = usePrevious(height)
 
   useEffect(() => {
-    if (defaultOpen && defaultOpen !== prevDefaultOpen) {
+    if (
+      hasActiveDescendents
+      && hasActiveDescendents !== prevHasActiveDescendents
+    ) {
       changeOpen(true)
     }
-  }, [changeOpen, defaultOpen, prevDefaultOpen, toggleOpen])
+  }, [changeOpen, hasActiveDescendents, prevHasActiveDescendents])
 
   const expand = useSpring({
     height: isOpen ? `${height}px` : '0px',
@@ -327,18 +374,20 @@ export function TreeNavEntry({
   const hasSections = children && Children.count(children) > 0
 
   return (
-    <>
+    <NavEntryContext.Provider
+      value={{ setIsActiveDescendant: setActiveState }}
+    >
       <NavLink
         isSubSection={hasSections}
         href={href}
         icon={icon}
         desktop={desktop}
         isOpen={isOpen && hasSections}
-        active={active}
-        activeSecondary={defaultOpen}
+        active={active && !hasActiveDescendents}
+        activeSecondary={hasActiveDescendents}
         onClick={(e: Event) => {
           onClick?.(e)
-          if (defaultOpen) {
+          if (hasActiveDescendents) {
             setIsOpen(true)
           }
           else {
@@ -368,7 +417,7 @@ export function TreeNavEntry({
           </KeyboardNavContext.Provider>
         </animated.div>
       )}
-    </>
+    </NavEntryContext.Provider>
   )
 }
 

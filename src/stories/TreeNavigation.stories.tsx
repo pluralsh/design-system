@@ -56,7 +56,7 @@ const getDirectory = () => [
 
 const loadSubEntriesOf = async (path: string): Promise<{ id: string; label: string }[] | null> => {
   await new Promise(resolve => {
-    setTimeout(resolve, 2000)
+    setTimeout(resolve, 500)
   })
 
   const ret
@@ -109,10 +109,7 @@ const loadSubEntriesOf = async (path: string): Promise<{ id: string; label: stri
 function NavEntryDoc({
   path,
   ...props
-}: { path: string } & Omit<
-  ComponentProps<typeof TreeNavEntry>,
-  'active' | 'defaultOpen'
->) {
+}: { path: string } & Omit<ComponentProps<typeof TreeNavEntry>, 'active'>) {
   const { usePathname, useNavigate } = useNavigationContext()
   const navigate = useNavigate()
   const currentPath = usePathname()
@@ -161,11 +158,9 @@ function NavEntryDoc({
 
   return (
     <TreeNavEntry
-      // label={entry.label}
+      active={isCurrentPath}
       loading={loadingSubPaths}
       onClick={() => navigate(path)}
-      // active={currentPath === path && !currentHash}
-      defaultOpen={currentPath.startsWith(path)}
       {...props}
     >
       {subPaths?.map(subEntry => (
@@ -174,7 +169,6 @@ function NavEntryDoc({
           label={subEntry.label}
           active={currentHash === subEntry.id}
           onClick={() => {
-            // navigate(path)
             setCurrentHash(subEntry.id)
           }}
         />
@@ -206,7 +200,6 @@ function TemplateInner() {
                   navigate(entry.path)
                 }
               }}
-              defaultOpen={isCurrentPath}
               active={isExactCurrentPath}
             >
               {entry.subPaths?.map(subEntry => (
