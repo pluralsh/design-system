@@ -1,16 +1,31 @@
 import styled from 'styled-components'
+import {
+  Dispatch,
+  ReactNode,
+  createRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
-import { ArrowTopRightIcon, MoreIcon, SearchIcon } from '../icons'
+import IsEmpty from 'lodash/isEmpty'
+
+import { MoreIcon, SearchIcon } from '../icons'
 import {
   AppIcon,
   Button,
   Card,
+  CardProps,
   Input,
   ListBoxItem,
   Select,
 } from '../index'
 
+import { useWindowSize } from './wizard/hooks'
+
 const AppList = styled(AppListUnstyled)(({ theme }) => ({
+  width: '100%',
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing.medium,
@@ -19,79 +34,108 @@ const AppList = styled(AppListUnstyled)(({ theme }) => ({
   '.app-grid': {
     display: 'grid',
     rowGap: theme.spacing.medium,
+    padding: theme.spacing.xxxsmall,
+    minHeight: '200px',
+    maxHeight: '100%',
+    overflow: 'auto',
+
+    '.promoted:not(:has(~ .promoted))': {
+      marginBottom: theme.spacing.medium,
+    },
+
+    '&.scrollable': {
+      paddingRight: '8px',
+    },
+
+    '.empty': {
+      display: 'flex',
+      alignItems: 'center',
+      justifyItems: 'center',
+      flexDirection: 'column',
+      gap: theme.spacing.small,
+
+      '.empty-message': {
+        ...(theme.partials.text.body2),
+        color: theme.colors['text-light'],
+      },
+    },
   },
 }))
 
 interface AppListProps {
-
+  apps: Array<AppProps>
+  onFilter?: Dispatch<string>
 }
 
-function AppListUnstyled({ ...props }: AppListProps): JSX.Element {
+function AppListUnstyled({ apps, onFilter, ...props }: AppListProps): JSX.Element {
+  const size = useWindowSize()
+  const scrollRef = createRef<HTMLDivElement>()
+
+  const [filter, setFilter] = useState<string>()
+  const [scrollable, setScrollable] = useState(false)
+
+  const isScrollbarVisible = (el: HTMLDivElement) => el?.scrollHeight > el?.clientHeight
+  const sortByPromoted = useCallback((app: AppProps) => (app.promoted ? -1 : 1), [])
+  const filterByName = useCallback((app: AppProps) => (filter ? app.name.toLowerCase().includes(filter?.toLowerCase()) : true), [filter])
+
+  const filteredApps = useMemo(() => (onFilter ? apps : apps.filter(filterByName)), [apps, filterByName, onFilter])
+
+  useEffect(() => {
+    if (!scrollRef.current) return
+
+    setScrollable(isScrollbarVisible(scrollRef.current))
+  }, [scrollRef, size])
+
   return (
     <div {...props}>
       <Input
         prefix={<SearchIcon />}
         placeholder="Filter applications"
+        value={filter}
+        onChange={({ target: { value } }) => setFilter(value)}
       />
 
-      <div className="app-grid">
-        <App
-          promoted
-          name="Console"
-          description="Manage your cluster and applications."
-          logoUrl="logos/console-logo.png"
-          primaryAction={(
-            <Button
-              minHeight={32}
-              height={32}
-            >
-              <div style={{ marginRight: '8px' }}>Launch</div>
-              <ArrowTopRightIcon />
-            </Button>
-          )}
-          actions={(
-            <ListBoxItem
-              key="test"
-              label="test"
-              textValue="test"
-              onSelect={() => console.log('hi')}
-            />
-          )}
-        />
+      <div
+        className={scrollable ? 'app-grid scrollable' : 'app-grid'}
+        ref={scrollRef}
+      >
+        {filteredApps.sort(sortByPromoted).map(app => (
+          <App
+            key={app.name}
+            className={app.promoted ? 'promoted' : undefined}
+            promoted={app.promoted}
+            name={app.name}
+            description={app.description}
+            logoUrl={app.logoUrl}
+            icon={app.icon}
+            primaryAction={app.primaryAction}
+            actions={app.actions}
+            {...app}
+          />
+        ))}
 
-        <App
-          name="Airbyte"
-          description="v1.24"
-          primaryAction={(
+        {IsEmpty(filteredApps) && (
+          <div className="empty">
+            <span className="empty-message">No applications found for "{filter}".</span>
             <Button
               secondary
-              minHeight={32}
-              height={32}
-            >
-              <div style={{ marginRight: '8px' }}>Launch</div>
-              <ArrowTopRightIcon />
+              onClick={() => setFilter('')}
+            >Clear search
             </Button>
-          )}
-          actions={(
-            <ListBoxItem
-              key="test"
-              label="test"
-              textValue="test"
-              onSelect={() => console.log('hi')}
-            />
-          )}
-        />
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
-const App = styled(AppUnstyled)(({ theme, promoted }) => ({
+const App = styled(AppUnstyled)(({ theme }) => ({
   display: 'flex',
   gap: theme.spacing.small,
   padding: theme.spacing.medium,
+  maxHeight: '80px',
 
-  ...(!!promoted && {
+  '&.promoted': {
     position: 'relative',
     border: 'none !important',
 
@@ -137,7 +181,7 @@ const App = styled(AppUnstyled)(({ theme, promoted }) => ({
       '80%': { '--border-angle': '285deg' },
       '100%': { '--border-angle': '360deg' },
     },
-  }),
+  },
 
   '.text-container': {
     display: 'flex',
@@ -166,34 +210,34 @@ const App = styled(AppUnstyled)(({ theme, promoted }) => ({
   },
 }))
 
-interface AppProps {
+type AppProps = {
   logoUrl?: string
+  icon?: JSX.Element
   name: string
   description: string,
   primaryAction?: JSX.Element
-  actions?: Array<JSX.Element> | JSX.Element
+  actions?: Array<AppMenuAction>
   promoted?: boolean
+} & CardProps
+
+interface AppMenuAction {
+  label: string,
+  onSelect: Dispatch<void>
+  leftContent?: ReactNode
+  rightContent?: ReactNode
 }
 
 function AppUnstyled({
-  logoUrl, name, description, primaryAction, actions, ...props
+  logoUrl, icon, name, description, primaryAction, actions, ...props
 }: AppProps): JSX.Element {
   return (
-    <Card
-      {...props}
-    >
-      {logoUrl && (
-        <AppIcon
-          url={logoUrl}
-          size="xsmall"
-        />
-      )}
-      {!logoUrl && (
-        <AppIcon
-          name={name}
-          size="xsmall"
-        />
-      )}
+    <Card {...props}>
+      <AppIcon
+        name={name}
+        url={logoUrl}
+        icon={icon}
+        size="xsmall"
+      />
       <div className="text-container">
         <div className="title">{name}</div>
         <div className="description">{description}</div>
@@ -210,6 +254,7 @@ function AppUnstyled({
           <Select
             aria-label="moreMenu"
             selectedKey={null}
+            onSelectionChange={key => actions.find(action => action.label === key)?.onSelect()}
             width="max-content"
             maxHeight={197}
             triggerButton={(
@@ -221,7 +266,15 @@ function AppUnstyled({
               </Button>
             )}
           >
-            {actions}
+            {actions.map(action => (
+              <ListBoxItem
+                key={action.label}
+                label={action.label}
+                textValue={action.label}
+                leftContent={action.leftContent}
+                rightContent={action.rightContent}
+              />
+            ))}
           </Select>
 
         </div>
@@ -230,4 +283,5 @@ function AppUnstyled({
   )
 }
 
+export type { AppProps }
 export { AppList }
