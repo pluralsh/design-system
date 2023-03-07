@@ -2,13 +2,13 @@ import styled from 'styled-components'
 
 import {
   AppList,
+  AppProps,
   ArrowTopRightIcon,
   Button,
   Card,
   CardProps,
   GitLabLogoIcon,
 } from '..'
-import { AppProps } from '../components/AppList'
 
 export default {
   title: 'AppList',
@@ -71,12 +71,11 @@ function ContainerUnstyled({ children, ...props }: any) {
   return <Card {...props}>{children}</Card>
 }
 
-function Template({ ...args }) {
+function Template() {
   return (
     <Container>
       <AppList
         apps={APPS}
-        {...args}
       />
     </Container>
   )

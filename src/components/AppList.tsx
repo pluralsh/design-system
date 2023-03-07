@@ -8,7 +8,6 @@ import {
   useMemo,
   useState,
 } from 'react'
-
 import IsEmpty from 'lodash/isEmpty'
 
 import { MoreIcon, SearchIcon } from '../icons'
@@ -283,5 +282,5 @@ function AppUnstyled({
   )
 }
 
-export type { AppProps }
+export type { AppProps, AppListProps }
 export { AppList }
