@@ -81,4 +81,15 @@ function Template() {
   )
 }
 
+function ScrollableTemplate() {
+  return (
+    <Container height={400}>
+      <AppList
+        apps={APPS}
+      />
+    </Container>
+  )
+}
+
 export const Default = Template.bind({})
+export const Scrollable = ScrollableTemplate.bind({})
