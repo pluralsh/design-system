@@ -25,6 +25,7 @@ import { useWindowSize } from './wizard/hooks'
 
 const AppList = styled(AppListUnstyled)(({ theme }) => ({
   width: '100%',
+  height: '100%',
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing.medium,
@@ -36,7 +37,8 @@ const AppList = styled(AppListUnstyled)(({ theme }) => ({
     padding: theme.spacing.xxxsmall,
     minHeight: '200px',
     maxHeight: '100%',
-    overflow: 'auto',
+    overflowY: 'auto',
+    overflowX: 'hidden',
 
     '.promoted:not(:has(~ .promoted))': {
       marginBottom: theme.spacing.medium,
@@ -74,7 +76,18 @@ function AppListUnstyled({ apps, onFilter, ...props }: AppListProps): JSX.Elemen
   const [scrollable, setScrollable] = useState(false)
 
   const isScrollbarVisible = (el: HTMLDivElement) => el?.scrollHeight > el?.clientHeight
-  const sortByPromoted = useCallback((app: AppProps) => (app.promoted ? -1 : 1), [])
+  const sortByPriority = useCallback((first: AppProps, second: AppProps) => {
+    // Surface promoted apps first
+    if (first.promoted) return -1
+    if (second.promoted) return 1
+
+    // Surface apps with primary action defined second
+    if (first.primaryAction) return -1
+    if (second.primaryAction) return 1
+
+    // Leave the rest as is
+    return 0
+  }, [])
   const filterByName = useCallback((app: AppProps) => (filter ? app.name.toLowerCase().includes(filter?.toLowerCase()) : true), [filter])
 
   const filteredApps = useMemo(() => (onFilter ? apps : apps.filter(filterByName)), [apps, filterByName, onFilter])
@@ -87,18 +100,20 @@ function AppListUnstyled({ apps, onFilter, ...props }: AppListProps): JSX.Elemen
 
   return (
     <div {...props}>
-      <Input
-        prefix={<SearchIcon />}
-        placeholder="Filter applications"
-        value={filter}
-        onChange={({ target: { value } }) => setFilter(value)}
-      />
+      {!IsEmpty(apps) && (
+        <Input
+          prefix={<SearchIcon />}
+          placeholder="Filter applications"
+          value={filter}
+          onChange={({ target: { value } }) => setFilter(value)}
+        />
+      )}
 
       <div
         className={scrollable ? 'app-grid scrollable' : 'app-grid'}
         ref={scrollRef}
       >
-        {filteredApps.sort(sortByPromoted).map(app => (
+        {filteredApps.sort(sortByPriority).map(app => (
           <App
             key={app.name}
             className={app.promoted ? 'promoted' : undefined}
@@ -113,7 +128,7 @@ function AppListUnstyled({ apps, onFilter, ...props }: AppListProps): JSX.Elemen
           />
         ))}
 
-        {IsEmpty(filteredApps) && (
+        {IsEmpty(filteredApps) && !IsEmpty(filter) && (
           <div className="empty">
             <span className="empty-message">No applications found for "{filter}".</span>
             <Button
@@ -121,6 +136,12 @@ function AppListUnstyled({ apps, onFilter, ...props }: AppListProps): JSX.Elemen
               onClick={() => setFilter('')}
             >Clear search
             </Button>
+          </div>
+        )}
+
+        {IsEmpty(apps) && (
+          <div className="empty">
+            <span className="empty-message">No applications found.</span>
           </div>
         )}
       </div>
@@ -133,6 +154,8 @@ const App = styled(AppUnstyled)(({ theme }) => ({
   gap: theme.spacing.small,
   padding: theme.spacing.medium,
   maxHeight: '80px',
+  minHeight: '80px',
+  minWidth: 0,
 
   '&.promoted': {
     position: 'relative',
@@ -187,6 +210,7 @@ const App = styled(AppUnstyled)(({ theme }) => ({
     flexGrow: 1,
     flexDirection: 'column',
     gap: theme.spacing.xxsmall,
+    overflow: 'hidden',
 
     '& > .title': {
       ...theme.partials.text.body1Bold,
@@ -195,6 +219,9 @@ const App = styled(AppUnstyled)(({ theme }) => ({
     '& > .description': {
       ...theme.partials.text.body2,
       color: theme.colors['text-light'],
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
     },
   },
 
@@ -224,6 +251,7 @@ interface AppMenuAction {
   onSelect: Dispatch<void>
   leftContent?: ReactNode
   rightContent?: ReactNode
+  destructive?: boolean
 }
 
 function AppUnstyled({
@@ -239,7 +267,11 @@ function AppUnstyled({
       />
       <div className="text-container">
         <div className="title">{name}</div>
-        <div className="description">{description}</div>
+        <div
+          className="description"
+          title={description}
+        >{description}
+        </div>
       </div>
 
       {primaryAction && (
@@ -272,6 +304,7 @@ function AppUnstyled({
                 textValue={action.label}
                 leftContent={action.leftContent}
                 rightContent={action.rightContent}
+                destructive={action.destructive}
               />
             ))}
           </Select>
@@ -282,5 +315,5 @@ function AppUnstyled({
   )
 }
 
-export type { AppProps, AppListProps }
+export type { AppProps, AppListProps, AppMenuAction }
 export { AppList }

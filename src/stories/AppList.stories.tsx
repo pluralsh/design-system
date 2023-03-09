@@ -49,7 +49,7 @@ const APPS: Array<AppProps & CardProps> = [
     ),
   }, {
     name: 'Airbyte',
-    description: 'v1.24',
+    description: 'Very looooong looong looong application description. Very looooong looong looong application description.',
   },
   {
     name: 'Clickhouse',
