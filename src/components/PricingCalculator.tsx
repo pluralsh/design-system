@@ -1,0 +1,141 @@
+import { FlexProps } from 'honorable'
+import {
+  ReactElement,
+  cloneElement,
+  forwardRef,
+  useState,
+} from 'react'
+import styled from 'styled-components'
+
+import Callout from './Callout'
+import AwsLogoIcon from './icons/AwsLogoIcon'
+import GoogleCloudLogoIcon from './icons/GoogleCloudLogoIcon'
+import InfoIcon from './icons/InfoIcon'
+
+type SelectItemWrapProps = {
+  selected?: boolean
+  width?: number | string
+}
+
+const SelectItemWrap = styled.button<SelectItemWrapProps>(({
+  theme, selected = false, width,
+}) => ({
+  ...theme.partials.text.buttonSmall,
+  display: 'flex',
+  height: 32,
+  width,
+  padding: '4px 12px',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: selected ? theme.colors['fill-two-selected'] : 'transparent',
+  border: theme.borders.default,
+  borderColor: selected ? theme.colors['border-selected'] : theme.colors['border-input'],
+  borderRadius: theme.borderRadiuses.medium,
+  color: selected ? theme.colors.text : theme.colors['text-light'],
+  cursor: 'pointer',
+  '&:focus,&:focus-visible': { ...theme.partials.focus.button },
+  '&:hover': { backgroundColor: theme.colors['action-input-hover'] },
+  '.label': { marginLeft: theme.spacing.small },
+}))
+
+type SelectItemProps = Omit<FlexProps, 'size'> & {
+  icon: ReactElement
+  label?: string
+  selected?: boolean
+}
+
+const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(({
+  icon,
+  label,
+  selected = false,
+}) => {
+  icon = cloneElement(icon, { size: 16 })
+
+  return (
+    <SelectItemWrap selected={selected}>
+      {icon}
+      {label && <div className="label">{label}</div>}
+    </SelectItemWrap>
+  )
+})
+
+// {radios.map(({ value, label }) => (
+//   <Radio
+//     name="manually-controlled"
+//     value={value}
+//     checked={selectedValueManual === value}
+//     onChange={({ target: { checked } }: any) => {
+//       if (checked) setSelectedValueManual(value)
+//     }}
+//     {...args}
+//   >
+//     {label}
+//   </Radio>
+// ))}
+
+export type PricingCalculatorProps = {
+  expandedDefault?: boolean
+}
+
+const PricingCalculatorWrap = styled.div(({ theme }) => ({
+  h1: {
+    ...theme.partials.text.body2Bold,
+    color: theme.colors.text,
+  },
+}))
+
+const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({
+  expandedDefault = false,
+}, ref) => {
+  const [expanded, setExpanded] = useState(expandedDefault)
+
+  return (
+    <Callout
+      expandable
+      expanded={expanded}
+      onExpand={setExpanded}
+      ref={ref}
+      title="Estimate your cloud cost."
+    >
+      <PricingCalculatorWrap>
+        <p>Estimate your cloud cost to get started with Plural open-source.</p>
+        <section>
+          <h1>Cloud provider</h1>
+
+          <SelectItem
+            icon={<AwsLogoIcon fullColor />}
+            label="AWS"
+            selected
+          />
+          <SelectItem
+            icon={<GoogleCloudLogoIcon fullColor />}
+            label="GCP"
+          />
+
+        </section>
+        <section>
+          <h1>Applications</h1>
+        </section>
+        <section>
+          <div>
+            <div>$12</div>
+            <div>AWS Kubernetes cost</div>
+            <InfoIcon />
+          </div>
+          <div>
+            <div>$12</div>
+            <div>AWS infrastructure price</div>
+            <InfoIcon />
+          </div>
+          <div>
+            <div>$12</div>
+            <div>Application infrastructure</div>
+            <InfoIcon />
+          </div>
+        </section>
+      </PricingCalculatorWrap>
+    </Callout>
+  )
+})
+
+export default PricingCalculator
