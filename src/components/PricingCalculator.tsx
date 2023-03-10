@@ -18,7 +18,7 @@ import Callout from './Callout'
 import AwsLogoIcon from './icons/AwsLogoIcon'
 import AzureLogoIcon from './icons/AzureLogoIcon'
 import GoogleCloudLogoIcon from './icons/GoogleCloudLogoIcon'
-import InfoIcon from './icons/InfoIcon'
+import InfoOutlineIcon from './icons/InfoOutlineIcon'
 import { RadioContext } from './RadioGroup'
 
 type SelectItemWrapProps = {
@@ -129,6 +129,13 @@ export type PricingCalculatorProps = {
 }
 
 const PricingCalculatorWrap = styled.div(({ theme }) => ({
+  ...theme.partials.text.body2,
+  color: theme.colors['text-xlight'],
+
+  p: {
+    color: theme.colors['text-light'],
+  },
+
   '.content': {
     display: 'flex',
     flexDirection: 'row',
@@ -145,7 +152,7 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
       '.section': {
         marginTop: theme.spacing.xlarge,
 
-        h1: {
+        '.header': {
           ...theme.partials.text.body2Bold,
           color: theme.colors.text,
           marginBottom: theme.spacing.medium,
@@ -159,6 +166,40 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
     flexDirection: 'row',
     gap: theme.spacing.small,
   },
+
+  '.costs': {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '14px',
+
+    '.cost': {
+      display: 'flex',
+      flexDirection: 'row',
+      flexGrow: 1,
+      flexShrink: 1,
+      gap: theme.spacing.xsmall,
+      alignItems: 'center',
+
+      '.value': {
+        ...theme.partials.text.subtitle2,
+        color: theme.colors.text,
+        marginRight: theme.spacing.xxsmall,
+      },
+    },
+  },
+
+  '.total-cost': {
+    '.value': {
+      ...theme.partials.text.title1,
+      color: theme.colors['text-warning-light'],
+      marginRight: theme.spacing.xxsmall,
+    },
+
+    '.provider': {
+      ...theme.partials.text.body2Bold,
+      color: theme.colors.text,
+    },
+  },
 }))
 
 const providers = [
@@ -166,16 +207,25 @@ const providers = [
     name: 'AWS',
     id: 'aws',
     icon: <AwsLogoIcon fullColor />,
+    k8sCost: 73,
+    infraPrice: 15,
+    appPrice: 3,
   },
   {
     name: 'GCP',
     id: 'gcp',
     icon: <GoogleCloudLogoIcon fullColor />,
+    k8sCost: 72,
+    infraPrice: 15,
+    appPrice: 3,
   },
   {
     name: 'Azure',
     id: 'azure',
     icon: <AzureLogoIcon fullColor />,
+    k8sCost: 89.71,
+    infraPrice: 15,
+    appPrice: 3,
   },
 ]
 
@@ -183,6 +233,7 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
   const [expanded, setExpanded] = useState(expandedDefault)
   const [providerId, setProviderId] = useState(providers[0].id)
   const provider = useMemo(() => providers.find(({ id }) => id === providerId), [providerId])
+  const totalCost = useMemo(() => provider?.k8sCost, [provider])
 
   return (
     <Callout
@@ -199,7 +250,7 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
         <div className="content">
           <div className="column">
             <div className="section">
-              <h1>Cloud provider</h1>
+              <div className="header">Cloud provider</div>
               <div className="providers">
                 {providers.map(({ id, name, icon }) => (
                   <SelectItem
@@ -215,30 +266,33 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
               </div>
             </div>
             <div className="section">
-              <h1>Applications</h1>
+              <div className="header">Applications</div>
               <div>slider goes here</div>
             </div>
           </div>
           <div className="column">
-            <div className="section">
-              <div>
-                <div>$12</div>
+            <div className="section costs">
+              <div className="cost">
+                <div className="value">$12</div>
                 <div>{provider?.name} Kubernetes cost</div>
-                <InfoIcon />
+                <InfoOutlineIcon />
               </div>
-              <div>
-                <div>$12</div>
+              <div className="cost">
+                <div className="value">$12</div>
                 <div>{provider?.name} infrastructure price</div>
-                <InfoIcon />
+                <InfoOutlineIcon />
               </div>
-              <div>
-                <div>$12</div>
+              <div className="cost">
+                <div className="value">$12</div>
                 <div>Application infrastructure</div>
-                <InfoIcon />
+                <InfoOutlineIcon />
               </div>
             </div>
+            <div className="section total-cost">
+              <div className="value">~${totalCost}</div>
+              <div>per month to <span className="provider">{provider?.name}</span></div>
+            </div>
           </div>
-
         </div>
       </PricingCalculatorWrap>
     </Callout>
