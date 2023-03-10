@@ -9,6 +9,35 @@ import {
   useState,
 } from 'react'
 
+
+const getTransitionProps = (isOpen: boolean, direction: 'up' | 'down' | 'right' | 'left') => {
+  translate = {
+    [`translate${direction === 'up' || direction==='down' ? Y : X}`]
+  }
+  return ({
+  from: { opacity: 0, translateX: `${CARD_WIDTH + 24}px` },
+  enter: { opacity: 1, translateX: '0px' },
+  leave: { opacity: 0, translateX: `${CARD_WIDTH + 24}px` },
+  config: isOpen
+    ? {
+      mass: 0.6,
+      tension: 280,
+      velocity: 0.02,
+    }
+    : {
+      mass: 0.6,
+      tension: 400,
+      velocity: 0.02,
+      restVelocity: 0.1,
+    },
+})}
+
+type LayerPositionType = "bottom" | "bottom-left" | "bottom-right" | "center" | "hidden" | "left" | "right" | "top" | "top-left" | "top-right"
+function Layer = function() {
+
+}
+
+
 import Banner from './Banner'
 
 export type Severity = 'info' | 'success' | 'error'
