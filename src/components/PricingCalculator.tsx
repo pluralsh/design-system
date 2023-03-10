@@ -58,7 +58,7 @@ type SelectItemProps = AriaRadioProps & {
   defaultSelected?: boolean
   checked?: boolean
   name?: string
-  onChange?: (e: { target: { checked: boolean } }) => any
+  onChange?: (e: { target: { checked: boolean } }) => void
 }
 
 const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(({

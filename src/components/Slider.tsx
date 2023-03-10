@@ -5,8 +5,87 @@ import { mergeProps } from '@react-aria/utils'
 import { VisuallyHidden } from '@react-aria/visually-hidden'
 import { useFocusRing } from '@react-aria/focus'
 import { useRef } from 'react'
+import styled from 'styled-components'
 
-import './Slider.css'
+const SliderWrap = styled.div(({ theme }) => ({
+  '.slider': {
+    display: 'flex',
+
+    '&.horizontal': {
+      flexDirection: 'column',
+      width: '300px',
+
+      '.track': {
+        height: '30px',
+        width: '100%',
+
+        '&:before': {
+          height: '12px',
+          width: '100%',
+          top: '50%',
+          transform: 'translateY(-50%)',
+        },
+      },
+
+      '.thumb': {
+        top: '50%',
+      },
+    },
+
+    '.&.vertical': {
+      height: '150px',
+
+      '.track': {
+        width: '30px',
+        height: '100%',
+
+        '&:before': {
+          width: '12px',
+          height: '100%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+        },
+      },
+
+      '.thumb': {
+        left: '50%',
+      },
+    },
+  },
+
+  '.label-container': {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+
+  '.track:before': {
+    content: 'attr(x)',
+    display: 'block',
+    position: 'absolute',
+    background: theme.colors['fill-one'],
+    borderRadius: '6px',
+    boxShadow: 'inset 0px 0.5px 2px rgba(0, 0, 0, 0.25), inset 0px -0.5px 1.5px rgba(255, 255, 255, 0.16)',
+  },
+
+  '.thumb': {
+    width: '20px',
+    height: '20px',
+    borderRadius: '50%',
+    background: 'gray',
+
+    '&.dragging': {
+      background: 'dimgray',
+    },
+
+    '&.focus': {
+      background: 'orange',
+    },
+
+    '&.disabled': {
+      opacity: 0.4,
+    },
+  },
+}))
 
 function Slider(props: any) {
   const trackRef = useRef(null)
@@ -20,11 +99,12 @@ function Slider(props: any) {
   } = useSlider(props, state, trackRef)
 
   return (
-    <div
-      {...groupProps}
-      className={`slider ${state.orientation}`}
-    >
-      {props.label
+    <SliderWrap>
+      <div
+        {...groupProps}
+        className={`slider ${state.orientation}`}
+      >
+        {props.label
         && (
           <div className="label-container">
             <label {...labelProps}>{props.label}</label>
@@ -33,18 +113,19 @@ function Slider(props: any) {
             </output>
           </div>
         )}
-      <div
-        {...trackProps}
-        ref={trackRef}
-        className={`track ${state.isDisabled ? 'disabled' : ''}`}
-      >
-        <Thumb
-          index={0}
-          state={state}
-          trackRef={trackRef}
-        />
+        <div
+          {...trackProps}
+          ref={trackRef}
+          className={`track ${state.isDisabled ? 'disabled' : ''}`}
+        >
+          <Thumb
+            index={0}
+            state={state}
+            trackRef={trackRef}
+          />
+        </div>
       </div>
-    </div>
+    </SliderWrap>
   )
 }
 
