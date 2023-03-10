@@ -15,14 +15,15 @@ import styled from 'styled-components'
 
 import Callout from './Callout'
 import AwsLogoIcon from './icons/AwsLogoIcon'
+import AzureLogoIcon from './icons/AzureLogoIcon'
 import GoogleCloudLogoIcon from './icons/GoogleCloudLogoIcon'
 import InfoIcon from './icons/InfoIcon'
 import { RadioContext } from './RadioGroup'
 
 type SelectItemWrapProps = {
-  selected?: boolean;
-  width?: number | string;
-};
+  selected?: boolean
+  width?: number | string
+}
 
 const SelectItemWrap = styled.label<SelectItemWrapProps>(({ theme, selected = false, width }) => ({
   ...theme.partials.text.buttonSmall,
@@ -48,15 +49,15 @@ const SelectItemWrap = styled.label<SelectItemWrapProps>(({ theme, selected = fa
 }))
 
 type SelectItemProps = AriaRadioProps & {
-  icon: ReactElement;
-  label?: string;
-  selected?: boolean;
+  icon: ReactElement
+  label?: string
+  selected?: boolean
 
-  defaultSelected?: boolean;
-  checked?: boolean;
-  name?: string;
-  onChange?: (e: { target: { checked: boolean } }) => any;
-};
+  defaultSelected?: boolean
+  checked?: boolean
+  name?: string
+  onChange?: (e: { target: { checked: boolean } }) => any
+}
 
 const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(({
   icon,
@@ -123,18 +124,24 @@ const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(({
 })
 
 export type PricingCalculatorProps = {
-  expandedDefault?: boolean;
+  expandedDefault?: boolean
 }
 
 const PricingCalculatorWrap = styled.div(({ theme }) => ({
-  h1: {
-    ...theme.partials.text.body2Bold,
-    color: theme.colors.text,
-  },
-  '.providers': {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: theme.spacing.small,
+  section: {
+    marginTop: theme.spacing.xlarge,
+
+    h1: {
+      ...theme.partials.text.body2Bold,
+      color: 'theme.colors.text',
+      marginBottom: theme.spacing.medium,
+    },
+
+    '.providers': {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: theme.spacing.small,
+    },
   },
 }))
 
@@ -144,8 +151,16 @@ const providers = [
     value: 'aws',
     icon: <AwsLogoIcon fullColor />,
   },
-  { label: 'GCP', value: 'gcp', icon: <GoogleCloudLogoIcon fullColor /> },
-  { label: 'Azure', value: 'azure', icon: <GoogleCloudLogoIcon fullColor /> },
+  {
+    label: 'GCP',
+    value: 'gcp',
+    icon: <GoogleCloudLogoIcon fullColor />,
+  },
+  {
+    label: 'Azure',
+    value: 'azure',
+    icon: <AzureLogoIcon fullColor />,
+  },
 ]
 
 const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ expandedDefault = false }, ref) => {
