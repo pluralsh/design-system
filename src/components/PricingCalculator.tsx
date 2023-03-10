@@ -20,6 +20,7 @@ import AzureLogoIcon from './icons/AzureLogoIcon'
 import GoogleCloudLogoIcon from './icons/GoogleCloudLogoIcon'
 import InfoOutlineIcon from './icons/InfoOutlineIcon'
 import { RadioContext } from './RadioGroup'
+import Slider from './Slider'
 
 type SelectItemWrapProps = {
   selected?: boolean
@@ -267,7 +268,12 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
             </div>
             <div className="section">
               <div className="header">Applications</div>
-              <div>slider goes here</div>
+              <Slider
+                label="Applications"
+                defaultValue={10}
+                minValue={1}
+                maxValue={25}
+              />
             </div>
           </div>
           <div className="column">
