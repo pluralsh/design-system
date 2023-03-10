@@ -8,6 +8,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -140,47 +141,48 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
       flexDirection: 'column',
       flexGrow: 1,
       flexShrink: 1,
+
+      '.section': {
+        marginTop: theme.spacing.xlarge,
+
+        h1: {
+          ...theme.partials.text.body2Bold,
+          color: theme.colors.text,
+          marginBottom: theme.spacing.medium,
+        },
+      },
     },
   },
 
-  section: {
-    marginTop: theme.spacing.xlarge,
-
-    h1: {
-      ...theme.partials.text.body2Bold,
-      color: theme.colors.text,
-      marginBottom: theme.spacing.medium,
-    },
-
-    '.providers': {
-      display: 'flex',
-      flexDirection: 'row',
-      gap: theme.spacing.small,
-    },
+  '.providers': {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: theme.spacing.small,
   },
 }))
 
 const providers = [
   {
-    label: 'AWS',
-    value: 'aws',
+    name: 'AWS',
+    id: 'aws',
     icon: <AwsLogoIcon fullColor />,
   },
   {
-    label: 'GCP',
-    value: 'gcp',
+    name: 'GCP',
+    id: 'gcp',
     icon: <GoogleCloudLogoIcon fullColor />,
   },
   {
-    label: 'Azure',
-    value: 'azure',
+    name: 'Azure',
+    id: 'azure',
     icon: <AzureLogoIcon fullColor />,
   },
 ]
 
 const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ expandedDefault = false }, ref) => {
   const [expanded, setExpanded] = useState(expandedDefault)
-  const [provider, setProvider] = useState(providers[0].value)
+  const [providerId, setProviderId] = useState(providers[0].id)
+  const provider = useMemo(() => providers.find(({ id }) => id === providerId), [providerId])
 
   return (
     <Callout
@@ -196,37 +198,37 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
         </p>
         <div className="content">
           <div className="column">
-            <section>
+            <div className="section">
               <h1>Cloud provider</h1>
               <div className="providers">
-                {providers.map(({ value, label, icon }) => (
+                {providers.map(({ id, name, icon }) => (
                   <SelectItem
-                    label={label}
+                    label={name}
                     icon={icon}
-                    value={value}
-                    checked={provider === value}
+                    value={id}
+                    checked={providerId === id}
                     onChange={({ target: { checked } }: any) => {
-                      if (checked) setProvider(value)
+                      if (checked) setProviderId(id)
                     }}
                   />
                 ))}
               </div>
-            </section>
-            <section>
+            </div>
+            <div className="section">
               <h1>Applications</h1>
               <div>slider goes here</div>
-            </section>
+            </div>
           </div>
           <div className="column">
-            <section>
+            <div className="section">
               <div>
                 <div>$12</div>
-                <div>AWS Kubernetes cost</div>
+                <div>{provider?.name} Kubernetes cost</div>
                 <InfoIcon />
               </div>
               <div>
                 <div>$12</div>
-                <div>AWS infrastructure price</div>
+                <div>{provider?.name} infrastructure price</div>
                 <InfoIcon />
               </div>
               <div>
@@ -234,7 +236,7 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
                 <div>Application infrastructure</div>
                 <InfoIcon />
               </div>
-            </section>
+            </div>
           </div>
 
         </div>
