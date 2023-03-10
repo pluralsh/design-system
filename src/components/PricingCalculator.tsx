@@ -128,12 +128,27 @@ export type PricingCalculatorProps = {
 }
 
 const PricingCalculatorWrap = styled.div(({ theme }) => ({
+  '.content': {
+    display: 'flex',
+    flexDirection: 'row',
+    flexGrow: 1,
+    flexShrink: 1,
+    gap: theme.spacing.xxlarge,
+
+    '.column': {
+      display: 'flex',
+      flexDirection: 'column',
+      flexGrow: 1,
+      flexShrink: 1,
+    },
+  },
+
   section: {
     marginTop: theme.spacing.xlarge,
 
     h1: {
       ...theme.partials.text.body2Bold,
-      color: 'theme.colors.text',
+      color: theme.colors.text,
       marginBottom: theme.spacing.medium,
     },
 
@@ -179,42 +194,50 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
         <p>
           Estimate your cloud cost to get started with Plural open-source.
         </p>
-        <section>
-          <h1>Cloud provider</h1>
-          <div className="providers">
-            {providers.map(({ value, label, icon }) => (
-              <SelectItem
-                label={label}
-                icon={icon}
-                value={value}
-                checked={provider === value}
-                onChange={({ target: { checked } }: any) => {
-                  if (checked) setProvider(value)
-                }}
-              />
-            ))}
+        <div className="content">
+          <div className="column">
+            <section>
+              <h1>Cloud provider</h1>
+              <div className="providers">
+                {providers.map(({ value, label, icon }) => (
+                  <SelectItem
+                    label={label}
+                    icon={icon}
+                    value={value}
+                    checked={provider === value}
+                    onChange={({ target: { checked } }: any) => {
+                      if (checked) setProvider(value)
+                    }}
+                  />
+                ))}
+              </div>
+            </section>
+            <section>
+              <h1>Applications</h1>
+              <div>slider goes here</div>
+            </section>
           </div>
-        </section>
-        <section>
-          <h1>Applications</h1>
-        </section>
-        <section>
-          <div>
-            <div>$12</div>
-            <div>AWS Kubernetes cost</div>
-            <InfoIcon />
+          <div className="column">
+            <section>
+              <div>
+                <div>$12</div>
+                <div>AWS Kubernetes cost</div>
+                <InfoIcon />
+              </div>
+              <div>
+                <div>$12</div>
+                <div>AWS infrastructure price</div>
+                <InfoIcon />
+              </div>
+              <div>
+                <div>$12</div>
+                <div>Application infrastructure</div>
+                <InfoIcon />
+              </div>
+            </section>
           </div>
-          <div>
-            <div>$12</div>
-            <div>AWS infrastructure price</div>
-            <InfoIcon />
-          </div>
-          <div>
-            <div>$12</div>
-            <div>Application infrastructure</div>
-            <InfoIcon />
-          </div>
-        </section>
+
+        </div>
       </PricingCalculatorWrap>
     </Callout>
   )
