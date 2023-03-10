@@ -1,7 +1,7 @@
 import PricingCalculator from '../components/PricingCalculator'
 
 export default {
-  title: 'PricingCalculator',
+  title: 'Pricing Calculator',
   component: PricingCalculator,
 }
 
