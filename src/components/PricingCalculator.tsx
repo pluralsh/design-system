@@ -233,6 +233,7 @@ const providers = [
 const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ expandedDefault = false }, ref) => {
   const [expanded, setExpanded] = useState(expandedDefault)
   const [providerId, setProviderId] = useState(providers[0].id)
+  const [apps, setApps] = useState(10)
   const provider = useMemo(() => providers.find(({ id }) => id === providerId), [providerId])
   const totalCost = useMemo(() => provider?.k8sCost, [provider])
 
@@ -269,10 +270,10 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
             <div className="section">
               <div className="header">Applications</div>
               <Slider
-                label="Applications"
-                defaultValue={10}
+                defaultValue={apps}
                 minValue={1}
                 maxValue={25}
+                onChange={values => setApps(values[0])}
               />
             </div>
           </div>

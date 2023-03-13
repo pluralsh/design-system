@@ -1,11 +1,25 @@
 import { useSliderState } from '@react-stately/slider'
-import { useSlider, useSliderThumb } from '@react-aria/slider'
+import { AriaSliderProps, useSlider, useSliderThumb } from '@react-aria/slider'
 import { useNumberFormatter } from '@react-aria/i18n'
 import { mergeProps } from '@react-aria/utils'
 import { VisuallyHidden } from '@react-aria/visually-hidden'
 import { useFocusRing } from '@react-aria/focus'
 import { useRef } from 'react'
 import styled from 'styled-components'
+
+import Tooltip from './Tooltip'
+
+export type SliderProps = AriaSliderProps & {
+  orientation?: 'horizontal' // TODO: Allow using 'vertical' once it will be ready.
+  formatOptions?: Intl.NumberFormatOptions,
+  label?: string
+  step?: number,
+  defaultValue?: number,
+  minValue: number,
+  maxValue: number,
+  tooltip?: boolean
+  onChange?: (values: number[]) => void
+}
 
 const SliderWrap = styled.div<{percent: number}>(({ theme, percent }) => ({
   '.slider': {
@@ -59,7 +73,6 @@ const SliderWrap = styled.div<{percent: number}>(({ theme, percent }) => ({
     position: 'absolute',
     background: theme.colors['fill-one'],
     backgroundImage: `linear-gradient(90deg, transparent 0%, rgba(74, 81, 242, 0.85) ${percent}%, transparent ${percent + 1}%)`,
-    backgroundPositionX: '100%',
     borderRadius: '6px',
     boxShadow: 'inset 0px 0.5px 2px rgba(0, 0, 0, 0.25), inset 0px -0.5px 1.5px rgba(255, 255, 255, 0.16)',
   },
@@ -94,7 +107,7 @@ const SliderWrap = styled.div<{percent: number}>(({ theme, percent }) => ({
   },
 }))
 
-function Slider(props: any) {
+function Slider({ tooltip = true, ...props }: SliderProps) {
   const trackRef = useRef(null)
   const numberFormatter = useNumberFormatter(props.formatOptions)
   const state = useSliderState({ ...props, numberFormatter })
@@ -130,6 +143,7 @@ function Slider(props: any) {
             index={0}
             state={state}
             trackRef={trackRef}
+            tooltip={tooltip}
           />
         </div>
       </div>
@@ -137,8 +151,9 @@ function Slider(props: any) {
   )
 }
 
-function Thumb(props: any) {
-  const { state, trackRef, index } = props
+function Thumb({
+  state, trackRef, index, tooltip,
+}: any) {
   const inputRef = useRef(null)
   const { thumbProps, inputProps, isDragging } = useSliderThumb({
     index,
@@ -148,7 +163,7 @@ function Thumb(props: any) {
 
   const { focusProps, isFocusVisible } = useFocusRing()
 
-  return (
+  const thumb = (
     <div
       {...thumbProps}
       className={`thumb ${isFocusVisible ? 'focus' : ''} ${
@@ -162,6 +177,18 @@ function Thumb(props: any) {
         />
       </VisuallyHidden>
     </div>
+  )
+
+  return (!tooltip
+    ? thumb : (
+      <Tooltip
+        arrow
+        placement="top"
+        label={state.getThumbValueLabel(0) || 0}
+      >
+        {thumb}
+      </Tooltip>
+    )
   )
 }
 
