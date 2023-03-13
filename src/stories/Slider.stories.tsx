@@ -16,4 +16,5 @@ Default.args = {
   minValue: 1,
   maxValue: 100,
   tooltip: true,
+  size: 400,
 }

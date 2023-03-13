@@ -18,16 +18,17 @@ export type SliderProps = AriaSliderProps & {
   minValue: number,
   maxValue: number,
   tooltip?: boolean
+  size?: number | string
   onChange?: (value: any) => void
 }
 
-const SliderWrap = styled.div<{percent: number}>(({ theme, percent }) => ({
+const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme, percent, size }) => ({
   '.slider': {
     display: 'flex',
 
     '&.horizontal': {
       flexDirection: 'column',
-      width: '100%',
+      width: size || '100%',
 
       '.track': {
         height: '30px',
@@ -47,7 +48,7 @@ const SliderWrap = styled.div<{percent: number}>(({ theme, percent }) => ({
     },
 
     '.&.vertical': {
-      height: '150px',
+      height: size || '300px',
 
       '.track': {
         width: '30px',
@@ -107,7 +108,7 @@ const SliderWrap = styled.div<{percent: number}>(({ theme, percent }) => ({
   },
 }))
 
-function Slider({ tooltip = true, ...props }: SliderProps) {
+function Slider({ tooltip = true, size, ...props }: SliderProps) {
   const trackRef = useRef(null)
   const numberFormatter = useNumberFormatter(props.formatOptions)
   const state = useSliderState({ ...props, numberFormatter })
@@ -119,7 +120,10 @@ function Slider({ tooltip = true, ...props }: SliderProps) {
   } = useSlider(props, state, trackRef)
 
   return (
-    <SliderWrap percent={(state.getThumbPercent(0) || 0) * 100}>
+    <SliderWrap
+      percent={(state.getThumbPercent(0) || 0) * 100}
+      size={size}
+    >
       <div
         {...groupProps}
         className={`slider ${state.orientation}`}
