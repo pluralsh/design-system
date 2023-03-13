@@ -100,7 +100,11 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
   const {
     totalCost, k8sCost, appCost, infraCost,
   } = useMemo(() => {
-    if (!provider) return 0
+    if (!provider) {
+      return {
+        totalCost: 0, k8sCost: 0, appCost: 0, infraCost: 0,
+      }
+    }
 
     const { k8sPrice = 0, infraPrice = 0, appPrice = 0 } = provider
     const k8sCost = Math.round(k8sPrice)
@@ -149,7 +153,7 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
                 defaultValue={apps}
                 minValue={1}
                 maxValue={25}
-                onChange={setApps}
+                onChange={v => setApps(v)}
               />
             </div>
           </div>
