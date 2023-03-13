@@ -7,7 +7,7 @@ import { useFocusRing } from '@react-aria/focus'
 import { useRef } from 'react'
 import styled from 'styled-components'
 
-const SliderWrap = styled.div(({ theme }) => ({
+const SliderWrap = styled.div<{percent: number}>(({ theme, percent }) => ({
   '.slider': {
     display: 'flex',
 
@@ -58,6 +58,8 @@ const SliderWrap = styled.div(({ theme }) => ({
     display: 'block',
     position: 'absolute',
     background: theme.colors['fill-one'],
+    backgroundImage: `linear-gradient(90deg, transparent 0%, rgba(74, 81, 242, 0.85) ${percent}%, transparent ${percent + 1}%)`,
+    backgroundPositionX: '100%',
     borderRadius: '6px',
     boxShadow: 'inset 0px 0.5px 2px rgba(0, 0, 0, 0.25), inset 0px -0.5px 1.5px rgba(255, 255, 255, 0.16)',
   },
@@ -104,7 +106,7 @@ function Slider(props: any) {
   } = useSlider(props, state, trackRef)
 
   return (
-    <SliderWrap>
+    <SliderWrap percent={(state.getThumbPercent(0) || 0) * 100}>
       <div
         {...groupProps}
         className={`slider ${state.orientation}`}
