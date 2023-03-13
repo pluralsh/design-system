@@ -72,7 +72,8 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
       '.value': {
         ...theme.partials.text.subtitle2,
         color: theme.colors.text,
-        marginRight: theme.spacing.xxsmall,
+        minWidth: 36,
+        marginRight: theme.spacing.xxxsmall,
       },
     },
   },
@@ -96,16 +97,20 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
   const [providerId, setProviderId] = useState(providers[0].id)
   const [apps, setApps] = useState(10)
   const provider = useMemo(() => providers.find(({ id }) => id === providerId), [providerId])
-  const totalCost = useMemo(() => {
+  const {
+    totalCost, k8sCost, appCost, infraCost,
+  } = useMemo(() => {
     if (!provider) return 0
 
-    console.log(apps)
+    const { k8sPrice = 0, infraPrice = 0, appPrice = 0 } = provider
+    const k8sCost = Math.round(k8sPrice)
+    const appCost = Math.round(appPrice * apps)
+    const infraCost = Math.round(infraPrice)
+    const totalCost = k8sCost + appCost + infraCost
 
-    const { k8sCost = 0, infraPrice = 0, appPrice = 0 } = provider
-    const appCost = appPrice * apps
-    const infraCost = infraPrice
-
-    return k8sCost + appCost + infraCost
+    return {
+      totalCost, k8sCost, appCost, infraCost,
+    }
   }, [provider, apps])
 
   return (
@@ -151,17 +156,17 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
           <div className="column">
             <div className="section costs">
               <div className="cost">
-                <div className="value">$12</div>
+                <div className="value">${k8sCost}</div>
                 <div>{provider?.name} Kubernetes cost</div>
                 <InfoOutlineIcon />
               </div>
               <div className="cost">
-                <div className="value">$12</div>
+                <div className="value">${infraCost}</div>
                 <div>{provider?.name} infrastructure price</div>
                 <InfoOutlineIcon />
               </div>
               <div className="cost">
-                <div className="value">$12</div>
+                <div className="value">${appCost}</div>
                 <div>Application infrastructure</div>
                 <InfoOutlineIcon />
               </div>
