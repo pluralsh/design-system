@@ -18,7 +18,7 @@ export type SliderProps = AriaSliderProps & {
   minValue: number,
   maxValue: number,
   tooltip?: boolean
-  onChange?: (values: number[]) => void
+  onChange?: (value: any) => void
 }
 
 const SliderWrap = styled.div<{percent: number}>(({ theme, percent }) => ({

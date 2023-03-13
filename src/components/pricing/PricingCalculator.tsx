@@ -1,129 +1,17 @@
-import { useFocusRing } from '@react-aria/focus'
-import { AriaRadioProps, useRadio } from '@react-aria/radio'
-import { VisuallyHidden } from '@react-aria/visually-hidden'
 import {
-  ReactElement,
-  cloneElement,
+  createElement,
   forwardRef,
-  useContext,
-  useEffect,
-  useId,
   useMemo,
-  useRef,
   useState,
 } from 'react'
 import styled from 'styled-components'
 
-import Callout from './Callout'
-import AwsLogoIcon from './icons/AwsLogoIcon'
-import AzureLogoIcon from './icons/AzureLogoIcon'
-import GoogleCloudLogoIcon from './icons/GoogleCloudLogoIcon'
-import InfoOutlineIcon from './icons/InfoOutlineIcon'
-import { RadioContext } from './RadioGroup'
-import Slider from './Slider'
+import Callout from '../Callout'
+import InfoOutlineIcon from '../icons/InfoOutlineIcon'
+import Slider from '../Slider'
 
-type SelectItemWrapProps = {
-  selected?: boolean
-  width?: number | string
-}
-
-const SelectItemWrap = styled.label<SelectItemWrapProps>(({ theme, selected = false, width }) => ({
-  ...theme.partials.text.buttonSmall,
-  display: 'flex',
-  height: 32,
-  width,
-  padding: '4px 12px',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: selected
-    ? theme.colors['fill-two-selected']
-    : 'transparent',
-  border: theme.borders.default,
-  borderColor: selected
-    ? theme.colors['border-selected']
-    : theme.colors['border-input'],
-  borderRadius: theme.borderRadiuses.medium,
-  color: selected ? theme.colors.text : theme.colors['text-light'],
-  cursor: 'pointer',
-  '&:focus,&:focus-visible': { ...theme.partials.focus.button },
-  '&:hover': { backgroundColor: theme.colors['action-input-hover'] },
-  '.label': { marginLeft: theme.spacing.small },
-}))
-
-type SelectItemProps = AriaRadioProps & {
-  icon: ReactElement
-  label?: string
-  selected?: boolean
-
-  defaultSelected?: boolean
-  checked?: boolean
-  name?: string
-  onChange?: (e: { target: { checked: boolean } }) => void
-}
-
-const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(({
-  icon,
-  label,
-  value,
-  checked: checkedProp,
-  defaultSelected,
-  'aria-describedby': ariaDescribedBy,
-  onChange,
-  onBlur,
-  onFocus,
-  onKeyDown,
-  onKeyUp,
-  name,
-}) => {
-  const [checked, setChecked] = useState(defaultSelected || checkedProp)
-  const state = useContext(RadioContext) || {
-    setSelectedValue: () => {},
-    selectedValue: checkedProp || checked ? value : undefined,
-  }
-
-  useEffect(() => {
-    setChecked(checkedProp)
-  }, [checkedProp])
-
-  const labelId = useId()
-  const inputRef = useRef<any>()
-  const { isFocusVisible, focusProps } = useFocusRing()
-  const { inputProps, isSelected } = useRadio({
-    value,
-    'aria-describedby': ariaDescribedBy,
-    'aria-labelledby': labelId,
-    onBlur,
-    onFocus,
-    onKeyDown,
-    onKeyUp,
-  },
-  state,
-  inputRef)
-
-  icon = cloneElement(icon, { size: 16 })
-
-  return (
-    <SelectItemWrap selected={checked}>
-      {icon}
-      {label && <div className="label">{label}</div>}
-      <VisuallyHidden>
-        <input
-          {...inputProps}
-          {...focusProps}
-          name={inputProps.name || name}
-          onChange={e => {
-            if (typeof onChange === 'function') {
-              onChange(e)
-            }
-            setChecked(!checked)
-            inputProps.onChange(e)
-          }}
-          ref={inputRef}
-        />
-      </VisuallyHidden>
-    </SelectItemWrap>
-  )
-})
+import { providers } from './constants'
+import { SelectItem } from './SelectItem'
 
 export type PricingCalculatorProps = {
   expandedDefault?: boolean
@@ -203,39 +91,22 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
   },
 }))
 
-const providers = [
-  {
-    name: 'AWS',
-    id: 'aws',
-    icon: <AwsLogoIcon fullColor />,
-    k8sCost: 73,
-    infraPrice: 15,
-    appPrice: 3,
-  },
-  {
-    name: 'GCP',
-    id: 'gcp',
-    icon: <GoogleCloudLogoIcon fullColor />,
-    k8sCost: 72,
-    infraPrice: 15,
-    appPrice: 3,
-  },
-  {
-    name: 'Azure',
-    id: 'azure',
-    icon: <AzureLogoIcon fullColor />,
-    k8sCost: 89.71,
-    infraPrice: 15,
-    appPrice: 3,
-  },
-]
-
 const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ expandedDefault = false }, ref) => {
   const [expanded, setExpanded] = useState(expandedDefault)
   const [providerId, setProviderId] = useState(providers[0].id)
   const [apps, setApps] = useState(10)
   const provider = useMemo(() => providers.find(({ id }) => id === providerId), [providerId])
-  const totalCost = useMemo(() => provider?.k8sCost, [provider])
+  const totalCost = useMemo(() => {
+    if (!provider) return 0
+
+    console.log(apps)
+
+    const { k8sCost = 0, infraPrice = 0, appPrice = 0 } = provider
+    const appCost = appPrice * apps
+    const infraCost = infraPrice
+
+    return k8sCost + appCost + infraCost
+  }, [provider, apps])
 
   return (
     <Callout
@@ -257,7 +128,7 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
                 {providers.map(({ id, name, icon }) => (
                   <SelectItem
                     label={name}
-                    icon={icon}
+                    icon={createElement(icon, { fullColor: true })}
                     value={id}
                     checked={providerId === id}
                     onChange={({ target: { checked } }: any) => {
@@ -273,7 +144,7 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
                 defaultValue={apps}
                 minValue={1}
                 maxValue={25}
-                onChange={values => setApps(values[0])}
+                onChange={setApps}
               />
             </div>
           </div>
