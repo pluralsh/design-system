@@ -53,11 +53,6 @@ const SliderWrap = styled.div(({ theme }) => ({
     },
   },
 
-  '.label-container': {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-
   '.track:before': {
     content: 'attr(x)',
     display: 'block',
@@ -68,22 +63,32 @@ const SliderWrap = styled.div(({ theme }) => ({
   },
 
   '.thumb': {
-    width: '20px',
-    height: '20px',
+    width: 24,
+    height: 24,
     borderRadius: '50%',
-    background: 'gray',
+    background: theme.colors['fill-primary'],
+    boxShadow: `
+      3px 3px 4px 0 rgba(255, 255, 255, 0.15) inset,
+      -2px -2px 3px 0 rgba(0, 0, 0, .1) inset,
+      ${theme.boxShadows.moderate}
+    `,
 
     '&.dragging': {
-      background: 'dimgray',
+      background: theme.colors['fill-primary-hover'],
     },
 
     '&.focus': {
-      background: 'orange',
+      background: theme.colors['fill-primary-hover'],
     },
 
     '&.disabled': {
       opacity: 0.4,
     },
+  },
+
+  '.label-container': {
+    display: 'flex',
+    justifyContent: 'space-between',
   },
 }))
 
