@@ -30,7 +30,7 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
     flexDirection: 'row',
     flexGrow: 1,
     flexShrink: 1,
-    gap: theme.spacing.xxlarge,
+    gap: theme.spacing.xxxlarge,
 
     '.column': {
       display: 'flex',

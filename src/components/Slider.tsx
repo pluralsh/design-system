@@ -27,7 +27,7 @@ const SliderWrap = styled.div<{percent: number}>(({ theme, percent }) => ({
 
     '&.horizontal': {
       flexDirection: 'column',
-      width: '300px',
+      width: '100%',
 
       '.track': {
         height: '30px',
