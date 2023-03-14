@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import Callout from '../Callout'
 import InfoOutlineIcon from '../icons/InfoOutlineIcon'
 import Slider from '../Slider'
+import Tooltip from '../Tooltip'
 
 import { providers } from './constants'
 import { SelectItem } from './SelectItem'
@@ -162,17 +163,23 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
               <div className="cost">
                 <div className="value">${k8sCost}</div>
                 <div>{provider?.name} Kubernetes cost</div>
-                <InfoOutlineIcon />
+                <Tooltip label="Cost to deploy this provider's managed version of Kubernetes">
+                  <InfoOutlineIcon cursor="help" />
+                </Tooltip>
               </div>
               <div className="cost">
                 <div className="value">${infraCost}</div>
                 <div>{provider?.name} infrastructure price</div>
-                <InfoOutlineIcon />
+                <Tooltip label="Cost to provision and run standard instances on this provider">
+                  <InfoOutlineIcon cursor="help" />
+                </Tooltip>
               </div>
               <div className="cost">
                 <div className="value">${appCost}</div>
                 <div>Application infrastructure</div>
-                <InfoOutlineIcon />
+                <Tooltip label="Cost to deploy and run selected number of applications">
+                  <InfoOutlineIcon cursor="help" />
+                </Tooltip>
               </div>
             </div>
             <div className="section total-cost">
