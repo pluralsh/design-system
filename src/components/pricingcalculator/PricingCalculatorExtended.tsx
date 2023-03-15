@@ -5,7 +5,12 @@ import { Switch } from 'honorable'
 
 import Card from '../Card'
 
-import { APP_PRICE, PROVIDERS } from './constants'
+import {
+  APP_PRICE,
+  CLUSTER_PRICE,
+  PROVIDERS,
+  USER_PRICE,
+} from './constants'
 import AppsControl from './controls/AppsControl'
 import ProviderControl from './controls/ProvidersControl'
 import Cost from './costs/Cost'
@@ -83,6 +88,19 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
     }
   }, [provider, apps])
 
+  const {
+    pluralCost, clusterCost, userCost,
+  } = useMemo(() => {
+    const pro = professional ? 1 : 0
+    const clusterCost = clusters * CLUSTER_PRICE * pro
+    const userCost = users * USER_PRICE * pro
+    const pluralCost = clusterCost + userCost
+
+    return {
+      pluralCost, clusterCost, userCost,
+    }
+  }, [professional, clusters, users])
+
   return (
     <Card padding="xlarge">
       <PricingCalculatorWrap>
@@ -139,11 +157,11 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
             </Costs>
             <Costs header="Plural costs">
               <Cost
-                cost={k8sCost}
+                cost={clusterCost}
                 label={`for ${clusters} clusters`}
               />
               <Cost
-                cost={infraCost}
+                cost={userCost}
                 label={`for ${users} users`}
               />
             </Costs>

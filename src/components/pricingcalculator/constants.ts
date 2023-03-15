@@ -5,7 +5,9 @@ import AzureLogoIcon from '../icons/AzureLogoIcon'
 import { IconProps } from '../icons/createIcon'
 import GoogleCloudLogoIcon from '../icons/GoogleCloudLogoIcon'
 
-export const APP_PRICE = 3 // TODO: Update.
+export const APP_PRICE = 10 // TODO: Update.
+export const CLUSTER_PRICE = 5 // TODO: Update.
+export const USER_PRICE = 39
 
 type Provider = {
   name: string
