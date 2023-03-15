@@ -1,4 +1,4 @@
-import PricingCalculator from '../components/pricing/PricingCalculator'
+import PricingCalculator from '../components/pricingcalculator/PricingCalculator'
 
 export default {
   title: 'Pricing Calculator',

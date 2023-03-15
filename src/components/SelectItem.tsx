@@ -13,14 +13,17 @@ import {
 } from 'react'
 import styled from 'styled-components'
 
-import { RadioContext } from '../RadioGroup'
+import { RadioContext } from './RadioGroup'
 
 type SelectItemWrapProps = {
     selected?: boolean
+    focused?: boolean
     width?: number | string
   }
 
-const SelectItemWrap = styled.label<SelectItemWrapProps>(({ theme, selected = false, width }) => ({
+const SelectItemWrap = styled.label<SelectItemWrapProps>(({
+  theme, selected = false, focused = false, width,
+}) => ({
   ...theme.partials.text.buttonSmall,
   display: 'flex',
   height: 32,
@@ -38,9 +41,9 @@ const SelectItemWrap = styled.label<SelectItemWrapProps>(({ theme, selected = fa
   borderRadius: theme.borderRadiuses.medium,
   color: selected ? theme.colors.text : theme.colors['text-light'],
   cursor: 'pointer',
-  '&:focus,&:focus-visible': { ...theme.partials.focus.button },
   '&:hover': { backgroundColor: theme.colors['action-input-hover'] },
   '.label': { marginLeft: theme.spacing.small },
+  ...(focused ? { ...theme.partials.focus.button } : {}),
 }))
 
 type SelectItemProps = AriaRadioProps & {
@@ -95,7 +98,10 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(({
   icon = cloneElement(icon, { size: 16 })
 
   return (
-    <SelectItemWrap selected={checked}>
+    <SelectItemWrap
+      selected={isSelected}
+      focused={isFocusVisible}
+    >
       {icon}
       {label && <div className="label">{label}</div>}
       <VisuallyHidden>
