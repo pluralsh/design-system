@@ -114,6 +114,7 @@ const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme
 
   '.ticks': {
     ...theme.partials.text.caption,
+    color: theme.colors['text-xlight'],
     display: 'flex',
     flexGrow: 1,
     justifyContent: 'space-between',
