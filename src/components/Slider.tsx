@@ -11,14 +11,17 @@ import range from 'lodash/range'
 import Tooltip from './Tooltip'
 
 export type SliderProps = AriaSliderProps & {
-  orientation?: 'horizontal' // TODO: Allow using 'vertical' once it will be ready.
-  formatOptions?: Intl.NumberFormatOptions,
+   // TODO: Allow using 'vertical' once it will be ready.
+  orientation?: 'horizontal'
+  formatOptions?: Intl.NumberFormatOptions
   label?: string
-  step?: number,
-  tickStep?: number,
-  defaultValue?: number,
-  minValue: number,
-  maxValue: number,
+  step?: number
+  // TODO: Allow using custom tickSteps arrays instead, i.e. [1, 5, 10, 15, 20, 25].
+  // Right now minValue + x * tickStep has to be equal to maxValue.
+  tickStep?: number
+  defaultValue?: number
+  minValue: number
+  maxValue: number
   tooltip?: boolean
   size?: number | string
   onChange?: (value: any) => void
