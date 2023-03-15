@@ -7,6 +7,7 @@ const TotalCostWrap = styled.div(({ theme }) => ({
   gap: theme.spacing.medium,
   alignItems: 'end',
   justifyContent: 'space-between',
+  marginTop: theme.spacing.large,
 
   '.value': {
     ...theme.partials.text.title1,

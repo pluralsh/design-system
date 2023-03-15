@@ -8,6 +8,7 @@ import AppsControl from './controls/AppsControl'
 import ProviderControl from './controls/ProvidersControl'
 import Cost from './costs/Cost'
 import Costs from './costs/Costs'
+import TotalCost from './costs/TotalCost'
 
 export type PricingCalculatorProps = {
   expandedDefault?: boolean
@@ -34,19 +35,6 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
       flexDirection: 'column',
       flexGrow: 1,
       flexShrink: 1,
-    },
-  },
-
-  '.total-cost': {
-    '.value': {
-      ...theme.partials.text.title1,
-      color: theme.colors['text-warning-light'],
-      marginRight: theme.spacing.xxsmall,
-    },
-
-    '.provider': {
-      ...theme.partials.text.body2Bold,
-      color: theme.colors.text,
     },
   },
 }))
@@ -121,10 +109,10 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
                 tooltip="Cost to deploy and run selected number of applications"
               />
             </Costs>
-            <div className="section total-cost">
-              <div className="value">~${totalCost}</div>
-              <div>per month to <span className="provider">{provider?.name}</span></div>
-            </div>
+            <TotalCost
+              providerCost={totalCost}
+              provider={provider?.name}
+            />
           </div>
         </div>
       </PricingCalculatorWrap>
