@@ -7,7 +7,6 @@ type TotalCostWrapProps = {
 const TotalCostWrap = styled.div<TotalCostWrapProps>(({ theme, marginTop }) => ({
   display: 'flex',
   gap: theme.spacing.xxlarge,
-  alignItems: 'end',
   marginTop: marginTop || theme.spacing.xxlarge,
 
   '.value': {
