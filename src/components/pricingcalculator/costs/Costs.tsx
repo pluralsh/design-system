@@ -1,10 +1,15 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-const CostsWrap = styled.div(({ theme }) => ({
+type CostsWrapProps = {
+  marginTop?: number
+}
+
+const CostsWrap = styled.div<CostsWrapProps>(({ theme, marginTop }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: '14px',
+  marginTop,
 
   '.header': {
     ...theme.partials.text.overline,
@@ -14,15 +19,17 @@ const CostsWrap = styled.div(({ theme }) => ({
 
 export type CostsProps = {
   header?: string
+  marginTop?: number
   children: ReactElement | ReactElement[] | string
 }
 
 export default function Costs({
   header,
+  marginTop,
   children,
 }: CostsProps) {
   return (
-    <CostsWrap>
+    <CostsWrap marginTop={marginTop}>
       {header && <div className="header">{header}</div>}
       {children}
     </CostsWrap>

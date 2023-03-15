@@ -144,7 +144,10 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
                 tooltip="Cost to deploy and run selected number of applications"
               />
             </Costs>
-            <Costs header="Plural costs">
+            <Costs
+              header="Plural costs"
+              marginTop={32}
+            >
               <Cost
                 cost={clusterCost}
                 label={`for ${clusters} clusters`}
