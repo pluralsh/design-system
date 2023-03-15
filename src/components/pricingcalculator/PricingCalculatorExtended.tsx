@@ -24,7 +24,7 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
   const [users, setUsers] = useState(10)
   const [professional, setProfessional] = useState(false)
   const provider = useMemo(() => PROVIDERS.find(({ id }) => id === providerId), [providerId])
-  const providerCost = useMemo(() => estimateProviderCost(provider, apps), [provider, apps])
+  const providerCost = useMemo(() => estimateProviderCost(provider, apps, clusters), [provider, apps, clusters])
   const pluralCost = useMemo(() => estimatePluralCost(professional, clusters, users), [professional, clusters, users])
 
   return (

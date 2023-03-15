@@ -49,7 +49,7 @@ type ProviderCostEstimation = {
   total: number
 }
 
-export function estimateProviderCost(provider: Provider, appCount: number): ProviderCostEstimation {
+export function estimateProviderCost(provider: Provider, appCount: number, clusterCount = 1): ProviderCostEstimation {
   if (!provider) {
     return {
       total: 0, k8s: 0, infra: 0, app: 0,
@@ -57,7 +57,7 @@ export function estimateProviderCost(provider: Provider, appCount: number): Prov
   }
 
   const { k8sPrice = 0, infraPrice = 0 } = provider
-  const k8s = Math.round(k8sPrice)
+  const k8s = Math.round(k8sPrice * clusterCount)
   const infra = Math.round(infraPrice)
   const app = Math.round(appCount * APP_PRICE)
 
