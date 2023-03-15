@@ -1,10 +1,8 @@
 import { forwardRef, useMemo, useState } from 'react'
 import styled from 'styled-components'
-
 import { Switch } from 'honorable'
 
 import Card from '../Card'
-import Button from '../Button'
 
 import {
   CLUSTER_PRICE,
