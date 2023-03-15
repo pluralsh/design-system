@@ -1,7 +1,7 @@
 import { forwardRef, useMemo, useState } from 'react'
 import { Switch } from 'honorable'
 
-import Card from '../Card'
+import Card, { CardProps } from '../Card'
 
 import {
   PROVIDERS,
@@ -17,7 +17,7 @@ import ClustersControl from './controls/ClustersControl'
 import Costs from './costs/Costs'
 import TotalCost from './costs/TotalCost'
 
-const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
+const PricingCalculatorExtended = forwardRef<HTMLDivElement, CardProps>((props, ref) => {
   const [providerId, setProviderId] = useState(PROVIDERS[0].id)
   const [clusters, setClusters] = useState(3)
   const [apps, setApps] = useState(10)
@@ -28,7 +28,11 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
   const pluralCost = useMemo(() => estimatePluralCost(professional, clusters, users), [professional, clusters, users])
 
   return (
-    <Card padding="xlarge">
+    <Card
+      padding="xlarge"
+      {...props}
+      ref={ref}
+    >
       <PricingCalculatorWrap>
         <div className="content">
           <div className="column">
