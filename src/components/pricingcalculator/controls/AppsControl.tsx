@@ -26,6 +26,7 @@ export default function AppsControl({
         defaultValue={apps}
         minValue={1}
         maxValue={25}
+        tickStep={4}
         onChange={v => setApps(v)}
       />
     </Control>

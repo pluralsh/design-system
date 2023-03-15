@@ -13,8 +13,9 @@ export const Default = Template.bind({})
 Default.args = {
   label: 'Applications',
   defaultValue: 30,
-  minValue: 1,
+  minValue: 0,
   maxValue: 100,
+  tickStep: 10,
   tooltip: true,
-  size: 400,
+  size: 600,
 }

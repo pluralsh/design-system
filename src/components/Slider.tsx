@@ -6,6 +6,7 @@ import { VisuallyHidden } from '@react-aria/visually-hidden'
 import { useFocusRing } from '@react-aria/focus'
 import { useRef } from 'react'
 import styled from 'styled-components'
+import range from 'lodash/range'
 
 import Tooltip from './Tooltip'
 
@@ -14,6 +15,7 @@ export type SliderProps = AriaSliderProps & {
   formatOptions?: Intl.NumberFormatOptions,
   label?: string
   step?: number,
+  tickStep?: number,
   defaultValue?: number,
   minValue: number,
   maxValue: number,
@@ -26,6 +28,10 @@ const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme
   '.slider': {
     display: 'flex',
 
+    // Additional padding to make sure that slider does not go outside parent element.
+    paddingLeft: 12,
+    paddingRight: 12,
+
     '&.horizontal': {
       flexDirection: 'column',
       width: size || '100%',
@@ -36,9 +42,13 @@ const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme
 
         '&:before': {
           height: '12px',
-          width: '100%',
           top: '50%',
           transform: 'translateY(-50%)',
+
+          // Additional padding inside track to align ticks with correct points on track.
+          marginLeft: -12,
+          marginRight: 12,
+          width: 'calc(100% + 24px)',
         },
       },
 
@@ -73,7 +83,7 @@ const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme
     display: 'block',
     position: 'absolute',
     background: theme.colors['fill-one'],
-    backgroundImage: `linear-gradient(90deg, transparent 0%, rgba(74, 81, 242, 0.85) ${percent}%, transparent ${percent + 1}%)`,
+    backgroundImage: `linear-gradient(90deg, transparent 0%, rgba(74, 81, 242, 0.85) ${percent}%, transparent ${percent}%)`,
     borderRadius: '6px',
     boxShadow: 'inset 0px 0.5px 2px rgba(0, 0, 0, 0.25), inset 0px -0.5px 1.5px rgba(255, 255, 255, 0.16)',
   },
@@ -102,13 +112,43 @@ const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme
     },
   },
 
+  '.ticks': {
+    ...theme.partials.text.caption,
+    display: 'flex',
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    marginRight: -12,
+    marginTop: theme.spacing.xxsmall,
+
+    '.tick': {
+      cursor: 'pointer',
+      marginLeft: '-12px',
+      width: 24,
+      textAlign: 'center',
+
+      '&.active': {
+        color: theme.colors.text,
+        fontWeight: 600,
+      },
+
+      '&:hover': {
+        color: theme.colors['text-light'],
+      },
+    },
+  },
+
   '.label-container': {
     display: 'flex',
     justifyContent: 'space-between',
+    marginLeft: -12,
+    marginRight: 12,
+    width: 'calc(100% + 24px)',
   },
 }))
 
-function Slider({ tooltip = true, size, ...props }: SliderProps) {
+function Slider({
+  tooltip = true, size, tickStep, ...props
+}: SliderProps) {
   const trackRef = useRef(null)
   const numberFormatter = useNumberFormatter(props.formatOptions)
   const state = useSliderState({ ...props, numberFormatter })
@@ -118,6 +158,8 @@ function Slider({ tooltip = true, size, ...props }: SliderProps) {
     labelProps,
     outputProps,
   } = useSlider(props, state, trackRef)
+
+  const ticks = tickStep ? range(state.getThumbMinValue(0), state.getThumbMaxValue(0) + 1, tickStep) : undefined
 
   return (
     <SliderWrap
@@ -150,6 +192,19 @@ function Slider({ tooltip = true, size, ...props }: SliderProps) {
             tooltip={tooltip}
           />
         </div>
+        {ticks && (
+          <div className="ticks">
+            {ticks.map(tick => (
+              <div
+                className={`tick ${tick === state.getThumbValue(0) ? 'active' : ''}`}
+                onClick={() => state.setThumbValue(0, tick)}
+              >
+                {tick}
+              </div>
+            ))}
+          </div>
+        )}
+
       </div>
     </SliderWrap>
   )

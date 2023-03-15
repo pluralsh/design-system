@@ -22,6 +22,7 @@ export default function ClustersControl({
         defaultValue={clusters}
         minValue={1}
         maxValue={6}
+        tickStep={1}
         onChange={v => setClusters(v)}
       />
     </Control>
