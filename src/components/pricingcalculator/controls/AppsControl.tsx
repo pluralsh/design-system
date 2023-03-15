@@ -4,7 +4,7 @@ import Slider from '../../Slider'
 
 import Control from './Control'
 
-export type AppsControlProps = {
+type AppsControlProps = {
   header: string
   caption?: string
   apps: number

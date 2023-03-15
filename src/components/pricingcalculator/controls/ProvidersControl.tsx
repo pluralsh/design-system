@@ -12,7 +12,7 @@ const ProvidersWrap = styled.div(({ theme }) => ({
   gap: theme.spacing.small,
 }))
 
-export type ProviderControlProps = {
+type ProviderControlProps = {
   header: string
   caption?: string
   providerId: string

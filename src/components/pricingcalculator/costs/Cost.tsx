@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-import InfoOutlineIcon from '../icons/InfoOutlineIcon'
-import Tooltip from '../Tooltip'
+import InfoOutlineIcon from '../../icons/InfoOutlineIcon'
+import Tooltip from '../../Tooltip'
 
 const CostWrap = styled.div(({ theme }) => ({
   display: 'flex',
@@ -32,12 +32,8 @@ export default function Cost({
 }: CostProps) {
   return (
     <CostWrap>
-      <div className="value">
-        ${cost}
-      </div>
-      <div>
-        {label}
-      </div>
+      <div className="value">${cost}</div>
+      <div>{label}</div>
       {tooltip && (
         <Tooltip label={tooltip}>
           <InfoOutlineIcon cursor="help" />

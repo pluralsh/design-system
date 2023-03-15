@@ -4,7 +4,7 @@ import Slider from '../../Slider'
 
 import Control from './Control'
 
-export type ClustersControlProps = {
+type ClustersControlProps = {
   clusters: number
   setClusters: Dispatch<number>
 }

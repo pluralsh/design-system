@@ -6,7 +6,8 @@ import Callout from '../Callout'
 import { APP_PRICE, PROVIDERS } from './constants'
 import AppsControl from './controls/AppsControl'
 import ProviderControl from './controls/ProvidersControl'
-import Cost from './Cost'
+import Cost from './costs/Cost'
+import Costs from './costs/Costs'
 
 export type PricingCalculatorProps = {
   expandedDefault?: boolean
@@ -36,12 +37,6 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
     },
   },
 
-  '.costs': {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '14px',
-  },
-
   '.total-cost': {
     '.value': {
       ...theme.partials.text.title1,
@@ -60,7 +55,9 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
   const [expanded, setExpanded] = useState(expandedDefault)
   const [providerId, setProviderId] = useState(PROVIDERS[0].id)
   const [apps, setApps] = useState(10)
+
   const provider = useMemo(() => PROVIDERS.find(({ id }) => id === providerId), [providerId])
+
   const {
     totalCost, k8sCost, appCost, infraCost,
   } = useMemo(() => {
@@ -107,7 +104,7 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
             />
           </div>
           <div className="column">
-            <div className="section costs">
+            <Costs>
               <Cost
                 cost={k8sCost}
                 label={`${provider?.name} Kubernetes cost`}
@@ -123,7 +120,7 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
                 label="Application infrastructure"
                 tooltip="Cost to deploy and run selected number of applications"
               />
-            </div>
+            </Costs>
             <div className="section total-cost">
               <div className="value">~${totalCost}</div>
               <div>per month to <span className="provider">{provider?.name}</span></div>

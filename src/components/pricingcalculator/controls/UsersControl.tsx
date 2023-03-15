@@ -24,7 +24,7 @@ const OPTIONS = [
   },
 ]
 
-export type UsersControlProps = {
+type UsersControlProps = {
   users: number
   setUsers: Dispatch<number>
 }

@@ -8,9 +8,10 @@ import Card from '../Card'
 import { APP_PRICE, PROVIDERS } from './constants'
 import AppsControl from './controls/AppsControl'
 import ProviderControl from './controls/ProvidersControl'
-import Cost from './Cost'
+import Cost from './costs/Cost'
 import UsersControl from './controls/UsersControl'
 import ClustersControl from './controls/ClustersControl'
+import Costs from './costs/Costs'
 
 const PricingCalculatorWrap = styled.div(({ theme }) => ({
   ...theme.partials.text.body2,
@@ -30,12 +31,6 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
       flexShrink: 1,
       flexBasis: '100%',
     },
-  },
-
-  '.costs': {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '14px',
   },
 
   '.total-cost': {
@@ -67,6 +62,7 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
   const [professional, setProfessional] = useState(false)
 
   const provider = useMemo(() => PROVIDERS.find(({ id }) => id === providerId), [providerId])
+
   const {
     totalCost, k8sCost, appCost, infraCost,
   } = useMemo(() => {
@@ -124,7 +120,7 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
             >
               Professional plan
             </Switch>
-            <div className="section costs">
+            <Costs header="Cloud costs">
               <Cost
                 cost={k8sCost}
                 label={`${provider?.name} Kubernetes cost`}
@@ -140,7 +136,17 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
                 label="Application infrastructure"
                 tooltip="Cost to deploy and run selected number of applications"
               />
-            </div>
+            </Costs>
+            <Costs header="Plural costs">
+              <Cost
+                cost={k8sCost}
+                label={`for ${clusters} clusters`}
+              />
+              <Cost
+                cost={infraCost}
+                label={`for ${users} users`}
+              />
+            </Costs>
             <div className="section total-cost">
               <div className="value">~${totalCost}</div>
               <div>per month to <span className="provider">{provider?.name}</span></div>

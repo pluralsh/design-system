@@ -20,7 +20,7 @@ const ControlWrap = styled.div(({ theme }) => ({
   },
 }))
 
-export type ControlProps = {
+type ControlProps = {
   header: string
   caption?: string
   children: ReactElement | ReactElement[] | string
