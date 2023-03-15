@@ -1,13 +1,12 @@
 import { forwardRef, useMemo, useState } from 'react'
-import styled from 'styled-components'
 import { Switch } from 'honorable'
 
 import Card from '../Card'
 
 import {
-  CLUSTER_PRICE,
   PROVIDERS,
-  USER_PRICE,
+  PricingCalculatorWrap,
+  estimatePluralCost,
   estimateProviderCost,
 } from './misc'
 import AppsControl from './controls/AppsControl'
@@ -18,34 +17,6 @@ import ClustersControl from './controls/ClustersControl'
 import Costs from './costs/Costs'
 import TotalCost from './costs/TotalCost'
 
-const PricingCalculatorWrap = styled.div(({ theme }) => ({
-  ...theme.partials.text.body2,
-  color: theme.colors['text-xlight'],
-
-  '.content': {
-    display: 'flex',
-    flexDirection: 'row',
-    flexGrow: 1,
-    flexShrink: 1,
-    gap: theme.spacing.xxxlarge,
-
-    '.column': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-      flexShrink: 1,
-      flexBasis: '100%',
-    },
-  },
-
-  '.hint': {
-    ...theme.partials.text.caption,
-    color: theme.colors['text-xlight'],
-    marginBottom: theme.spacing.medium,
-    fontStyle: 'italic',
-  },
-}))
-
 const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
   const [providerId, setProviderId] = useState(PROVIDERS[0].id)
   const [clusters, setClusters] = useState(3)
@@ -54,19 +25,7 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
   const [professional, setProfessional] = useState(false)
   const provider = useMemo(() => PROVIDERS.find(({ id }) => id === providerId), [providerId])
   const providerCost = useMemo(() => estimateProviderCost(provider, apps), [provider, apps])
-
-  const {
-    pluralCost, clusterCost, userCost,
-  } = useMemo(() => {
-    const pro = professional ? 1 : 0
-    const clusterCost = clusters * CLUSTER_PRICE * pro
-    const userCost = users * USER_PRICE * pro
-    const pluralCost = clusterCost + userCost
-
-    return {
-      pluralCost, clusterCost, userCost,
-    }
-  }, [professional, clusters, users])
+  const pluralCost = useMemo(() => estimatePluralCost(professional, clusters, users), [professional, clusters, users])
 
   return (
     <Card padding="xlarge">
@@ -127,11 +86,11 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
               marginTop={48}
             >
               <Cost
-                cost={clusterCost}
+                cost={pluralCost?.clusters}
                 label={`for ${clusters} clusters`}
               />
               <Cost
-                cost={userCost}
+                cost={pluralCost?.users}
                 label={`for ${users} users`}
               />
             </Costs>
@@ -139,7 +98,7 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
               providerCost={providerCost?.total}
               provider={provider?.name}
               proPlan={professional}
-              pluralCost={pluralCost}
+              pluralCost={pluralCost?.total}
             />
           </div>
         </div>

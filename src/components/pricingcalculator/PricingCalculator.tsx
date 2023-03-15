@@ -1,9 +1,8 @@
 import { forwardRef, useMemo, useState } from 'react'
-import styled from 'styled-components'
 
 import Callout from '../Callout'
 
-import { PROVIDERS, estimateProviderCost } from './misc'
+import { PROVIDERS, PricingCalculatorWrap, estimateProviderCost } from './misc'
 import AppsControl from './controls/AppsControl'
 import ProviderControl from './controls/ProvidersControl'
 import Cost from './costs/Cost'
@@ -13,31 +12,6 @@ import TotalCost from './costs/TotalCost'
 export type PricingCalculatorProps = {
   expandedDefault?: boolean
 }
-
-const PricingCalculatorWrap = styled.div(({ theme }) => ({
-  ...theme.partials.text.body2,
-  color: theme.colors['text-xlight'],
-
-  p: {
-    color: theme.colors['text-light'],
-    marginBottom: theme.spacing.xlarge,
-  },
-
-  '.content': {
-    display: 'flex',
-    flexDirection: 'row',
-    flexGrow: 1,
-    flexShrink: 1,
-    gap: theme.spacing.xxxlarge,
-
-    '.column': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-      flexShrink: 1,
-    },
-  },
-}))
 
 const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ expandedDefault = false }, ref) => {
   const [expanded, setExpanded] = useState(expandedDefault)
