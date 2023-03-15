@@ -17,6 +17,7 @@ import Cost from './costs/Cost'
 import UsersControl from './controls/UsersControl'
 import ClustersControl from './controls/ClustersControl'
 import Costs from './costs/Costs'
+import TotalCost from './costs/TotalCost'
 
 const PricingCalculatorWrap = styled.div(({ theme }) => ({
   ...theme.partials.text.body2,
@@ -35,19 +36,6 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
       flexGrow: 1,
       flexShrink: 1,
       flexBasis: '100%',
-    },
-  },
-
-  '.total-cost': {
-    '.value': {
-      ...theme.partials.text.title1,
-      color: theme.colors['text-warning-light'],
-      marginRight: theme.spacing.xxsmall,
-    },
-
-    '.provider': {
-      ...theme.partials.text.body2Bold,
-      color: theme.colors.text,
     },
   },
 
@@ -165,10 +153,12 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
                 label={`for ${users} users`}
               />
             </Costs>
-            <div className="section total-cost">
-              <div className="value">~${totalCost}</div>
-              <div>per month to <span className="provider">{provider?.name}</span></div>
-            </div>
+            <TotalCost
+              providerCost={totalCost}
+              provider={provider?.name}
+              proPlan={professional}
+              pluralCost={pluralCost}
+            />
           </div>
         </div>
       </PricingCalculatorWrap>
