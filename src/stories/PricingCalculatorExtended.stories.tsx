@@ -16,5 +16,5 @@ function Template(args: any) {
 export const Default = Template.bind({})
 
 Default.args = {
-  fillLevel: 0,
+  fillLevel: 2,
 }
