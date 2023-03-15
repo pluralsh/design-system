@@ -1,6 +1,8 @@
 import { forwardRef, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { Switch } from 'honorable'
+
 import Card from '../Card'
 
 import { APP_PRICE, PROVIDERS } from './constants'
@@ -55,6 +57,7 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
   const [clusters, setClusters] = useState(3)
   const [apps, setApps] = useState(10)
   const [users, setUsers] = useState(10)
+  const [professional, setProfessional] = useState(false)
 
   const provider = useMemo(() => PROVIDERS.find(({ id }) => id === providerId), [providerId])
   const {
@@ -103,6 +106,13 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
             />
           </div>
           <div className="column">
+            <Switch
+              defaultValue={professional}
+              onChange={({ target: { checked } }) => setProfessional(checked)}
+              marginBottom="xlarge"
+            >
+              Professional plan
+            </Switch>
             <div className="section costs">
               <Cost
                 cost={k8sCost}

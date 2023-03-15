@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 const SectionWrap = styled.div(({ theme }) => ({
-  marginTop: theme.spacing.xlarge,
+  marginBottom: theme.spacing.xlarge,
 
   '.header': {
     ...theme.partials.text.body2Bold,

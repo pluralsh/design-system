@@ -18,6 +18,7 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
 
   p: {
     color: theme.colors['text-light'],
+    marginBottom: theme.spacing.xlarge,
   },
 
   '.content': {
