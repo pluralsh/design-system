@@ -1,7 +1,7 @@
 import { Dispatch, createElement } from 'react'
 import styled from 'styled-components'
 
-import { SelectItem } from '../../SelectItem'
+import SelectItem from '../../SelectItem'
 import { PROVIDERS } from '../misc'
 
 import Control from './Control'
