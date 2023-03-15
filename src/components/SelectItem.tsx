@@ -56,7 +56,7 @@ type SelectItemProps = AriaRadioProps & {
   onChange?: (e: { target: { checked: boolean } }) => void
 }
 
-export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(({
+const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(({
   icon,
   label,
   value,
@@ -122,3 +122,5 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(({
     </SelectItemWrap>
   )
 })
+
+export default SelectItem
