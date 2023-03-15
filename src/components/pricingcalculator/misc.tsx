@@ -109,6 +109,7 @@ export const PricingCalculatorWrap = styled.div(({ theme }) => ({
 
     '.column': {
       display: 'flex',
+      flexBasis: '100%',
       flexDirection: 'column',
       flexGrow: 1,
       flexShrink: 1,
