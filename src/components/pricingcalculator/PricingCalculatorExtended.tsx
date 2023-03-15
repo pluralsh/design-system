@@ -6,11 +6,11 @@ import { Switch } from 'honorable'
 import Card from '../Card'
 
 import { APP_PRICE, PROVIDERS } from './constants'
-import AppsSection from './sections/AppsSection'
-import ProviderSection from './sections/ProviderSection'
+import AppsControl from './controls/AppsControl'
+import ProviderControl from './controls/ProvidersControl'
 import Cost from './Cost'
-import UsersSection from './sections/UsersSection'
-import ClustersSection from './sections/ClustersSection'
+import UsersControl from './controls/UsersControl'
+import ClustersControl from './controls/ClustersControl'
 
 const PricingCalculatorWrap = styled.div(({ theme }) => ({
   ...theme.partials.text.body2,
@@ -50,6 +50,13 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
       color: theme.colors.text,
     },
   },
+
+  '.hint': {
+    ...theme.partials.text.caption,
+    color: theme.colors['text-xlight'],
+    marginBottom: theme.spacing.medium,
+    fontStyle: 'italic',
+  },
 }))
 
 const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
@@ -85,25 +92,29 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
       <PricingCalculatorWrap>
         <div className="content">
           <div className="column">
-            <ProviderSection
+            <ProviderControl
               header="What cloud provider will you use?"
               providerId={providerId}
               setProviderId={setProviderId}
             />
-            <ClustersSection
+            <ClustersControl
               clusters={clusters}
               setClusters={setClusters}
             />
-            <AppsSection
+            <AppsControl
               header="How many applications do you plan to install?"
               caption="We use $10/month as the estimated cost of running each application, but this varies widely."
               apps={apps}
               setApps={setApps}
             />
-            <UsersSection
+            <UsersControl
               users={users}
               setUsers={setUsers}
             />
+            <div className="hint">
+              *Accounts requiring {'>'}6 clusters or {'>'}60 users should reach out
+              to discuss our Enterprise option to optimize plan costs to your specific needs.
+            </div>
           </div>
           <div className="column">
             <Switch

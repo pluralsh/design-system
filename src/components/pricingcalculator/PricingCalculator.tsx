@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import Callout from '../Callout'
 
 import { APP_PRICE, PROVIDERS } from './constants'
-import AppsSection from './sections/AppsSection'
-import ProviderSection from './sections/ProviderSection'
+import AppsControl from './controls/AppsControl'
+import ProviderControl from './controls/ProvidersControl'
 import Cost from './Cost'
 
 export type PricingCalculatorProps = {
@@ -95,12 +95,12 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
         </p>
         <div className="content">
           <div className="column">
-            <ProviderSection
+            <ProviderControl
               header="Cloud provider"
               providerId={providerId}
               setProviderId={setProviderId}
             />
-            <AppsSection
+            <AppsControl
               header="Applications"
               apps={apps}
               setApps={setApps}

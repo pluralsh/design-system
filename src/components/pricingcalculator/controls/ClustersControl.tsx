@@ -1,19 +1,20 @@
 import { Dispatch } from 'react'
 
 import Slider from '../../Slider'
-import Section from '../Section'
 
-export type ClustersSectionProps = {
+import Control from './Control'
+
+export type ClustersControlProps = {
   clusters: number
   setClusters: Dispatch<number>
 }
 
-export default function ClustersSection({
+export default function ClustersControl({
   clusters,
   setClusters,
-}: ClustersSectionProps) {
+}: ClustersControlProps) {
   return (
-    <Section
+    <Control
       header="How many clusters will you be running?"
       caption="Our standard deployment utilizes 3 nodes, 2 core / 8GB for all providers and defaults to AMD CPUs."
     >
@@ -23,6 +24,6 @@ export default function ClustersSection({
         maxValue={6}
         onChange={v => setClusters(v)}
       />
-    </Section>
+    </Control>
   )
 }

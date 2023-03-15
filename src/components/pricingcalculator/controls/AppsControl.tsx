@@ -1,23 +1,24 @@
 import { Dispatch } from 'react'
 
 import Slider from '../../Slider'
-import Section from '../Section'
 
-export type AppsSectionProps = {
+import Control from './Control'
+
+export type AppsControlProps = {
   header: string
   caption?: string
   apps: number
   setApps: Dispatch<number>
 }
 
-export default function AppsSection({
+export default function AppsControl({
   header,
   caption,
   apps,
   setApps,
-}: AppsSectionProps) {
+}: AppsControlProps) {
   return (
-    <Section
+    <Control
       header={header}
       caption={caption}
     >
@@ -27,6 +28,6 @@ export default function AppsSection({
         maxValue={25}
         onChange={v => setApps(v)}
       />
-    </Section>
+    </Control>
   )
 }

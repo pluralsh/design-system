@@ -1,8 +1,9 @@
 import { Dispatch } from 'react'
 
-import Radio from '../../../components/Radio'
-import RadioGroup from '../../../components/RadioGroup'
-import Section from '../Section'
+import Radio from '../../Radio'
+import RadioGroup from '../../RadioGroup'
+
+import Control from './Control'
 
 const OPTIONS = [
   {
@@ -23,17 +24,17 @@ const OPTIONS = [
   },
 ]
 
-export type UsersSectionProps = {
+export type UsersControlProps = {
   users: number
   setUsers: Dispatch<number>
 }
 
-export default function UsersSection({
+export default function UsersControl({
   users,
   setUsers,
-}: UsersSectionProps) {
+}: UsersControlProps) {
   return (
-    <Section
+    <Control
       header="How many users will access your clusters?"
       caption="Open-source users are free, but the professional plan has a $39/user fee."
     >
@@ -52,6 +53,6 @@ export default function UsersSection({
           </Radio>
         ))}
       </RadioGroup>
-    </Section>
+    </Control>
   )
 }

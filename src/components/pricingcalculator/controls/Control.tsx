@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-const SectionWrap = styled.div(({ theme }) => ({
+const ControlWrap = styled.div(({ theme }) => ({
   marginBottom: theme.spacing.xlarge,
 
   '.header': {
@@ -20,26 +20,22 @@ const SectionWrap = styled.div(({ theme }) => ({
   },
 }))
 
-export type SectionProps = {
+export type ControlProps = {
   header: string
   caption?: string
   children: ReactElement | ReactElement[] | string
 }
 
-export default function Section({
+export default function Control({
   header,
   caption,
   children,
-}: SectionProps) {
+}: ControlProps) {
   return (
-    <SectionWrap>
-      <div className={`header ${caption ? 'with-caption' : 'without-caption'}`}>
-        {header}
-      </div>
-      <div className="caption">
-        {caption}
-      </div>
+    <ControlWrap>
+      <div className={`header ${caption ? 'with-caption' : 'without-caption'}`}>{header}</div>
+      <div className="caption">{caption}</div>
       {children}
-    </SectionWrap>
+    </ControlWrap>
   )
 }

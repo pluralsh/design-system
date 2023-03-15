@@ -3,7 +3,8 @@ import styled from 'styled-components'
 
 import { SelectItem } from '../../SelectItem'
 import { PROVIDERS } from '../constants'
-import Section from '../Section'
+
+import Control from './Control'
 
 const ProvidersWrap = styled.div(({ theme }) => ({
   display: 'flex',
@@ -11,21 +12,21 @@ const ProvidersWrap = styled.div(({ theme }) => ({
   gap: theme.spacing.small,
 }))
 
-export type ProviderSectionProps = {
+export type ProviderControlProps = {
   header: string
   caption?: string
   providerId: string
   setProviderId: Dispatch<string>
 }
 
-export default function ProviderSection({
+export default function ProviderControl({
   header,
   caption,
   providerId,
   setProviderId,
-}: ProviderSectionProps) {
+}: ProviderControlProps) {
   return (
-    <Section
+    <Control
       header={header}
       caption={caption}
     >
@@ -42,6 +43,6 @@ export default function ProviderSection({
           />
         ))}
       </ProvidersWrap>
-    </Section>
+    </Control>
   )
 }
