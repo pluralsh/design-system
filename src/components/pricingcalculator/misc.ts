@@ -40,3 +40,30 @@ export const PROVIDERS: Provider[] = [
     infraPrice: 147,
   },
 ]
+
+type ProviderCostEstimation = {
+  total: number
+  k8s: number
+  infra: number
+  app: number
+}
+
+export function estimateProviderCost(provider: Provider, apps: number): ProviderCostEstimation {
+  if (!provider) {
+    return {
+      total: 0, k8s: 0, infra: 0, app: 0,
+    }
+  }
+
+  const { k8sPrice = 0, infraPrice = 0 } = provider
+  const k8s = Math.round(k8sPrice)
+  const infra = Math.round(infraPrice)
+  const app = Math.round(apps * APP_PRICE)
+
+  return {
+    total: k8s + infra + app,
+    k8s,
+    infra,
+    app,
+  }
+}

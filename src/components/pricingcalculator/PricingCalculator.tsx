@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import Callout from '../Callout'
 
-import { APP_PRICE, PROVIDERS } from './constants'
+import { PROVIDERS, estimateProviderCost } from './misc'
 import AppsControl from './controls/AppsControl'
 import ProviderControl from './controls/ProvidersControl'
 import Cost from './costs/Cost'
@@ -43,28 +43,8 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
   const [expanded, setExpanded] = useState(expandedDefault)
   const [providerId, setProviderId] = useState(PROVIDERS[0].id)
   const [apps, setApps] = useState(10)
-
   const provider = useMemo(() => PROVIDERS.find(({ id }) => id === providerId), [providerId])
-
-  const {
-    totalCost, k8sCost, appCost, infraCost,
-  } = useMemo(() => {
-    if (!provider) {
-      return {
-        totalCost: 0, k8sCost: 0, appCost: 0, infraCost: 0,
-      }
-    }
-
-    const { k8sPrice = 0, infraPrice = 0 } = provider
-    const k8sCost = Math.round(k8sPrice)
-    const appCost = Math.round(apps * APP_PRICE)
-    const infraCost = Math.round(infraPrice)
-    const totalCost = k8sCost + appCost + infraCost
-
-    return {
-      totalCost, k8sCost, appCost, infraCost,
-    }
-  }, [provider, apps])
+  const providerCost = useMemo(() => estimateProviderCost(provider, apps), [provider, apps])
 
   return (
     <Callout
@@ -94,23 +74,23 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
           <div className="column">
             <Costs>
               <Cost
-                cost={k8sCost}
+                cost={providerCost?.k8s}
                 label={`${provider?.name} Kubernetes cost`}
                 tooltip="Cost to deploy this provider's managed version of Kubernetes"
               />
               <Cost
-                cost={infraCost}
+                cost={providerCost?.infra}
                 label={`${provider?.name} infrastructure price`}
                 tooltip="Cost to provision and run standard instances on this provider"
               />
               <Cost
-                cost={appCost}
+                cost={providerCost?.app}
                 label="Application infrastructure"
                 tooltip="Cost to deploy and run selected number of applications"
               />
             </Costs>
             <TotalCost
-              providerCost={totalCost}
+              providerCost={providerCost?.total}
               provider={provider?.name}
             />
           </div>
