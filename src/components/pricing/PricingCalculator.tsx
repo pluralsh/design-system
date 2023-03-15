@@ -11,7 +11,7 @@ import InfoOutlineIcon from '../icons/InfoOutlineIcon'
 import Slider from '../Slider'
 import Tooltip from '../Tooltip'
 
-import { providers } from './constants'
+import { APP_PRICE, PROVIDERS } from './constants'
 import { SelectItem } from './SelectItem'
 
 export type PricingCalculatorProps = {
@@ -95,9 +95,9 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
 
 const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ expandedDefault = false }, ref) => {
   const [expanded, setExpanded] = useState(expandedDefault)
-  const [providerId, setProviderId] = useState(providers[0].id)
+  const [providerId, setProviderId] = useState(PROVIDERS[0].id)
   const [apps, setApps] = useState(10)
-  const provider = useMemo(() => providers.find(({ id }) => id === providerId), [providerId])
+  const provider = useMemo(() => PROVIDERS.find(({ id }) => id === providerId), [providerId])
   const {
     totalCost, k8sCost, appCost, infraCost,
   } = useMemo(() => {
@@ -107,9 +107,9 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
       }
     }
 
-    const { k8sPrice = 0, infraPrice = 0, appPrice = 0 } = provider
+    const { k8sPrice = 0, infraPrice = 0 } = provider
     const k8sCost = Math.round(k8sPrice)
-    const appCost = Math.round(appPrice * apps)
+    const appCost = Math.round(apps * APP_PRICE)
     const infraCost = Math.round(infraPrice)
     const totalCost = k8sCost + appCost + infraCost
 
@@ -135,7 +135,7 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
             <div className="section">
               <div className="header">Cloud provider</div>
               <div className="providers">
-                {providers.map(({ id, name, icon }) => (
+                {PROVIDERS.map(({ id, name, icon }) => (
                   <SelectItem
                     label={name}
                     icon={createElement(icon, { fullColor: true })}
