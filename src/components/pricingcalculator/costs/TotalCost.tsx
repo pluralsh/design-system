@@ -1,11 +1,15 @@
 import styled from 'styled-components'
 
-const TotalCostWrap = styled.div(({ theme }) => ({
+type TotalCostWrapProps = {
+  marginTop?: number
+}
+
+const TotalCostWrap = styled.div<TotalCostWrapProps>(({ theme, marginTop }) => ({
   display: 'flex',
   gap: theme.spacing.medium,
   alignItems: 'end',
   justifyContent: 'space-between',
-  marginTop: theme.spacing.xxlarge,
+  marginTop: marginTop || theme.spacing.xxlarge,
 
   '.value': {
     ...theme.partials.text.title1,
@@ -28,6 +32,7 @@ export type TotalCostProps = {
   provider: string
   pluralCost?: number
   proPlan?: boolean
+  marginTop?: number
 }
 
 export default function TotalCost({
@@ -35,9 +40,10 @@ export default function TotalCost({
   provider,
   pluralCost,
   proPlan,
+  marginTop,
 }: TotalCostProps) {
   return (
-    <TotalCostWrap>
+    <TotalCostWrap marginTop={marginTop}>
       <div>
         <div className="value">~${providerCost}</div>
         <div>per month to <span className="provider">{provider}</span></div>

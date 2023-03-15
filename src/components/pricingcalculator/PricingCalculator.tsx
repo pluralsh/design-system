@@ -32,7 +32,7 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
         <p>
           Estimate your cloud cost to get started with Plural open-source.
         </p>
-        <div className="content">
+        <div className="content with-padding">
           <div className="column">
             <ProviderControl
               header="Cloud provider"
@@ -66,6 +66,7 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
             <TotalCost
               providerCost={providerCost?.total}
               provider={provider?.name}
+              marginTop={24}
             />
           </div>
         </div>

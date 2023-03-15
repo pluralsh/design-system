@@ -103,6 +103,10 @@ export const PricingCalculatorWrap = styled.div(({ theme }) => ({
     flexShrink: 1,
     gap: theme.spacing.xxxlarge,
 
+    '&.with-padding': {
+      paddingBottom: theme.spacing.medium,
+    },
+
     '.column': {
       display: 'flex',
       flexDirection: 'column',
