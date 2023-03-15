@@ -1,10 +1,9 @@
 import { Dispatch, createElement } from 'react'
 import styled from 'styled-components'
 
-import { SelectItem } from '../SelectItem'
-
-import { PROVIDERS } from './constants'
-import { Section, SectionHeader } from './misc'
+import { SelectItem } from '../../SelectItem'
+import { PROVIDERS } from '../constants'
+import Section from '../Section'
 
 const ProvidersWrap = styled.div(({ theme }) => ({
   display: 'flex',
@@ -13,19 +12,23 @@ const ProvidersWrap = styled.div(({ theme }) => ({
 }))
 
 export type ProviderSectionProps = {
-  header?: string
+  header: string
+  caption?: string
   providerId: string
   setProviderId: Dispatch<string>
 }
 
 export default function ProviderSection({
-  header = 'Cloud provider',
+  header,
+  caption,
   providerId,
   setProviderId,
 }: ProviderSectionProps) {
   return (
-    <Section>
-      <SectionHeader>{header}</SectionHeader>
+    <Section
+      header={header}
+      caption={caption}
+    >
       <ProvidersWrap>
         {PROVIDERS.map(({ id, name, icon }) => (
           <SelectItem

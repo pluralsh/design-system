@@ -32,8 +32,12 @@ export default function Cost({
 }: CostProps) {
   return (
     <CostWrap>
-      <div className="value">${cost}</div>
-      <div>{label}</div>
+      <div className="value">
+        ${cost}
+      </div>
+      <div>
+        {label}
+      </div>
       {tooltip && (
         <Tooltip label={tooltip}>
           <InfoOutlineIcon cursor="help" />

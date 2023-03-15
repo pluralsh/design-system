@@ -1,24 +1,18 @@
 import { forwardRef, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import Callout from '../Callout'
+import Card from '../Card'
 
 import { APP_PRICE, PROVIDERS } from './constants'
 import AppsSection from './sections/AppsSection'
 import ProviderSection from './sections/ProviderSection'
 import Cost from './Cost'
-
-export type PricingCalculatorProps = {
-  expandedDefault?: boolean
-}
+import UsersSection from './sections/UsersSection'
+import ClustersSection from './sections/ClustersSection'
 
 const PricingCalculatorWrap = styled.div(({ theme }) => ({
   ...theme.partials.text.body2,
   color: theme.colors['text-xlight'],
-
-  p: {
-    color: theme.colors['text-light'],
-  },
 
   '.content': {
     display: 'flex',
@@ -32,6 +26,7 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
       flexDirection: 'column',
       flexGrow: 1,
       flexShrink: 1,
+      flexBasis: '100%',
     },
   },
 
@@ -55,10 +50,12 @@ const PricingCalculatorWrap = styled.div(({ theme }) => ({
   },
 }))
 
-const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ expandedDefault = false }, ref) => {
-  const [expanded, setExpanded] = useState(expandedDefault)
+const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
   const [providerId, setProviderId] = useState(PROVIDERS[0].id)
+  const [clusters, setClusters] = useState(3)
   const [apps, setApps] = useState(10)
+  const [users, setUsers] = useState(10)
+
   const provider = useMemo(() => PROVIDERS.find(({ id }) => id === providerId), [providerId])
   const {
     totalCost, k8sCost, appCost, infraCost,
@@ -81,28 +78,28 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
   }, [provider, apps])
 
   return (
-    <Callout
-      expandable
-      expanded={expanded}
-      onExpand={setExpanded}
-      ref={ref}
-      title="Estimate your cloud cost."
-    >
+    <Card padding="xlarge">
       <PricingCalculatorWrap>
-        <p>
-          Estimate your cloud cost to get started with Plural open-source.
-        </p>
         <div className="content">
           <div className="column">
             <ProviderSection
-              header="Cloud provider"
+              header="What cloud provider will you use?"
               providerId={providerId}
               setProviderId={setProviderId}
             />
+            <ClustersSection
+              clusters={clusters}
+              setClusters={setClusters}
+            />
             <AppsSection
-              header="Applications"
+              header="How many applications do you plan to install?"
+              caption="We use $10/month as the estimated cost of running each application, but this varies widely."
               apps={apps}
               setApps={setApps}
+            />
+            <UsersSection
+              users={users}
+              setUsers={setUsers}
             />
           </div>
           <div className="column">
@@ -130,8 +127,8 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
           </div>
         </div>
       </PricingCalculatorWrap>
-    </Callout>
+    </Card>
   )
 })
 
-export default PricingCalculator
+export default PricingCalculatorExtended
