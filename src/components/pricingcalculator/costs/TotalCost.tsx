@@ -2,12 +2,10 @@ import styled from 'styled-components'
 
 const TotalCostWrap = styled.div(({ theme }) => ({
   display: 'flex',
-  flexGrow: 1,
-  flexShrink: 1,
   gap: theme.spacing.medium,
   alignItems: 'end',
   justifyContent: 'space-between',
-  marginTop: theme.spacing.large,
+  marginTop: theme.spacing.xxlarge,
 
   '.value': {
     ...theme.partials.text.title1,

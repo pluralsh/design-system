@@ -126,7 +126,7 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
             </Costs>
             <Costs
               header="Plural costs"
-              marginTop={32}
+              marginTop={48}
             >
               <Cost
                 cost={clusterCost}
@@ -143,14 +143,6 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement>(() => {
               proPlan={professional}
               pluralCost={pluralCost}
             />
-            <Button
-              borderColor="transparent"
-              background="linear-gradient(180deg, rgba(74, 81, 242, 0.85) 0%, #4A51F2 100%)"
-              boxShadow="0px 2px 4px rgba(14, 16, 21, 0.14), 0px 2px 7px rgba(14, 16, 21, 0.18), inset 0px 0.5px 1px rgba(255, 255, 255, 0.15), inset 0px -1px 1px rgba(0, 0, 0, 0.25)"
-              marginTop="xlarge" // TODO: What happens on click?
-            >
-              Get started
-            </Button>
           </div>
         </div>
       </PricingCalculatorWrap>
