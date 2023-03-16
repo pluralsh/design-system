@@ -1,4 +1,5 @@
 import { Dispatch } from 'react'
+import range from 'lodash/range'
 
 import Slider from '../../Slider'
 
@@ -22,7 +23,7 @@ export default function ClustersControl({
         defaultValue={clusters}
         minValue={1}
         maxValue={6}
-        tickStep={1}
+        tickMarks={range(1, 7)}
         onChange={v => setClusters(v)}
       />
     </Control>

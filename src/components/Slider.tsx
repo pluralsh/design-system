@@ -6,22 +6,18 @@ import { VisuallyHidden } from '@react-aria/visually-hidden'
 import { useFocusRing } from '@react-aria/focus'
 import { useRef } from 'react'
 import styled from 'styled-components'
-import range from 'lodash/range'
 
 import Tooltip from './Tooltip'
 
 export type SliderProps = AriaSliderProps & {
-   // TODO: Allow using 'vertical' once it will be ready.
-  orientation?: 'horizontal'
+  orientation?: 'horizontal' // TODO: Allow using 'vertical' once it will be ready.
   formatOptions?: Intl.NumberFormatOptions
   label?: string
   step?: number
-  // TODO: Allow using custom tickSteps arrays instead, i.e. [1, 5, 10, 15, 20, 25].
-  // Right now minValue + x * tickStep has to be equal to maxValue.
-  tickStep?: number
   defaultValue?: number
   minValue: number
   maxValue: number
+  tickMarks?: number[]
   tooltip?: boolean
   size?: number | string
   onChange?: (value: any) => void
@@ -115,30 +111,13 @@ const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme
     },
   },
 
-  '.ticks': {
+  '.tick-marks': {
     ...theme.partials.text.caption,
     color: theme.colors['text-xlight'],
     display: 'flex',
     flexGrow: 1,
-    justifyContent: 'space-between',
-    marginRight: -12,
     marginTop: theme.spacing.xxsmall,
-
-    '.tick': {
-      cursor: 'pointer',
-      marginLeft: '-12px',
-      width: 24,
-      textAlign: 'center',
-
-      '&.active': {
-        color: theme.colors.text,
-        fontWeight: 600,
-      },
-
-      '&:hover': {
-        color: theme.colors['text-light'],
-      },
-    },
+    position: 'relative',
   },
 
   '.label-container': {
@@ -150,8 +129,30 @@ const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme
   },
 }))
 
+type TickMarkProps = {
+  percent: number
+  active?: boolean
+}
+
+const TickMark = styled.div<TickMarkProps>(({ theme, percent = 0, active = false }) => ({
+  cursor: 'pointer',
+  left: `calc(${percent * 100}% - 12px)`,
+  position: 'absolute',
+  width: 24,
+  textAlign: 'center',
+
+  ...(active && {
+    color: theme.colors.text,
+    fontWeight: 600,
+  }),
+
+  '&:hover': {
+    color: theme.colors['text-light'],
+  },
+}))
+
 function Slider({
-  tooltip = true, size, tickStep, ...props
+  tooltip = true, size, tickMarks, ...props
 }: SliderProps) {
   const trackRef = useRef(null)
   const numberFormatter = useNumberFormatter(props.formatOptions)
@@ -162,8 +163,6 @@ function Slider({
     labelProps,
     outputProps,
   } = useSlider(props, state, trackRef)
-
-  const ticks = tickStep ? range(state.getThumbMinValue(0), state.getThumbMaxValue(0) + 1, tickStep) : undefined
 
   return (
     <SliderWrap
@@ -196,19 +195,19 @@ function Slider({
             tooltip={tooltip}
           />
         </div>
-        {ticks && (
-          <div className="ticks">
-            {ticks.map(tick => (
-              <div
-                className={`tick ${tick === state.getThumbValue(0) ? 'active' : ''}`}
-                onClick={() => state.setThumbValue(0, tick)}
+        {tickMarks && (
+          <div className="tick-marks">
+            {tickMarks.map(tickMark => (
+              <TickMark
+                percent={state.getValuePercent(tickMark)}
+                active={tickMark === state.getThumbValue(0)}
+                onClick={() => state.setThumbValue(0, tickMark)}
               >
-                {tick}
-              </div>
+                {tickMark}
+              </TickMark>
             ))}
           </div>
         )}
-
       </div>
     </SliderWrap>
   )
