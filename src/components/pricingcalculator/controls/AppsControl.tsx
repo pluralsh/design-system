@@ -26,7 +26,7 @@ export default function AppsControl({
         defaultValue={apps}
         minValue={1}
         maxValue={25}
-        tickMarks={[1, 5, 10, 15, 20, 25]}
+        tickMarks={[1, 5, 10, 15, 20, 25].map(value => ({ value }))}
         onChange={v => setApps(v)}
       />
     </Control>

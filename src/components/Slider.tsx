@@ -9,6 +9,11 @@ import styled from 'styled-components'
 
 import Tooltip from './Tooltip'
 
+export type SliderTickMark = {
+  value: number
+  label?: string | JSX.Element
+}
+
 export type SliderProps = AriaSliderProps & {
   orientation?: 'horizontal' // TODO: Allow using 'vertical' once it will be ready.
   formatOptions?: Intl.NumberFormatOptions
@@ -17,7 +22,7 @@ export type SliderProps = AriaSliderProps & {
   defaultValue?: number
   minValue: number
   maxValue: number
-  tickMarks?: number[]
+  tickMarks?: SliderTickMark[]
   tooltip?: boolean
   size?: number | string
   onChange?: (value: any) => void
@@ -197,13 +202,13 @@ function Slider({
         </div>
         {tickMarks && (
           <div className="tick-marks">
-            {tickMarks.map(tickMark => (
+            {tickMarks.map(({ value, label }) => (
               <TickMark
-                percent={state.getValuePercent(tickMark)}
-                active={tickMark === state.getThumbValue(0)}
-                onClick={() => state.setThumbValue(0, tickMark)}
+                percent={state.getValuePercent(value)}
+                active={value === state.getThumbValue(0)}
+                onClick={() => state.setThumbValue(0, value)}
               >
-                {tickMark}
+                {label || value}
               </TickMark>
             ))}
           </div>

@@ -15,7 +15,15 @@ Default.args = {
   defaultValue: 30,
   minValue: 0,
   maxValue: 100,
-  tickMarks: [0, 10, 20, 30, 50, 100],
+  tickMarks: [
+    { value: 0 },
+    { value: 5 },
+    { value: 10 },
+    { value: 20 },
+    { value: 30 },
+    { value: 50, label: 'Fifty' },
+    { value: 100, label: '💯' },
+  ],
   tooltip: true,
   size: 600,
 }
