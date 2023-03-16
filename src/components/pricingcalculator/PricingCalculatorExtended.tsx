@@ -1,4 +1,9 @@
-import { forwardRef, useMemo, useState } from 'react'
+import {
+  forwardRef,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { Switch } from 'honorable'
 
 import Card, { CardProps } from '../Card'
@@ -21,11 +26,23 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement, CardProps>((props, 
   const [providerId, setProviderId] = useState(PROVIDERS[0].id)
   const [clusters, setClusters] = useState(3)
   const [apps, setApps] = useState(10)
-  const [users, setUsers] = useState(10)
+  const [users, setUsers] = useState(0)
   const [professional, setProfessional] = useState(false)
+  const [enforcedPro, setEnforcedPro] = useState(false)
   const provider = useMemo(() => PROVIDERS.find(({ id }) => id === providerId), [providerId])
   const providerCost = useMemo(() => estimateProviderCost(provider, apps, clusters), [provider, apps, clusters])
   const pluralCost = useMemo(() => estimatePluralCost(professional, clusters, users), [professional, clusters, users])
+
+  useEffect(() => {
+    if (users > 5 && !professional) {
+      setProfessional(true)
+      setEnforcedPro(true)
+    }
+    if (users <= 5 && enforcedPro) {
+      setProfessional(false)
+      setEnforcedPro(false)
+    }
+  }, [users, enforcedPro, setProfessional, setEnforcedPro])
 
   return (
     <Card
@@ -62,7 +79,8 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement, CardProps>((props, 
           </div>
           <div className="column">
             <Switch
-              defaultValue={professional}
+              disabled={users > 5}
+              checked={professional}
               onChange={({ target: { checked } }) => setProfessional(checked)}
               marginBottom="xlarge"
             >
