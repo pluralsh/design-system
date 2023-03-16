@@ -28,7 +28,7 @@ const SelectItemWrap = styled.label<SelectItemWrapProps>(({
   display: 'flex',
   height: 32,
   width,
-  padding: '4px 12px',
+  padding: `${theme.spacing.xxsmall} ${theme.spacing.small}`,
   alignItems: 'center',
   justifyContent: 'center',
   backgroundColor: selected
