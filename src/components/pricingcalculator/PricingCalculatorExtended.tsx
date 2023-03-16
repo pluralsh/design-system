@@ -42,7 +42,7 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement, CardProps>((props, 
       setProfessional(false)
       setEnforcedPro(false)
     }
-  }, [users, enforcedPro, setProfessional, setEnforcedPro])
+  }, [users, professional, setProfessional, enforcedPro, setEnforcedPro])
 
   return (
     <Card
