@@ -87,7 +87,7 @@ const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme
     display: 'block',
     position: 'absolute',
     background: theme.colors['fill-one'],
-    backgroundImage: `linear-gradient(90deg, transparent 0%, rgba(74, 81, 242, 0.85) ${percent}%, transparent ${percent}%)`,
+    backgroundImage: `linear-gradient(90deg, transparent 0%, rgba(74, 81, 242, calc(0.85 * ${percent / 100})) ${percent}%, transparent ${percent}%)`,
     borderRadius: '6px',
     boxShadow: 'inset 0px 0.5px 2px rgba(0, 0, 0, 0.25), inset 0px -0.5px 1.5px rgba(255, 255, 255, 0.16)',
   },
