@@ -1,6 +1,5 @@
 import { FlexProps } from 'honorable'
 import {
-  Dispatch,
   Ref,
   forwardRef,
   useCallback,
@@ -15,47 +14,72 @@ export type Severity = 'info' | 'success' | 'error'
 
 type ToastProps = {
   position?: LayerPositionType
-  closeTimeout?: number
-  onClose?: Dispatch<void>
+  closeTimeout?: number | 'none' | 'default'
+  onClose?: () => void
+  onCloseComplete?: () => void
+  show?: boolean
   severity?: Severity
 } & FlexProps
 
 const defaults = {
-  closeTimeout: 99999999, // 10000, // 10 seconds
+  closeTimeout: 10000, // 10 seconds
   position: 'bottom-right' as LayerPositionType,
   onClose: () => {},
+  onCloseComplete: () => {},
   severity: 'info' as Severity,
 }
 
 const Toast = forwardRef(({
   position = defaults.position,
-  closeTimeout = defaults.closeTimeout,
+  closeTimeout: closeTimeoutProp = defaults.closeTimeout,
   onClose = defaults.onClose,
+  onCloseComplete = defaults.onCloseComplete,
   severity = defaults.severity,
   children,
+  show = true,
   ...props
 }: ToastProps,
 ref: Ref<any>): JSX.Element => {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(show)
   const close = useCallback(() => {
     setOpen(false)
-    onClose()
-  }, [setOpen, onClose])
+  }, [setOpen])
+
+  const closeTimeout: 'none' | number
+      = closeTimeoutProp === 'none' || closeTimeoutProp <= 0
+        ? 'none'
+        : typeof closeTimeoutProp === 'number'
+          && !Number.isNaN(closeTimeoutProp)
+          ? closeTimeoutProp
+          : defaults.closeTimeout
 
   useEffect(() => {
+    setOpen(show)
+  }, [show])
+
+  useEffect(() => {
+    if (closeTimeout === 'none') {
+      return
+    }
     const timer = open ? setTimeout(() => close(), closeTimeout) : null
 
     return () => clearTimeout(timer)
-  })
+  }, [close, closeTimeout, open])
 
   return (
     <Layer
-      show={open}
+      open={open}
       position={position}
+      onClose={() => {
+        onClose()
+      }}
+      onCloseComplete={() => {
+        onCloseComplete()
+      }}
       ref={ref}
     >
       <Banner
-        onClose={close}
+        onClose={() => setOpen(false)}
         severity={severity}
         {...props}
       >

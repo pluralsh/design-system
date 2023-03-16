@@ -3,21 +3,27 @@ import {
   MutableRefObject,
   PropsWithChildren,
   forwardRef,
+  useCallback,
+  useEffect,
   useRef,
+  useState,
 } from 'react'
 import { createPortal } from 'react-dom'
-import {
-  TransitionFrom,
-  TransitionTo,
-  animated,
-  useTransition,
-} from 'react-spring'
+import { UseTransitionProps, animated, useTransition } from 'react-spring'
+
 import styled, { useTheme } from 'styled-components'
 
+import usePrevious from '../hooks/usePrevious'
+
+const DIRECTIONS = ['up', 'down', 'left', 'right'] as const
+
+type Direction = typeof DIRECTIONS[number]
+
+type TransitionType = 'slide' | 'fade' | 'scale'
 type GetTransitionProps = {
   isOpen: boolean
-  type: 'slide' | 'fade' | 'scale'
-  direction: 'up' | 'down' | 'right' | 'left'
+  type: TransitionType
+  direction: Direction
 }
 
 type AnimationType =
@@ -31,48 +37,39 @@ type AnimationType =
   | 'slide-horizontal'
   | 'slide-vertical'
 
+const DEFAULT_DIRECTION: Direction = 'down' as const
+const DEFAULT_TRANSITION_TYPE: TransitionType = 'slide' as const
+const isDirection = (direction: string | null | undefined): direction is Direction => DIRECTIONS.includes(direction as any)
+
 const getTransitionProps = ({
   isOpen,
   type,
   direction,
 }: GetTransitionProps) => {
-  const translateKey = `translate${
-    direction === 'up' || direction === 'down' ? 'Y' : 'X'
-  }`
-  let from:Record<string, any> = {
+  if (type !== 'slide') {
+    direction = undefined
+  }
+
+  const from = {
     opacity: 0,
+    translateX:
+      direction === 'right' ? '-100%' : direction === 'left' ? '100%' : '0%',
+    translateY:
+      direction === 'down' ? '-100%' : direction === 'up' ? '100%' : '0%',
+    scale: type === 'scale' ? '10%' : '100%',
   }
-  let to:Record<string, any> = {
+
+  const to = {
     opacity: 1,
-  }
-
-  if (type === 'slide') {
-    from = {
-      ...from,
-      [translateKey]:
-        direction === 'down' || direction === 'right' ? '-100%' : '100%',
-    }
-    to = {
-      ...to,
-      [translateKey]: '0%',
-    }
-  }
-
-  if (type === 'scale') {
-    from = {
-      ...from,
-      scale: '30%',
-    }
-    to = {
-      ...to,
-      scale: '100%',
-    }
+    translateX: '0%',
+    translateY: '0%',
+    scale: '100%',
   }
 
   return {
     from,
     enter: to,
-    leave: from,
+    leave: { ...from, opacity: type === 'fade' ? 0 : -1.5 },
     config: isOpen
       ? {
         mass: 0.6,
@@ -81,7 +78,7 @@ const getTransitionProps = ({
       }
       : {
         mass: 0.6,
-        tension: 400,
+        tension: 375,
         velocity: 0.02,
         restVelocity: 0.1,
       },
@@ -100,23 +97,29 @@ export type LayerPositionType =
   | 'top-left'
   | 'top-right'
 
-export type MarginType = {
-  vertical?: string | number | undefined | null
-  horizontal?: string | number | undefined | null
+type SimpleMarginType = {
   top?: string | number | undefined | null
   bottom?: string | number | undefined | null
   left?: string | number | undefined | null
   right?: string | number | undefined | null
 }
 
-const LayerWrapper = styled.div<{ position: LayerPositionType }>(({ position }) => ({
-  position: 'absolute',
+export type MarginType = (SimpleMarginType & {
+  vertical?: string | number | undefined | null
+  horizontal?: string | number | undefined | null
+}) | string | number
 
+const LayerWrapper = styled.div<{
+  position: LayerPositionType
+  margin: SimpleMarginType
+}>(({ position, margin }) => ({
+  display: 'flex',
+  position: 'absolute',
   pointerEvents: 'none',
   '& > *': {
     pointerEvents: 'auto',
   },
-  display: position === 'hidden' ? 'hidden' : 'flex',
+  overflow: 'hidden',
   alignItems: position.startsWith('top')
     ? 'start'
     : position.startsWith('bottom')
@@ -131,6 +134,10 @@ const LayerWrapper = styled.div<{ position: LayerPositionType }>(({ position }) 
   left: 0,
   right: 0,
   bottom: 0,
+  paddingLeft: margin.left,
+  paddingRight: margin.right,
+  paddingTop: margin.top,
+  paddingBottom: margin.bottom,
 }))
 
 function LayerRef({
@@ -139,22 +146,52 @@ function LayerRef({
   margin,
   children,
   onClickOutside,
-  show,
+  onClose,
+  onCloseComplete,
+  open,
 }: PropsWithChildren<{
-    show: boolean
+    open: boolean
     position: LayerPositionType
     animation?: AnimationType
-  margin?: MarginType
-    onClickOutside?: ()=>void
+    margin?: MarginType
+    onClose?: () => void | null | undefined
+    onCloseComplete?: () => void | null | undefined
+    onClickOutside?: () => void | null | undefined
   }>,
 ref: MutableRefObject<HTMLDivElement>) {
   const theme = useTheme()
   const internalRef = useRef<HTMLDivElement>()
   const finalRef = ref || internalRef
+  const [closeComplete, setCloseComplete] = useState(!open)
+  const prevOpen = usePrevious(open)
+
+  console.log('open', open)
+  console.log('closeComplete', closeComplete)
+  const visible = open || !closeComplete
+
+  useEffect(() => {
+    if (open) {
+      console.log('setCloseComplete(false)')
+      setCloseComplete(false)
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (!open && prevOpen) {
+      onClose?.()
+    }
+  }, [onClose, open, prevOpen])
 
   useOutsideClick(finalRef, () => {
     onClickOutside?.()
   })
+  const onDestroyed = useCallback(() => {
+    console.log('onDestroyed, open:', open)
+    if (!open) {
+      setCloseComplete(true)
+    }
+    onCloseComplete?.()
+  }, [onCloseComplete, open])
 
   if (typeof margin === 'string' || typeof margin === 'number') {
     margin = {
@@ -165,9 +202,9 @@ ref: MutableRefObject<HTMLDivElement>) {
   if (typeof margin === 'object') {
     margin = {
       ...(margin.top ? { top: margin.top } : {}),
-      ...(margin.bottom ? { top: margin.bottom } : {}),
-      ...(margin.left ? { top: margin.left } : {}),
-      ...(margin.right ? { top: margin.right } : {}),
+      ...(margin.bottom ? { bottom: margin.bottom } : {}),
+      ...(margin.left ? { left: margin.left } : {}),
+      ...(margin.right ? { right: margin.right } : {}),
       ...(margin.vertical
         ? {
           top: margin.vertical,
@@ -188,25 +225,25 @@ ref: MutableRefObject<HTMLDivElement>) {
   for (const [key, value] of Object.entries(margin)) {
     margin[key] = theme.spacing[value] || value
   }
-  let animationDirection: GetTransitionProps['direction'] = 'down'
-  let animationType: GetTransitionProps['type'] = 'slide'
+  let transitionDirection: GetTransitionProps['direction'] = DEFAULT_DIRECTION
+  let transitionType: GetTransitionProps['type'] = DEFAULT_TRANSITION_TYPE
 
   if (animation.startsWith('fade')) {
-    animationType = 'fade'
-    animationDirection = undefined
+    transitionType = 'fade'
+    transitionDirection = undefined
   }
   else if (animation === 'scale') {
-    animationType = 'scale'
-    animationDirection = undefined
+    transitionType = 'scale'
+    transitionDirection = undefined
   }
   else if (animation === 'slide') {
     if (position === 'center') {
-      animationType = 'scale'
-      animationDirection = undefined
+      transitionType = 'scale'
+      transitionDirection = undefined
     }
     else {
-      animationType = 'slide'
-      animationDirection = position.startsWith('top')
+      transitionType = 'slide'
+      transitionDirection = position.startsWith('top')
         ? 'down'
         : position.startsWith('bottom')
           ? 'up'
@@ -214,49 +251,57 @@ ref: MutableRefObject<HTMLDivElement>) {
             ? 'right'
             : position.endsWith('right')
               ? 'left'
-              : 'down'
+              : DEFAULT_DIRECTION
     }
   }
   else if (animation.startsWith('slide')) {
-    animationType = 'slide'
-    const tempDir = animation.split('-')[1]
+    transitionType = 'slide'
+    const tempDirection = animation.split('-')[1]
 
-    animationDirection = tempDir === 'up' ? 'up' : 'down'
-    if (tempDir === 'horizontal') {
-      animationDirection = position.endsWith('right') ? 'left' : 'right'
+    if (isDirection(tempDirection)) {
+      transitionDirection = tempDirection as Direction
     }
-    else if (tempDir === 'vertical') {
-      animationDirection = position.endsWith('bottom') ? 'up' : 'down'
+    if (tempDirection === 'horizontal') {
+      transitionDirection = position.endsWith('right') ? 'left' : 'right'
+    }
+    else if (tempDirection === 'vertical') {
+      transitionDirection = position.endsWith('bottom') ? 'up' : 'down'
     }
   }
 
-  const transitionProps = getTransitionProps({
-    isOpen: show,
-    direction: animationDirection,
-    type: animationType,
-  })
-  const transitions = useTransition(show ? [true] : [], transitionProps)
+  const transitionProps: UseTransitionProps = {
+    ...getTransitionProps({
+      isOpen: open,
+      direction: transitionDirection,
+      type: transitionType,
+    }),
+    onDestroyed,
+  }
+  const transitions = useTransition(open ? [true] : [], transitionProps)
 
-  if (!document) {
+  const portalElt
+    = document?.getElementById(theme.portals.default.id) ?? document?.body
+
+  if (!visible || position === 'hidden' || !portalElt) {
     return null
   }
-  const portalElt = document?.getElementById(theme.portals.default.id)
+
+  console.log('ultimate margin:', margin)
 
   const portalContent = (
-    <LayerWrapper position={position}>
-      {transitions(styles => {
-        console.log('transitions inner', styles)
-
-        return (
-          <animated.div
-            className="animated"
-            ref={finalRef}
-            style={{ ...styles }}
-          >
-            {children}
-          </animated.div>
-        )
-      })}
+    <LayerWrapper
+      position={position}
+      margin={margin}
+    >
+      {transitions(styles => (
+        <animated.div
+          className="animated"
+          ref={finalRef}
+          style={{ ...styles }}
+        >
+          {children}
+        </animated.div>
+      ))}
     </LayerWrapper>
   )
 
