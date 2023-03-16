@@ -50,17 +50,17 @@ const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ 
               <Cost
                 cost={providerCost?.k8s}
                 label={`${provider?.name} Kubernetes cost`}
-                tooltip="Cost to deploy this provider's managed version of Kubernetes"
+                tooltip="Cost to deploy this provider's managed version of Kubernetes."
               />
               <Cost
                 cost={providerCost?.infra}
                 label={`${provider?.name} infrastructure price`}
-                tooltip="Cost to provision and run standard instances on this provider"
+                tooltip="Cost to provision and run standard instances on this provider."
               />
               <Cost
                 cost={providerCost?.app}
                 label="Application infrastructure"
-                tooltip="Cost to deploy and run selected number of applications"
+                tooltip="Cost to deploy and run selected number of applications. Default setup includes headroom for a few applications and will scale to meet additional needs."
               />
             </Costs>
             <TotalCost

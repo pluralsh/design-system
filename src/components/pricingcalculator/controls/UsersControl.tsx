@@ -7,8 +7,8 @@ import Control from './Control'
 
 const OPTIONS = [
   {
-    value: '4',
-    label: '4',
+    value: '0',
+    label: '0-5',
   },
   {
     value: '10',
@@ -36,7 +36,7 @@ export default function UsersControl({
   return (
     <Control
       header="How many users will access your clusters?"
-      caption="Open-source users are free, but the professional plan has a $49/user fee."
+      caption="Plural is free for up to 5 open-source users. Account requiring more than 5 users and accounts on the professional plan will add $49/user."
     >
       <RadioGroup
         defaultValue={`${users}`}

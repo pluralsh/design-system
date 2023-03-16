@@ -33,7 +33,7 @@ export const PROVIDERS: Provider[] = [
     icon: GoogleCloudLogoIcon,
     k8sPrice: 73,
     infraPrice: 221,
-    appPrice: 73.73,
+    appPrice: 48.92,
   },
   {
     name: 'Azure',
@@ -41,7 +41,7 @@ export const PROVIDERS: Provider[] = [
     icon: AzureLogoIcon,
     k8sPrice: 72,
     infraPrice: 147,
-    appPrice: 48.92,
+    appPrice: 73.73,
   },
 ]
 
