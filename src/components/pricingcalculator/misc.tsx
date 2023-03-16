@@ -6,7 +6,6 @@ import AzureLogoIcon from '../icons/AzureLogoIcon'
 import { IconProps } from '../icons/createIcon'
 import GoogleCloudLogoIcon from '../icons/GoogleCloudLogoIcon'
 
-export const APP_PRICE = 10 // TODO: Update.
 export const CLUSTER_PRICE = 399
 export const USER_PRICE = 49
 
@@ -16,6 +15,7 @@ type Provider = {
   icon: ComponentType<IconProps>
   k8sPrice: number
   infraPrice: number
+  appPrice: number // Additional instance cost. Each instance can handle 2 apps.
 }
 
 export const PROVIDERS: Provider[] = [
@@ -25,6 +25,7 @@ export const PROVIDERS: Provider[] = [
     icon: AwsLogoIcon,
     k8sPrice: 73,
     infraPrice: 165,
+    appPrice: 54.9,
   },
   {
     name: 'GCP',
@@ -32,6 +33,7 @@ export const PROVIDERS: Provider[] = [
     icon: GoogleCloudLogoIcon,
     k8sPrice: 73,
     infraPrice: 221,
+    appPrice: 73.73,
   },
   {
     name: 'Azure',
@@ -39,6 +41,7 @@ export const PROVIDERS: Provider[] = [
     icon: AzureLogoIcon,
     k8sPrice: 72,
     infraPrice: 147,
+    appPrice: 48.92,
   },
 ]
 
@@ -56,10 +59,12 @@ export function estimateProviderCost(provider: Provider, appCount: number, clust
     }
   }
 
-  const { k8sPrice = 0, infraPrice = 0 } = provider
+  const { k8sPrice = 0, infraPrice = 0, appPrice = 0 } = provider
   const k8s = Math.round(k8sPrice * clusterCount)
   const infra = Math.round(infraPrice)
-  const app = Math.round(appCount * APP_PRICE)
+
+  // First 5 apps do not raise the cost, then for every 2 apps we add one more instance.
+  const app = appCount <= 5 ? 0 : Math.round(Math.floor((appCount - 4) / 2) * appPrice)
 
   return {
     k8s,
