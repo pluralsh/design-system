@@ -165,13 +165,10 @@ ref: MutableRefObject<HTMLDivElement>) {
   const [closeComplete, setCloseComplete] = useState(!open)
   const prevOpen = usePrevious(open)
 
-  console.log('open', open)
-  console.log('closeComplete', closeComplete)
   const visible = open || !closeComplete
 
   useEffect(() => {
     if (open) {
-      console.log('setCloseComplete(false)')
       setCloseComplete(false)
     }
   }, [open])
@@ -186,7 +183,6 @@ ref: MutableRefObject<HTMLDivElement>) {
     onClickOutside?.()
   })
   const onDestroyed = useCallback(() => {
-    console.log('onDestroyed, open:', open)
     if (!open) {
       setCloseComplete(true)
     }
@@ -285,8 +281,6 @@ ref: MutableRefObject<HTMLDivElement>) {
   if (!visible || position === 'hidden' || !portalElt) {
     return null
   }
-
-  console.log('ultimate margin:', margin)
 
   const portalContent = (
     <LayerWrapper
