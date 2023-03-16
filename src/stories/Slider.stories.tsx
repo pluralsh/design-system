@@ -24,6 +24,7 @@ Default.args = {
     { value: 50, label: 'Fifty' },
     { value: 100, label: '💯' },
   ],
+  thumbRadius: 12,
   tooltip: true,
   size: 600,
 }

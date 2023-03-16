@@ -14,7 +14,7 @@ const CostWrap = styled.div(({ theme }) => ({
   '.value': {
     ...theme.partials.text.subtitle2,
     color: theme.colors.text,
-    minWidth: 48,
+    minWidth: theme.spacing.xxlarge,
     marginRight: theme.spacing.xxxsmall,
   },
 }))

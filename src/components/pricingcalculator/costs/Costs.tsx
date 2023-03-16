@@ -8,7 +8,7 @@ type CostsWrapProps = {
 const CostsWrap = styled.div<CostsWrapProps>(({ theme, marginTop }) => ({
   display: 'flex',
   flexDirection: 'column',
-  gap: '14px',
+  gap: 14,
   marginTop,
 
   '.header': {

@@ -23,36 +23,45 @@ export type SliderProps = AriaSliderProps & {
   minValue: number
   maxValue: number
   tickMarks?: SliderTickMark[]
+  thumbRadius?: number // At the moment it will also change size of track bar to half of thumb size.
   tooltip?: boolean
   size?: number | string
   onChange?: (value: any) => void
 }
 
-const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme, percent, size }) => ({
+type SliderWrapProps = {
+  percent: number,
+  size: number | string
+  thumbRadius?: number
+}
+
+const SliderWrap = styled.div<SliderWrapProps>(({
+  theme, percent, size, thumbRadius = 12,
+}) => ({
   '.slider': {
     display: 'flex',
 
     // Additional padding to make sure that slider does not go outside parent element.
-    paddingLeft: 12,
-    paddingRight: 12,
+    paddingLeft: thumbRadius,
+    paddingRight: thumbRadius,
 
     '&.horizontal': {
       flexDirection: 'column',
       width: size || '100%',
 
       '.track': {
-        height: '30px',
+        height: 30,
         width: '100%',
 
         '&:before': {
-          height: '12px',
+          height: thumbRadius,
           top: '50%',
           transform: 'translateY(-50%)',
 
           // Additional padding inside track to align ticks with correct points on track.
-          marginLeft: -12,
-          marginRight: 12,
-          width: 'calc(100% + 24px)',
+          marginLeft: -thumbRadius,
+          marginRight: thumbRadius,
+          width: `calc(100% + ${thumbRadius * 2}px)`,
         },
       },
 
@@ -62,14 +71,14 @@ const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme
     },
 
     '.&.vertical': {
-      height: size || '300px',
+      height: size || 300,
 
       '.track': {
-        width: '30px',
+        width: 30,
         height: '100%',
 
         '&:before': {
-          width: '12px',
+          width: thumbRadius,
           height: '100%',
           left: '50%',
           transform: 'translateX(-50%)',
@@ -88,13 +97,13 @@ const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme
     position: 'absolute',
     background: theme.colors['fill-one'],
     backgroundImage: `linear-gradient(90deg, transparent 0%, rgba(74, 81, 242, calc(0.85 * ${percent / 100})) ${percent}%, transparent ${percent}%)`,
-    borderRadius: '6px',
+    borderRadius: theme.borderRadiuses.large,
     boxShadow: 'inset 0px 0.5px 2px rgba(0, 0, 0, 0.25), inset 0px -0.5px 1.5px rgba(255, 255, 255, 0.16)',
   },
 
   '.thumb': {
-    width: 24,
-    height: 24,
+    width: thumbRadius * 2,
+    height: thumbRadius * 2,
     borderRadius: '50%',
     background: `radial-gradient(${theme.colors['border-selected']} 37%, ${theme.colors['fill-primary']} 40%)`,
     boxShadow: `
@@ -121,29 +130,33 @@ const SliderWrap = styled.div<{percent: number, size: number | string}>(({ theme
     color: theme.colors['text-xlight'],
     display: 'flex',
     flexGrow: 1,
-    marginTop: theme.spacing.xxsmall,
+    marginTop: thumbRadius / 3,
     position: 'relative',
   },
 
   '.label-container': {
     display: 'flex',
     justifyContent: 'space-between',
-    marginLeft: -12,
-    marginRight: 12,
-    width: 'calc(100% + 24px)',
+    marginLeft: -thumbRadius,
+    marginRight: thumbRadius,
+    marginBottom: thumbRadius / 3,
+    width: `calc(100% + ${thumbRadius * 2}px)`,
   },
 }))
 
 type TickMarkProps = {
   percent: number
   active?: boolean
+  thumbRadius?: number
 }
 
-const TickMark = styled.div<TickMarkProps>(({ theme, percent = 0, active = false }) => ({
+const TickMark = styled.div<TickMarkProps>(({
+  theme, percent = 0, active = false, thumbRadius = 12,
+}) => ({
   cursor: 'pointer',
-  left: `calc(${percent * 100}% - 12px)`,
+  left: `calc(${percent * 100}% - ${thumbRadius}px)`,
   position: 'absolute',
-  width: 24,
+  width: thumbRadius * 2,
   textAlign: 'center',
 
   ...(active && {
@@ -157,7 +170,7 @@ const TickMark = styled.div<TickMarkProps>(({ theme, percent = 0, active = false
 }))
 
 function Slider({
-  tooltip = true, size, tickMarks, ...props
+  tooltip = true, size, tickMarks, thumbRadius, ...props
 }: SliderProps) {
   const trackRef = useRef(null)
   const numberFormatter = useNumberFormatter(props.formatOptions)
@@ -173,6 +186,7 @@ function Slider({
     <SliderWrap
       percent={(state.getThumbPercent(0) || 0) * 100}
       size={size}
+      thumbRadius={thumbRadius}
     >
       <div
         {...groupProps}
@@ -207,6 +221,7 @@ function Slider({
                 percent={state.getValuePercent(value)}
                 active={value === state.getThumbValue(0)}
                 onClick={() => state.setThumbValue(0, value)}
+                thumbRadius={thumbRadius}
               >
                 {label || value}
               </TickMark>
