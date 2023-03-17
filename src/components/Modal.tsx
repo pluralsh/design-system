@@ -13,6 +13,7 @@ import CheckRoundedIcon from './icons/CheckRoundedIcon'
 import createIcon from './icons/createIcon'
 import ErrorIcon from './icons/ErrorIcon'
 import WarningIcon from './icons/WarningIcon'
+import InfoIcon from './icons/InfoIcon'
 
 export const SEVERITIES = ['info', 'warning', 'success', 'danger'] as const
 
@@ -30,7 +31,7 @@ const severityToIconColorKey: Readonly<
   Record<ModalSeverity | 'default', ColorKey>
 > = {
   default: 'icon-default',
-  info: 'icon-default',
+  info: 'icon-info',
   danger: 'icon-danger',
   warning: 'icon-warning',
   success: 'icon-success',
@@ -41,7 +42,7 @@ const severityToIcon: Record<
   ReturnType<typeof createIcon> | null | undefined
 > = {
   default: null,
-  info: null,
+  info: InfoIcon,
   danger: ErrorIcon,
   warning: WarningIcon,
   success: CheckRoundedIcon,
