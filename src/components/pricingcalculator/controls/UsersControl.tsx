@@ -36,7 +36,7 @@ export default function UsersControl({
   return (
     <Control
       header="How many users will access your clusters?"
-      caption="Plural is free for up to 5 open-source users. Account requiring more than 5 users and accounts on the professional plan will add $49/user."
+      caption="Plural is free for up to 5 open-source users. Accounts requiring more than 5 users and accounts on the professional plan will add $49/user."
     >
       <RadioGroup
         defaultValue={`${users}`}
