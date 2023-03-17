@@ -90,7 +90,7 @@ export { default as SelectItem } from './components/SelectItem'
 export { default as Slider } from './components/Slider'
 export { default as PricingCalculator } from './components/pricingcalculator/PricingCalculator'
 export { default as PricingCalculatorExtended } from './components/pricingcalculator/PricingCalculatorExtended'
-
+export { default as Layer } from './components/Layer'
 // Hooks
 export { default as usePrevious } from './hooks/usePrevious'
 export { default as useUnmount } from './hooks/useUnmount'
