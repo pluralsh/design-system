@@ -1,5 +1,7 @@
 import { ComponentType } from 'react'
 import styled from 'styled-components'
+
+// @ts-ignore
 import styledContainerQuery from 'styled-container-query'
 
 import AwsLogoIcon from '../icons/AwsLogoIcon'
