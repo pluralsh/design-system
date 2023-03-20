@@ -135,12 +135,12 @@ export const PricingCalculatorWrap = styled.div(({ theme }) => ({
 export const PricingCalculatorContainerQuery = styledContainerQuery.div`
   &:container(max-width: 620px) {
     .content {
-      flex-direction: column !important;
+      flex-direction: column;
       gap: 32px;
     }
 
     .hint {
-      marginBottom: 0;
+      margin-bottom: 0;
     }
 },
 `
