@@ -21,7 +21,7 @@ export type PricingCalculatorProps = {
 const PricingCalculator = forwardRef<HTMLDivElement, PricingCalculatorProps>(({ expandedDefault = false }, ref) => {
   const [expanded, setExpanded] = useState(expandedDefault)
   const [providerId, setProviderId] = useState(PROVIDERS[0].id)
-  const [apps, setApps] = useState(10)
+  const [apps, setApps] = useState(5)
   const provider = useMemo(() => PROVIDERS.find(({ id }) => id === providerId), [providerId])
   const providerCost = useMemo(() => estimateProviderCost(provider, apps), [provider, apps])
 

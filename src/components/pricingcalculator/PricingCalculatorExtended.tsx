@@ -25,8 +25,8 @@ import TotalCost from './costs/TotalCost'
 
 const PricingCalculatorExtended = forwardRef<HTMLDivElement, CardProps>((props, ref) => {
   const [providerId, setProviderId] = useState(PROVIDERS[0].id)
-  const [clusters, setClusters] = useState(3)
-  const [apps, setApps] = useState(10)
+  const [clusters, setClusters] = useState(1)
+  const [apps, setApps] = useState(5)
   const [users, setUsers] = useState(0)
   const [professional, setProfessional] = useState(false)
   const [enforcedPro, setEnforcedPro] = useState(false)
