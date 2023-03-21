@@ -111,7 +111,7 @@ const PricingCalculatorExtended = forwardRef<HTMLDivElement, CardProps>((props, 
               >
                 <Cost
                   cost={pluralCost?.clusters}
-                  label={`for ${clusters} clusters`}
+                  label={`for ${clusters} cluster${clusters > 1 ? 's' : ''}`}
                 />
                 <Cost
                   cost={pluralCost?.users}
