@@ -11,7 +11,7 @@ import { ColorKey, Severity } from 'src/types'
 import { Flex } from 'honorable'
 import AnimateHeight from 'react-animate-height'
 
-import { CaretDownIcon } from '../icons'
+import { CaretDownIcon, CloseIcon } from '../icons'
 
 import {
   FillLevel,
@@ -77,6 +77,9 @@ export type CalloutProps = PropsWithChildren<{
   expandable?: boolean
   expanded?: boolean
   onExpand?: Dispatch<boolean>
+  closeable?: boolean
+  closed?: boolean
+  onClose?: Dispatch<boolean>
 }>
 
 export function CalloutButton(props: ButtonProps) {
@@ -95,12 +98,19 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(({
   expandable = false,
   expanded = false,
   onExpand,
+  closeable = false,
+  closed = false,
+  onClose,
   fillLevel,
   className,
   buttonProps,
   children,
 },
 ref) => {
+  if (expandable && closeable) {
+    throw new Error('Callout component cannot be expandable and closable at the same time')
+  }
+
   severity = useMemo(() => {
     if (!severityToIconColorKey[severity]) {
       console.warn(`Callout: Incorrect severity (${severity}) specified. Valid values are ${SEVERITIES.map(s => `"${s}"`).join(', ')}. Defaulting to "${DEFAULT_SEVERITY}".`)
@@ -129,6 +139,10 @@ ref) => {
     iconTopMargin += 2
   }
 
+  if (closed) {
+    return null
+  }
+
   return (
     <FillLevelProvider value={fillLevel}>
       <CalloutWrap
@@ -148,7 +162,7 @@ ref) => {
             display="flex"
           />
         </div>
-        <div>
+        <div className="content">
           <h6 className={classNames({ visuallyHidden: !title, expandable })}>
             <span className="visuallyHidden">{`${text}: `}</span>
             {title}
@@ -162,7 +176,7 @@ ref) => {
             )}
           </AnimateHeight>
         </div>
-        {expandable && (
+        {(expandable || closeable) && (
           <Flex
             grow={1}
             justify="flex-end"
@@ -172,8 +186,11 @@ ref) => {
               display="flex"
               size="small"
               clickable
-              onClick={() => onExpand && onExpand(!expanded)}
-              icon={<CaretDownIcon className="expandIcon" />}
+              onClick={() => {
+                if (expandable && onExpand) onExpand(!expanded)
+                if (closeable && onClose) onClose(!closed)
+              }}
+              icon={expandable ? <CaretDownIcon className="expandIcon" /> : <CloseIcon />}
             />
           </Flex>
         )}
@@ -225,6 +242,9 @@ const CalloutWrap = styled.div<{
       marginBottom: $expanded ? theme.spacing.small : 0,
       transition: 'margin-bottom .5s',
     },
+  },
+  '.content': {
+    width: '100%',
   },
   '.children *:first-child': {
     marginTop: '0',
