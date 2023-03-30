@@ -9,6 +9,7 @@ import styled from 'styled-components'
 
 import {
   AppIcon,
+  BrowseAppsIcon,
   Button,
   Card,
   CheckIcon,
@@ -207,6 +208,7 @@ function Template() {
           onSelectionChange={key => {
             setSelectedKey(key)
           }}
+          titleContent={<><BrowseAppsIcon marginRight="small" />Marketplace</>}
         >
           {items.slice(0, 4).map(({ key, label }) => (
             <ListBoxItem
@@ -349,6 +351,7 @@ function Template() {
           onSelectionChange={keys => {
             setSelectedKeys(keys)
           }}
+          titleContent={<><BrowseAppsIcon marginRight="small" />Marketplace</>}
         >
           {items.slice(0, 4).map(({ key, label }) => (
             <ListBoxItem

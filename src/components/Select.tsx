@@ -34,6 +34,7 @@ type Placement = 'left' | 'right'
 type Size = 'small' | 'medium' | 'large'
 
 type SelectButtonProps = {
+  titleContent?: ReactNode
   leftContent?: ReactNode
   rightContent?: ReactNode
   children?: ReactNode
@@ -52,6 +53,7 @@ export type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   dropdownFooter?: ReactElement
   onHeaderClick?: () => unknown
   onFooterClick?: () => unknown
+  titleContent?: ReactNode
   triggerButton?: ReactElement
   placement?: Placement
   size?: Size
@@ -95,31 +97,47 @@ const SelectButtonInner = styled.div<{ $isOpen: boolean, $size: Size, $parentFil
   display: 'flex',
   flexDirection: 'row',
   flexShrink: 1,
-  alignItems: 'center',
   width: '100%',
-  padding: `${size === 'medium' ? 9 : 5}px ${theme.spacing.medium}px`,
   color: theme.colors['text-light'],
   border: theme.borders.input,
   borderRadius: theme.borderRadiuses.medium,
-  '.children': {
-    flexGrow: 1,
-  },
-  '.leftContent, .rightContent': {
-    display: 'flex',
+  '.titleContent': {
+    ...theme.partials.text.caption,
     alignItems: 'center',
-  },
-  '.leftContent': {
-    marginRight: theme.spacing.medium,
-  },
-  '.rightContent': {
-    marginLeft: theme.spacing.medium,
-  },
-  '.arrow': {
-    transition: 'transform 0.1s ease',
+    backgroundColor: theme.colors[parentFillLevel < 2 ? 'fill-three' : 'fill-three-selected'],
     display: 'flex',
-    marginLeft: theme.spacing.medium,
+    flexDirection: 'row',
+    fontWeight: 600,
+    padding: `${size === 'medium' ? 9 : 5}px ${theme.spacing.small}px`,
+  },
+  '.content': {
     alignItems: 'center',
-    ...theme.partials.dropdown.arrowTransition({ isOpen }),
+    display: 'flex',
+    flexDirection: 'row',
+    flexShrink: 1,
+    padding: `${size === 'medium' ? 9 : 5}px ${theme.spacing.medium}px`,
+    width: '100%',
+    '.children': {
+      flexGrow: 1,
+    },
+    '.leftContent, .rightContent': {
+      display: 'flex',
+      alignItems: 'center',
+    },
+
+    '.leftContent': {
+      marginRight: theme.spacing.medium,
+    },
+    '.rightContent': {
+      marginLeft: theme.spacing.medium,
+    },
+    '.arrow': {
+      transition: 'transform 0.1s ease',
+      display: 'flex',
+      marginLeft: theme.spacing.medium,
+      alignItems: 'center',
+      ...theme.partials.dropdown.arrowTransition({ isOpen }),
+    },
   },
   '&:focus-visible': {
     ...theme.partials.focus.default,
@@ -130,7 +148,7 @@ const SelectButton = forwardRef<
   HTMLDivElement,
   SelectButtonProps & HTMLAttributes<HTMLDivElement>
 >(({
-  leftContent, rightContent, children, showArrow = true, isOpen, size = 'medium', ...props
+  titleContent, leftContent, rightContent, children, showArrow = true, isOpen, size = 'medium', ...props
 },
 ref) => {
   const parentFillLevel = useFillLevel()
@@ -143,14 +161,17 @@ ref) => {
       $parentFillLevel={parentFillLevel}
       {...props}
     >
-      {leftContent && <div className="leftContent">{leftContent}</div>}
-      <div className="children">{children}</div>
-      {rightContent && <div className="rightContent">{rightContent}</div>}
-      {showArrow && (
-        <div className="arrow">
-          <DropdownArrowIcon size={16} />
-        </div>
-      )}
+      {titleContent && <div className="titleContent">{titleContent}</div>}
+      <div className="content">
+        {leftContent && <div className="leftContent">{leftContent}</div>}
+        <div className="children">{children}</div>
+        {rightContent && <div className="rightContent">{rightContent}</div>}
+        {showArrow && (
+          <div className="arrow">
+            <DropdownArrowIcon size={16} />
+          </div>
+        )}
+      </div>
     </SelectButtonInner>
   )
 })
@@ -181,6 +202,7 @@ function Select({
   onSelectionChange,
   isOpen,
   onOpenChange,
+  titleContent,
   leftContent,
   rightContent,
   dropdownHeader,
@@ -243,6 +265,7 @@ function Select({
   triggerButton = triggerButton || (
     <SelectButton
       className="triggerButton"
+      titleContent={titleContent}
       leftContent={leftContent}
       rightContent={rightContent}
       isOpen={state.isOpen}
