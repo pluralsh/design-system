@@ -8,7 +8,7 @@ import CopyIcon from './icons/CopyIcon'
 
 type CodelineProps = FlexProps & {
   displayText?: string
-  onCopy: (text: string) => Promise<void>
+  onCopy?: (text: string) => Promise<void>
 }
 
 const propTypes = {}
