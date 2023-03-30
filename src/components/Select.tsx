@@ -14,12 +14,19 @@ import { useButton } from '@react-aria/button'
 import styled, { useTheme } from 'styled-components'
 import { AriaSelectProps } from '@react-types/select'
 
-import { BimodalSelectProps, BimodalSelectState, useBimodalSelectState } from '../utils/useBimodalSelectState'
+import {
+  BimodalSelectProps,
+  BimodalSelectState,
+  useBimodalSelectState,
+} from '../utils/useBimodalSelectState'
 
 import { ListBoxItemBaseProps } from './ListBoxItem'
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
 import { PopoverListBox } from './PopoverListBox'
-import { setNextFocusedKey, useSelectComboStateProps } from './SelectComboShared'
+import {
+  setNextFocusedKey,
+  useSelectComboStateProps,
+} from './SelectComboShared'
 import { useFloatingDropdown } from './useFloatingDropdown'
 import { FillLevel, useFillLevel } from './contexts/FillLevelContext'
 
@@ -88,96 +95,119 @@ function Trigger({ buttonElt, isOpen, ...props }: TriggerProps) {
   })
 }
 
-const SelectButtonInner = styled.div<{ $isOpen: boolean, $size: Size, $parentFillLevel: FillLevel }>(({
-  theme, $isOpen: isOpen, $size: size, $parentFillLevel: parentFillLevel,
-}) => ({
-  ...theme.partials.reset.button,
-  ...theme.partials.text.body2,
-  backgroundColor: theme.colors[parentFillLevelToBackground[parentFillLevel]],
-  display: 'flex',
-  flexDirection: 'row',
-  flexShrink: 1,
-  width: '100%',
-  color: theme.colors['text-light'],
-  border: theme.borders.input,
-  borderRadius: theme.borderRadiuses.medium,
-  '.titleContent': {
-    ...theme.partials.text.caption,
-    alignItems: 'center',
-    backgroundColor: theme.colors[parentFillLevel < 2 ? 'fill-three' : 'fill-three-selected'],
-    color: theme.colors.text,
-    display: 'flex',
-    flexDirection: 'row',
-    fontWeight: 600,
-    padding: `${size === 'medium' ? 9 : 5}px ${theme.spacing.small}px`,
-  },
-  '.content': {
-    alignItems: 'center',
+const SelectButtonInner = styled.div<{
+  $isOpen: boolean
+  $size: Size
+  $parentFillLevel: FillLevel
+}>(
+  ({
+    theme,
+    $isOpen: isOpen,
+    $size: size,
+    $parentFillLevel: parentFillLevel,
+  }) => ({
+    ...theme.partials.reset.button,
+    ...theme.partials.text.body2,
+    backgroundColor: theme.colors[parentFillLevelToBackground[parentFillLevel]],
     display: 'flex',
     flexDirection: 'row',
     flexShrink: 1,
-    padding: `${size === 'medium' ? 9 : 5}px ${theme.spacing.medium}px`,
     width: '100%',
-    '.children': {
-      flexGrow: 1,
-    },
-    '.leftContent, .rightContent': {
-      display: 'flex',
+    color: theme.colors['text-light'],
+    border: theme.borders.input,
+    borderRadius: theme.borderRadiuses.medium,
+    '.titleContent': {
+      ...theme.partials.text.caption,
       alignItems: 'center',
+      backgroundColor:
+        theme.colors[
+          parentFillLevel < 2 ? 'fill-three' : 'fill-three-selected'
+        ],
+      color: theme.colors.text,
+      display: 'flex',
+      flexDirection: 'row',
+      fontWeight: 600,
+      padding: `${size === 'medium' ? 9 : 5}px ${theme.spacing.small}px`,
     },
+    '.content': {
+      alignItems: 'center',
+      display: 'flex',
+      flexDirection: 'row',
+      flexShrink: 1,
+      padding: `${size === 'medium' ? 9 : 5}px ${theme.spacing.medium}px`,
+      width: '100%',
+      '.children': {
+        flexGrow: 1,
+      },
+      '.leftContent, .rightContent': {
+        display: 'flex',
+        alignItems: 'center',
+      },
 
-    '.leftContent': {
-      marginRight: theme.spacing.medium,
+      '.leftContent': {
+        marginRight: theme.spacing.medium,
+      },
+      '.rightContent': {
+        marginLeft: theme.spacing.medium,
+      },
+      '.arrow': {
+        transition: 'transform 0.1s ease',
+        display: 'flex',
+        marginLeft: theme.spacing.medium,
+        alignItems: 'center',
+        ...theme.partials.dropdown.arrowTransition({ isOpen }),
+      },
     },
-    '.rightContent': {
-      marginLeft: theme.spacing.medium,
+    '&:focus-visible': {
+      ...theme.partials.focus.default,
     },
-    '.arrow': {
-      transition: 'transform 0.1s ease',
-      display: 'flex',
-      marginLeft: theme.spacing.medium,
-      alignItems: 'center',
-      ...theme.partials.dropdown.arrowTransition({ isOpen }),
-    },
-  },
-  '&:focus-visible': {
-    ...theme.partials.focus.default,
-  },
-}))
+  })
+)
 
 const SelectButton = forwardRef<
   HTMLDivElement,
   SelectButtonProps & HTMLAttributes<HTMLDivElement>
->(({
-  titleContent, leftContent, rightContent, children, showArrow = true, isOpen, size = 'medium', ...props
-},
-ref) => {
-  const parentFillLevel = useFillLevel()
+>(
+  (
+    {
+      titleContent,
+      leftContent,
+      rightContent,
+      children,
+      showArrow = true,
+      isOpen,
+      size = 'medium',
+      ...props
+    },
+    ref
+  ) => {
+    const parentFillLevel = useFillLevel()
 
-  return (
-    <SelectButtonInner
-      ref={ref}
-      $isOpen={isOpen}
-      $size={size}
-      $parentFillLevel={parentFillLevel}
-      {...props}
-    >
-      {titleContent && <div className="titleContent">{titleContent}</div>}
-      <div className="content">
-        {leftContent && <div className="leftContent">{leftContent}</div>}
-        <div className="children">{children}</div>
-        {rightContent && <div className="rightContent">{rightContent}</div>}
-        {showArrow && (
-          <div className="arrow">
-            <DropdownArrowIcon size={16} />
-          </div>
-        )}
-      </div>
-    </SelectButtonInner>
-  )
-})
+    return (
+      <SelectButtonInner
+        ref={ref}
+        $isOpen={isOpen}
+        $size={size}
+        $parentFillLevel={parentFillLevel}
+        {...props}
+      >
+        {titleContent && <div className="titleContent">{titleContent}</div>}
+        <div className="content">
+          {leftContent && <div className="leftContent">{leftContent}</div>}
+          <div className="children">{children}</div>
+          {rightContent && <div className="rightContent">{rightContent}</div>}
+          {showArrow && (
+            <div className="arrow">
+              <DropdownArrowIcon size={16} />
+            </div>
+          )}
+        </div>
+      </SelectButtonInner>
+    )
+  }
+)
 
-const SelectInner = styled.div(_ => ({
+const SelectInner = styled.div((_) => ({
   position: 'relative',
 }))
 
@@ -229,7 +259,9 @@ function Select({
     isOpen = isOpenUncontrolled
   }
   if (props.selectionMode === 'multiple' && selectedKey) {
-    throw new Error('When using selectionMode="multiple", you must use "selectedKeys" instead of "selectedKey"')
+    throw new Error(
+      'When using selectionMode="multiple", you must use "selectedKeys" instead of "selectedKey"'
+    )
   }
 
   const selectStateBaseProps = useSelectComboStateProps<SelectProps>({
@@ -272,18 +304,22 @@ function Select({
       isOpen={state.isOpen}
       size={size}
     >
-      {(props.selectionMode === 'multiple'
-        && state.selectedItems.length > 0
-        && state.selectedItems
-          .map(item => item?.props?.children?.props?.label)
-          .filter(label => !!label)
-          .join(', '))
-        || state.selectedItem?.props?.children?.props?.label
-        || label}
+      {(props.selectionMode === 'multiple' &&
+        state.selectedItems.length > 0 &&
+        state.selectedItems
+          .map((item) => item?.props?.children?.props?.label)
+          .filter((label) => !!label)
+          .join(', ')) ||
+        state.selectedItem?.props?.children?.props?.label ||
+        label}
     </SelectButton>
   )
 
-  const { floating, triggerRef } = useFloatingDropdown({ triggerRef: ref, width, maxHeight })
+  const { floating, triggerRef } = useFloatingDropdown({
+    triggerRef: ref,
+    width,
+    maxHeight,
+  })
 
   return (
     <SelectInner className="selectInner">
