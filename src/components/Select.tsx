@@ -105,6 +105,7 @@ const SelectButtonInner = styled.div<{ $isOpen: boolean, $size: Size, $parentFil
     ...theme.partials.text.caption,
     alignItems: 'center',
     backgroundColor: theme.colors[parentFillLevel < 2 ? 'fill-three' : 'fill-three-selected'],
+    color: theme.colors.text,
     display: 'flex',
     flexDirection: 'row',
     fontWeight: 600,
