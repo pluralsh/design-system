@@ -12,7 +12,6 @@ import {
 import { HiddenSelect, useSelect } from '@react-aria/select'
 import { useButton } from '@react-aria/button'
 import styled, { useTheme } from 'styled-components'
-
 import { AriaSelectProps } from '@react-types/select'
 
 import { BimodalSelectProps, BimodalSelectState, useBimodalSelectState } from '../utils/useBimodalSelectState'
@@ -23,15 +22,17 @@ import { PopoverListBox } from './PopoverListBox'
 import { setNextFocusedKey, useSelectComboStateProps } from './SelectComboShared'
 import { useFloatingDropdown } from './useFloatingDropdown'
 
+type Placement = 'left' | 'right'
+type Size = 'small' | 'medium' | 'large'
+
 type SelectButtonProps = {
   leftContent?: ReactNode
   rightContent?: ReactNode
   children?: ReactNode
   showArrow?: boolean
   isOpen?: boolean
+  size: Size
 }
-
-type Placement = 'left' | 'right'
 
 export type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   children:
@@ -45,6 +46,7 @@ export type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   onFooterClick?: () => unknown
   triggerButton?: ReactElement
   placement?: Placement
+  size?: Size
   width?: string | number
   maxHeight?: string | number
   onSelectionChange?: (arg: any) => any
@@ -76,7 +78,7 @@ function Trigger({ buttonElt, isOpen, ...props }: TriggerProps) {
   })
 }
 
-const SelectButtonInner = styled.div<{ $isOpen: boolean }>(({ theme, $isOpen: isOpen }) => ({
+const SelectButtonInner = styled.div<{ $isOpen: boolean, $size: Size }>(({ theme, $isOpen: isOpen, $size: size }) => ({
   ...theme.partials.reset.button,
   ...theme.partials.text.body2,
   display: 'flex',
@@ -84,7 +86,7 @@ const SelectButtonInner = styled.div<{ $isOpen: boolean }>(({ theme, $isOpen: is
   flexShrink: 1,
   alignItems: 'center',
   width: '100%',
-  padding: `9px ${theme.spacing.medium}px`,
+  padding: `${size === 'medium' ? 9 : 5}px ${theme.spacing.medium}px`,
   color: theme.colors['text-light'],
   border: theme.borders.input,
   borderRadius: theme.borderRadiuses.medium,
@@ -117,12 +119,13 @@ const SelectButton = forwardRef<
   HTMLDivElement,
   SelectButtonProps & HTMLAttributes<HTMLDivElement>
 >(({
-  leftContent, rightContent, children, showArrow = true, isOpen, ...props
+  leftContent, rightContent, children, showArrow = true, isOpen, size = 'medium', ...props
 },
 ref) => (
   <SelectButtonInner
     ref={ref}
     $isOpen={isOpen}
+    $size={size}
     {...props}
   >
     {leftContent && <div className="leftContent">{leftContent}</div>}
@@ -174,6 +177,7 @@ function Select({
   name,
   triggerButton,
   placement,
+  size = 'medium',
   width,
   maxHeight,
   ...props
@@ -226,6 +230,7 @@ function Select({
       leftContent={leftContent}
       rightContent={rightContent}
       isOpen={state.isOpen}
+      size={size}
     >
       {(props.selectionMode === 'multiple'
         && state.selectedItems.length > 0
