@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import {
   AppIcon,
   Button,
+  Card,
   CheckIcon,
   Chip,
   DropdownArrowIcon,
@@ -325,13 +326,6 @@ function Template() {
         </Select>
       </Flex>
 
-      {/*  */}
-      {/*  */}
-      {/*  */}
-      {/*  */}
-      {/*  */}
-      {/*  */}
-
       {/* MULTIPLE SELECT */}
       <H4
         subtitle
@@ -340,7 +334,13 @@ function Template() {
       >
         Multiple select
       </H4>
-      <Div>
+      <Card
+        display="flex"
+        flexDirection="column"
+        gap="large"
+        padding="large"
+        fillLevel={2}
+      >
         <Select
           defaultOpen={false}
           label="Pick something"
@@ -359,9 +359,6 @@ function Template() {
             />
           ))}
         </Select>
-      </Div>
-
-      <Div>
         <Select
           label="Pick something"
           selectionMode="multiple"
@@ -389,9 +386,6 @@ function Template() {
             />
           ))}
         </Select>
-      </Div>
-
-      <Div>
         <Select
           label="Pick something"
           selectionMode="multiple"
@@ -422,48 +416,47 @@ function Template() {
             />
           ))}
         </Select>
-      </Div>
-
-      <Flex justifyContent="right">
-        <Select
-          label="Version"
-          selectionMode="multiple"
-          selectedKeys={selectedKeys}
-          onSelectionChange={keys => {
-            setSelectedKeys(keys)
-          }}
-          triggerButton={<CustomTriggerButton />}
-          width="max-content"
-          maxHeight={197}
-          placement="right"
-          onFooterClick={() => {
-            setShownLimit(shownLimit + shownStep)
-          }}
-          onOpenChange={open => {
-            if (!open) setShownLimit(shownStep)
-          }}
-          dropdownFooter={
-            shownLimit < items.length && (
-              <ListBoxFooterPlus>View more</ListBoxFooterPlus>
-            )
-          }
-        >
-          {items.slice(0, shownLimit).map(({ key, chips, version }) => (
-            <ListBoxItem
-              key={key}
-              label={version}
-              textValue={version}
-              rightContent={(
-                <ListBoxItemChipList
-                  maxVisible={1}
-                  showExtra
-                  chips={chips}
-                />
-              )}
-            />
-          ))}
-        </Select>
-      </Flex>
+        <Flex justifyContent="right">
+          <Select
+            label="Version"
+            selectionMode="multiple"
+            selectedKeys={selectedKeys}
+            onSelectionChange={keys => {
+              setSelectedKeys(keys)
+            }}
+            triggerButton={<CustomTriggerButton />}
+            width="max-content"
+            maxHeight={197}
+            placement="right"
+            onFooterClick={() => {
+              setShownLimit(shownLimit + shownStep)
+            }}
+            onOpenChange={open => {
+              if (!open) setShownLimit(shownStep)
+            }}
+            dropdownFooter={
+              shownLimit < items.length && (
+                <ListBoxFooterPlus>View more</ListBoxFooterPlus>
+              )
+            }
+          >
+            {items.slice(0, shownLimit).map(({ key, chips, version }) => (
+              <ListBoxItem
+                key={key}
+                label={version}
+                textValue={version}
+                rightContent={(
+                  <ListBoxItemChipList
+                    maxVisible={1}
+                    showExtra
+                    chips={chips}
+                  />
+                )}
+              />
+            ))}
+          </Select>
+        </Flex>
+      </Card>
     </Flex>
   )
 }

@@ -21,6 +21,14 @@ import DropdownArrowIcon from './icons/DropdownArrowIcon'
 import { PopoverListBox } from './PopoverListBox'
 import { setNextFocusedKey, useSelectComboStateProps } from './SelectComboShared'
 import { useFloatingDropdown } from './useFloatingDropdown'
+import { FillLevel, useFillLevel } from './contexts/FillLevelContext'
+
+const parentFillLevelToBackground = {
+  0: 'fill-one',
+  1: 'fill-two',
+  2: 'fill-three',
+  3: 'fill-three',
+}
 
 type Placement = 'left' | 'right'
 type Size = 'small' | 'medium' | 'large'
@@ -31,7 +39,7 @@ type SelectButtonProps = {
   children?: ReactNode
   showArrow?: boolean
   isOpen?: boolean
-  size: Size
+  size?: Size
 }
 
 export type SelectProps = Exclude<SelectButtonProps, 'children'> & {
@@ -78,9 +86,12 @@ function Trigger({ buttonElt, isOpen, ...props }: TriggerProps) {
   })
 }
 
-const SelectButtonInner = styled.div<{ $isOpen: boolean, $size: Size }>(({ theme, $isOpen: isOpen, $size: size }) => ({
+const SelectButtonInner = styled.div<{ $isOpen: boolean, $size: Size, $parentFillLevel: FillLevel }>(({
+  theme, $isOpen: isOpen, $size: size, $parentFillLevel: parentFillLevel,
+}) => ({
   ...theme.partials.reset.button,
   ...theme.partials.text.body2,
+  backgroundColor: theme.colors[parentFillLevelToBackground[parentFillLevel]],
   display: 'flex',
   flexDirection: 'row',
   flexShrink: 1,
@@ -121,23 +132,28 @@ const SelectButton = forwardRef<
 >(({
   leftContent, rightContent, children, showArrow = true, isOpen, size = 'medium', ...props
 },
-ref) => (
-  <SelectButtonInner
-    ref={ref}
-    $isOpen={isOpen}
-    $size={size}
-    {...props}
-  >
-    {leftContent && <div className="leftContent">{leftContent}</div>}
-    <div className="children">{children}</div>
-    {rightContent && <div className="rightContent">{rightContent}</div>}
-    {showArrow && (
-      <div className="arrow">
-        <DropdownArrowIcon size={16} />
-      </div>
-    )}
-  </SelectButtonInner>
-))
+ref) => {
+  const parentFillLevel = useFillLevel()
+
+  return (
+    <SelectButtonInner
+      ref={ref}
+      $isOpen={isOpen}
+      $size={size}
+      $parentFillLevel={parentFillLevel}
+      {...props}
+    >
+      {leftContent && <div className="leftContent">{leftContent}</div>}
+      <div className="children">{children}</div>
+      {rightContent && <div className="rightContent">{rightContent}</div>}
+      {showArrow && (
+        <div className="arrow">
+          <DropdownArrowIcon size={16} />
+        </div>
+      )}
+    </SelectButtonInner>
+  )
+})
 
 const SelectInner = styled.div(_ => ({
   position: 'relative',
