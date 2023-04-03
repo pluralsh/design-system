@@ -115,7 +115,7 @@ const DEFAULT_STEPS: Array<StepConfig> = [
     key: 'apps',
     label: 'Apps',
     Icon: AppsIcon,
-    node: <Picker items={PICKER_ITEMS} />,
+    node: <Picker items={[]} />,
     isDefault: true,
   },
   {
