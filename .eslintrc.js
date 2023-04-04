@@ -13,5 +13,6 @@ module.exports = {
   rules: {
     '@typescript-eslint/consistent-type-exports': 'error',
     'import-newlines/enforce': 'off',
+    'arrow-parens': 'off',
   },
 }

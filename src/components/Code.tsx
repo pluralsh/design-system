@@ -236,10 +236,7 @@ function CodeTabs() {
   )
 
   return (
-    <TabsWrap
-      ref={tabsWrapRef}
-      $isDisabled={tabListStateProps.isDisabled}
-    >
+    <TabsWrap ref={tabsWrapRef} $isDisabled={tabListStateProps.isDisabled}>
       <TabList
         className="my-tab-list"
         stateRef={tabStateRef}
@@ -247,7 +244,7 @@ function CodeTabs() {
         ref={tabsRef}
         style={!tabInterface ? { opacity: 0 } : undefined}
       >
-        {tabs.map((tab) => {
+        {tabs.map(tab => {
           if (typeof tab.content !== 'string') {
             throw new Error(
               'Code component expects a string for tabs[].content'
@@ -272,7 +269,7 @@ function CodeTabs() {
 function CodeSelectUnstyled({ className }: ComponentProps<'div'>) {
   const { tabs, selectedKey, onSelectionChange } = useContext(TabsContext)
 
-  const selectedTab = tabs.find((tab) => tab.key === selectedKey) || tabs[0]
+  const selectedTab = tabs.find(tab => tab.key === selectedKey) || tabs[0]
 
   return (
     <div className={className}>
@@ -285,7 +282,7 @@ function CodeSelectUnstyled({ className }: ComponentProps<'div'>) {
           <TabsDropdownButton>{selectedTab.label} </TabsDropdownButton>
         }
       >
-        {tabs.map((tab) => (
+        {tabs.map(tab => (
           <ListBoxItem
             key={tab.key}
             label={tab.label || tab.language}
@@ -333,11 +330,7 @@ function CodeContent({
   }
 
   return (
-    <Div
-      height="100%"
-      overflow="auto"
-      alignItems="center"
-    >
+    <Div height="100%" overflow="auto" alignItems="center">
       <CopyButton
         copied={copied}
         handleCopy={handleCopy}
@@ -415,11 +408,7 @@ function CodeRef(
       }
       {...props}
     >
-      <Flex
-        position="relative"
-        direction="column"
-        height="100%"
-      >
+      <Flex position="relative" direction="column" height="100%">
         {showHeader && (
           <>
             <CodeHeader
@@ -438,19 +427,13 @@ function CodeRef(
           </>
         )}
         {tabs ? (
-          tabs.map((tab) => (
+          tabs.map(tab => (
             <TabPanel
               key={tab.key}
               tabKey={tab.key}
               mode="multipanel"
               stateRef={tabStateRef}
-              as={
-                <Div
-                  position="relative"
-                  height="100%"
-                  overflow="hidden"
-                />
-              }
+              as={<Div position="relative" height="100%" overflow="hidden" />}
             >
               <CodeContent
                 language={tab.language}
@@ -462,11 +445,7 @@ function CodeRef(
             </TabPanel>
           ))
         ) : (
-          <Div
-            position="relative"
-            height="100%"
-            overflow="hidden"
-          >
+          <Div position="relative" height="100%" overflow="hidden">
             <CodeContent
               language={language}
               showLineNumbers={showLineNumbers}
@@ -485,7 +464,7 @@ function CodeRef(
   )
 }
 
-const Code = styled(forwardRef(CodeRef))((_) => ({
+const Code = styled(forwardRef(CodeRef))(_ => ({
   [CopyButton]: {
     opacity: 0,
     pointerEvents: 'none',

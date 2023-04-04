@@ -35,7 +35,7 @@ const parentFillLevelToBackground = {
   1: 'fill-two',
   2: 'fill-three',
   3: 'fill-three',
-}
+} as const satisfies Record<FillLevel, string>
 
 type Placement = 'left' | 'right'
 type Size = 'small' | 'medium' | 'large'
@@ -207,7 +207,7 @@ const SelectButton = forwardRef<
   }
 )
 
-const SelectInner = styled.div((_) => ({
+const SelectInner = styled.div(_ => ({
   position: 'relative',
 }))
 
@@ -307,8 +307,8 @@ function Select({
       {(props.selectionMode === 'multiple' &&
         state.selectedItems.length > 0 &&
         state.selectedItems
-          .map((item) => item?.props?.children?.props?.label)
-          .filter((label) => !!label)
+          .map(item => item?.props?.children?.props?.label)
+          .filter(label => !!label)
           .join(', ')) ||
         state.selectedItem?.props?.children?.props?.label ||
         label}
@@ -319,16 +319,12 @@ function Select({
     triggerRef: ref,
     width,
     maxHeight,
+    placement,
   })
 
   return (
     <SelectInner className="selectInner">
-      <HiddenSelect
-        state={state}
-        triggerRef={ref}
-        label={label}
-        name={name}
-      />
+      <HiddenSelect state={state} triggerRef={ref} label={label} name={name} />
       <Trigger
         buttonRef={triggerRef as unknown as RefObject<HTMLElement>}
         buttonElt={triggerButton}
@@ -343,7 +339,6 @@ function Select({
         dropdownHeaderFixed={dropdownHeaderFixed}
         dropdownFooterFixed={dropdownFooterFixed}
         width={width}
-        placement={placement}
         floating={floating}
       />
     </SelectInner>

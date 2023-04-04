@@ -2,6 +2,7 @@ import {
   ComponentPropsWithRef,
   ComponentPropsWithoutRef,
   ElementType,
+  Key,
   ReactNode,
   forwardRef,
 } from 'react'
@@ -20,7 +21,7 @@ type ListBoxItemBaseProps = {
   disabled?: boolean
   label?: ReactNode
   description?: ReactNode
-  key?: string
+  key?: Key
   labelProps?: ComponentPropsWithoutRef<ElementType>
   descriptionProps?: ComponentPropsWithoutRef<ElementType>
 } & ComponentPropsWithRef<'div'> &
@@ -120,36 +121,23 @@ const ListBoxItem = forwardRef<HTMLDivElement, ListBoxItemProps>(
     },
     ref
   ) => (
-    <ListBoxItemInner
-      ref={ref}
-      selected={selected}
-      {...props}
-    >
+    <ListBoxItemInner ref={ref} selected={selected} {...props}>
       {leftContent && <div className="left-content">{leftContent}</div>}
       <div className="center-content">
         {label && (
-          <div
-            className="label"
-            {...labelProps}
-          >
+          <div className="label" {...labelProps}>
             {label}
           </div>
         )}
         {description && (
-          <div
-            className="description"
-            {...descriptionProps}
-          >
+          <div className="description" {...descriptionProps}>
             {description}
           </div>
         )}
       </div>
       {rightContent && <div className="right-content">{rightContent}</div>}
       {(selected || reserveSelectedIndicatorSpace) && (
-        <StatusOkIcon
-          className="selected-indicator"
-          size={16}
-        />
+        <StatusOkIcon className="selected-indicator" size={16} />
       )}
     </ListBoxItemInner>
   )
@@ -195,11 +183,7 @@ const ListBoxFooterInner = styled.div<{ focused?: boolean }>(
 )
 const ListBoxFooter = forwardRef<HTMLDivElement, ListBoxFooterProps>(
   ({ leftContent, rightContent, children, ...props }, ref) => (
-    <ListBoxFooterInner
-      tabIndex={0}
-      ref={ref}
-      {...props}
-    >
+    <ListBoxFooterInner tabIndex={0} ref={ref} {...props}>
       {leftContent && <div className="leftContent">{leftContent}</div>}
       <div className="children">{children}</div>
       {rightContent && <div className="rightContent">{rightContent}</div>}

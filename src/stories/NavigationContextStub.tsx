@@ -6,7 +6,17 @@ import {
 } from '../components/contexts/NavigationContext'
 
 export function Link({ children, ...props }: LinkProps) {
-  return <a {...props}>{children}</a>
+  return (
+    <a
+      {...props}
+      onClick={e => {
+        console.info('Link clicked to:', props?.href)
+        e.preventDefault()
+      }}
+    >
+      {children}
+    </a>
+  )
 }
 
 const currentPathReducer = (_: string | null, newPath: string | null) => {
