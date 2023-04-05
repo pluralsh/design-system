@@ -221,7 +221,7 @@ function CrumbSelect({
       >
         {breadcrumbs.map((crumb, i) => (
           <ListBoxItem
-            key={i}
+            key={String(i)}
             label={crumb.label}
             textValue={crumb.textValue || ''}
           />

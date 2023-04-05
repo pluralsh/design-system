@@ -1,6 +1,6 @@
 import { Flex, Span } from 'honorable'
 
-import { Key, useState } from 'react'
+import { useState } from 'react'
 
 import {
   type Breadcrumb,
@@ -67,8 +67,8 @@ const crumbList: Breadcrumb[] = [
 const crumbLists = crumbList.map((_, i) => crumbList.slice(0, i + 1))
 
 function CrumbSetter() {
-  const [selectedList, setSelectedList] = useState<Key>(
-    String(crumbLists.length - 1)
+  const [selectedList, setSelectedList] = useState<string>(
+    (crumbLists.length - 1).toString()
   )
 
   useSetBreadcrumbs(crumbLists[selectedList])
@@ -78,14 +78,14 @@ function CrumbSetter() {
       <Select
         label="..."
         selectedKey={selectedList}
-        onSelectionChange={(key) => setSelectedList(key)}
+        onSelectionChange={(key) => setSelectedList(key as string)}
       >
         {crumbLists.map((crumbs, i) => {
           const lastCrumb = crumbs[crumbs.length - 1]
 
           return (
             <ListBoxItem
-              key={i}
+              key={i.toString()}
               textValue={lastCrumb.textValue}
               label={lastCrumb.label}
             />

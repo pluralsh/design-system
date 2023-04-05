@@ -2,7 +2,6 @@ import {
   ComponentPropsWithRef,
   ComponentPropsWithoutRef,
   ElementType,
-  Key,
   ReactNode,
   forwardRef,
 } from 'react'
@@ -21,7 +20,7 @@ type ListBoxItemBaseProps = {
   disabled?: boolean
   label?: ReactNode
   description?: ReactNode
-  key?: Key
+  key?: string
   labelProps?: ComponentPropsWithoutRef<ElementType>
   descriptionProps?: ComponentPropsWithoutRef<ElementType>
 } & ComponentPropsWithRef<'div'> &
