@@ -8,9 +8,9 @@ import {
   Breadcrumbs,
   useSetBreadcrumbs,
 } from '../components/Breadcrumbs'
-
 import { Select } from '../components/Select'
 import { ListBoxItem } from '../components/ListBoxItem'
+import FormField from '../components/FormField'
 
 import { NavContextProviderStub } from './NavigationContextStub'
 
@@ -74,23 +74,25 @@ function CrumbSetter() {
   useSetBreadcrumbs(crumbLists[selectedList])
 
   return (
-    <Select
-      label="Select a page"
-      selectedKey={selectedList}
-      onSelectionChange={(key) => setSelectedList(key)}
-    >
-      {crumbLists.map((crumbs, i) => {
-        const lastCrumb = crumbs[crumbs.length - 1]
+    <FormField label="Select a page">
+      <Select
+        label="..."
+        selectedKey={selectedList}
+        onSelectionChange={(key) => setSelectedList(key)}
+      >
+        {crumbLists.map((crumbs, i) => {
+          const lastCrumb = crumbs[crumbs.length - 1]
 
-        return (
-          <ListBoxItem
-            key={i}
-            textValue={lastCrumb.textValue}
-            label={lastCrumb.label}
-          />
-        )
-      })}
-    </Select>
+          return (
+            <ListBoxItem
+              key={i}
+              textValue={lastCrumb.textValue}
+              label={lastCrumb.label}
+            />
+          )
+        })}
+      </Select>
+    </FormField>
   )
 }
 

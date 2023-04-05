@@ -217,7 +217,7 @@ function CrumbSelect({
         }}
         placement="left"
         triggerButton={<CrumbSelectTrigger />}
-        width="200px"
+        width="180px"
       >
         {breadcrumbs.map((crumb, i) => (
           <ListBoxItem
