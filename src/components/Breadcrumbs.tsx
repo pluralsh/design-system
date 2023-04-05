@@ -1,6 +1,6 @@
 // TODO:
 //   Style "..." trigger focus state
-//   Fix flashing when changing breadcrumbs data
+//   See if we can prevent brief flashing of empty list on breadcrumb data change
 
 import React, {
   type Key,
@@ -153,6 +153,13 @@ const CrumbLinkText = styled.span(({ theme }) => ({
     textDecoration: 'none',
     color: theme.colors['text-xlight'],
     cursor: 'pointer',
+    '&:focus, &:focus-visible': {
+      outline: 'none',
+    },
+    '&:focus-visible': {
+      textDecoration: 'underline',
+      textDecorationColor: theme.colors['border-outline-focused'],
+    },
     '&:hover': {
       color: theme.colors.text,
       textDecoration: 'underline',
@@ -178,6 +185,13 @@ const CrumbSelectTrigger = styled(CrumbSelectTriggerUnstyled)<{
   ...theme.partials.text.caption,
   cursor: 'pointer',
   color: theme.colors['text-xlight'],
+  '&:focus, &:focus-visible': {
+    outline: 'none',
+  },
+  '&:focus-visible': {
+    textDecoration: 'underline',
+    textDecorationColor: theme.colors['border-outline-focused'],
+  },
 }))
 
 function CrumbSelect({
@@ -370,18 +384,15 @@ export function Breadcrumbs({
   }, [breadcrumbs, refitCrumbList])
 
   // Make breadcrumbs visible after refit complete
-  useEffect(() => {
-    if (visibleListId) {
-      wrapperRef?.current?.style.setProperty('opacity', '1')
-    }
-  }, [visibleListId])
+  if (visibleListId) {
+    wrapperRef?.current?.style.setProperty('opacity', '1')
+  }
 
   return (
     <Div {...props}>
       <Flex
         direction="column"
         ref={wrapperRef}
-        overflow="hidden"
       >
         {children}
       </Flex>

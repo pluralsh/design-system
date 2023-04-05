@@ -67,7 +67,9 @@ const crumbList: Breadcrumb[] = [
 const crumbLists = crumbList.map((_, i) => crumbList.slice(0, i + 1))
 
 function CrumbSetter() {
-  const [selectedList, setSelectedList] = useState<Key>(crumbLists.length - 1)
+  const [selectedList, setSelectedList] = useState<Key>(
+    String(crumbLists.length - 1)
+  )
 
   useSetBreadcrumbs(crumbLists[selectedList])
 
@@ -75,7 +77,7 @@ function CrumbSetter() {
     <Select
       label="Select a page"
       selectedKey={selectedList}
-      onSelectionChange={setSelectedList}
+      onSelectionChange={(key) => setSelectedList(key)}
     >
       {crumbLists.map((crumbs, i) => {
         const lastCrumb = crumbs[crumbs.length - 1]
