@@ -1,5 +1,6 @@
 // TODO:
 //   Style "..." trigger focus state
+//   Fix flashing when changing breadcrumbs data
 
 import React, {
   type Key,
@@ -24,12 +25,22 @@ import { Select } from './Select'
 import { ListBoxItem } from './ListBoxItem'
 import { useNavigationContext } from './contexts/NavigationContext'
 
-export type Breadcrumb = {
+export type BreadcrumbBase = {
   url?: string
-  label?: ReactNode
-  text?: string
   key?: Key
 }
+
+export type Breadcrumb = BreadcrumbBase &
+  (
+    | {
+        label: Exclude<ReactNode, string>
+        textValue: string
+      }
+    | {
+        label: string
+        textValue?: string
+      }
+  )
 
 function isKey(maybeKey: unknown): maybeKey is Key {
   return (
@@ -90,7 +101,7 @@ function getCrumbKey(crumb: Breadcrumb) {
 
   return isKey(maybeKey)
     ? maybeKey
-    : `${typeof crumb.label === 'string' ? crumb.label : crumb.text}-${
+    : `${typeof crumb.label === 'string' ? crumb.label : crumb.textValue}-${
         crumb.url
       }`
 }
@@ -109,16 +120,15 @@ function CrumbLink({
   crumb: Breadcrumb
   isLast?: boolean
 }) {
-  const label = crumb.label ?? crumb.text
   const { Link } = useNavigationContext()
 
   return (
     <CrumbLinkWrap>
       <CrumbLinkText className={classNames({ isLast })}>
         {isLast || typeof crumb.url !== 'string' ? (
-          label
+          crumb.label
         ) : (
-          <Link href={crumb.url}>{label}</Link>
+          <Link href={crumb.url}>{crumb.label}</Link>
         )}
       </CrumbLinkText>
       {!isLast && <CrumbSeparator />}
@@ -198,14 +208,8 @@ function CrumbSelect({
         {breadcrumbs.map((crumb, i) => (
           <ListBoxItem
             key={i}
-            label={crumb.label || crumb.text}
-            textValue={
-              crumb.text
-                ? crumb.text
-                : typeof crumb.label === 'string'
-                ? crumb.label
-                : undefined
-            }
+            label={crumb.label}
+            textValue={crumb.textValue || ''}
           />
         ))}
       </Select>
@@ -214,15 +218,15 @@ function CrumbSelect({
   )
 }
 
-function TruncatedCrumbListRef(
+function CrumbListRef(
   {
     breadcrumbs,
-    maxLen,
+    maxLength,
     visibleListId,
     ...props
   }: {
     breadcrumbs: Breadcrumb[]
-    maxLen: number
+    maxLength: number
     visibleListId: string
   } & FlexProps,
   ref: MutableRefObject<HTMLDivElement>
@@ -232,16 +236,16 @@ function TruncatedCrumbListRef(
   if (breadcrumbs?.length < 1) {
     return null
   }
-  maxLen = Math.min(maxLen, breadcrumbs.length)
+  maxLength = Math.min(maxLength, breadcrumbs.length)
   const hidden = visibleListId !== id
 
-  const head = maxLen > 1 ? [breadcrumbs[0]] : []
+  const head = maxLength > 1 ? [breadcrumbs[0]] : []
   const middle = breadcrumbs.slice(
     head.length,
-    breadcrumbs.length + head.length - maxLen
+    breadcrumbs.length + head.length - maxLength
   )
   const tail = breadcrumbs.slice(
-    breadcrumbs.length + head.length - maxLen,
+    breadcrumbs.length + head.length - maxLength,
     breadcrumbs.length
   )
 
@@ -250,7 +254,7 @@ function TruncatedCrumbListRef(
       id={id}
       ref={ref}
       {...(hidden
-        ? { height: 0, overflow: 'hidden', 'aria-visible': 'false' }
+        ? { height: 0, opacity: 0, overflow: 'hidden', 'aria-visible': 'false' }
         : {})}
       className="crumbList"
       direction="row"
@@ -283,58 +287,94 @@ function TruncatedCrumbListRef(
   )
 }
 
-const TruncatedCrumbList = forwardRef(TruncatedCrumbListRef)
+const CrumbList = forwardRef(CrumbListRef)
 
-export function Breadcrumbs(props: FlexProps) {
+export function Breadcrumbs({
+  minLength = 0,
+  maxLength = Infinity,
+  collapsible = true,
+  ...props
+}: {
+  minLength?: number
+  maxLength?: number
+  collapsible?: boolean
+} & FlexProps) {
   const { breadcrumbs } = useBreadcrumbs()
   const wrapperRef = useRef<HTMLDivElement | undefined>()
   const [visibleListId, setVisibleListId] = useState<string>('')
 
   const children = []
 
-  for (let i = 0; i <= breadcrumbs.length; ++i) {
+  if (!collapsible) {
+    minLength = breadcrumbs.length
+    maxLength = breadcrumbs.length
+  } else {
+    minLength = Math.min(Math.max(minLength, 0), breadcrumbs.length)
+    maxLength = Math.min(maxLength, breadcrumbs.length)
+  }
+
+  for (let i = minLength; i <= maxLength; ++i) {
     children.push(
-      <TruncatedCrumbList
+      <CrumbList
         key={i}
         breadcrumbs={breadcrumbs}
-        maxLen={i}
+        maxLength={i}
         visibleListId={visibleListId}
       />
     )
   }
 
-  const onResize = useCallback((wrapperWidth: number) => {
-    const lists = Array.from(
-      wrapperRef?.current?.getElementsByClassName('crumbList')
-    )
+  const refitCrumbList = useCallback(
+    ({ width: wrapperWidth }: { width: number }) => {
+      const lists = Array.from(
+        wrapperRef?.current?.getElementsByClassName('crumbList')
+      )
 
-    const { id } = lists.reduce(
-      (prev, next) => {
-        const prevWidth = prev.width ?? 0
-        const nextWidth = next?.getBoundingClientRect?.()?.width
+      const { id } = lists.reduce(
+        (prev, next) => {
+          const prevWidth = prev.width
+          const nextWidth = next?.scrollWidth
 
-        if (nextWidth > prevWidth && nextWidth < wrapperWidth) {
-          return { width: nextWidth, id: next.id }
-        }
+          if (
+            (prevWidth > wrapperWidth &&
+              (nextWidth <= prevWidth || nextWidth < wrapperWidth)) ||
+            nextWidth <= wrapperWidth
+          ) {
+            return { width: nextWidth, id: next.id }
+          }
 
-        return prev
-      },
-      { width: 0, id: '' }
-    )
+          return prev
+        },
+        { width: Infinity, id: '' }
+      )
 
-    setVisibleListId(id)
-  }, [])
+      setVisibleListId(id)
+    },
+    []
+  )
 
+  // Refit breadcrumb list on resize
+  useResizeObserver(wrapperRef, refitCrumbList)
+
+  // Make sure to also refit if breadcrumbs data changes
   useEffect(() => {
     const wrapperWidth =
       wrapperRef?.current?.getBoundingClientRect?.()?.width || 0
 
-    onResize(wrapperWidth)
-  }, [breadcrumbs, onResize])
+    // Hide breadcrumbs until refit is complete
+    setVisibleListId(null)
+    // Hide immediately instead of waiting for repaint to prevent flashing
+    // of incorrect breadcrumb list
+    wrapperRef?.current?.style.setProperty('opacity', '0')
+    refitCrumbList({ width: wrapperWidth })
+  }, [breadcrumbs, refitCrumbList])
 
-  useResizeObserver(wrapperRef, (rect) => {
-    onResize(rect.width)
-  })
+  // Make breadcrumbs visible after refit complete
+  useEffect(() => {
+    if (visibleListId) {
+      wrapperRef?.current?.style.setProperty('opacity', '1')
+    }
+  }, [visibleListId])
 
   return (
     <Div {...props}>

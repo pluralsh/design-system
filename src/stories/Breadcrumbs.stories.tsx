@@ -1,4 +1,6 @@
-import { Div, Flex, Span } from 'honorable'
+import { Flex, Span } from 'honorable'
+
+import { Key, useState } from 'react'
 
 import {
   type Breadcrumb,
@@ -7,22 +9,28 @@ import {
   useSetBreadcrumbs,
 } from '../components/Breadcrumbs'
 
+import { Select } from '../components/Select'
+import { ListBoxItem } from '../components/ListBoxItem'
+
 import { NavContextProviderStub } from './NavigationContextStub'
 
 export default {
   title: 'Breadcrumbs',
   component: 'Breadcrumbs',
+  argTypes: {
+    maxLength: {},
+  },
 }
 
-const crumbs: Breadcrumb[] = [
+const crumbList: Breadcrumb[] = [
   {
     url: 'http://stuff.com/link1',
-    text: 'Root level',
+    label: 'Root level',
   },
   {
     url: 'http://stuff.com/link1/link2',
     label: <Span>Level 2</Span>,
-    text: 'One step up ',
+    textValue: 'Level 2',
   },
   {
     url: 'http://stuff.com/link1/link2/link3',
@@ -35,11 +43,11 @@ const crumbs: Breadcrumb[] = [
         Yet <i>another</i> level
       </>
     ),
-    text: 'Yet another level',
+    textValue: 'Yet another level',
   },
   {
     url: 'http://stuff.com/link1/link2/link3/link4/link5',
-    text: 'Are well still going?',
+    label: 'Are well still going?',
   },
   {
     url: 'http://stuff.com/link1/link2/link3/link4/link5',
@@ -48,21 +56,43 @@ const crumbs: Breadcrumb[] = [
         You <b>bet</b> we are!
       </>
     ),
-    text: 'You bet we are',
+    textValue: 'You bet we are',
   },
   {
     url: 'http://stuff.com/link1/link2/link3/link4/link5/link6',
-    text: 'This is getting out of hand',
+    label: 'This is getting out of hand',
   },
 ]
 
-function CrumbSetter() {
-  useSetBreadcrumbs(crumbs)
+const crumbLists = crumbList.map((_, i) => crumbList.slice(0, i + 1))
 
-  return <Div>Page Content</Div>
+function CrumbSetter() {
+  const [selectedList, setSelectedList] = useState<Key>(crumbLists.length - 1)
+
+  useSetBreadcrumbs(crumbLists[selectedList])
+
+  return (
+    <Select
+      label="Select a page"
+      selectedKey={selectedList}
+      onSelectionChange={setSelectedList}
+    >
+      {crumbLists.map((crumbs, i) => {
+        const lastCrumb = crumbs[crumbs.length - 1]
+
+        return (
+          <ListBoxItem
+            key={i}
+            textValue={lastCrumb.textValue}
+            label={lastCrumb.label}
+          />
+        )
+      })}
+    </Select>
+  )
 }
 
-function Template() {
+function Template(args: any) {
   return (
     <NavContextProviderStub>
       <BreadcrumbProvider>
@@ -71,7 +101,7 @@ function Template() {
           gap="large"
         >
           {/* SINGLE SELECT */}
-          <Breadcrumbs />
+          <Breadcrumbs {...args} />
           <CrumbSetter />
         </Flex>
       </BreadcrumbProvider>
@@ -81,4 +111,8 @@ function Template() {
 
 export const Default = Template.bind({})
 
-Default.args = {}
+Default.args = {
+  minLength: undefined,
+  maxLength: undefined,
+  collapsible: true,
+}
