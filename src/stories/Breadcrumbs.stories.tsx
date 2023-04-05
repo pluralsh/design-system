@@ -66,7 +66,10 @@ function Template() {
   return (
     <NavContextProviderStub>
       <BreadcrumbProvider>
-        <Flex flexDirection="column" gap="large">
+        <Flex
+          flexDirection="column"
+          gap="large"
+        >
           {/* SINGLE SELECT */}
           <Breadcrumbs />
           <CrumbSetter />

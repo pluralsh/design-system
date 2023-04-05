@@ -106,7 +106,11 @@ const OpenButton = styled(
     )
 
     return (
-      <div ref={buttonRef} {...props} {...useButtonProps}>
+      <div
+        ref={buttonRef}
+        {...props}
+        {...useButtonProps}
+      >
         <DropdownArrowIcon />
       </div>
     )
@@ -232,7 +236,7 @@ function ComboBoxInput({
   )
 }
 
-const ComboBoxInner = styled(SelectInner)(_p => ({}))
+const ComboBoxInner = styled(SelectInner)((_p) => ({}))
 
 function ComboBox({
   children,

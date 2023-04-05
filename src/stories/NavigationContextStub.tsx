@@ -9,7 +9,7 @@ export function Link({ children, ...props }: LinkProps) {
   return (
     <a
       {...props}
-      onClick={e => {
+      onClick={(e) => {
         console.info('Link clicked to:', props?.href)
         e.preventDefault()
       }}

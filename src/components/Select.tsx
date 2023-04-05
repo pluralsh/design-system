@@ -207,7 +207,7 @@ const SelectButton = forwardRef<
   }
 )
 
-const SelectInner = styled.div(_ => ({
+const SelectInner = styled.div((_) => ({
   position: 'relative',
 }))
 
@@ -307,8 +307,8 @@ function Select({
       {(props.selectionMode === 'multiple' &&
         state.selectedItems.length > 0 &&
         state.selectedItems
-          .map(item => item?.props?.children?.props?.label)
-          .filter(label => !!label)
+          .map((item) => item?.props?.children?.props?.label)
+          .filter((label) => !!label)
           .join(', ')) ||
         state.selectedItem?.props?.children?.props?.label ||
         label}
@@ -324,7 +324,12 @@ function Select({
 
   return (
     <SelectInner className="selectInner">
-      <HiddenSelect state={state} triggerRef={ref} label={label} name={name} />
+      <HiddenSelect
+        state={state}
+        triggerRef={ref}
+        label={label}
+        name={name}
+      />
       <Trigger
         buttonRef={triggerRef as unknown as RefObject<HTMLElement>}
         buttonElt={triggerButton}

@@ -152,7 +152,11 @@ const CrumbLinkText = styled.span(({ theme }) => ({
 
 const CrumbSelectTriggerUnstyled = forwardRef<any, any>(
   ({ className, ...props }: { className?: string }, ref) => (
-    <div className={className} ref={ref} {...props}>
+    <div
+      className={className}
+      ref={ref}
+      {...props}
+    >
       ...
     </div>
   )
@@ -180,7 +184,7 @@ function CrumbSelect({
     <CrumbLinkWrap>
       <Select
         selectedKey={null}
-        onSelectionChange={key => {
+        onSelectionChange={(key) => {
           const url = breadcrumbs[key as number]?.url
 
           if (url) {
@@ -254,7 +258,7 @@ function TruncatedCrumbListRef(
       maxWidth="max-content"
       {...props}
     >
-      {head.map(headCrumb => (
+      {head.map((headCrumb) => (
         <CrumbLink
           key={getCrumbKey(headCrumb)}
           crumb={headCrumb}
@@ -262,7 +266,10 @@ function TruncatedCrumbListRef(
         />
       ))}
       {middle.length > 0 && (
-        <CrumbSelect breadcrumbs={middle} isLast={tail.length === 0} />
+        <CrumbSelect
+          breadcrumbs={middle}
+          isLast={tail.length === 0}
+        />
       )}
 
       {tail.map((crumb, i) => (
@@ -325,13 +332,17 @@ export function Breadcrumbs(props: FlexProps) {
     onResize(wrapperWidth)
   }, [breadcrumbs, onResize])
 
-  useResizeObserver(wrapperRef, rect => {
+  useResizeObserver(wrapperRef, (rect) => {
     onResize(rect.width)
   })
 
   return (
     <Div {...props}>
-      <Flex direction="column" ref={wrapperRef} overflow="hidden">
+      <Flex
+        direction="column"
+        ref={wrapperRef}
+        overflow="hidden"
+      >
         {children}
       </Flex>
     </Div>
