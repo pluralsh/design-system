@@ -1,3 +1,6 @@
+// TODO:
+//   Style "..." trigger focus state
+
 import React, {
   type Key,
   MutableRefObject,
@@ -176,7 +179,7 @@ function CrumbSelect({
   return (
     <CrumbLinkWrap>
       <Select
-        selectedKey={0}
+        selectedKey={null}
         onSelectionChange={key => {
           const url = breadcrumbs[key as number]?.url
 
@@ -229,9 +232,12 @@ function TruncatedCrumbListRef(
   const hidden = visibleListId !== id
 
   const head = maxLen > 1 ? [breadcrumbs[0]] : []
-  const middle = breadcrumbs.slice(head.length, breadcrumbs.length - maxLen + 1)
+  const middle = breadcrumbs.slice(
+    head.length,
+    breadcrumbs.length + head.length - maxLen
+  )
   const tail = breadcrumbs.slice(
-    breadcrumbs.length - maxLen + 1,
+    breadcrumbs.length + head.length - maxLen,
     breadcrumbs.length
   )
 
@@ -275,19 +281,13 @@ const TruncatedCrumbList = forwardRef(TruncatedCrumbListRef)
 export function Breadcrumbs(props: FlexProps) {
   const { breadcrumbs } = useBreadcrumbs()
   const wrapperRef = useRef<HTMLDivElement | undefined>()
-  //   const listRefs = useRef<HTMLDivElement[]>([])
   const [visibleListId, setVisibleListId] = useState<string>('')
 
   const children = []
 
-  //   listRefs.current = []
-
-  for (let i = 1; i <= breadcrumbs.length; ++i) {
+  for (let i = 0; i <= breadcrumbs.length; ++i) {
     children.push(
       <TruncatedCrumbList
-        // ref={elt => {
-        //   listRefs.current[i] = elt
-        // }}
         key={i}
         breadcrumbs={breadcrumbs}
         maxLen={i}
@@ -297,7 +297,6 @@ export function Breadcrumbs(props: FlexProps) {
   }
 
   const onResize = useCallback((wrapperWidth: number) => {
-    console.log('resized')
     const lists = Array.from(
       wrapperRef?.current?.getElementsByClassName('crumbList')
     )
@@ -315,8 +314,6 @@ export function Breadcrumbs(props: FlexProps) {
       },
       { width: 0, id: '' }
     )
-
-    console.log('index', id + 1)
 
     setVisibleListId(id)
   }, [])

@@ -17,33 +17,42 @@ export default {
 const crumbs: Breadcrumb[] = [
   {
     url: 'http://stuff.com/link1',
-    text: 'Level 1',
+    text: 'Root level',
   },
   {
     url: 'http://stuff.com/link1/link2',
     label: <Span>Level 2</Span>,
-    text: 'Level 2',
+    text: 'One step up ',
   },
   {
     url: 'http://stuff.com/link1/link2/link3',
-    label: 'Level 3',
+    label: 'Another',
   },
   {
     url: 'http://stuff.com/link1/link2/link3/link4',
     label: (
       <>
-        Level <b>4</b>
+        Yet <i>another</i> level
       </>
     ),
-    text: 'Level 4',
+    text: 'Yet another level',
   },
   {
     url: 'http://stuff.com/link1/link2/link3/link4/link5',
-    text: 'Level 5',
+    text: 'Are well still going?',
+  },
+  {
+    url: 'http://stuff.com/link1/link2/link3/link4/link5',
+    label: (
+      <>
+        You <b>bet</b> we are!
+      </>
+    ),
+    text: 'You bet we are',
   },
   {
     url: 'http://stuff.com/link1/link2/link3/link4/link5/link6',
-    text: 'Level 6',
+    text: 'This is getting out of hand',
   },
 ]
 
