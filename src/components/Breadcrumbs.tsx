@@ -1,7 +1,3 @@
-// TODO:
-//   Style "..." trigger focus state
-//   See if we can prevent brief flashing of empty list on breadcrumb data change
-
 import React, {
   type Key,
   MutableRefObject,
@@ -19,7 +15,11 @@ import { Div, Flex, FlexProps } from 'honorable'
 import styled from 'styled-components'
 import classNames from 'classnames'
 
+import { SwitchTransition, Transition } from 'react-transition-group'
+
 import useResizeObserver from '../hooks/useResizeObserver'
+
+import usePrevious from '../hooks/usePrevious'
 
 import { Select } from './Select'
 import { ListBoxItem } from './ListBoxItem'
@@ -303,21 +303,33 @@ function CrumbListRef(
 
 const CrumbList = forwardRef(CrumbListRef)
 
-export function Breadcrumbs({
-  minLength = 0,
-  maxLength = Infinity,
-  collapsible = true,
-  ...props
-}: {
+const transitionStyles = {
+  entering: { opacity: 0, height: 0 },
+  entered: { opacity: 1 },
+  exiting: { display: 'none' },
+  exited: { display: 'none' },
+}
+
+type BreadcrumbsProps = {
   minLength?: number
   maxLength?: number
   collapsible?: boolean
-} & FlexProps) {
-  const { breadcrumbs } = useBreadcrumbs()
+} & FlexProps
+
+export function BreadcrumbsInside({
+  minLength = 0,
+  maxLength = Infinity,
+  collapsible = true,
+  breadcrumbs,
+  wrapperRef: transitionRef,
+  ...props
+}: BreadcrumbsProps & {
+  breadcrumbs: Breadcrumb[]
+  wrapperRef?: MutableRefObject<HTMLDivElement>
+}) {
   const wrapperRef = useRef<HTMLDivElement | undefined>()
   const [visibleListId, setVisibleListId] = useState<string>('')
-
-  const children = []
+  const children: ReactNode[] = []
 
   if (!collapsible) {
     minLength = breadcrumbs.length
@@ -343,7 +355,6 @@ export function Breadcrumbs({
       const lists = Array.from(
         wrapperRef?.current?.getElementsByClassName('crumbList')
       )
-
       const { id } = lists.reduce(
         (prev, next) => {
           const prevWidth = prev.width
@@ -364,7 +375,7 @@ export function Breadcrumbs({
 
       setVisibleListId(id)
     },
-    []
+    [wrapperRef]
   )
 
   // Refit breadcrumb list on resize
@@ -375,27 +386,65 @@ export function Breadcrumbs({
     const wrapperWidth =
       wrapperRef?.current?.getBoundingClientRect?.()?.width || 0
 
-    // Hide breadcrumbs until refit is complete
-    setVisibleListId(null)
-    // Hide immediately instead of waiting for repaint to prevent flashing
-    // of incorrect breadcrumb list
-    wrapperRef?.current?.style.setProperty('opacity', '0')
     refitCrumbList({ width: wrapperWidth })
-  }, [breadcrumbs, refitCrumbList])
+  }, [breadcrumbs, refitCrumbList, wrapperRef])
 
-  // Make breadcrumbs visible after refit complete
-  if (visibleListId) {
-    wrapperRef?.current?.style.setProperty('opacity', '1')
+  useEffect(() => {
+    if (visibleListId) {
+      wrapperRef.current?.dispatchEvent(new Event('refitdone'))
+    }
+  }, [visibleListId])
+
+  return (
+    <Flex
+      direction="column"
+      ref={(elt: any) => {
+        wrapperRef.current = elt
+        if (transitionRef) transitionRef.current = elt
+      }}
+      {...props}
+    >
+      {children}
+    </Flex>
+  )
+}
+
+export function Breadcrumbs({
+  minLength = 0,
+  maxLength = Infinity,
+  collapsible = true,
+  ...props
+}: BreadcrumbsProps) {
+  const { breadcrumbs } = useBreadcrumbs()
+  const prevBreadcrumbs = usePrevious(breadcrumbs)
+  const transitionKey = useRef<number>(0)
+
+  if (prevBreadcrumbs !== breadcrumbs) {
+    transitionKey.current++
   }
 
   return (
     <Div {...props}>
-      <Flex
-        direction="column"
-        ref={wrapperRef}
-      >
-        {children}
-      </Flex>
+      <SwitchTransition mode="in-out">
+        <Transition
+          key={String(transitionKey.current)}
+          timeout={200}
+          // @ts-expect-error
+          addEndListener={(node, done) => {
+            node?.addEventListener('refitdone', done, false)
+          }}
+        >
+          {(state) => (
+            <BreadcrumbsInside
+              minLength={minLength}
+              maxLength={maxLength}
+              collapsible={collapsible}
+              breadcrumbs={breadcrumbs}
+              style={transitionStyles[state]}
+            />
+          )}
+        </Transition>
+      </SwitchTransition>
     </Div>
   )
 }

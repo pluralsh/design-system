@@ -103,7 +103,10 @@ function Template(args: any) {
           gap="large"
         >
           {/* SINGLE SELECT */}
-          <Breadcrumbs {...args} />
+          <Breadcrumbs
+            {...args}
+            marginBottom="xlarge"
+          />
           <CrumbSetter />
         </Flex>
       </BreadcrumbProvider>
