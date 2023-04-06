@@ -3,11 +3,11 @@ import { Flex, Span } from 'honorable'
 import { useState } from 'react'
 
 import {
-  type Breadcrumb,
-  BreadcrumbProvider,
-  Breadcrumbs,
+  Breadcrumb,
+  BreadcrumbsProvider,
   useSetBreadcrumbs,
-} from '../components/Breadcrumbs'
+} from '../components/contexts/BreadcrumbsContext'
+import { Breadcrumbs } from '../components/Breadcrumbs'
 import { Select } from '../components/Select'
 import { ListBoxItem } from '../components/ListBoxItem'
 import FormField from '../components/FormField'
@@ -99,7 +99,7 @@ function CrumbSetter() {
 function Template(args: any) {
   return (
     <NavContextProviderStub>
-      <BreadcrumbProvider>
+      <BreadcrumbsProvider>
         <Flex
           flexDirection="column"
           gap="large"
@@ -111,7 +111,7 @@ function Template(args: any) {
           />
           <CrumbSetter />
         </Flex>
-      </BreadcrumbProvider>
+      </BreadcrumbsProvider>
     </NavContextProviderStub>
   )
 }

@@ -1,11 +1,8 @@
 import React, {
-  type Key,
   MutableRefObject,
-  PropsWithChildren,
   ReactNode,
   forwardRef,
   useCallback,
-  useContext,
   useEffect,
   useId,
   useRef,
@@ -14,92 +11,20 @@ import React, {
 import { Div, Flex, FlexProps } from 'honorable'
 import styled from 'styled-components'
 import classNames from 'classnames'
-
 import { SwitchTransition, Transition } from 'react-transition-group'
 
 import useResizeObserver from '../hooks/useResizeObserver'
-
 import usePrevious from '../hooks/usePrevious'
 
 import { Select } from './Select'
 import { ListBoxItem } from './ListBoxItem'
 import { useNavigationContext } from './contexts/NavigationContext'
-
-export type BreadcrumbBase = {
-  url?: string
-  key?: Key
-}
-
-export type Breadcrumb = BreadcrumbBase &
-  (
-    | {
-        label: Exclude<ReactNode, string>
-        textValue: string
-      }
-    | {
-        label: string
-        textValue?: string
-      }
-  )
-
-function isKey(maybeKey: unknown): maybeKey is Key {
-  return (
-    (maybeKey && typeof maybeKey === 'string') ||
-    (typeof maybeKey === 'number' && !Number.isNaN(maybeKey))
-  )
-}
-
-type BreadcrumbsContextT = {
-  breadcrumbs: Breadcrumb[]
-  setBreadcrumbs: (crumbs: Breadcrumb[]) => void
-}
-
-const BreadcrumbsContext = React.createContext<BreadcrumbsContextT | null>(null)
-
-export function BreadcrumbProvider({ children }: PropsWithChildren) {
-  const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([])
-
-  return (
-    // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <BreadcrumbsContext.Provider value={{ breadcrumbs, setBreadcrumbs }}>
-      {children}
-    </BreadcrumbsContext.Provider>
-  )
-}
-
-export function useBreadcrumbs() {
-  const ctx = useContext(BreadcrumbsContext)
-
-  if (!ctx) {
-    throw Error('useBreadcrumbs() must be used inside a <BreadcrumbProvider>')
-  }
-
-  return ctx
-}
-
-export function useSetBreadcrumbs(breadcrumbs?: Breadcrumb[]) {
-  const ctx = useContext(BreadcrumbsContext)
-  const { setBreadcrumbs } = ctx
-
-  useEffect(() => {
-    if (setBreadcrumbs && Array.isArray(breadcrumbs)) {
-      setBreadcrumbs(breadcrumbs)
-    }
-  }, [breadcrumbs, setBreadcrumbs])
-
-  if (!ctx) {
-    throw Error(
-      'useSetBreadcrumbs() must be used inside a <BreadcrumbProvider>'
-    )
-  }
-
-  return ctx
-}
+import { Breadcrumb, useBreadcrumbs } from './contexts/BreadcrumbsContext'
 
 function getCrumbKey(crumb: Breadcrumb) {
   const maybeKey = crumb?.key
 
-  return isKey(maybeKey)
+  return typeof maybeKey === 'string'
     ? maybeKey
     : `${typeof crumb.label === 'string' ? crumb.label : crumb.textValue}-${
         crumb.url
