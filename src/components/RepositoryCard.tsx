@@ -1,13 +1,4 @@
-import {
-  Div,
-  DivProps,
-  Flex,
-  H1,
-  H3,
-  Img,
-  P,
-  Span,
-} from 'honorable'
+import { Div, DivProps, Flex, H1, H3, Img, P, Span } from 'honorable'
 import PropTypes from 'prop-types'
 import { Ref, forwardRef } from 'react'
 
@@ -26,7 +17,8 @@ type RepositoryCardProps = DivProps & {
   trending?: boolean
   description?: string
   imageUrl?: string
-  tags?: string[],
+  tags?: string[]
+  releaseStatus?: 'ALPHA' | 'BETA' | string
   size?: 'small' | 'medium' | 'large' | string
 }
 
@@ -39,25 +31,32 @@ const propTypes = {
   trending: PropTypes.bool,
   description: PropTypes.string,
   imageUrl: PropTypes.string,
+  releaseStatus: PropTypes.oneOf(['ALPHA', 'BETA']),
   tags: PropTypes.arrayOf(PropTypes.string),
   size: PropTypes.oneOf(['small', 'medium', 'large']),
 }
 
-function RepositoryCardRef({
-  title,
-  publisher,
-  priv,
-  installed,
-  verified,
-  trending,
-  description,
-  imageUrl,
-  tags = [],
-  size = 'small',
-  ...props
-}: RepositoryCardProps,
-ref: Ref<any>) {
+const prerelease = (status?: string) => status === 'ALPHA' || status === 'BETA'
+
+function RepositoryCardRef(
+  {
+    title,
+    publisher,
+    priv,
+    installed,
+    verified,
+    trending,
+    description,
+    imageUrl,
+    tags = [],
+    size = 'small',
+    releaseStatus,
+    ...props
+  }: RepositoryCardProps,
+  ref: Ref<any>
+) {
   const maxTags = trending ? 5 : 6
+  const showRelease = prerelease(releaseStatus)
 
   return (
     <Card
@@ -136,7 +135,16 @@ ref: Ref<any>) {
                 flexGrow={1}
                 marginLeft="medium"
               >
-                {!!installed && (
+                {showRelease && (
+                  <Chip
+                    severity={releaseStatus === 'BETA' ? 'info' : 'warning'}
+                    size="large"
+                    hue="lighter"
+                  >
+                    <Span fontWeight={600}>{releaseStatus}</Span>
+                  </Chip>
+                )}
+                {!!installed && !showRelease && (
                   <Chip
                     severity="success"
                     size="large"
@@ -197,16 +205,18 @@ ref: Ref<any>) {
                   </Span>
                 </Chip>
               )}
-              {tags?.filter((_x, i) => i < maxTags).map(tag => (
-                <Chip
-                  size="small"
-                  hue="lighter"
-                  key={tag}
-                  _last={{ marginRight: 0 }}
-                >
-                  {tag}
-                </Chip>
-              ))}
+              {tags
+                ?.filter((_x, i) => i < maxTags)
+                .map((tag) => (
+                  <Chip
+                    size="small"
+                    hue="lighter"
+                    key={tag}
+                    _last={{ marginRight: 0 }}
+                  >
+                    {tag}
+                  </Chip>
+                ))}
             </Flex>
           )}
         </Flex>
