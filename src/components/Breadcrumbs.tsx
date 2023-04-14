@@ -171,13 +171,12 @@ function CrumbListRef(
     maxLength,
     visibleListId,
     ariaOnly = false,
-    ...props
   }: {
     breadcrumbs: Breadcrumb[]
     maxLength: number
     visibleListId?: string
     ariaOnly?: boolean
-  } & FlexProps,
+  },
   ref: MutableRefObject<HTMLDivElement>
 ) {
   const id = useId()
@@ -206,16 +205,15 @@ function CrumbListRef(
     <Ol
       id={id}
       ref={ref}
-      {...(heightlessHidden && !ariaOnly
-        ? { height: 0, opacity: 0, overflow: 'hidden' }
-        : {})}
       display="flex"
       {...theme.partials.reset.list}
       className={ariaOnly ? '' : 'crumbList'}
       direction="row"
       gap="small"
       maxWidth="max-content"
-      {...props}
+      {...(heightlessHidden && !ariaOnly
+        ? { height: 0, opacity: 0, overflow: 'hidden' }
+        : {})}
       {...(ariaOnly ? visuallyHiddenProps : {})}
     >
       {head.map((headCrumb) => (
