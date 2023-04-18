@@ -1,11 +1,14 @@
-import { ReactNode, useMemo, useReducer } from 'react'
+import { type ComponentProps, type ReactNode, useMemo, useReducer } from 'react'
 
 import {
-  LinkProps,
   NavigationContextProvider,
+  type NavigationContextValue,
 } from '../components/contexts/NavigationContext'
 
-export function Link({ children, ...props }: LinkProps) {
+export function Link({
+  children,
+  ...props
+}: ComponentProps<NavigationContextValue['Link']>) {
   return (
     <a
       {...props}
