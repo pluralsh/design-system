@@ -11,19 +11,16 @@ import {
 import IsEmpty from 'lodash/isEmpty'
 
 import { MoreIcon, SearchIcon } from '../icons'
-import {
-  AppIcon,
-  Button,
-  Card,
-  CardProps,
-  Input,
-  ListBoxItem,
-  Select,
-  Tooltip,
-  WrapWithIf,
-} from '../index'
 
+import AppIcon from './AppIcon'
+import Button from './Button'
+import Card, { CardProps } from './Card'
+import Input from './Input'
+import { ListBoxItem } from './ListBoxItem'
+import { Select } from './Select'
+import Tooltip from './Tooltip'
 import { useWindowSize } from './wizard/hooks'
+import WrapWithIf from './WrapWithIf'
 
 const AppList = styled(AppListUnstyled)(({ theme }) => ({
   width: '100%',
@@ -58,7 +55,7 @@ const AppList = styled(AppListUnstyled)(({ theme }) => ({
       gap: theme.spacing.small,
 
       '.empty-message': {
-        ...(theme.partials.text.body2),
+        ...theme.partials.text.body2,
         color: theme.colors['text-light'],
       },
     },
@@ -70,14 +67,19 @@ interface AppListProps {
   onFilter?: Dispatch<string>
 }
 
-function AppListUnstyled({ apps, onFilter, ...props }: AppListProps): JSX.Element {
+function AppListUnstyled({
+  apps,
+  onFilter,
+  ...props
+}: AppListProps): JSX.Element {
   const size = useWindowSize()
   const scrollRef = createRef<HTMLDivElement>()
 
   const [filter, setFilter] = useState<string>()
   const [scrollable, setScrollable] = useState(false)
 
-  const isScrollbarVisible = (el: HTMLDivElement) => el?.scrollHeight > el?.clientHeight
+  const isScrollbarVisible = (el: HTMLDivElement) =>
+    el?.scrollHeight > el?.clientHeight
   const sortByPriority = useCallback((first: AppProps, second: AppProps) => {
     // Surface promoted apps first
     if (first.promoted) return -1
@@ -90,9 +92,16 @@ function AppListUnstyled({ apps, onFilter, ...props }: AppListProps): JSX.Elemen
     // Leave the rest as is
     return 0
   }, [])
-  const filterByName = useCallback((app: AppProps) => (filter ? app.name.toLowerCase().includes(filter?.toLowerCase()) : true), [filter])
+  const filterByName = useCallback(
+    (app: AppProps) =>
+      filter ? app.name.toLowerCase().includes(filter?.toLowerCase()) : true,
+    [filter]
+  )
 
-  const filteredApps = useMemo(() => (onFilter ? apps : apps.filter(filterByName)), [apps, filterByName, onFilter])
+  const filteredApps = useMemo(
+    () => (onFilter ? apps : apps.filter(filterByName)),
+    [apps, filterByName, onFilter]
+  )
 
   useEffect(() => {
     if (!scrollRef.current) return
@@ -115,7 +124,7 @@ function AppListUnstyled({ apps, onFilter, ...props }: AppListProps): JSX.Elemen
         className={scrollable ? 'app-grid scrollable' : 'app-grid'}
         ref={scrollRef}
       >
-        {filteredApps.sort(sortByPriority).map(app => (
+        {filteredApps.sort(sortByPriority).map((app) => (
           <App
             key={app.name}
             className={app.promoted ? 'promoted' : undefined}
@@ -132,11 +141,14 @@ function AppListUnstyled({ apps, onFilter, ...props }: AppListProps): JSX.Elemen
 
         {IsEmpty(filteredApps) && !IsEmpty(filter) && (
           <div className="empty">
-            <span className="empty-message">No applications found for "{filter}".</span>
+            <span className="empty-message">
+              No applications found for "{filter}".
+            </span>
             <Button
               secondary
               onClick={() => setFilter('')}
-            >Clear search
+            >
+              Clear search
             </Button>
           </div>
         )}
@@ -242,7 +254,7 @@ type AppProps = {
   logoUrl?: string
   icon?: JSX.Element
   name: string
-  description: string,
+  description: string
   primaryAction?: JSX.Element
   actions?: Array<AppMenuAction>
   promoted?: boolean
@@ -250,7 +262,7 @@ type AppProps = {
 } & CardProps
 
 interface AppMenuAction {
-  label: string,
+  label: string
   onSelect: Dispatch<void>
   leftContent?: ReactNode
   rightContent?: ReactNode
@@ -258,7 +270,14 @@ interface AppMenuAction {
 }
 
 function AppUnstyled({
-  logoUrl, icon, name, description, primaryAction, actions, isAlive, ...props
+  logoUrl,
+  icon,
+  name,
+  description,
+  primaryAction,
+  actions,
+  isAlive,
+  ...props
 }: AppProps): JSX.Element {
   return (
     <Card {...props}>
@@ -273,15 +292,12 @@ function AppUnstyled({
         <div
           className="description"
           title={description}
-        >{description}
+        >
+          {description}
         </div>
       </div>
 
-      {primaryAction && (
-        <div className="primary-action">
-          {primaryAction}
-        </div>
-      )}
+      {primaryAction && <div className="primary-action">{primaryAction}</div>}
 
       {actions && (
         <div className="actions">
@@ -293,20 +309,23 @@ function AppUnstyled({
               <Select
                 aria-label="moreMenu"
                 selectedKey={null}
-                onSelectionChange={key => actions.find(action => action.label === key)?.onSelect()}
+                onSelectionChange={(key) =>
+                  actions.find((action) => action.label === key)?.onSelect()
+                }
                 isDisabled={!isAlive}
                 width="max-content"
                 maxHeight={197}
-                triggerButton={(
+                triggerButton={
                   <Button
                     secondary
                     width={32}
                     minHeight={32}
-                  ><MoreIcon />
+                  >
+                    <MoreIcon />
                   </Button>
-                )}
+                }
               >
-                {actions.map(action => (
+                {actions.map((action) => (
                   <ListBoxItem
                     key={action.label}
                     label={action.label}
