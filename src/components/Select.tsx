@@ -226,6 +226,7 @@ function Select({
       leftContent={leftContent}
       rightContent={rightContent}
       isOpen={state.isOpen}
+      showArrow={!props.isDisabled}
     >
       {(props.selectionMode === 'multiple'
         && state.selectedItems.length > 0
