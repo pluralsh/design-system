@@ -3,7 +3,7 @@ import { type RenderableTreeNode } from '@markdoc/markdoc'
 
 import { isTag } from '../types'
 
-import { CodeStyled, toCodeString } from './Fence'
+import { FenceInner, toCodeString } from './Fence'
 
 function CodeTabs({
   tabs,
@@ -37,7 +37,7 @@ function CodeTabs({
   )
 
   return (
-    <CodeStyled
+    <FenceInner
       tabs={codeTabs}
       {...props}
     />

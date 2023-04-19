@@ -1,6 +1,7 @@
 import {
   type ComponentProps,
-  type ReactElement,
+  type ComponentType,
+  type RefAttributes,
   createContext,
   useContext,
 } from 'react'
@@ -10,8 +11,8 @@ export type NavigationContextLinkProps = Omit<ComponentProps<'a'>, 'ref'> & {
 }
 
 export type NavigationContextValue = {
-  Link: (props: NavigationContextLinkProps) => ReactElement
-  usePathname: (href?: string) => string
+  Link: ComponentType<NavigationContextLinkProps & RefAttributes<any>>
+  usePathname: () => string
   useNavigate: () => (location?: string) => void
 }
 

@@ -38,7 +38,7 @@ function transformRecord(config) {
   return { output, components }
 }
 
-export const getRuntimeSchema = function getSchema(schema) {
+export const getSchema = function getSchema(schema) {
   const { output: tags, components: tagComponents } = transformRecord(
     schema.tags
   )

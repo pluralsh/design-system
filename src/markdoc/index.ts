@@ -1,6 +1,5 @@
-import baseSchema from './schema/defaultSchema'
-
 export type { MarkdocContextValue } from './MarkdocContext'
 export { useMarkdocContext, MarkdocContextProvider } from './MarkdocContext'
-export { getRuntimeSchema } from './schema/runtimeSchema'
-export { baseSchema as defaultSchema }
+export { getSchema as getRuntimeSchema } from './runtimeSchema'
+export { default as collectHeadings } from './utils/collectHeadings'
+export { getMdContent } from './utils/getMdContent'

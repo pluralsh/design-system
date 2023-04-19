@@ -1,4 +1,4 @@
-import Blockquote from '../components/Blockquote'
+import { Blockquote } from '../components/Blockquote'
 import { type BaseSchema } from '../types'
 
 export const blockquote: BaseSchema = {

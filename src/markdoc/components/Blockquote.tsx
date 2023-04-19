@@ -22,7 +22,7 @@ const StyledBlockquote = styled.blockquote(({ theme }) => ({
   },
 }))
 
-function Blockquote(
+function BlockquoteRef(
   { children, ...props }: ComponentProps<typeof StyledBlockquote>,
   ref: MutableRefObject<any>
 ) {
@@ -38,4 +38,4 @@ function Blockquote(
   )
 }
 
-export default forwardRef(Blockquote)
+export const Blockquote = forwardRef(BlockquoteRef)

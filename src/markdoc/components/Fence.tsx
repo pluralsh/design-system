@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 import { type RenderableTreeNode } from '@markdoc/markdoc'
 
-import { Code } from '../../index'
+import { Code as CodeBase } from '../../index'
 import { type CodeProps } from '../../components/Code'
 
 export function toCodeString({
@@ -23,12 +23,12 @@ export function toCodeString({
     : content || ''
 }
 
-export const CodeStyled = styled(Code)(({ theme }) => ({
+export const FenceInner = styled(CodeBase)(({ theme }) => ({
   marginTop: theme.spacing.large,
   marginBottom: theme.spacing.large,
 }))
 
-export default function Fence({
+export function Fence({
   children,
   language,
   title,
@@ -50,13 +50,13 @@ export default function Fence({
   }
 
   return (
-    <CodeStyled
+    <FenceInner
       showHeader={showHeader}
       language={language}
       title={title}
       {...props}
     >
       {codeString}
-    </CodeStyled>
+    </FenceInner>
   )
 }

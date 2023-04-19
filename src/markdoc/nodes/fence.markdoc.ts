@@ -1,4 +1,4 @@
-import Fence from '../components/Fence'
+import { Fence } from '../components/Fence'
 import { type BaseSchema } from '../types'
 
 export const fence: BaseSchema = {

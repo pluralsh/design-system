@@ -56,9 +56,6 @@ const StyledH = styled.h1.withConfig({ shouldForwardProp: () => true })<{
 
   return {
     marginTop: theme.spacing.xxlarge,
-    '&:first-child': {
-      marginBottom: '100px',
-    },
     ...(variant === 'docs'
       ? {}
       : {

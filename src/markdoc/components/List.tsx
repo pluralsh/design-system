@@ -7,7 +7,7 @@ import { useMarkdocContext } from '../MarkdocContext'
 
 import { bodyText } from './Paragraph'
 
-export const commonCfg = { shouldForwardProp: () => true }
+const commonCfg = { shouldForwardProp: () => true }
 
 const COUNTER_ID = 'list-item'
 

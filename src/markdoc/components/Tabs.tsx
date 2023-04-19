@@ -13,19 +13,7 @@ import type { TabListStateProps } from '../../index'
 
 import TabComponent from './Tab'
 
-export const TabContext = createContext({})
-
-export const TabPanelStyled = styled(TabPanel)(({ theme }) => ({
-  borderBottom: theme.borders.default,
-  marginBottom: theme.spacing.xxlarge,
-  '> div': {
-    marginTop: theme.spacing.large,
-    marginBottom: theme.spacing.xlarge,
-  },
-  'article > &:last-child': {
-    border: 'none',
-  },
-}))
+const TabContext = createContext({})
 
 const TabListStyled = styled(TabList)(({ theme }) => ({
   flexShrink: 0,
