@@ -361,7 +361,7 @@ export function Breadcrumbs({
   breadcrumbs: propsCrumbs,
   ...props
 }: BreadcrumbsProps) {
-  const { breadcrumbs: contextCrumbs } = useContext(BreadcrumbsContext)
+  const contextCrumbs = useContext(BreadcrumbsContext)?.breadcrumbs
   const breadcrumbs = propsCrumbs || contextCrumbs
 
   if (!breadcrumbs) {
