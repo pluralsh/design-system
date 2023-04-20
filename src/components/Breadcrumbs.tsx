@@ -58,7 +58,7 @@ function CrumbLink({
   const { Link } = useNavigationContext()
 
   return (
-    <CrumbLinkWrap>
+    <CrumbLinkWrap {...(isLast ? { 'aria-current': 'page' } : {})}>
       <CrumbLinkText className={classNames({ isLast })}>
         {isLast || typeof crumb.url !== 'string' ? (
           crumb.label
