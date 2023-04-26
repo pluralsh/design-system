@@ -1,5 +1,5 @@
 import { Div } from 'honorable'
-import { Key, useState } from 'react'
+import { type Key, useState } from 'react'
 
 import { Button, Checkbox } from '..'
 
@@ -11,7 +11,7 @@ export default {
 type CheckedVal = 'checked' | 'unchecked' | 'indeterminate'
 type CheckedVals = Record<string, CheckedVal>
 
-const checks:Record<Key, {label: string, startVal:CheckedVal}> = {
+const checks: Record<Key, { label: string; startVal: CheckedVal }> = {
   0: {
     label: 'Drawing',
     startVal: 'indeterminate',

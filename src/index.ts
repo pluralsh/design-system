@@ -1,6 +1,4 @@
-export {
-  Avatar, Menu, MenuItem, Switch,
-} from 'honorable'
+export { Avatar, Menu, MenuItem, Switch } from 'honorable'
 
 // Icons
 export * from './icons'
@@ -39,7 +37,7 @@ export { default as AppIcon } from './components/AppIcon'
 export { default as RepositoryCard } from './components/RepositoryCard'
 export { default as RepositoryChip } from './components/RepositoryChip'
 export { default as StackCard } from './components/StackCard'
-export { default as Stepper } from './components/Stepper'
+export { default as Stepper, type StepperSteps } from './components/Stepper'
 export type { SidecarProps } from './components/Sidecar'
 export {
   default as Sidecar,
@@ -53,7 +51,10 @@ export { TabList } from './components/TabList'
 export { default as TabPanel } from './components/TabPanel'
 export { default as Table } from './components/Table'
 export { default as TipCarousel } from './components/TipCarousel'
-export { default as ValidatedInput } from './components/ValidatedInput'
+export {
+  type ValidationResponse,
+  default as ValidatedInput,
+} from './components/ValidatedInput'
 export type { TooltipProps } from './components/Tooltip'
 export { default as Tooltip } from './components/Tooltip'
 export { default as FormTitle } from './components/FormTitle'
@@ -76,6 +77,10 @@ export {
   ListBoxItem,
   ListBoxFooter,
   ListBoxFooterPlus,
+  type ListBoxItemBaseProps,
+  type ListBoxItemProps,
+  type ListBoxFooterProps,
+  type ListBoxFooterProps as ListBoxFooterPlusProps,
 } from './components/ListBoxItem'
 export { default as ListBoxItemChipList } from './components/ListBoxItemChipList'
 export { Select, SelectButton } from './components/Select'
@@ -84,13 +89,19 @@ export { default as LoopingLogo } from './components/LoopingLogo'
 export { ComboBox } from './components/ComboBox'
 export { Toast, GraphQLToast } from './components/Toast'
 export { default as WrapWithIf } from './components/WrapWithIf'
-export type { AppProps, AppListProps, AppMenuAction } from './components/AppList'
+export type {
+  AppProps,
+  AppListProps,
+  AppMenuAction,
+} from './components/AppList'
 export { AppList } from './components/AppList'
 export { default as SelectItem } from './components/SelectItem'
 export { default as Slider } from './components/Slider'
 export { default as PricingCalculator } from './components/pricingcalculator/PricingCalculator'
 export { default as PricingCalculatorExtended } from './components/pricingcalculator/PricingCalculatorExtended'
 export { default as Layer } from './components/Layer'
+export { Breadcrumbs } from './components/Breadcrumbs'
+
 // Hooks
 export { default as usePrevious } from './hooks/usePrevious'
 export { default as useUnmount } from './hooks/useUnmount'
@@ -105,6 +116,12 @@ export {
 } from './components/contexts/FillLevelContext'
 export * from './components/contexts/NavigationContext'
 export * from './components/TreeNavigation'
+export {
+  BreadcrumbsProvider,
+  useBreadcrumbs,
+  useSetBreadcrumbs,
+  type Breadcrumb,
+} from './components/contexts/BreadcrumbsContext'
 
 // Theme
 export { default as theme, styledTheme } from './theme'

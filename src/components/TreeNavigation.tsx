@@ -1,6 +1,10 @@
 import {
   Children,
-  PropsWithChildren,
+  type ComponentProps,
+  type Key,
+  type MutableRefObject,
+  type PropsWithChildren,
+  type ReactElement,
   createContext,
   forwardRef,
   useCallback,
@@ -10,31 +14,19 @@ import {
   useMemo,
   useState,
 } from 'react'
-import type {
-  ComponentProps,
-  Key,
-  MutableRefObject,
-  ReactElement,
-} from 'react'
-
 import classNames from 'classnames'
 import { animated, useSpring } from 'react-spring'
 import useMeasure from 'react-use-measure'
 import styled, { useTheme } from 'styled-components'
 import { type ImmerReducer, useImmerReducer } from 'use-immer'
-
 import { Div } from 'honorable'
 
+import usePrevious from '../hooks/usePrevious'
 import useUnmount from '../hooks/useUnmount'
+import { CaretRightIcon } from '../icons'
 
-import {
-  CaretRightIcon,
-  Tab,
-  useNavigationContext,
-  usePrevious,
-} from '../index'
-
-import { TAB_INDICATOR_THICKNESS } from './Tab'
+import { useNavigationContext } from './contexts/NavigationContext'
+import Tab, { TAB_INDICATOR_THICKNESS } from './Tab'
 
 export type SideNavProps = {
   desktop: boolean
@@ -91,45 +83,47 @@ const StyledLink = styled.a(({ theme }) => ({
   },
 }))
 
-const CaretButton = styled(({
-  isOpen = false,
-  className,
-  ...props
-}: {
+const CaretButton = styled(
+  ({
+    isOpen = false,
+    className,
+    ...props
+  }: {
     isOpen: boolean
     className?: string
   } & ComponentProps<'button'>) => {
-  const { keyboardNavigable } = useContext(KeyboardNavContext)
-  const [showHoverState, setShowHoverState] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
-  const wasOpen = usePrevious(isOpen)
+    const { keyboardNavigable } = useContext(KeyboardNavContext)
+    const [showHoverState, setShowHoverState] = useState(false)
+    const [isHovered, setIsHovered] = useState(false)
+    const wasOpen = usePrevious(isOpen)
 
-  useEffect(() => {
-    if (wasOpen !== isOpen) {
-      if (isHovered) setShowHoverState(false)
-    }
-  }, [wasOpen, isOpen, isHovered])
+    useEffect(() => {
+      if (wasOpen !== isOpen) {
+        if (isHovered) setShowHoverState(false)
+      }
+    }, [wasOpen, isOpen, isHovered])
 
-  return (
-    <button
-      tabIndex={keyboardNavigable ? 0 : -1}
-      type="button"
-      className={classNames(className, { showHoverState })}
-      aria-label={isOpen ? 'Collapse' : 'Expand'}
-      onMouseEnter={() => {
-        setShowHoverState(true)
-        setIsHovered(true)
-      }}
-      onMouseLeave={() => {
-        setShowHoverState(true)
-        setIsHovered(false)
-      }}
-      {...props}
-    >
-      <CaretRightIcon className="icon" />
-    </button>
-  )
-})(({ theme, isOpen }) => ({
+    return (
+      <button
+        tabIndex={keyboardNavigable ? 0 : -1}
+        type="button"
+        className={classNames(className, { showHoverState })}
+        aria-label={isOpen ? 'Collapse' : 'Expand'}
+        onMouseEnter={() => {
+          setShowHoverState(true)
+          setIsHovered(true)
+        }}
+        onMouseLeave={() => {
+          setShowHoverState(true)
+          setIsHovered(false)
+        }}
+        {...props}
+      >
+        <CaretRightIcon className="icon" />
+      </button>
+    )
+  }
+)(({ theme, isOpen }) => ({
   ...theme.partials.reset.button,
   display: 'flex',
   alignSelf: 'stretch',
@@ -160,7 +154,7 @@ const CaretButton = styled(({
   },
 }))
 
-const BareLi = styled.li(_ => ({
+const BareLi = styled.li((_) => ({
   margin: 0,
   padding: 0,
   listStyle: 'none',
@@ -196,7 +190,7 @@ function NavLink({
         activeSecondary={activeSecondary}
         vertical
         iconLeft={icon}
-        onClick={e => {
+        onClick={(e) => {
           onClick(e)
         }}
         width="100%"
@@ -223,7 +217,7 @@ function NavLink({
         {isSubSection && (
           <CaretButton
             isOpen={isOpen}
-            onClick={e => {
+            onClick={(e) => {
               e.stopPropagation()
               e.preventDefault()
               onClickCaret()
@@ -243,14 +237,16 @@ export const TopHeading = styled.h6(({ theme }) => ({
   ...theme.partials.marketingText.label,
 }))
 
-const SubSectionsListWrap = styled.ul<{ indentLevel: number }>(_ => ({
+const SubSectionsListWrap = styled.ul<{ indentLevel: number }>((_) => ({
   margin: 0,
   padding: 0,
   listStyle: 'none',
 }))
 
-function SubSectionsListRef({ className, children, ...props }: PropsWithChildren<{ className?: string }>,
-  ref: MutableRefObject<any>) {
+function SubSectionsListRef(
+  { className, children, ...props }: PropsWithChildren<{ className?: string }>,
+  ref: MutableRefObject<any>
+) {
   const navDepth = useContext(NavDepthContext)
 
   return (
@@ -275,19 +271,20 @@ const activeStatesReducer: ImmerReducer<
 > = (activeStates, { value, id }) => {
   if (!value) {
     delete activeStates[id]
-  }
-  else {
+  } else {
     activeStates[id] = true
   }
 }
 
 const NavEntryContext = createContext<{
-  setIsActiveDescendant:(arg: { id: string; value: boolean }) => void
-    }>({ setIsActiveDescendant: () => {} })
+  setIsActiveDescendant: (arg: { id: string; value: boolean }) => void
+}>({ setIsActiveDescendant: () => {} })
 
 const useActiveStates = () => {
-  const [activeStates, setActiveDescendant] = useImmerReducer(activeStatesReducer,
-    {})
+  const [activeStates, setActiveDescendant] = useImmerReducer(
+    activeStatesReducer,
+    {}
+  )
 
   return {
     setActiveState: setActiveDescendant,
@@ -315,8 +312,10 @@ export function TreeNavEntry({
   const { setIsActiveDescendant } = useContext(NavEntryContext)
   const prevHasActiveDescendents = usePrevious(hasActiveDescendents)
   const [isOpen, setIsOpen] = useState(hasActiveDescendents)
-  const navEntryContextVal = useMemo(() => ({ setIsActiveDescendant: setActiveState }),
-    [setActiveState])
+  const navEntryContextVal = useMemo(
+    () => ({ setIsActiveDescendant: setActiveState }),
+    [setActiveState]
+  )
 
   useEffect(() => {
     setIsActiveDescendant({ id, value: active || hasActiveDescendents })
@@ -326,13 +325,15 @@ export function TreeNavEntry({
     setIsActiveDescendant({ id, value: false })
   })
 
-  const changeOpen = useCallback((open: boolean) => {
-    if (open !== isOpen) {
-      setIsOpen(open)
-      onOpenChange?.(open)
-    }
-  },
-  [isOpen, onOpenChange])
+  const changeOpen = useCallback(
+    (open: boolean) => {
+      if (open !== isOpen) {
+        setIsOpen(open)
+        onOpenChange?.(open)
+      }
+    },
+    [isOpen, onOpenChange]
+  )
   const toggleOpen = useCallback(() => {
     changeOpen(!isOpen)
   }, [changeOpen, isOpen])
@@ -341,8 +342,8 @@ export function TreeNavEntry({
 
   useEffect(() => {
     if (
-      hasActiveDescendents
-      && hasActiveDescendents !== prevHasActiveDescendents
+      hasActiveDescendents &&
+      hasActiveDescendents !== prevHasActiveDescendents
     ) {
       changeOpen(true)
     }
@@ -353,16 +354,16 @@ export function TreeNavEntry({
     immediate: !prevHeight,
     config: isOpen
       ? {
-        mass: 0.6,
-        tension: 280,
-        velocity: 0.02,
-      }
+          mass: 0.6,
+          tension: 280,
+          velocity: 0.02,
+        }
       : {
-        mass: 0.6,
-        tension: 400,
-        velocity: 0.02,
-        restVelocity: 0.1,
-      },
+          mass: 0.6,
+          tension: 400,
+          velocity: 0.02,
+          restVelocity: 0.1,
+        },
   })
 
   const contextValue = useMemo(() => ({ keyboardNavigable: isOpen }), [isOpen])
@@ -384,8 +385,7 @@ export function TreeNavEntry({
           onClick?.(e)
           if (hasActiveDescendents) {
             setIsOpen(true)
-          }
-          else {
+          } else {
             toggleOpen()
           }
         }}
@@ -397,7 +397,6 @@ export function TreeNavEntry({
       </NavLink>
       {Children.count(children) > 0 && (
         <animated.div
-          className="sturf"
           style={{
             ...(prevHeight ? expand : { height: isOpen ? 'auto' : '0' }),
             overflow: 'hidden',

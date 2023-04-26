@@ -1,7 +1,9 @@
 import { Div, Flex } from 'honorable'
 
 import MagnifyingGlassIcon from '../components/icons/MagnifyingGlassIcon'
+import BrowseAppsIcon from '../components/icons/BrowseAppsIcon'
 import CaretDownIcon from '../components/icons/CaretDownIcon'
+import SearchIcon from '../components/icons/SearchIcon'
 import Input from '../components/Input'
 
 export default {
@@ -19,13 +21,13 @@ function Template(args: any) {
       <Div marginTop="medium">
         <Input
           startIcon={<MagnifyingGlassIcon />}
-          endIcon={(
+          endIcon={
             <CaretDownIcon
               size={10}
               mt={0.333}
               mx="3px"
             />
-          )}
+          }
           {...args}
         />
       </Div>
@@ -33,7 +35,7 @@ function Template(args: any) {
   )
 }
 
-function CustomInputTemplate(props:any) {
+function CustomInputTemplate(props: any) {
   return (
     <Flex
       direction="column"
@@ -65,8 +67,7 @@ function CustomInputTemplate(props:any) {
 
 export const Default = Template.bind({})
 
-Default.args = {
-}
+Default.args = {}
 
 export const Error = Template.bind({})
 
@@ -99,4 +100,17 @@ export const Multiline = CustomInputTemplate.bind({})
 Multiline.args = {
   multiline: true,
   minRows: 3,
+}
+
+export const TitleContent = CustomInputTemplate.bind({})
+
+TitleContent.args = {
+  startIcon: <SearchIcon />,
+  titleContent: (
+    <>
+      <BrowseAppsIcon marginRight="small" />
+      Marketplace
+    </>
+  ),
+  placeholder: 'Search the marketplace',
 }

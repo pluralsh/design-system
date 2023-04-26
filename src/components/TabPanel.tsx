@@ -1,9 +1,9 @@
-import { Div, DivProps } from 'honorable'
+import { Div, type DivProps } from 'honorable'
 import { useTabPanel } from '@react-aria/tabs'
 import {
-  Key,
-  MutableRefObject,
-  ReactElement,
+  type Key,
+  type MutableRefObject,
+  type ReactElement,
   cloneElement,
   forwardRef,
   useCallback,
@@ -17,11 +17,11 @@ import styled from 'styled-components'
 
 import { useVisuallyHidden } from '@react-aria/visually-hidden'
 
-import { MakeOptional, Renderer, TabStateRef } from './TabList'
+import { type MakeOptional, type Renderer, type TabStateRef } from './TabList'
 
 /*
 mode='multipanel'
-  Use when you all tab content visible in the DOM at all time (such as for
+  Use when you want all tab content visible in the DOM at all times (such as for
   search indexing the docs site, etc).
   In this mode, each tab will need it's own TabPanel with the `tabKey` prop set
   to the same key as the tab associated with it.
@@ -47,13 +47,14 @@ export type WrappedTabPanelProps = DivProps & {
 
 type TabPanelProps = MakeOptional<WrappedTabPanelProps, 'as'>
 
-export const TabPanelClone = styled(({
-  className, cloneAs, tabRef, ...props
-}) => cloneElement(cloneAs, {
-  className: `${cloneAs.props.className || ''} ${className || ''}`.trim(),
-  ref: tabRef,
-  ...props,
-}))<{ vertical: boolean }>(({ theme }) => ({
+export const TabPanelClone = styled(
+  ({ className, cloneAs, tabRef, ...props }) =>
+    cloneElement(cloneAs, {
+      className: `${cloneAs.props.className || ''} ${className || ''}`.trim(),
+      ref: tabRef,
+      ...props,
+    })
+)<{ vertical: boolean }>(({ theme }) => ({
   position: 'relative',
   '&:focus, &:focus-visible': {
     outline: 'none',
@@ -79,7 +80,9 @@ function WrappedTabPanel({
     const thisTabProps = tabProps[tabKey]
 
     if (!thisTabProps) {
-      console.warn('Unable to find props for TabPanel. Did you forget to create a TabList?')
+      console.warn(
+        'Unable to find props for TabPanel. Did you forget to create a TabList?'
+      )
     }
     tabPanelProps = {
       'aria-labelledby': thisTabProps.id,
@@ -108,69 +111,75 @@ function WrappedTabPanel({
   )
 }
 
-const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(({
-  as, renderer, stateRef, tabKey, mode, ...props
-}, ref) => {
+const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
+  ({ as, renderer, stateRef, tabKey, mode, ...props }, ref) => {
     // https://reactjs.org/docs/hooks-faq.html#is-there-something-like-forceupdate
-  const [numRechecks, recheckStateRef] = useReducer(x => x + 1, 0)
-  const [, forceUpdate] = useReducer(x => x + 1, 0)
-  const updateTabPanel = useCallback(() => forceUpdate(), [forceUpdate])
+    const [numRechecks, recheckStateRef] = useReducer((x) => x + 1, 0)
+    const [, forceUpdate] = useReducer((x) => x + 1, 0)
+    const updateTabPanel = useCallback(() => forceUpdate(), [forceUpdate])
 
-  if (mode === 'multipanel' && !tabKey) {
-    throw new Error("TabPanel: tabKey prop must be set when mode='multipanel'")
-  }
-  if (mode === 'singlepanel' && tabKey) {
-    console.warn("TabPanel: tabKey prop is not supported for mode='singlepanel'. Did you mean to set mode='multipanel'?")
-  }
+    if (mode === 'multipanel' && !tabKey) {
+      throw new Error(
+        "TabPanel: tabKey prop must be set when mode='multipanel'"
+      )
+    }
+    if (mode === 'singlepanel' && tabKey) {
+      console.warn(
+        "TabPanel: tabKey prop is not supported for mode='singlepanel'. Did you mean to set mode='multipanel'?"
+      )
+    }
 
     // Force update until stateRef.current has been filled
-  useEffect(() => {
-    if (!stateRef?.current) {
-      if (numRechecks > 1000) {
-        console.warn('TabPanel stateRef never received a value. Did you forget to pass stateRef to both TabList and TabPanel?')
+    useEffect(() => {
+      if (!stateRef?.current) {
+        if (numRechecks > 1000) {
+          console.warn(
+            'TabPanel stateRef never received a value. Did you forget to pass stateRef to both TabList and TabPanel?'
+          )
 
-        return
+          return
+        }
+        recheckStateRef()
       }
-      recheckStateRef()
+    })
+
+    if (!renderer && !as) {
+      as = (
+        <Div
+          ref={ref}
+          {...props}
+        />
+      )
     }
-  })
 
-  if (!renderer && !as) {
-    as = (
-      <Div
-        ref={ref}
-        {...props}
-      />
-    )
-  }
+    if (stateRef.current) {
+      stateRef.current.updateTabPanel = updateTabPanel
 
-  if (stateRef.current) {
-    stateRef.current.updateTabPanel = updateTabPanel
+      return (
+        <WrappedTabPanel
+          mode={mode}
+          as={as}
+          renderer={renderer}
+          stateRef={stateRef}
+          tabKey={tabKey}
+          {...props}
+        />
+      )
+    }
+
+    if (renderer) {
+      return renderer({ ...props }, null, null)
+    }
 
     return (
-      <WrappedTabPanel
-        mode={mode}
-        as={as}
-        renderer={renderer}
-        stateRef={stateRef}
-        tabKey={tabKey}
-        {...props}
-      />
+      <TabPanelClone
+        tabRef={mergeRefs(as.ref, ref)}
+        cloneAs={as}
+      >
+        {props.children}
+      </TabPanelClone>
     )
   }
-
-  if (renderer) {
-    return renderer({ ...props }, null, null)
-  }
-
-  return (
-    <TabPanelClone
-      tabRef={mergeRefs(as.ref, ref)}
-      cloneAs={as}
-    >
-      {props.children}
-    </TabPanelClone>
-  )
-})
+)
 
 export default TabPanel

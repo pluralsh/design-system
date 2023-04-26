@@ -1,4 +1,4 @@
-import { MutableRefObject, useMemo } from 'react'
+import { type MutableRefObject, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import {
   autoUpdate,
@@ -9,7 +9,7 @@ import {
 } from '@floating-ui/react-dom-interactions'
 import { mergeRefs } from 'react-merge-refs'
 
-import { SelectProps } from './Select'
+import { type SelectProps } from './Select'
 
 const DEFAULT_MAX_HEIGHT = 230
 
@@ -33,8 +33,8 @@ export function useFloatingDropdown({
         apply(args) {
           const { elements, availableHeight, rects } = args
           const minH = 140
-          const maxH
-            = typeof maxHeight === 'string'
+          const maxH =
+            typeof maxHeight === 'string'
               ? maxHeight
               : Math.min(availableHeight, maxHeight || DEFAULT_MAX_HEIGHT)
 
@@ -43,8 +43,8 @@ export function useFloatingDropdown({
               typeof width === 'string' && width
                 ? width
                 : `${
-                  typeof width === 'number' ? width : rects.reference.width
-                }px`,
+                    typeof width === 'number' ? width : rects.reference.width
+                  }px`,
             height: `${maxH}px`,
             minHeight: `${minH}px`,
           })
@@ -60,8 +60,10 @@ export function useFloatingDropdown({
     ],
     whileElementsMounted: autoUpdate,
   })
-  const mergedRef = useMemo(() => mergeRefs([floating.reference, triggerRef]),
-    [floating.reference, triggerRef])
+  const mergedRef = useMemo(
+    () => mergeRefs([floating.reference, triggerRef]),
+    [floating.reference, triggerRef]
+  )
 
   return { floating, triggerRef: mergedRef }
 }

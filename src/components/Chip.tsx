@@ -1,10 +1,10 @@
-import { Flex, FlexProps, Spinner } from 'honorable'
+import { Flex, type FlexProps, Spinner } from 'honorable'
 import PropTypes from 'prop-types'
-import { ReactElement, Ref, forwardRef } from 'react'
+import { type ReactElement, type Ref, forwardRef } from 'react'
 import styled from 'styled-components'
 
-import Card, { CardProps } from './Card'
-import { FillLevel, useFillLevel } from './contexts/FillLevelContext'
+import Card, { type CardProps } from './Card'
+import { type FillLevel, useFillLevel } from './contexts/FillLevelContext'
 import CloseIcon from './icons/CloseIcon'
 
 type Hue = 'default' | 'lighter' | 'lightest'
@@ -68,18 +68,20 @@ const ChipCard = styled(Card)(({ theme }) => ({
   },
 }))
 
-function ChipRef({
-  children,
-  size = 'medium',
-  severity = 'neutral',
-  hue,
-  loading = false,
-  icon,
-  closeButton,
-  clickable,
-  ...props
-}: ChipProps,
-ref: Ref<any>) {
+function ChipRef(
+  {
+    children,
+    size = 'medium',
+    severity = 'neutral',
+    hue,
+    loading = false,
+    icon,
+    closeButton,
+    clickable,
+    ...props
+  }: ChipProps,
+  ref: Ref<any>
+) {
   const parentFillLevel = useFillLevel()
 
   hue = hue || parentFillLevelToHue[parentFillLevel]

@@ -1,11 +1,6 @@
-import {
-  Div,
-  Flex,
-  H1,
-  Text,
-} from 'honorable'
+import { Div, Flex, H1, Text } from 'honorable'
 
-import { IconFrame, IconFrameProps, TrashCanIcon } from '../index'
+import { IconFrame, type IconFrameProps, TrashCanIcon } from '../index'
 
 export default {
   title: 'Icon Frame',
@@ -32,7 +27,7 @@ function Template({
   tooltipProps,
   ...props
 }: Partial<IconFrameProps>) {
-  return types.map(type => (
+  return types.map((type) => (
     <Div key={type}>
       <H1
         caption
@@ -46,7 +41,7 @@ function Template({
         alignItems="center"
         flexWrap="wrap"
       >
-        {sizes.map(size => (
+        {sizes.map((size) => (
           <>
             <Text caption>size="{size}"</Text>
             <IconFrame

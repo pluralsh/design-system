@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { type ReactElement } from 'react'
 import styled from 'styled-components'
 
 type CostsWrapProps = {
@@ -23,11 +23,7 @@ export type CostsProps = {
   children: ReactElement | ReactElement[] | string
 }
 
-export default function Costs({
-  header,
-  marginTop,
-  children,
-}: CostsProps) {
+export default function Costs({ header, marginTop, children }: CostsProps) {
   return (
     <CostsWrap marginTop={marginTop}>
       {header && <div className="header">{header}</div>}

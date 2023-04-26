@@ -1,23 +1,24 @@
-import { ReactNode, Ref, forwardRef } from 'react'
+import { type ReactNode, type Ref, forwardRef } from 'react'
 import {
   Div,
   Flex,
   H1,
   Modal as HonorableModal,
-  ModalProps,
+  type ModalProps,
 } from 'honorable'
 import PropTypes from 'prop-types'
-import { ColorKey, Severity } from 'src/types'
+
+import { type ColorKey, type Severity } from '../types'
 
 import CheckRoundedIcon from './icons/CheckRoundedIcon'
-import createIcon from './icons/createIcon'
+import type createIcon from './icons/createIcon'
 import ErrorIcon from './icons/ErrorIcon'
 import WarningIcon from './icons/WarningIcon'
 import InfoIcon from './icons/InfoIcon'
 
 export const SEVERITIES = ['info', 'warning', 'success', 'danger'] as const
 
-type ModalSeverity = Extract<Severity, typeof SEVERITIES[number]>
+type ModalSeverity = Extract<Severity, (typeof SEVERITIES)[number]>
 
 type ModalPropsType = ModalProps & {
   form?: boolean
@@ -60,18 +61,20 @@ const sizeToWidth: { [key in 'medium' | 'large']: number } = {
   large: 608,
 }
 
-function ModalRef({
-  children,
-  header,
-  actions,
-  form = false,
-  open = false,
-  size = form ? 'large' : 'medium',
-  onClose,
-  severity,
-  ...props
-}: ModalPropsType,
-ref: Ref<any>) {
+function ModalRef(
+  {
+    children,
+    header,
+    actions,
+    form = false,
+    open = false,
+    size = form ? 'large' : 'medium',
+    onClose,
+    severity,
+    ...props
+  }: ModalPropsType,
+  ref: Ref<any>
+) {
   const HeaderIcon = severityToIcon[severity ?? 'default']
   const iconColorKey = severityToIconColorKey[severity ?? 'default']
 

@@ -1,15 +1,16 @@
-import { StringObj } from 'src/theme'
-import { CSSObject } from 'styled-components'
+import { type CSSObject } from 'styled-components'
 
-import { FillLevel } from '../components/contexts/FillLevelContext'
+import { type StringObj } from '../theme'
+
+import { type FillLevel } from '../components/contexts/FillLevelContext'
 
 import { semanticColors } from './colors'
 
 export const scrollBar = ({ fillLevel }: { fillLevel: FillLevel }) => {
-  const trackColor
-    = fillLevel >= 2 ? semanticColors['fill-three'] : semanticColors['fill-two']
-  const barColor
-    = fillLevel >= 2
+  const trackColor =
+    fillLevel >= 2 ? semanticColors['fill-three'] : semanticColors['fill-two']
+  const barColor =
+    fillLevel >= 2
       ? semanticColors['text-xlight']
       : semanticColors['fill-three']
   const barWidth = 6

@@ -1,4 +1,4 @@
-import { CSSObject } from 'styled-components'
+import { type CSSObject } from 'styled-components'
 
 export const resetPartials = {
   button: {
@@ -10,5 +10,14 @@ export const resetPartials = {
     font: 'inherit',
     cursor: 'pointer',
     outline: 'inherit',
+  },
+  list: {
+    margin: 0,
+    padding: 0,
+    listStyle: 'none',
+  },
+  li: {
+    margin: 0,
+    padding: 0,
   },
 } as const satisfies Record<string, CSSObject>

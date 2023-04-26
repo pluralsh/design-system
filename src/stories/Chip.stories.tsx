@@ -1,5 +1,5 @@
 import { Div, Flex, H1 } from 'honorable'
-import { ComponentProps } from 'react'
+import { type ComponentProps } from 'react'
 
 import { StatusOkIcon, WrapWithIf } from '..'
 import Chip from '../components/Chip'
@@ -54,7 +54,7 @@ function Template({ onFillLevel, ...args }: any) {
       {/* - Regular */}
       {/* - With loading spinenr */}
       {/* - With icon */}
-      {sizes.map(size => (
+      {sizes.map((size) => (
         <div>
           <H1
             subtitle2
@@ -65,23 +65,23 @@ function Template({ onFillLevel, ...args }: any) {
           <Div marginBottom="xlarge">
             <WrapWithIf
               condition={onFillLevel > 0}
-              wrapper={(
+              wrapper={
                 <Card
                   fillLevel={onFillLevel}
                   padding="small"
                 />
-              )}
+              }
             >
               <Flex
                 direction="column"
                 gap="xlarge"
               >
-                {versionsArgs.map(version => (
+                {versionsArgs.map((version) => (
                   <Flex
                     align="center"
                     gap="medium"
                   >
-                    {severities.map(severity => (
+                    {severities.map((severity) => (
                       <Chip
                         severity={severity}
                         size={size}

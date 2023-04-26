@@ -1,14 +1,8 @@
 // Tooltip Library docs: https://floating-ui.com/docs/react-dom
-import {
-  ReactNode,
-  cloneElement,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { type ReactNode, cloneElement, useMemo, useRef, useState } from 'react'
 import {
   FloatingPortal,
-  Placement,
+  type Placement,
   arrow,
   autoUpdate,
   flip,
@@ -23,7 +17,7 @@ import {
   useRole,
 } from '@floating-ui/react-dom-interactions'
 import { mergeRefs } from 'react-merge-refs'
-import { Div, DivProps } from 'honorable'
+import { Div, type DivProps } from 'honorable'
 import { CSSTransition } from 'react-transition-group'
 import styled, { useTheme } from 'styled-components'
 
@@ -111,12 +105,12 @@ function Tooltip({
   const theme = useTheme()
   const [open, setOpen] = useState(false)
   const arrowRef = useRef()
-  const isOpen
-    = displayOn === 'none' ? false : displayOn === 'manual' ? manualOpen : open
+  const isOpen =
+    displayOn === 'none' ? false : displayOn === 'manual' ? manualOpen : open
 
-  const totalOffset
-    = (showArrow ? ARROW_LENGTH : 0)
-    + (typeof tipOffset === 'number' ? tipOffset : DEFAULT_OFFSET)
+  const totalOffset =
+    (showArrow ? ARROW_LENGTH : 0) +
+    (typeof tipOffset === 'number' ? tipOffset : DEFAULT_OFFSET)
 
   const {
     x,
@@ -131,7 +125,7 @@ function Tooltip({
     placement,
     open: isOpen,
     strategy,
-    onOpenChange: open => {
+    onOpenChange: (open) => {
       setOpen(open)
       if (onOpenChange) onOpenChange(open)
     },
@@ -157,8 +151,10 @@ function Tooltip({
   ])
 
   // Preserve the consumer's ref
-  const childrenRef = useMemo(() => mergeRefs([reference, (children as any).ref]),
-    [reference, children])
+  const childrenRef = useMemo(
+    () => mergeRefs([reference, (children as any).ref]),
+    [reference, children]
+  )
 
   const finalPlacementSide = `${finalPlacement}`.split('-')[0]
   const arrowRotation = {
@@ -184,16 +180,18 @@ function Tooltip({
 
   return (
     <>
-      {cloneElement(children,
-        getReferenceProps({ ref: childrenRef, ...children.props }))}
+      {cloneElement(
+        children,
+        getReferenceProps({ ref: childrenRef, ...children.props })
+      )}
       <WrapWithIf
         condition={portal}
-        wrapper={(
+        wrapper={
           <FloatingPortal
             id={theme.portals.default.id}
             {...portalProps}
           />
-        )}
+        }
       >
         <CSSTransition
           in={isOpen}

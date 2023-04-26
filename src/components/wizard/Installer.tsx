@@ -1,14 +1,12 @@
-import styled, { StyledProps } from 'styled-components'
-import { ReactElement } from 'react'
+import styled, { type StyledProps } from 'styled-components'
+import { type ReactElement } from 'react'
 
+import AppIcon from '../AppIcon'
 import { ListBox } from '../ListBox'
 import { ListBoxItem } from '../ListBoxItem'
-import { AppIcon } from '../../index'
 import PencilIcon from '../icons/PencilIcon'
 import Chip from '../Chip'
-
 import Tooltip from '../Tooltip'
-
 import InfoOutlineIcon from '../icons/InfoOutlineIcon'
 
 import { useNavigation, useStepper } from './hooks'
@@ -47,25 +45,26 @@ function InstallerUnstyled({ ...props }: StyledProps<unknown>): ReactElement {
         selectedKey={null}
         onSelectionChange={() => {}}
       >
-        {apps.map(app => (
+        {apps.map((app) => (
           <ListBoxItem
             key={app.key}
             label={app.label}
-            leftContent={(
+            leftContent={
               <AppIcon
                 size="xsmall"
                 url={app.imageUrl}
                 icon={app.Icon && <app.Icon />}
               />
-            )}
-            rightContent={(
+            }
+            rightContent={
               <div className="item-right-content">
                 {app.isDependency && (
                   <Chip
                     marginRight="medium"
                     hue="lightest"
                     size="small"
-                  >Dependency
+                  >
+                    Dependency
                   </Chip>
                 )}
                 {app.isRequired && (
@@ -88,7 +87,7 @@ function InstallerUnstyled({ ...props }: StyledProps<unknown>): ReactElement {
                   onClick={() => onEdit(app)}
                 />
               </div>
-            )}
+            }
           />
         ))}
       </ListBox>

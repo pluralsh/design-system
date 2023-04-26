@@ -1,29 +1,25 @@
-import {
-  Div,
-  DivProps,
-  Flex,
-  P,
-} from 'honorable'
+import { Div, type DivProps, Flex, P } from 'honorable'
 import PropTypes from 'prop-types'
 import {
-  HTMLAttributes,
-  PropsWithChildren,
-  ReactNode,
-  Ref,
+  type HTMLAttributes,
+  type PropsWithChildren,
+  type ReactNode,
+  type Ref,
   forwardRef,
 } from 'react'
 
-type FormFieldProps = DivProps & PropsWithChildren<{
-  label?: ReactNode
-  labelProps?: HTMLAttributes<HTMLElement>
-  caption?: ReactNode
-  hint?: ReactNode
-  length?: number
-  maxLength?: number
-  required?: boolean
-  small?: boolean
-  error?: boolean
-}>
+type FormFieldProps = DivProps &
+  PropsWithChildren<{
+    label?: ReactNode
+    labelProps?: HTMLAttributes<HTMLElement>
+    caption?: ReactNode
+    hint?: ReactNode
+    length?: number
+    maxLength?: number
+    required?: boolean
+    small?: boolean
+    error?: boolean
+  }>
 
 const propTypes = {
   label: PropTypes.node,
@@ -35,20 +31,22 @@ const propTypes = {
   small: PropTypes.bool,
 }
 
-function FormFieldRef({
-  children,
-  label,
-  labelProps,
-  caption,
-  hint,
-  error,
-  length,
-  maxLength,
-  required,
-  small,
-  ...props
-}: FormFieldProps,
-ref: Ref<any>) {
+function FormFieldRef(
+  {
+    children,
+    label,
+    labelProps,
+    caption,
+    hint,
+    error,
+    length,
+    maxLength,
+    required,
+    small,
+    ...props
+  }: FormFieldProps,
+  ref: Ref<any>
+) {
   return (
     <Div
       ref={ref}
@@ -65,7 +63,8 @@ ref: Ref<any>) {
           flexShrink={0}
           {...labelProps}
         >
-          {label}{required ? '*' : ''}
+          {label}
+          {required ? '*' : ''}
         </P>
         <Div flexGrow={1} />
         <P
@@ -98,7 +97,9 @@ ref: Ref<any>) {
           >
             {hint}
           </P>
-        ) : hint}
+        ) : (
+          hint
+        )}
         {typeof maxLength === 'number' && (
           <P
             caption

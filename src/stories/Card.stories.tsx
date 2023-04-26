@@ -1,7 +1,7 @@
 import { Flex } from 'honorable'
-import { ComponentProps } from 'react'
+import { type ComponentProps } from 'react'
 
-import { FillLevel } from '../components/contexts/FillLevelContext'
+import { type FillLevel } from '../components/contexts/FillLevelContext'
 
 import { Card } from '../index'
 import type { CardProps } from '../components/Card'
@@ -28,12 +28,12 @@ function Template({
       flexWrap="wrap"
       gap="xxlarge"
     >
-      {cornerSizes.map(cornerSize => (
+      {cornerSizes.map((cornerSize) => (
         <Flex
           flexWrap="wrap"
           gap="xxlarge"
         >
-          {fillLevels.map(fillLevel => (
+          {fillLevels.map((fillLevel) => (
             <Card
               clickable={clickable}
               selected={selected}
@@ -70,7 +70,7 @@ function FillLevelTemplate({
       flexWrap="wrap"
       gap="xxlarge"
     >
-      {fillLevels.map(fillLevel => (
+      {fillLevels.map((fillLevel) => (
         <Card
           clickable={clickable}
           selected={selected}

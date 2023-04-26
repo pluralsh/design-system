@@ -1,13 +1,13 @@
-import { Flex, FlexProps } from 'honorable'
+import { Flex, type FlexProps } from 'honorable'
 import {
   Children,
-  Ref,
+  type Ref,
   cloneElement,
   forwardRef,
   isValidElement,
 } from 'react'
 
-import { SidebarLayout } from './Sidebar'
+import { type SidebarLayout } from './Sidebar'
 
 type SidebarSectionProps = FlexProps & {
   grow?: number
@@ -20,11 +20,16 @@ const styles = {
   },
 }
 
-function SidebarSectionRef({
-  layout = 'vertical', children, grow = 0, ...props
-}: SidebarSectionProps, ref: Ref<any>) {
+function SidebarSectionRef(
+  { layout = 'vertical', children, grow = 0, ...props }: SidebarSectionProps,
+  ref: Ref<any>
+) {
   const isHorizontal = layout === 'horizontal'
-  const childrenWithProps = Children.map(children, child => (isValidElement(child) ? cloneElement(child, { layout, ...(child as any).props }) : child))
+  const childrenWithProps = Children.map(children, (child) =>
+    isValidElement(child)
+      ? cloneElement(child, { layout, ...(child as any).props })
+      : child
+  )
 
   return (
     <Flex

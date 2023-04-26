@@ -1,4 +1,4 @@
-import { ComponentType } from 'react'
+import { type ComponentType } from 'react'
 import styled from 'styled-components'
 
 // @ts-ignore
@@ -6,7 +6,7 @@ import styledContainerQuery from 'styled-container-query'
 
 import AwsLogoIcon from '../icons/AwsLogoIcon'
 import AzureLogoIcon from '../icons/AzureLogoIcon'
-import { IconProps } from '../icons/createIcon'
+import { type IconProps } from '../icons/createIcon'
 import GoogleCloudLogoIcon from '../icons/GoogleCloudLogoIcon'
 
 export const CLUSTER_PRICE = 399
@@ -55,10 +55,17 @@ type ProviderCostEstimation = {
   total: number
 }
 
-export function estimateProviderCost(provider: Provider, appCount: number, clusterCount = 1): ProviderCostEstimation {
+export function estimateProviderCost(
+  provider: Provider,
+  appCount: number,
+  clusterCount = 1
+): ProviderCostEstimation {
   if (!provider) {
     return {
-      total: 0, k8s: 0, infra: 0, app: 0,
+      total: 0,
+      k8s: 0,
+      infra: 0,
+      app: 0,
     }
   }
 
@@ -67,7 +74,8 @@ export function estimateProviderCost(provider: Provider, appCount: number, clust
   const infra = Math.round(infraPrice)
 
   // First 5 apps do not raise the cost, then for every 2 apps we add one more instance.
-  const app = appCount <= 5 ? 0 : Math.round(Math.floor((appCount - 4) / 2) * appPrice)
+  const app =
+    appCount <= 5 ? 0 : Math.round(Math.floor((appCount - 4) / 2) * appPrice)
 
   return {
     k8s,
@@ -83,7 +91,11 @@ type PluralCostEstimation = {
   total: number
 }
 
-export function estimatePluralCost(isProPlan: boolean, clusterCount: number, userCount: number): PluralCostEstimation {
+export function estimatePluralCost(
+  isProPlan: boolean,
+  clusterCount: number,
+  userCount: number
+): PluralCostEstimation {
   const pro = isProPlan ? 1 : 0
   const clusters = clusterCount * CLUSTER_PRICE * pro
   const users = userCount * USER_PRICE * pro

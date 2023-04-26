@@ -1,4 +1,4 @@
-import { Dispatch } from 'react'
+import { type Dispatch } from 'react'
 
 import Radio from '../../Radio'
 import RadioGroup from '../../RadioGroup'
@@ -29,10 +29,7 @@ type UsersControlProps = {
   setUsers: Dispatch<number>
 }
 
-export default function UsersControl({
-  users,
-  setUsers,
-}: UsersControlProps) {
+export default function UsersControl({ users, setUsers }: UsersControlProps) {
   return (
     <Control
       header="How many users will access your clusters?"

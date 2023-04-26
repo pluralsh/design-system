@@ -1,24 +1,27 @@
 import {
-  ComponentProps,
-  ReactElement,
+  type ComponentProps,
+  type ComponentType,
+  type RefAttributes,
   createContext,
   useContext,
 } from 'react'
 
-export type LinkProps = Omit<ComponentProps<'a'>, 'ref'> & { ref?: any }
-
-export type NavigationContextT = {
-  Link: (props: LinkProps) => ReactElement
-  usePathname: (href?: string) => string
-  useNavigate: ()=> (location?: string) => void
+export type NavigationContextLinkProps = Omit<ComponentProps<'a'>, 'ref'> & {
+  ref?: any
 }
 
-const NavigationContext = createContext<NavigationContextT | null>(null)
+export type NavigationContextValue = {
+  Link: ComponentType<NavigationContextLinkProps & RefAttributes<any>>
+  usePathname: () => string
+  useNavigate: () => (location?: string) => void
+}
+
+const NavigationContext = createContext<NavigationContextValue | null>(null)
 
 export function NavigationContextProvider({
   value,
   ...props
-}: { value: NavigationContextT } & Omit<
+}: { value: NavigationContextValue } & Omit<
   ComponentProps<typeof NavigationContext.Provider>,
   'value'
 >) {
@@ -34,7 +37,9 @@ export function useNavigationContext() {
   const context = useContext(NavigationContext)
 
   if (!context) {
-    throw Error('You must wrap your content in a NavigationContextProvider to use useNavigationContext()')
+    throw Error(
+      'You must wrap your content in a NavigationContextProvider to use useNavigationContext()'
+    )
   }
 
   return context

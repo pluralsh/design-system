@@ -1,15 +1,5 @@
-import {
-  Ref,
-  forwardRef,
-  useEffect,
-  useState,
-} from 'react'
-import {
-  CssProps,
-  Div,
-  Flex,
-  FlexProps,
-} from 'honorable'
+import { type Ref, forwardRef, useCallback, useEffect, useState } from 'react'
+import { type CssProps, Div, Flex, type FlexProps } from 'honorable'
 import { useTheme } from 'styled-components'
 
 import Tooltip from '../components/Tooltip'
@@ -18,13 +8,29 @@ import CopyIcon from './icons/CopyIcon'
 
 type CodelineProps = FlexProps & {
   displayText?: string
+  onCopyClick?: (text: string) => Promise<void>
 }
 
 const propTypes = {}
 
-function CodelineRef({ children, displayText, ...props }: CodelineProps, ref: Ref<any>) {
+function CodelineRef(
+  { children, displayText, onCopyClick, ...props }: CodelineProps,
+  ref: Ref<any>
+) {
   const [copied, setCopied] = useState(false)
   const theme = useTheme()
+
+  const handleCopy = useCallback(() => {
+    if (onCopyClick) {
+      onCopyClick(children as string).then(() => setCopied(true))
+
+      return
+    }
+
+    window.navigator.clipboard
+      .writeText(children as string)
+      .then(() => setCopied(true))
+  }, [children, onCopyClick])
 
   useEffect(() => {
     if (copied) {
@@ -33,8 +39,6 @@ function CodelineRef({ children, displayText, ...props }: CodelineProps, ref: Re
       return () => clearTimeout(timeout)
     }
   }, [copied])
-
-  const handleCopy = () => window.navigator.clipboard.writeText(children as string).then(() => setCopied(true))
 
   return (
     <Flex
@@ -53,7 +57,7 @@ function CodelineRef({ children, displayText, ...props }: CodelineProps, ref: Re
       >
         <Div
           body2
-          {...theme.partials.text.code as CssProps}
+          {...(theme.partials.text.code as CssProps)}
           color="text-light"
           flexGrow={1}
           whiteSpace="pre"
@@ -77,7 +81,7 @@ function CodelineRef({ children, displayText, ...props }: CodelineProps, ref: Re
           placement="top"
           displayOn="manual"
           dismissable
-          onOpenChange={open => {
+          onOpenChange={(open) => {
             if (!open && copied) setCopied(false)
           }}
           manualOpen={copied}

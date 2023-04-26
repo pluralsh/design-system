@@ -1,6 +1,6 @@
-import { FlexProps, H3, P } from 'honorable'
+import { type FlexProps, H3, P } from 'honorable'
 import PropTypes from 'prop-types'
-import { Ref, forwardRef } from 'react'
+import { type Ref, forwardRef } from 'react'
 
 type FormTitleProps = FlexProps & {
   title?: string
@@ -12,8 +12,10 @@ const propTypes = {
   message: PropTypes.string,
 }
 
-function FormTitleRef({ title, message, ...props }: FormTitleProps,
-  ref: Ref<any>) {
+function FormTitleRef(
+  { title, message, ...props }: FormTitleProps,
+  ref: Ref<any>
+) {
   return (
     <H3
       ref={ref}
