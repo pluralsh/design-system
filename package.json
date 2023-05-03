@@ -52,7 +52,7 @@
     "@react-types/shared": "3.17.0",
     "@tanstack/match-sorter-utils": "8.7.6",
     "@tanstack/react-table": "8.7.9",
-    "@tanstack/react-virtual": "3.0.0-beta.48",
+    "@tanstack/react-virtual": "3.0.0-beta.54",
     "@types/chroma-js": "2.1.5",
     "chroma-js": "2.4.2",
     "classnames": "2.3.2",
