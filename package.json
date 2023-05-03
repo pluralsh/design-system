@@ -34,7 +34,7 @@
     "@react-aria/combobox": "3.5.0",
     "@react-aria/focus": "3.11.0",
     "@react-aria/interactions": "3.14.0",
-    "@react-aria/listbox": "3.8.0",
+    "@react-aria/listbox": "3.8.1",
     "@react-aria/overlays": "3.13.0",
     "@react-aria/radio": "3.5.0",
     "@react-aria/select": "3.9.0",
