@@ -37,7 +37,7 @@
     "@react-aria/listbox": "3.8.0",
     "@react-aria/overlays": "3.13.0",
     "@react-aria/radio": "3.5.0",
-    "@react-aria/select": "3.9.0",
+    "@react-aria/select": "3.9.1",
     "@react-aria/slider": "3.3.0",
     "@react-aria/tabs": "3.4.0",
     "@react-aria/utils": "3.15.0",
