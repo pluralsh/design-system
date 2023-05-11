@@ -127,7 +127,13 @@ export {
 } from './components/contexts/BreadcrumbsContext'
 
 // Theme
-export { default as theme, styledTheme } from './theme'
+export {
+  honorableThemeDark as theme,
+  styledTheme,
+  styledThemeLight,
+  honorableThemeLight,
+  styledThemeDark,
+} from './theme'
 export { default as GlobalStyle } from './GlobalStyle'
 
 // Utils
