@@ -17,11 +17,21 @@ export function useFloatingDropdown({
   placement,
   triggerRef,
   width,
+  minWidth,
+  minHeight = 140,
   maxHeight,
 }: Pick<SelectProps, 'placement' | 'width' | 'maxHeight'> & {
+  minHeight?: string | number
+  minWidth?: string | number
   triggerRef: MutableRefObject<any>
 }) {
   const theme = useTheme()
+  const sizePadding = theme.spacing.xxsmall
+
+  // flip() padding must be smaller than size() padding to prevent flickering
+  // back and forth. This makes padding off by one at some window sizes, but
+  // it's a decent trade off for not flickering.
+  const flipPadding = sizePadding - 1
 
   const floating = useFloating({
     placement: `bottom-${placement === 'left' ? 'start' : 'end'}`,
@@ -29,32 +39,50 @@ export function useFloatingDropdown({
     middleware: [
       offset(theme.spacing.xxsmall),
       size({
-        padding: theme.spacing.xxsmall,
+        padding: sizePadding,
         apply(args) {
           const { elements, availableHeight, rects } = args
-          const minH = 140
+          const maxW =
+            typeof width === 'string' && width
+              ? width
+              : `${typeof width === 'number' ? width : rects.reference.width}px`
+          const minW =
+            typeof minWidth === 'string' && minWidth
+              ? minWidth === 'reference'
+                ? `${rects.reference.width}px`
+                : minWidth
+              : typeof minWidth === 'number'
+              ? `${minWidth}px`
+              : null
           const maxH =
-            typeof maxHeight === 'string'
+            typeof maxHeight === 'string' && maxHeight
               ? maxHeight
-              : Math.min(availableHeight, maxHeight || DEFAULT_MAX_HEIGHT)
+              : `${Math.min(
+                  availableHeight,
+                  typeof maxHeight === 'number' ? maxHeight : DEFAULT_MAX_HEIGHT
+                )}px`
+          const minH =
+            typeof minHeight === 'string' && minHeight
+              ? minHeight
+              : typeof minHeight === 'number'
+              ? `${minHeight}px`
+              : null
+
+          console.log('maxW', maxW)
+          console.log('minW', minW)
+          console.log('maxH', maxH)
+          console.log('minH', minH)
 
           Object.assign(elements.floating.style, {
-            maxWidth:
-              typeof width === 'string' && width
-                ? width
-                : `${
-                    typeof width === 'number' ? width : rects.reference.width
-                  }px`,
-            height: `${maxH}px`,
-            minHeight: `${minH}px`,
+            maxWidth: maxW,
+            ...(minW ? { minWidth: minW } : {}),
+            ...(maxH ? { height: maxH } : {}),
+            ...(minH ? { minHeight: minH } : {}),
           })
         },
       }),
       flip({
-        // flip() padding must be smaller than size() padding to prevent flickering
-        // back and forth. This makes padding off by one at some window sizes, but
-        // it's a decent trade off for not flickering.
-        padding: theme.spacing.xxsmall - 1,
+        padding: flipPadding,
         fallbackStrategy: 'initialPlacement',
       }),
     ],
