@@ -68,11 +68,6 @@ export function useFloatingDropdown({
               ? `${minHeight}px`
               : null
 
-          console.log('maxW', maxW)
-          console.log('minW', minW)
-          console.log('maxH', maxH)
-          console.log('minH', minH)
-
           Object.assign(elements.floating.style, {
             maxWidth: maxW,
             ...(minW ? { minWidth: minW } : {}),
