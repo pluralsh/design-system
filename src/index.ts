@@ -106,7 +106,7 @@ export { Breadcrumbs } from './components/Breadcrumbs'
 export { default as usePrevious } from './hooks/usePrevious'
 export { default as useUnmount } from './hooks/useUnmount'
 export { useFloatingDropdown } from './hooks/useFloatingDropdown'
-export { useResizeObserver } from './hooks/useResizeObserver'
+export { default as useResizeObserver } from './hooks/useResizeObserver'
 
 // Contexts
 export {
