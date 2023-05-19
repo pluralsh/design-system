@@ -147,7 +147,7 @@ export type CheckboxProps = {
   defaultSelected?: boolean
   onChange?: (e: { target: { checked: boolean } }) => any
   onFocusChange?: (isFocused: boolean) => void
-  tabIndex: number | string
+  tabIndex?: number | string
 } & Omit<InputProps, 'onChange'>
 
 function Checkbox(
