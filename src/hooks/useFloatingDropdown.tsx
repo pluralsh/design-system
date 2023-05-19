@@ -9,7 +9,7 @@ import {
 } from '@floating-ui/react-dom-interactions'
 import { mergeRefs } from 'react-merge-refs'
 
-import { type SelectProps } from './Select'
+import { type SelectProps } from '../components/Select'
 
 const DEFAULT_MAX_HEIGHT = 230
 
