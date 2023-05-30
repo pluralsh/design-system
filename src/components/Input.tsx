@@ -123,7 +123,7 @@ const Input = forwardRef(
           ref={ref}
           endIcon={
             <>
-              {showClearButton && (
+              {showClearButton && props.value && (
                 <ClearButton
                   onClick={() => {
                     const input = inputRef?.current
