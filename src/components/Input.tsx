@@ -16,7 +16,7 @@ export type InputProps = HonorableInputProps & {
   suffix?: ReactNode
   prefix?: ReactNode
   titleContent?: ReactNode
-  clearButton?: boolean
+  showClearButton?: boolean
 }
 
 const PrefixSuffix = styled.div(({ theme }) => ({
@@ -70,7 +70,7 @@ const Input = forwardRef(
       endIcon,
       suffix,
       prefix,
-      clearButton,
+      showClearButton,
       titleContent,
       inputProps,
       ...props
@@ -91,7 +91,7 @@ const Input = forwardRef(
       ? 'small'
       : 'medium'
 
-    if (suffix || clearButton) {
+    if (suffix || showClearButton) {
       themeExtension = mergeTheme(themeExtension, {
         Input: {
           Root: [{ paddingRight: 0 }],
@@ -123,7 +123,7 @@ const Input = forwardRef(
           ref={ref}
           endIcon={
             <>
-              {clearButton && (
+              {showClearButton && (
                 <ClearButton
                   onClick={() => {
                     const input = inputRef?.current
