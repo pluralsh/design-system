@@ -137,6 +137,6 @@ TitleContent.args = {
     </>
   ),
   placeholder: 'Search the marketplace',
-  clearButton: true,
-  suffix: 'Hello',
+  showClearButton: true,
+  suffix: '',
 }
