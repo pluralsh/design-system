@@ -63,7 +63,7 @@
     "immer": "9.0.21",
     "moment": "2.29.4",
     "prop-types": "15.8.1",
-    "react-animate-height": "3.1.0",
+    "react-animate-height": "3.1.1",
     "react-embed": "3.6.0",
     "react-markdown": "8.0.7",
     "react-merge-refs": "2.0.1",
