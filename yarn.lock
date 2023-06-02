@@ -4281,7 +4281,7 @@ __metadata:
     react-dom: 18.2.0
     react-embed: 3.6.0
     react-markdown: 8.0.7
-    react-merge-refs: 2.0.1
+    react-merge-refs: 2.0.2
     react-spring: 9.7.1
     react-transition-group: 4.4.5
     react-use-measure: 2.1.1
@@ -16459,10 +16459,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-merge-refs@npm:2.0.1":
-  version: 2.0.1
-  resolution: "react-merge-refs@npm:2.0.1"
-  checksum: c0b6fdb384a92e9b2bb7d56128244a2db97b9343c0dcae70f172352c3732312266c078495902707e45f523625afcba78996a22edea3a8e7b2b17fe97347059fe
+"react-merge-refs@npm:2.0.2":
+  version: 2.0.2
+  resolution: "react-merge-refs@npm:2.0.2"
+  checksum: 64758870d79ad52e6666d1d30cdecd5a72722edfd5c89808b41acdbd81a039f0c78b8b576f7ae247010468fc45cb57dd31f402693c64224439dbe0127f4389f3
   languageName: node
   linkType: hard
 
