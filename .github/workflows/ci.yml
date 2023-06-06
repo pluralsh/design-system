@@ -24,6 +24,23 @@ jobs:
       - run: |
           yarn install --immutable
       - run: yarn build
+  test:
+    name: Unit test
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - name: Read Node.js version from package.json
+        run: echo "nodeVersion=$(node -p "require('./package.json').engines.node")" >> $GITHUB_OUTPUT
+        id: engines
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.engines.outputs.nodeVersion }}
+      - run: yarn --immutable
+      - run: yarn test
   build-storybook:
     name: Build Storybook
     runs-on: ubuntu-latest

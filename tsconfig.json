@@ -13,6 +13,7 @@
     "rootDir": "src",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "types": ["vitest/globals", "@testing-library/jest-dom", "node", "@types/testing-library__jest-dom"],
     "suppressImplicitAnyIndexErrors": true
   },
   "include": ["src/**/*"]
