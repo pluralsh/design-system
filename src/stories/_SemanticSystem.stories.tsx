@@ -163,7 +163,9 @@ function BoxRadiuses() {
   )
 }
 
-const BorderedBox = styled(RadiusedBox).attrs(() => ({ radius: 'medium' }))<{
+const BorderedBox = styled(RadiusedBox).attrs(
+  () => ({ radius: 'medium' } as any)
+)<{
   border?: string
 }>(({ theme, border }) => ({ border: theme.borders[border] }))
 

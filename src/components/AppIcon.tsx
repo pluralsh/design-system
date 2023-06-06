@@ -1,10 +1,11 @@
 import { type DivProps, Flex, Img } from 'honorable'
 import PropTypes from 'prop-types'
 import { type ReactNode, type Ref, forwardRef } from 'react'
-import { type CSSObject } from 'styled-components'
-import last from 'lodash/last'
+import { last } from 'lodash-es'
 
 import { styledTheme as theme } from '../theme'
+
+import { type CSSObject } from '../types'
 
 import { type FillLevel, useFillLevel } from './contexts/FillLevelContext'
 
