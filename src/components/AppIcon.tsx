@@ -13,9 +13,9 @@ type Hue = 'default' | 'lighter' | 'lightest'
 type Size = 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'
 
 type AppIconProps = DivProps & {
-  size?: Size | string
+  size?: Size
   spacing?: 'none' | 'padding' | string
-  hue?: 'default' | 'lighter' | 'lightest' | string
+  hue?: 'default' | 'lighter' | 'lightest'
   clickable?: boolean
   url?: string
   icon?: ReactNode
@@ -81,9 +81,11 @@ const hueToBorderColor: {
   lightest: 'border-fill-three',
 }
 
-const sizeToFont: {
-  [key in 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge']: CSSObject
-} = {
+const sizeToFont: Record<Size, CSSObject> = {
+  xxsmall: {
+    ...theme.partials.text.body2Bold,
+    fontSize: 12,
+  },
   xsmall: theme.partials.text.body2Bold,
   small: theme.partials.text.subtitle2,
   medium: theme.partials.text.subtitle1,
@@ -178,7 +180,7 @@ function AppIconRef(
 
 const AppIcon = forwardRef(AppIconRef)
 
-AppIcon.propTypes = propTypes
+AppIcon.propTypes = propTypes as any
 
 export default AppIcon
 export type { AppIconProps }

@@ -52,6 +52,7 @@ const sizes = [
   { label: 'Medium', size: 'medium' },
   { label: 'Small', size: 'small' },
   { label: 'Extra Small', size: 'xsmall' },
+  { label: 'XX Small', size: 'xxsmall' },
 ]
 
 function Template({ onFillLevel, icon, ...args }: any) {

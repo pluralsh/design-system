@@ -405,7 +405,7 @@ export function Breadcrumbs({
               maxLength={maxLength}
               collapsible={collapsible}
               breadcrumbs={breadcrumbs}
-              style={transitionStyles[state]}
+              style={(transitionStyles as any)[state]}
             />
           )}
         </Transition>

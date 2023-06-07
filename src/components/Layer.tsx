@@ -225,7 +225,8 @@ function LayerRef(
     margin = {}
   }
   for (const [key, value] of Object.entries(margin)) {
-    margin[key] = (!isNil(value) && theme.spacing[value]) || value
+    margin[key as keyof typeof margin] =
+      (!isNil(value) && (theme.spacing as any)[value]) || value
   }
   let transitionDirection: GetTransitionProps['direction'] = DEFAULT_DIRECTION
   let transitionType: GetTransitionProps['type'] = DEFAULT_TRANSITION_TYPE
