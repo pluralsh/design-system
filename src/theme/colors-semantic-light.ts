@@ -1,3 +1,4 @@
+import chroma from 'chroma-js'
 import { type CSSProperties } from 'styled-components'
 
 import { blue, green, grey, purple, red, yellow } from './colors-base'
@@ -41,24 +42,24 @@ export const semanticColorsLight = {
   // link-inline
 
   // Check with design team that this is correct
-  'action-link-inline-hover': blue[100],
+  'action-link-inline-hover': blue[600],
 
   'action-link-inline-visited': purple[300],
   'action-link-inline-visited-hover': purple[200],
   // input
-  'action-input-hover': `#F9FAFB`,
+  'action-input-hover': `${chroma(grey[950]).alpha(0.04)}`, // text color w/ alpha
 
   // Border
   //
-  border: '#DFE2E7',
-  'border-input': '#C5C9D3',
-  'border-fill-two': '#C5C9D3',
-  'border-fill-three': grey[700],
-  'border-disabled': '#C5C9D3',
-  'border-outline-focused': '#15A5F9',
-  'border-primary': '#4A51F2',
+  border: grey[100],
+  'border-input': grey[300],
+  'border-fill-two': grey[200],
+  'border-fill-three': grey[400],
+  'border-disabled': grey[200],
+  'border-outline-focused': blue[400],
+  'border-primary': purple[400],
   'border-secondary': blue[400],
-  'border-success': '#17E8A0',
+  'border-success': green[500],
   'border-warning': '#FFF175',
   'border-danger': '#ED4578',
   'border-selected': grey[100],
@@ -66,7 +67,7 @@ export const semanticColorsLight = {
 
   // Text
   //
-  text: '#0E1015',
+  text: grey[950],
   'text-light': '#5D626F',
   'text-xlight': '#A9AFBC',
   'text-long-form': grey[300],
