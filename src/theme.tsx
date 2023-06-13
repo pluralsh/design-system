@@ -2,6 +2,10 @@ import { mergeTheme } from 'honorable'
 import defaultTheme from 'honorable-theme-default'
 import mapperRecipe from 'honorable-recipe-mapper'
 
+import { useState } from 'react'
+
+import { useMutationObserver } from '@react-hooks-library/core'
+
 import { semanticColorsDark } from './theme/colors-semantic-dark'
 import { semanticColorsLight } from './theme/colors-semantic-light'
 import { baseColors } from './theme/colors-base'
@@ -22,7 +26,7 @@ import { resetPartials } from './theme/resets'
 import { marketingTextPartials } from './theme/marketingText'
 import gradients from './theme/gradients'
 
-const COLOR_THEME_STORAGE_KEY = 'theme'
+export const COLOR_THEME_STORAGE_KEY = 'theme-mode'
 
 export type ColorMode = 'light' | 'dark'
 
@@ -807,7 +811,60 @@ export const styledThemeLight = {
 export const styledTheme = styledThemeDark
 export default honorableThemeDark
 
-export const setTheme = (mode: ColorMode) => {
-  localStorage.setItem(COLOR_THEME_STORAGE_KEY, mode)
-  document.documentElement.dataset[COLOR_THEME_STORAGE_KEY] = mode
+export const setThemeColorMode = (
+  mode: ColorMode,
+  {
+    dataAttrName = COLOR_THEME_STORAGE_KEY,
+    element = document?.documentElement,
+  }: {
+    dataAttrName?: string
+    element?: HTMLElement
+  } = {}
+) => {
+  if (!element) {
+    return
+  }
+  localStorage.setItem(dataAttrName, mode)
+  element.setAttribute(`data-${dataAttrName}`, mode)
+}
+
+export const useThemeColorMode = ({
+  dataAttrName = COLOR_THEME_STORAGE_KEY,
+  defaultMode = 'dark',
+  element = document?.documentElement,
+}: {
+  dataAttrName?: string
+  defaultMode?: ColorMode
+  element?: HTMLElement
+} = {}) => {
+  const attrName = `data-${dataAttrName}`
+
+  console.log(
+    'element?.getAttribute(attrName)',
+    element?.getAttribute(attrName)
+  )
+  const [thisTheme, setThisTheme] = useState(
+    element?.getAttribute(attrName) || defaultMode
+  )
+
+  useMutationObserver(
+    element,
+    (mutations) => {
+      console.log('mutes', mutations)
+      mutations.forEach((mutation) => {
+        console.log('mutation', mutation)
+        console.log('docElt', element)
+        if (
+          mutation?.attributeName === attrName &&
+          mutation.target instanceof HTMLElement
+        ) {
+          console.log('next attr', mutation.target.getAttribute(attrName))
+          setThisTheme(mutation.target.getAttribute(attrName) || defaultMode)
+        }
+      })
+    },
+    { attributeFilter: [attrName] }
+  )
+
+  return thisTheme
 }

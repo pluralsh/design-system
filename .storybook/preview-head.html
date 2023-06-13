@@ -78,8 +78,9 @@
   }
 </style>
 <script>
-  const theme = localStorage.getItem('theme') || 'light';
-  document.documentElement.dataset.theme = theme;
+  const key = 'theme-mode'
+  const theme = localStorage.getItem(key) || 'light'
+  document.documentElement.setAttribute('data-' + key, theme)
 </script>
 <script>
   window.global = window;
