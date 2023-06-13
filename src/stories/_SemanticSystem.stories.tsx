@@ -3,6 +3,7 @@ import styled, { useTheme } from 'styled-components'
 import { type FillLevel } from '../components/contexts/FillLevelContext'
 import { type styledTheme } from '..'
 import Divider from '../components/Divider'
+import { baseSpacing } from '../theme/spacing'
 
 const fillLevelToBGColor: Record<FillLevel, string> = {
   0: 'fill-zero',
@@ -25,10 +26,10 @@ const BlockWrapper = styled.div(({ theme }) => ({
   marginBottom: theme.spacing.large,
 }))
 
-const FilledBox = styled.div(({ theme }) => ({
+const FilledBox = styled.div<{ $bgColor?: string }>(({ theme, $bgColor }) => ({
   width: '64px',
   height: '64px',
-  backgroundColor: theme.colors['fill-one'],
+  backgroundColor: $bgColor || theme.colors['fill-one'],
 }))
 
 function Template({ exampleText }: { exampleText?: string }) {
@@ -84,7 +85,7 @@ const ColorBox = styled(FilledBox)<{ color: string }>(({ theme, color }) => ({
 }))
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ColorBoxWrap = styled.div((_p) => ({
+const ColorBoxWrap = styled.div((_) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -142,20 +143,24 @@ function Shadows() {
   )
 }
 
-const RadiusedBox = styled(FilledBox)<{ radius: 'medium' | 'large' }>(
-  ({ theme, radius }) => ({
+const RadiusedBox = styled(FilledBox)<{ $radius: 'medium' | 'large' }>(
+  ({ theme, $radius: radius }) => ({
     borderRadius: theme.borderRadiuses[radius],
   })
 )
 
 function BoxRadiuses() {
   const radii: ('medium' | 'large')[] = ['medium', 'large']
+  const theme = useTheme()
 
   return (
     <FlexWrap>
       {radii.map((key) => (
         <BlockWrapper key={key}>
-          <RadiusedBox radius={key} />
+          <RadiusedBox
+            $radius={key}
+            $bgColor={theme.colors['fill-three']}
+          />
           <ItemLabel>{key}</ItemLabel>
         </BlockWrapper>
       ))}
@@ -259,34 +264,24 @@ function Scrollbars() {
   )
 }
 
-const SpacingBox = styled.div<{ space: string }>(({ theme, space }) => ({
+const SpacingBox = styled.div<{ $space: number }>(({ theme, $space }) => ({
   borderRadius: 0,
   backgroundColor: theme.colors['action-primary'],
   margin: 0,
-  paddingRight: (theme.spacing as any)[space],
-  paddingTop: (theme.spacing as any)[space],
+  paddingRight: $space,
+  paddingTop: $space,
   width: 'min-content',
 }))
 
 function Spacing() {
   return (
     <>
-      {[
-        'xxxsmall',
-        'xxsmall',
-        'xsmall',
-        'small',
-        'medium',
-        'large',
-        'xlarge',
-        'xxlarge',
-        'xxxlarge',
-        'xxxxlarge',
-        'xxxxxlarge',
-      ].map((key) => (
+      {Object.entries(baseSpacing).map(([key, val]) => (
         <BlockWrapper key={key}>
-          <SpacingBox space={key} />
-          <ItemLabel>{key}</ItemLabel>
+          <SpacingBox $space={val} />
+          <ItemLabel>
+            {key}: {val}px
+          </ItemLabel>
         </BlockWrapper>
       ))}
     </>
@@ -294,8 +289,8 @@ function Spacing() {
 }
 
 const SemanticText = styled.div<{
-  typeStyle?: keyof typeof styledTheme.partials.text
-}>(({ theme, typeStyle }) => ({
+  $typeStyle?: keyof typeof styledTheme.partials.text
+}>(({ theme, $typeStyle: typeStyle }) => ({
   ...theme.partials.text[typeStyle],
   marginBottom: theme.spacing.large,
 }))
@@ -307,34 +302,34 @@ function Typography({
 }) {
   return (
     <>
-      <SemanticText typeStyle="h1">H1 - {txt}</SemanticText>
-      <SemanticText typeStyle="h2">H2 - {txt}</SemanticText>
-      <SemanticText typeStyle="h3">H3 - {txt}</SemanticText>
-      <SemanticText typeStyle="h4">H4 - {txt}</SemanticText>
-      <SemanticText typeStyle="title1">Title 1 - {txt}</SemanticText>
-      <SemanticText typeStyle="title2">Title 2 - {txt}</SemanticText>
-      <SemanticText typeStyle="subtitle1">Subtitle 1 - {txt}</SemanticText>
-      <SemanticText typeStyle="subtitle2">Subtitle 2 - {txt}</SemanticText>
-      <SemanticText typeStyle="body1Bold">Body 1 (Bold) - {txt}</SemanticText>
-      <SemanticText typeStyle="body1">Body 1 - {txt}</SemanticText>
-      <SemanticText typeStyle="body2Bold">Body 2 (Bold) - {txt}</SemanticText>
-      <SemanticText typeStyle="body2">Body 2 - {txt}</SemanticText>
-      <SemanticText typeStyle="body2LooseLineHeight">
+      <SemanticText $typeStyle="h1">H1 - {txt}</SemanticText>
+      <SemanticText $typeStyle="h2">H2 - {txt}</SemanticText>
+      <SemanticText $typeStyle="h3">H3 - {txt}</SemanticText>
+      <SemanticText $typeStyle="h4">H4 - {txt}</SemanticText>
+      <SemanticText $typeStyle="title1">Title 1 - {txt}</SemanticText>
+      <SemanticText $typeStyle="title2">Title 2 - {txt}</SemanticText>
+      <SemanticText $typeStyle="subtitle1">Subtitle 1 - {txt}</SemanticText>
+      <SemanticText $typeStyle="subtitle2">Subtitle 2 - {txt}</SemanticText>
+      <SemanticText $typeStyle="body1Bold">Body 1 (Bold) - {txt}</SemanticText>
+      <SemanticText $typeStyle="body1">Body 1 - {txt}</SemanticText>
+      <SemanticText $typeStyle="body2Bold">Body 2 (Bold) - {txt}</SemanticText>
+      <SemanticText $typeStyle="body2">Body 2 - {txt}</SemanticText>
+      <SemanticText $typeStyle="body2LooseLineHeight">
         Body 2 Loose Line Height - {txt}
       </SemanticText>
-      <SemanticText typeStyle="caption">Caption - {txt}</SemanticText>
-      <SemanticText typeStyle="badgeLabel">Badge Label - {txt}</SemanticText>
-      <SemanticText typeStyle="buttonLarge">Large Button - {txt}</SemanticText>
-      <SemanticText typeStyle="buttonSmall">Small Button - {txt}</SemanticText>
-      <SemanticText typeStyle="overline">Overline - {txt}</SemanticText>
-      <SemanticText typeStyle="code">Code - {txt}</SemanticText>
+      <SemanticText $typeStyle="caption">Caption - {txt}</SemanticText>
+      <SemanticText $typeStyle="badgeLabel">Badge Label - {txt}</SemanticText>
+      <SemanticText $typeStyle="buttonLarge">Large Button - {txt}</SemanticText>
+      <SemanticText $typeStyle="buttonSmall">Small Button - {txt}</SemanticText>
+      <SemanticText $typeStyle="overline">Overline - {txt}</SemanticText>
+      <SemanticText $typeStyle="code">Code - {txt}</SemanticText>
     </>
   )
 }
 
 const MktgText = styled.div<{
-  typeStyle?: keyof typeof styledTheme.partials.marketingText
-}>(({ theme, typeStyle }) => ({
+  $typeStyle?: keyof typeof styledTheme.partials.marketingText
+}>(({ theme, $typeStyle: typeStyle }) => ({
   ...theme.partials.marketingText[typeStyle],
   display: 'block',
   marginBottom: theme.spacing.large,
@@ -351,64 +346,64 @@ function MarketingTypography({
 }) {
   return (
     <>
-      <MktgText typeStyle="bigHeader">
+      <MktgText $typeStyle="bigHeader">
         Big Header (
         <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
       </MktgText>
-      <MktgText typeStyle="hero1">
+      <MktgText $typeStyle="hero1">
         Hero 1 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>)
         - {txt}
       </MktgText>
-      <MktgText typeStyle="hero2">
+      <MktgText $typeStyle="hero2">
         Hero 2 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>)
         - {txt}
       </MktgText>
-      <MktgText typeStyle="title1">
+      <MktgText $typeStyle="title1">
         Title 1 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>
         ) - {txt}
       </MktgText>
-      <MktgText typeStyle="title2">
+      <MktgText $typeStyle="title2">
         Title 2 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>
         ) - {txt}
       </MktgText>
-      <MktgText typeStyle="subtitle1">
+      <MktgText $typeStyle="subtitle1">
         Subtitle 1 (
         <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
       </MktgText>
-      <MktgText typeStyle="subtitle2">
+      <MktgText $typeStyle="subtitle2">
         Subtitle 2 (
         <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
       </MktgText>
-      <MktgText typeStyle="body1Bold">
+      <MktgText $typeStyle="body1Bold">
         Body 1 (Bold) (
         <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
       </MktgText>
-      <MktgText typeStyle="body1">
+      <MktgText $typeStyle="body1">
         Body 1 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>)
         - {txt}
       </MktgText>
-      <MktgText typeStyle="body2Bold">
+      <MktgText $typeStyle="body2Bold">
         Body 2 (Bold) (
         <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
       </MktgText>
-      <MktgText typeStyle="body2">
+      <MktgText $typeStyle="body2">
         Body 2 (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>)
         - {txt}
       </MktgText>
-      <MktgText typeStyle="standaloneLink">Standalone link - {txt}</MktgText>
-      <MktgText typeStyle="componentText">
+      <MktgText $typeStyle="standaloneLink">Standalone link - {txt}</MktgText>
+      <MktgText $typeStyle="componentText">
         Component text (
         <MarketingInlineLink href="#">Inline link</MarketingInlineLink>) - {txt}
       </MktgText>
-      <MktgText typeStyle="componentLink">Component link - {txt}</MktgText>
-      <MktgText typeStyle="componentLinkSmall">
+      <MktgText $typeStyle="componentLink">Component link - {txt}</MktgText>
+      <MktgText $typeStyle="componentLinkSmall">
         Small component link - {txt}
       </MktgText>
-      <MktgText typeStyle="label">
+      <MktgText $typeStyle="label">
         Label (<MarketingInlineLink href="#">Inline link</MarketingInlineLink>)
         - {txt}
       </MktgText>
-      <MktgText typeStyle="navLink">Nav link - {txt}</MktgText>
+      <MktgText $typeStyle="navLink">Nav link - {txt}</MktgText>
     </>
   )
 }
