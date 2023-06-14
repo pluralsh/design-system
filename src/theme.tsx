@@ -26,9 +26,11 @@ import { resetPartials } from './theme/resets'
 import { marketingTextPartials } from './theme/marketingText'
 import gradients from './theme/gradients'
 
-export const COLOR_THEME_STORAGE_KEY = 'theme-mode'
+export const COLOR_THEME_KEY = 'theme-mode'
 
-export type ColorMode = 'light' | 'dark'
+export const COLOR_MODES = ['light', 'dark'] as const
+export type ColorMode = (typeof COLOR_MODES)[number]
+export const DEFAULT_COLOR_MODE: ColorMode = 'dark'
 
 export type StringObj = { [key: string]: string | StringObj }
 
@@ -814,7 +816,7 @@ export default honorableThemeDark
 export const setThemeColorMode = (
   mode: ColorMode,
   {
-    dataAttrName = COLOR_THEME_STORAGE_KEY,
+    dataAttrName = COLOR_THEME_KEY,
     element = document?.documentElement,
   }: {
     dataAttrName?: string
@@ -829,7 +831,7 @@ export const setThemeColorMode = (
 }
 
 export const useThemeColorMode = ({
-  dataAttrName = COLOR_THEME_STORAGE_KEY,
+  dataAttrName = COLOR_THEME_KEY,
   defaultMode = 'dark',
   element = document?.documentElement,
 }: {

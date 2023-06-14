@@ -24,7 +24,7 @@ const BlockWrapper = styled.div(({ theme }) => ({
   marginBottom: theme.spacing.large,
 }))
 
-function Template({ exampleText }: { exampleText?: string }) {
+function Template() {
   return (
     <>
       <Divider
@@ -224,9 +224,7 @@ function Spacing() {
 }
 
 export const Miscellaneous = Template.bind({})
-Miscellaneous.args = {
-  exampleText: 'Lorem ipsum dolor sit amet',
-}
+Miscellaneous.args = {}
 
 export { default as Colors } from './Colors'
 export { default as Typography } from './Typography'
