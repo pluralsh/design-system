@@ -94,10 +94,7 @@ function cssSwapper(selPrimary: string, otherSel: string, limit = 6) {
     str += ` ${otherSel} ${selPrimary}`
     selectors.push(str)
   }
-
   const ret = selectors.join(',\n')
-
-  console.log('ret', ret)
 
   return ret
 }

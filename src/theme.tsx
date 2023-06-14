@@ -840,11 +840,6 @@ export const useThemeColorMode = ({
   element?: HTMLElement
 } = {}) => {
   const attrName = `data-${dataAttrName}`
-
-  console.log(
-    'element?.getAttribute(attrName)',
-    element?.getAttribute(attrName)
-  )
   const [thisTheme, setThisTheme] = useState(
     element?.getAttribute(attrName) || defaultMode
   )
@@ -852,15 +847,11 @@ export const useThemeColorMode = ({
   useMutationObserver(
     element,
     (mutations) => {
-      console.log('mutes', mutations)
       mutations.forEach((mutation) => {
-        console.log('mutation', mutation)
-        console.log('docElt', element)
         if (
           mutation?.attributeName === attrName &&
           mutation.target instanceof HTMLElement
         ) {
-          console.log('next attr', mutation.target.getAttribute(attrName))
           setThisTheme(mutation.target.getAttribute(attrName) || defaultMode)
         }
       })
