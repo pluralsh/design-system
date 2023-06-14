@@ -10,7 +10,7 @@ import {
   honorableThemeLight,
   styledThemeDark,
   styledThemeLight,
-} from '../theme'
+} from '../../theme'
 
 const Wrapper = styled.div``
 

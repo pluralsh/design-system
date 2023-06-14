@@ -125,6 +125,7 @@ export {
   useSetBreadcrumbs,
   type Breadcrumb,
 } from './components/contexts/BreadcrumbsContext'
+export { ColorModeProvider } from './components/contexts/ColorModeProvider'
 
 // Theme
 export {
