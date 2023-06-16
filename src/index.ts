@@ -135,6 +135,8 @@ export {
   honorableThemeLight,
   styledThemeDark,
 } from './theme'
+export type { SemanticColorKey, SemanticColorCssVar } from './theme/colors'
+export { semanticColorKeys, semanticColorCssVars } from './theme/colors'
 export { default as GlobalStyle } from './GlobalStyle'
 
 // Utils

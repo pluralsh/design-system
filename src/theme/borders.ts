@@ -1,6 +1,6 @@
 import { type CSSProperties } from 'react'
 
-import { semanticColorVars } from './colors'
+import { semanticColorCssVars } from './colors'
 
 export const borderWidths = {
   default: 1,
@@ -12,12 +12,12 @@ export const borderStyles = {
 } as const satisfies Record<string, CSSProperties['borderStyle']>
 
 export const borders = {
-  default: `${borderWidths.default}px ${borderStyles.default} ${semanticColorVars.border}`,
-  'fill-one': `${borderWidths.default}px ${borderStyles.default} ${semanticColorVars.border}`,
-  'fill-two': `${borderWidths.default}px ${borderStyles.default} ${semanticColorVars['border-fill-two']}`,
-  'fill-three': `${borderWidths.default}px ${borderStyles.default} ${semanticColorVars['border-input']}`,
-  input: `${borderWidths.default}px ${borderStyles.default} ${semanticColorVars['border-input']}`,
-  'outline-focused': `${borderWidths.default}px ${borderStyles.default} ${semanticColorVars['border-outline-focused']}`,
+  default: `${borderWidths.default}px ${borderStyles.default} ${semanticColorCssVars.border}`,
+  'fill-one': `${borderWidths.default}px ${borderStyles.default} ${semanticColorCssVars.border}`,
+  'fill-two': `${borderWidths.default}px ${borderStyles.default} ${semanticColorCssVars['border-fill-two']}`,
+  'fill-three': `${borderWidths.default}px ${borderStyles.default} ${semanticColorCssVars['border-input']}`,
+  input: `${borderWidths.default}px ${borderStyles.default} ${semanticColorCssVars['border-input']}`,
+  'outline-focused': `${borderWidths.default}px ${borderStyles.default} ${semanticColorCssVars['border-outline-focused']}`,
 } as const satisfies Record<string, CSSProperties['border']>
 
 export const borderRadiuses = {

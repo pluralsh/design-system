@@ -37,3 +37,45 @@ export function suffixKeys<T extends object, Suffix extends string>(
     Object.entries(obj).map(([key, val]) => [`${key}${suffix}`, val])
   ) as SuffixKeys<T, Suffix>
 }
+
+export type AffixValues<
+  T extends Record<any, string>,
+  Prefix extends string = '',
+  Suffix extends string = ''
+> = {
+  [key in keyof T]: `${Prefix}${T[key]}${Suffix}`
+}
+
+export function affixValues<
+  T extends Record<any, string>,
+  Prefix extends string = '',
+  Suffix extends string = ''
+>(obj: T, { prefix, suffix }: { prefix?: Prefix; suffix?: Suffix }) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, val]) => [
+      key,
+      `${prefix || ''}${val}${suffix || ''}`,
+    ])
+  ) as AffixValues<T, Prefix, Suffix>
+}
+
+export type AffixKeyToValue<
+  T extends Record<string, string>,
+  Prefix extends string = '',
+  Suffix extends string = ''
+> = {
+  [key in keyof T]: `${Prefix}${key & string}${Suffix}`
+}
+
+export function affixKeysToValues<
+  T extends Record<any, string>,
+  Prefix extends string = '',
+  Suffix extends string = ''
+>(obj: T, { prefix, suffix }: { prefix?: Prefix; suffix?: Suffix }) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key]) => [
+      key,
+      `${prefix || ''}${key}${suffix || ''}`,
+    ])
+  ) as AffixKeyToValue<T, Prefix, Suffix>
+}

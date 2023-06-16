@@ -3,7 +3,7 @@ import { type CSSProperties } from 'react'
 
 import { borderWidths } from './borders'
 
-import { semanticColorVars } from './colors'
+import { semanticColorCssVars } from './colors'
 import { semanticColorsDark as cDark } from './colors-semantic-dark'
 import { semanticColorsLight as cLight } from './colors-semantic-light'
 
@@ -28,5 +28,5 @@ export const getBoxShadows = ({ mode }: { mode: 'dark' | 'light' }) =>
           )}, 0px 10px 20px ${chroma(cLight['shadow-default']).alpha(0.3)}`,
           modal: `0px 20px 50px ${chroma(cLight['shadow-default']).alpha(0.6)}`,
         }),
-    focused: `0px 0px 0px ${borderWidths.focus}px ${semanticColorVars['border-outline-focused']}`,
+    focused: `0px 0px 0px ${borderWidths.focus}px ${semanticColorCssVars['border-outline-focused']}`,
   } as const satisfies Record<string, CSSProperties['boxShadow']>)

@@ -5,7 +5,7 @@ import { type ColorMode } from '../theme'
 import { getBoxShadows } from './boxShadows'
 
 import { borderWidths } from './borders'
-import { semanticColorVars } from './colors'
+import { semanticColorCssVars } from './colors'
 
 export const getFocusPartials = ({ mode }: { mode: ColorMode }) => {
   const boxShadows = getBoxShadows({ mode })
@@ -16,10 +16,10 @@ export const getFocusPartials = ({ mode }: { mode: ColorMode }) => {
       boxShadow: boxShadows.focused,
     },
     outline: {
-      outline: `${borderWidths.focus}px solid ${semanticColorVars['border-outline-focused']}`,
+      outline: `${borderWidths.focus}px solid ${semanticColorCssVars['border-outline-focused']}`,
     },
     button: {
-      outline: `1px solid ${semanticColorVars['border-outline-focused']}`,
+      outline: `1px solid ${semanticColorCssVars['border-outline-focused']}`,
       outlineOffset: '-1px',
     },
     insetAbsolute: {
