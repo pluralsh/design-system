@@ -156,15 +156,17 @@ const textPartials = {
     textOverflow: 'ellipsis',
   },
   inlineLink: {
-    color: semanticColorCssVars['action-link-inline'],
+    '--inline-link-c': semanticColorCssVars['action-link-inline'],
+    color: `var(--inline-link-c)`,
     textDecoration: 'underline',
     '&:hover': {
-      color: semanticColorCssVars['action-link-inline-hover'],
+      '--inline-link-c': semanticColorCssVars['action-link-inline-hover'],
     },
     '&:visited, &:active': {
-      color: semanticColorCssVars['action-link-inline-visited'],
+      '--inline-link-c': semanticColorCssVars['action-link-inline-visited'],
       '&:hover': {
-        color: semanticColorCssVars['action-link-inline-visited-hover'],
+        '--inline-link-c':
+          semanticColorCssVars['action-link-inline-visited-hover'],
       },
     },
   },
