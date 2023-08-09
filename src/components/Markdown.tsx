@@ -42,8 +42,10 @@ function getLastStringChild(children: any, depth = 0): any {
 function MarkdownPreformatted({ children, ...props }: any) {
   let lang
 
-  if (children.props?.className?.startsWith('lang-')) {
-    lang = children.props.className.slice(5)
+  const className = children?.[0]?.props?.className
+
+  if (className && typeof className === 'string') {
+    lang = /language-(\w+)/.exec(className)?.[1] || ''
   }
   const stringChild = getLastStringChild(children) || ''
 
