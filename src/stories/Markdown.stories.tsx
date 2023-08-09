@@ -10,6 +10,8 @@ const markdown = `# Plural Console
   </div>
 </div>
 
+![Console](/assets/public/PluralConsole-background.png)
+
 # H1 - Some un-ordered lists
 
 * Reception of over-the-air application updates
@@ -67,6 +69,12 @@ const num2 = 24;
 
 console.log(sum(num1, num2));
 \`\`\`
+
+###### Links
+[Absolute url](https://google.com)  
+[Absolute url - no protocol](//google.com)  
+[Relative url – Console Readme](README.md)  
+[Root relative url – Console Security](/SECURITY.md)  
 
 ___
 
