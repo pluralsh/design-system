@@ -22,9 +22,6 @@ export const PopoverWrapper = styled.div<{
 }>(({ theme, $placement: placement }) => ({
   position: 'absolute',
   display: 'flex',
-  width: '100%',
-  // alignItems: placement.startsWith('top') ? 'end' : 'start',
-  // ...(placement.endsWith('end') && { right: 0, left: 'auto' }),
   pointerEvents: 'none',
   zIndex: theme.zIndexes.selectPopover,
   '.popover': {
@@ -33,8 +30,6 @@ export const PopoverWrapper = styled.div<{
 }))
 
 const Animated = styled(animated.div)((_) => ({
-  width: '100%',
-  maxHeight: '100%',
   display: 'flex',
 }))
 

@@ -32,14 +32,6 @@ export function useFloatingCornerScale({
       offset(theme.spacing.xxsmall),
       size({
         padding: sizePadding,
-        apply(args) {
-          const { elements, availableHeight, availableWidth } = args
-
-          Object.assign(elements.floating.style, {
-            maxWidth: `${availableWidth}px`,
-            maxHeight: `${availableHeight}px`,
-          })
-        },
       }),
       flip({
         padding: flipPadding,

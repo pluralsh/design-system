@@ -27,7 +27,7 @@ function Template(args: any) {
   const [date, setDate] = useState<
     ZonedDateTime | CalendarDate | CalendarDateTime | null
   >(null)
-  const minDate = nowTime.subtract({ years: 5 })
+  const minDate = nowTime.subtract({ months: 4 })
   const maxDate = nowTime
   const props: ComponentProps<typeof DatePicker> = {
     onChange: (d) => {

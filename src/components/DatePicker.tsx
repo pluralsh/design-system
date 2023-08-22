@@ -96,14 +96,12 @@ export function DatePicker({
       >
         <DateField {...fieldProps} />
         <CalendarButton
-          // ref={triggerRef}
           {...buttonProps}
           selected={state.isOpen}
         />
       </FieldWrapSC>
       <PopoverCornerScale
         isOpen={state.isOpen}
-        isOpen
         onClose={state.close}
         floating={floating}
       >
