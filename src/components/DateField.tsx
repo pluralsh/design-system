@@ -1,6 +1,5 @@
 import {
   type AriaDateFieldProps,
-  type DateValue,
   useDateField,
   useDateSegment,
   useLocale,
@@ -90,32 +89,21 @@ export function DateField({
   const ref = useRef<HTMLDivElement>(null)
   const { fieldProps } = useDateField(props, state, ref)
 
-  console.log('dateField Props', props)
-
-  console.log('dateFieldProps', fieldProps)
-
   return (
     <DateFieldWrapperSC
       {...fieldProps}
       ref={ref}
       className="field dateField"
     >
-      {state.segments.map((segment, i, segments) => {
-        console.log('segment', segment)
-
-        return (
-          <DateSegment
-            key={i}
-            first={i === 0}
-            last={i === segments.length - 1}
-            segment={segment}
-            state={state}
-          />
-        )
-      })}
-      {state.validationState === 'invalid' && (
-        <span aria-hidden="true">🚫</span>
-      )}
+      {state.segments.map((segment, i, segments) => (
+        <DateSegment
+          key={i}
+          first={i === 0}
+          last={i === segments.length - 1}
+          segment={segment}
+          state={state}
+        />
+      ))}
     </DateFieldWrapperSC>
   )
 }

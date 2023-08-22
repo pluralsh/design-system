@@ -1,7 +1,8 @@
 import {
+  type AriaButtonProps,
   type AriaCalendarGridProps,
   type AriaCalendarProps,
-  type DateValue,
+  useButton,
   useCalendar,
   useCalendarCell,
   useCalendarGrid,
@@ -13,7 +14,7 @@ import { createCalendar, getWeeksInMonth } from '@internationalized/date'
 // Reuse the Button from your component library. See below for details.
 
 import styled from 'styled-components'
-import React, { type ComponentProps } from 'react'
+import React, { type ComponentProps, type ReactNode, useRef } from 'react'
 import { type Merge } from 'type-fest'
 
 import classNames from 'classnames'
@@ -189,15 +190,31 @@ const CalendarSC = styled.div(({ theme }) => ({
   },
 }))
 
-const NextPrevButtonSC = styled(IconFrame)(({ theme }) => ({
-  '&&': { border: theme.borders.input },
-}))
+const NextPrevButtonSC = styled(IconFrame)<{ $disabled: boolean }>(
+  ({ $disabled, theme }) => ({
+    '&&': {
+      border: theme.borders.input,
+      ...($disabled
+        ? { cursor: 'not-allowed', color: theme.colors['icon-disabled'] }
+        : {}),
+    },
+  })
+)
 
-function NextPrevButton(props: ComponentProps<typeof NextPrevButtonSC>) {
+function NextPrevButton({
+  icon,
+  ...props
+}: AriaButtonProps & { icon: ReactNode }) {
+  const ref = useRef(null)
+  const { buttonProps: useButtonProps } = useButton(props, ref)
+
   return (
     <NextPrevButtonSC
-      {...props}
-      clickable
+      ref={ref}
+      {...(useButtonProps as any)}
+      icon={icon}
+      clickable={!useButtonProps.disabled}
+      $disabled={useButtonProps.disabled}
       type="tertiary"
       size="medium"
     />
@@ -207,7 +224,6 @@ function NextPrevButton(props: ComponentProps<typeof NextPrevButtonSC>) {
 export function Calendar({
   ...props
 }: Merge<ComponentProps<typeof CalendarSC>, AriaCalendarProps<any>>) {
-  console.log({ props })
   const { locale } = useLocale()
   const state = useCalendarState({
     ...props,
@@ -221,8 +237,6 @@ export function Calendar({
     nextButtonProps,
     title,
   } = useCalendar(props, state)
-
-  console.log('prevButtonprops', prevButtonProps)
 
   return (
     <CalendarSC
@@ -242,7 +256,7 @@ export function Calendar({
           {/* @ts-ignore */}
           <NextPrevButton
             icon={<ArrowRightIcon />}
-            // {...nextButtonProps}
+            {...nextButtonProps}
           />
         </div>
       </div>

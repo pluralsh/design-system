@@ -67,8 +67,6 @@ function PopoverCornerScale({
   } as const satisfies Record<Placement, string>
   const transformOrigin = placementToTransformOrigin[floating.placement]
 
-  console.log('transformOrigin', transformOrigin)
-  console.log('floating.placement', floating.placement)
   const outProps = {
     opacity: 0,
     scale: 0.5,

@@ -35,8 +35,6 @@ const CalendarButton = forwardRef(
   ) => {
     const { buttonProps: buttonEltProps } = useButton(props, ref)
 
-    console.log('buttonProps', buttonEltProps)
-
     return (
       <IconFrame
         {...buttonEltProps}
@@ -51,16 +49,19 @@ const CalendarButton = forwardRef(
   }
 )
 
-const FieldWrapSC = styled.div(({ theme }) => ({
-  display: 'flex',
-  columnGap: theme.spacing.medium,
-  padding: `${theme.spacing.small}px ${theme.spacing.medium}px`,
-  borderRadius: theme.borderRadiuses.medium,
-  border: theme.borders.input,
-  '& > :first-child': {
-    flexGrow: 1,
-  },
-}))
+const FieldWrapSC = styled.div<{ $invalid: boolean }>(
+  ({ $invalid, theme }) => ({
+    display: 'flex',
+    columnGap: theme.spacing.medium,
+    padding: `${theme.spacing.small}px ${theme.spacing.medium}px`,
+    borderRadius: theme.borderRadiuses.medium,
+    border: theme.borders.input,
+    ...($invalid ? { borderColor: theme.colors['border-danger'] } : {}),
+    '& > :first-child': {
+      flexGrow: 1,
+    },
+  })
+)
 
 const DatePickerSC = styled.div(({ theme: _ }) => ({}))
 
@@ -74,44 +75,23 @@ export function DatePicker({
   }
 >) {
   const state = useDatePickerState(props)
-
   const ref = useRef(null)
-
-  console.log('kprops', props)
-
-  const pickerResult = useDatePicker(
-    { granularity: 'minute', hourCycle: 24, hideTimeZone: false, ...props },
-    state,
-    ref
-  )
-
-  const {
-    groupProps,
-    // labelProps,
-    fieldProps,
-    buttonProps,
-    dialogProps,
-    calendarProps,
-  } = pickerResult
-
-  console.log('2')
-
-  const buttonRef = useRef<HTMLButtonElement>(null)
-
-  console.log('3')
-
-  console.log('buttonRef', buttonRef)
+  const { groupProps, fieldProps, buttonProps, dialogProps, calendarProps } =
+    useDatePicker(
+      { granularity: 'minute', hourCycle: 24, hideTimeZone: false, ...props },
+      state,
+      ref
+    )
   const { floating, triggerRef } = useFloatingCornerScale({
     triggerRef: ref,
     placement: 'bottom-end',
   })
 
-  console.log('fieldProps', fieldProps)
-
   return (
     <DatePickerSC {...elementProps}>
       <FieldWrapSC
         {...groupProps}
+        $invalid={state.validationState === 'invalid'}
         ref={triggerRef}
       >
         <DateField {...fieldProps} />
@@ -123,7 +103,7 @@ export function DatePicker({
       </FieldWrapSC>
       <PopoverCornerScale
         isOpen={state.isOpen}
-        // isOpen
+        isOpen
         onClose={state.close}
         floating={floating}
       >

@@ -9,7 +9,6 @@ import { type ComponentProps, useState } from 'react'
 import styled from 'styled-components'
 
 import { DatePicker } from '..'
-import { Calendar } from '../components/Calendar'
 
 export default {
   title: 'Date Picker',
@@ -18,22 +17,25 @@ export default {
 
 const TemplateSC = styled.div((_) => ({
   display: 'grid',
-  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-  gap: '30px',
+  gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
+  columnGap: 48,
+  rowGap: 500,
 }))
 
 function Template(args: any) {
-  const localTZ = getLocalTimeZone()
-
-  console.log('tz', localTZ)
+  const nowTime = now(getLocalTimeZone())
   const [date, setDate] = useState<
     ZonedDateTime | CalendarDate | CalendarDateTime | null
   >(null)
+  const minDate = nowTime.subtract({ years: 5 })
+  const maxDate = nowTime
   const props: ComponentProps<typeof DatePicker> = {
     onChange: (d) => {
-      console.log('changed date', d)
       setDate(d)
     },
+    value: date,
+    minValue: minDate,
+    maxValue: maxDate,
   }
 
   return (
@@ -41,25 +43,14 @@ function Template(args: any) {
       <h4>{args.header} Date Picker</h4>
 
       <TemplateSC>
-        <Calendar />
         <DatePicker
-          // {...args}
-          placeholderValue={now('America/Los_Angeles')}
-          value={date}
+          placeholderValue={nowTime}
           {...props}
-        />
-        {/* <DatePicker
-          {...props}
-          {...args}
         />
         <DatePicker
           {...props}
           {...args}
         />
-        <DatePicker
-          {...props}
-          {...args}
-        /> */}
       </TemplateSC>
     </>
   )

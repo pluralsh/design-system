@@ -35,12 +35,10 @@ export function useFloatingCornerScale({
         apply(args) {
           const { elements, availableHeight, availableWidth } = args
 
-          console.log('available', { availableHeight, availableWidth })
           Object.assign(elements.floating.style, {
             maxWidth: `${availableWidth}px`,
-            maxheight: `${availableHeight}px`,
+            maxHeight: `${availableHeight}px`,
           })
-          console.log('elements.floating.style', elements.floating.style)
         },
       }),
       flip({
