@@ -8,7 +8,7 @@ import {
 import { type ComponentProps, useState } from 'react'
 import styled from 'styled-components'
 
-import { DatePicker } from '..'
+import { DatePicker, FormField } from '..'
 
 export default {
   title: 'Date Picker',
@@ -22,46 +22,45 @@ const TemplateSC = styled.div((_) => ({
   rowGap: 500,
 }))
 
-function Template(args: any) {
+function Template() {
   const nowTime = now(getLocalTimeZone())
   const [date, setDate] = useState<
     ZonedDateTime | CalendarDate | CalendarDateTime | null
   >(null)
+  const [isInvalid, setIsInvalid] = useState(false)
   const minDate = nowTime.subtract({ months: 4 })
   const maxDate = nowTime
   const props: ComponentProps<typeof DatePicker> = {
-    onChange: (d) => {
-      setDate(d)
+    onChange: setDate,
+    onValidationChange: (validationState) => {
+      setIsInvalid(validationState === 'invalid')
     },
     value: date,
     minValue: minDate,
     maxValue: maxDate,
+    placeholderValue: nowTime,
   }
 
-  return (
-    <>
-      <h4>{args.header} Date Picker</h4>
+  const picker = (
+    <FormField
+      label="Choose a date"
+      hint={
+        !date ? 'Date has not been set' : isInvalid ? 'Invalid date' : undefined
+      }
+      error={isInvalid}
+    >
+      <DatePicker {...props} />
+    </FormField>
+  )
 
-      <TemplateSC>
-        <DatePicker
-          placeholderValue={nowTime}
-          {...props}
-        />
-        <DatePicker
-          {...props}
-          {...args}
-        />
-      </TemplateSC>
-    </>
+  return (
+    <TemplateSC>
+      {picker}
+      {picker}
+    </TemplateSC>
   )
 }
 
 export const Default = Template.bind({})
 
-Default.args = {
-  header: 'Default',
-  title: 'Confirm Uninstall',
-  form: false,
-  size: 'medium',
-  hasActions: true,
-}
+Default.args = {}

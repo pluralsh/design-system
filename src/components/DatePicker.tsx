@@ -3,6 +3,7 @@ import {
   type ReactNode,
   type RefObject,
   forwardRef,
+  useEffect,
   useRef,
 } from 'react'
 import {
@@ -14,11 +15,15 @@ import {
   useDatePicker,
   useDialog,
 } from 'react-aria'
-import { type DatePickerStateOptions, useDatePickerState } from 'react-stately'
+import {
+  type DatePickerState,
+  type DatePickerStateOptions,
+  useDatePickerState,
+} from 'react-stately'
 import styled from 'styled-components'
-
 import { type Merge } from 'type-fest'
 
+import {} from '@internationalized/date'
 import { useFloatingCornerScale } from '../hooks/useFloatingCornerScale'
 
 import { Calendar } from './Calendar'
@@ -67,18 +72,27 @@ const DatePickerSC = styled.div(({ theme: _ }) => ({}))
 
 export function DatePicker({
   elementProps = {},
+  onValidationChange,
   ...props
 }: Merge<
   AriaDatePickerProps<any> & DatePickerStateOptions<DateValue>,
   {
     elementProps: ComponentProps<typeof DatePickerSC>
+    onValidationChange?: (
+      validationState: DatePickerState['validationState']
+    ) => void
   }
 >) {
   const state = useDatePickerState(props)
   const ref = useRef(null)
   const { groupProps, fieldProps, buttonProps, dialogProps, calendarProps } =
     useDatePicker(
-      { granularity: 'minute', hourCycle: 24, hideTimeZone: false, ...props },
+      {
+        granularity: 'minute',
+        hourCycle: 24,
+        hideTimeZone: false,
+        ...props,
+      },
       state,
       ref
     )
@@ -86,6 +100,10 @@ export function DatePicker({
     triggerRef: ref,
     placement: 'bottom-end',
   })
+
+  useEffect(() => {
+    onValidationChange?.(state.validationState)
+  }, [state.validationState, onValidationChange])
 
   return (
     <DatePickerSC {...elementProps}>
