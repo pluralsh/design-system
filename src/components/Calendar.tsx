@@ -56,6 +56,9 @@ const CalendarCellSC = styled.td(({ theme }) => ({
     '&.selected': {
       backgroundColor: theme.colors['fill-two-selected'],
     },
+    '&.outsideRange': {
+      display: 'none',
+    },
   },
 }))
 
@@ -81,6 +84,7 @@ function CalendarCell({ state, date }: any) {
           selected: isSelected,
           disabled: isDisabled,
           unavailable: isUnavailable,
+          outsideRange: isOutsideVisibleRange,
         })}
       >
         {formattedDate}
