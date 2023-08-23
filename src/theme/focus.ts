@@ -1,11 +1,9 @@
 import { type CSSObject } from '../types'
 
-import { type ColorMode } from '../theme'
-
 import { borderWidths } from './borders'
 import { semanticColorCssVars } from './colors'
 
-export const getFocusPartials = ({ mode }: { mode: ColorMode }) => {
+export const getFocusPartials = () => {
   const outline = {
     '--outline-c': semanticColorCssVars['border-outline-focused'],
     outline: `${borderWidths.focus}px solid var(--outline-c)`,
