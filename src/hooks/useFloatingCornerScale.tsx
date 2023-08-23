@@ -35,7 +35,7 @@ export function useFloatingCornerScale({
       }),
       flip({
         padding: flipPadding,
-        fallbackStrategy: 'initialPlacement',
+        fallbackStrategy: 'bestFit',
       }),
     ],
     whileElementsMounted: autoUpdate,
