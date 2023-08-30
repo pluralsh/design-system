@@ -50,19 +50,19 @@ export const semanticColorsLight = {
 
   // Border
   //
-  border: grey[100],
-  'border-input': grey[300],
-  'border-fill-two': grey[200],
+  border: '#DFE2E7',
+  'border-fill-two': '#C5C9D3',
   'border-fill-three': grey[400],
+  'border-selected': grey[600],
+  'border-input': '#C6CBD7',
   'border-disabled': grey[200],
-  'border-outline-focused': blue[400],
   'border-primary': purple[400],
   'border-secondary': blue[400],
-  'border-success': green[500],
+  'border-info': blue[300],
+  'border-success': green[700],
   'border-warning': '#FFF175',
   'border-danger': '#ED4578',
-  'border-selected': grey[100],
-  'border-info': blue[300],
+  'border-outline-focused': blue[400],
 
   // Text
   //

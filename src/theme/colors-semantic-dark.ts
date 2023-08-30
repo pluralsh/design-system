@@ -48,18 +48,18 @@ export const semanticColorsDark = {
   // Border
   //
   border: grey[800],
-  'border-input': grey[700],
   'border-fill-two': grey[750],
   'border-fill-three': grey[700],
+  'border-selected': grey[100],
+  'border-input': grey[700],
   'border-disabled': grey[700],
-  'border-outline-focused': blue[300],
   'border-primary': purple[300],
   'border-secondary': blue[400],
+  'border-info': blue[300],
   'border-success': green[300],
   'border-warning': yellow[200],
   'border-danger': red[300],
-  'border-selected': grey[100],
-  'border-info': blue[300],
+  'border-outline-focused': blue[300],
 
   // Text
   //
