@@ -1,4 +1,4 @@
-import { Flex, type FlexProps, Spinner } from 'honorable'
+import { Flex, type FlexProps } from 'honorable'
 import PropTypes from 'prop-types'
 import {
   type ComponentProps,
@@ -6,8 +6,9 @@ import {
   type Ref,
   forwardRef,
 } from 'react'
-import styled, { type DefaultTheme } from 'styled-components'
+import styled, { type DefaultTheme, useTheme } from 'styled-components'
 
+import { Spinner } from './Spinner'
 import Card, { type BaseCardProps } from './Card'
 import { type FillLevel, useFillLevel } from './contexts/FillLevelContext'
 import CloseIcon from './icons/CloseIcon'
@@ -104,6 +105,7 @@ function ChipRef(
   ref: Ref<any>
 ) {
   const parentFillLevel = useFillLevel()
+  const theme = useTheme()
 
   hue = hue || parentFillLevelToHue[parentFillLevel]
   const col = severityToColor[severity] || 'text'
@@ -125,7 +127,7 @@ function ChipRef(
     >
       {loading && (
         <Spinner
-          color={iconCol}
+          color={theme.colors[iconCol]}
           size={size === 'large' ? 15 : 13}
           marginRight="xsmall"
         />
@@ -134,7 +136,7 @@ function ChipRef(
         <icon.type
           size={size === 'large' ? 15 : 13}
           marginRight="xsmall"
-          color={iconCol}
+          color={theme.colors[iconCol]}
         />
       )}
       <Flex
