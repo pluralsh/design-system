@@ -42,6 +42,8 @@ export const semanticColorsDark = {
   'action-link-inline-visited': purple[300],
   'action-link-inline-visited-hover': purple[200],
   'action-input-hover': `${chroma('#E9ECF0').alpha(0.04)}`,
+  // always-white
+  'action-always-white': grey[50],
 
   // Border
   //

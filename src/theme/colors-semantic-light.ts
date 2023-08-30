@@ -37,17 +37,16 @@ export const semanticColorsLight = {
   'action-primary-disabled': grey[100],
   // link
   'action-link-inactive': '#A9AFBC',
-  'action-link-active': blue[600],
-  'action-link-inline': blue[700],
+  'action-link-active': '#CDD1D2',
   // link-inline
-
-  // Check with design team that this is correct
+  'action-link-inline': '#539AC3',
   'action-link-inline-hover': blue[600],
-
   'action-link-inline-visited': purple[300],
   'action-link-inline-visited-hover': purple[200],
   // input
-  'action-input-hover': `${chroma(grey[950]).alpha(0.04)}`, // text color w/ alpha
+  'action-input-hover': `${chroma('#C3C3C4').alpha(0.04)}`, // text color w/ alpha
+  // always white
+  'action-always-white': semanticColorsDark['action-always-white'],
 
   // Border
   //
