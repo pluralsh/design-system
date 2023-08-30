@@ -92,6 +92,7 @@ export const semanticColorsDark = {
   'icon-warning': yellow[100],
   'icon-danger': red[200],
   'icon-danger-critical': red[400],
+  'icon-always-white': grey[100],
 
   // Marketing
   //
@@ -101,6 +102,8 @@ export const semanticColorsDark = {
   // Shadows
   //
   'shadow-default': grey[950],
+  // Shouldn't actually be used in dark mode
+  'shadow-purple': purple[400],
 
   // Code blocks
   //

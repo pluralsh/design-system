@@ -1,7 +1,7 @@
 import chroma from 'chroma-js'
 import { type CSSProperties } from 'styled-components'
 
-import { blue, green, grey, purple, red, yellow } from './colors-base'
+import { blue, green, grey, purple, red } from './colors-base'
 import { colorsCloudShellLight } from './colors-cloudshell-light'
 import { colorsCodeBlockLight } from './colors-codeblock-light'
 import { semanticColorsDark } from './colors-semantic-dark'
@@ -95,6 +95,7 @@ export const semanticColorsLight = {
   'icon-warning': '#FF9900',
   'icon-danger': red[300],
   'icon-danger-critical': '#ED4578',
+  'icon-always-white': semanticColorsDark['text-always-white'],
 
   // Marketing
   //
@@ -104,6 +105,7 @@ export const semanticColorsLight = {
   // Shadows
   //
   'shadow-default': grey[950],
+  'shadow-purple': purple[400],
 
   // Code-blocks
   //
