@@ -4,27 +4,27 @@ import { type CSSProperties } from 'styled-components'
 import { blue, green, grey, purple, red, yellow } from './colors-base'
 import { colorsCloudShellLight } from './colors-cloudshell-light'
 import { colorsCodeBlockLight } from './colors-codeblock-light'
-import { type semanticColorsDark } from './colors-semantic-dark'
+import { semanticColorsDark } from './colors-semantic-dark'
 
 export const semanticColorsLight = {
   // Fill
   //
   // fill-zero
-  'fill-zero': '#F9FAFB',
-  'fill-zero-hover': grey[50],
-  'fill-zero-selected': grey[100],
+  'fill-zero': '#F3F5F7',
+  'fill-zero-hover': '#F5F5F5',
+  'fill-zero-selected': '#E5E6E7',
   // fill-one
-  'fill-one': '#FFFFFF',
-  'fill-one-hover': grey[100],
-  'fill-one-selected': grey[200],
+  'fill-one': '#F9FAFB',
+  'fill-one-hover': '#F3F5F7',
+  'fill-one-selected': '#EEF0F2',
   // fill-two
-  'fill-two': '#F0F4F5',
-  'fill-two-hover': grey[200],
-  'fill-two-selected': '#A9AFBC',
+  'fill-two': '#F5F5F5',
+  'fill-two-hover': '#EBEDEE',
+  'fill-two-selected': '#E6E8E9',
   // fill-three
-  'fill-three': grey[100],
-  'fill-three-hover': grey[400],
-  'fill-three-selected': grey[300],
+  'fill-three': '#ECEDF2',
+  'fill-three-hover': '#D6D6D8',
+  'fill-three-selected': '#D3D3D3',
   // primary
   'fill-primary': purple[400],
   'fill-primary-hover': purple[350],
@@ -81,6 +81,7 @@ export const semanticColorsLight = {
   'text-warning-light': '#FFE500',
   'text-danger': '#ED4578',
   'text-danger-light': red[300],
+  'text-always-white': semanticColorsDark['text-always-white'],
 
   // Icon
   //

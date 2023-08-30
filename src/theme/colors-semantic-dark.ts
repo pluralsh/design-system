@@ -75,6 +75,7 @@ export const semanticColorsDark = {
   'text-warning-light': yellow[100],
   'text-danger': red[400],
   'text-danger-light': red[200],
+  'text-always-white': grey[50],
 
   // Icon
   //
