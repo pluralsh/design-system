@@ -228,7 +228,7 @@ const Card = forwardRef(
           })}
           {...(clickable &&
             !selected &&
-            !severity && {
+            severity === 'neutral' && {
               _hover: { backgroundColor: fillToNeutralHoverBgC[fillLevel] },
             })}
           {...theme.partials.scrollBar({ fillLevel })}
