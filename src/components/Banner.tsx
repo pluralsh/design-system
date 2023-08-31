@@ -1,9 +1,9 @@
-import { type ReactNode, type Ref, forwardRef, useMemo } from 'react'
+import { type ReactNode, type Ref, forwardRef } from 'react'
 import { Div, Flex, type FlexProps, Span, type SpanProps } from 'honorable'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { type ColorKey, type SeverityExt } from '../types'
+import { type ColorKey, type SeverityExt, sanitizeSeverity } from '../types'
 
 import { FillLevelProvider } from './contexts/FillLevelContext'
 import ErrorIcon from './icons/ErrorIcon'
@@ -129,21 +129,10 @@ function BannerRef(
   }: BannerProps,
   ref: Ref<any>
 ) {
-  const finalSeverity = useMemo(() => {
-    const sev: BannerSeverity = severity === 'error' ? 'danger' : severity
-
-    if (!severityToIcon[sev]) {
-      console.warn(
-        `Banner: Incorrect severity (${sev}) specified. Valid values are ${BANNER_SEVERITIES.map(
-          (s) => `"${s}"`
-        ).join(', ')}. Defaulting to "${DEFAULT_SEVERITY}".`
-      )
-
-      return DEFAULT_SEVERITY
-    }
-
-    return sev
-  }, [severity])
+  const finalSeverity = sanitizeSeverity(severity, {
+    allowList: BANNER_SEVERITIES,
+    default: DEFAULT_SEVERITY,
+  })
 
   const BannerIcon = severityToIcon[finalSeverity]
   const iconColorKey = severityToIconColorKey[finalSeverity]

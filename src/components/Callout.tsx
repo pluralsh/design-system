@@ -1,17 +1,12 @@
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
-import {
-  type Dispatch,
-  type PropsWithChildren,
-  forwardRef,
-  useMemo,
-} from 'react'
+import { type Dispatch, type PropsWithChildren, forwardRef } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 import { Flex } from 'honorable'
 import AnimateHeight from 'react-animate-height'
 
-import { type ColorKey, type Severity } from '../types'
+import { type ColorKey, type SeverityExt, sanitizeSeverity } from '../types'
 
 import { CaretDownIcon, CloseIcon } from '../icons'
 
@@ -29,9 +24,17 @@ import StatusOkIcon from './icons/StatusOkIcon'
 import WarningIcon from './icons/WarningIcon'
 import IconFrame from './IconFrame'
 
-const SEVERITIES = ['info', 'danger', 'warning', 'success'] as const
+const CALLOUT_SEVERITIES = [
+  'info',
+  'danger',
+  'warning',
+  'success',
+] as const satisfies Readonly<SeverityExt[]>
 
-export type CalloutSeverity = Extract<Severity, (typeof SEVERITIES)[number]>
+export type CalloutSeverity = Extract<
+  SeverityExt,
+  (typeof CALLOUT_SEVERITIES)[number]
+>
 const DEFAULT_SEVERITY: CalloutSeverity = 'info'
 
 export type CalloutSize = 'compact' | 'full'
@@ -118,19 +121,10 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
       )
     }
 
-    severity = useMemo(() => {
-      if (!severityToIconColorKey[severity]) {
-        console.warn(
-          `Callout: Incorrect severity (${severity}) specified. Valid values are ${SEVERITIES.map(
-            (s) => `"${s}"`
-          ).join(', ')}. Defaulting to "${DEFAULT_SEVERITY}".`
-        )
-
-        return DEFAULT_SEVERITY
-      }
-
-      return severity
-    }, [severity])
+    severity = sanitizeSeverity(severity, {
+      default: DEFAULT_SEVERITY,
+      allowList: CALLOUT_SEVERITIES,
+    })
     const theme = useTheme()
 
     const text = severityToText[severity]
@@ -331,7 +325,7 @@ const CalloutWrap = styled.div<{
 }))
 
 Callout.propTypes = {
-  severity: PropTypes.oneOf(SEVERITIES),
+  severity: PropTypes.oneOf(CALLOUT_SEVERITIES),
   title: PropTypes.string,
   size: PropTypes.oneOf(['compact', 'full']),
   fillLevel: PropTypes.oneOf([0, 1, 2, 3]),

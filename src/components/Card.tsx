@@ -5,6 +5,8 @@ import { type DefaultTheme, useTheme } from 'styled-components'
 import { type Merge } from 'type-fest'
 import { memoize } from 'lodash-es'
 
+import { type SeverityExt, sanitizeSeverity } from '../types'
+
 import {
   type FillLevel,
   FillLevelProvider,
@@ -14,19 +16,20 @@ import {
 } from './contexts/FillLevelContext'
 
 const HUES = ['default', 'lighter', 'lightest'] as const
-const SEVERITIES = [
-  'neutral',
+
+const CARD_SEVERITIES = [
   'info',
   'success',
   'warning',
-  'error',
+  'danger',
   'critical',
-] as const
+  'neutral',
+] as const satisfies Readonly<SeverityExt[]>
 
 type CornerSize = 'medium' | 'large'
 type CardFillLevel = Exclude<FillLevel, 0>
 type CardHue = (typeof HUES)[number]
-type CardSeverity = (typeof SEVERITIES)[number]
+type CardSeverity = Extract<SeverityExt, (typeof CARD_SEVERITIES)[number]>
 
 type BaseCardProps = {
   hue?: CardHue // Deprecated, prefer fillLevel
@@ -34,7 +37,7 @@ type BaseCardProps = {
   cornerSize?: CornerSize
   clickable?: boolean
   selected?: boolean
-  severity?: CardSeverity
+  severity?: SeverityExt
 }
 
 type CardProps = Merge<DivProps, BaseCardProps>
@@ -123,7 +126,7 @@ const getFillToLightBgC = memoize(
       2: `${chroma(theme.colors.semanticYellow).alpha(0.05)}`,
       3: `${chroma(theme.colors.semanticYellow).alpha(0.2)}`,
     },
-    error: {
+    danger: {
       1: `${chroma(theme.colors.semanticRedLight).alpha(0.1)}`,
       2: `${chroma(theme.colors.semanticRedLight).alpha(0.05)}`,
       3: `${chroma(theme.colors.semanticRedLight).alpha(0.2)}`,
@@ -141,8 +144,8 @@ const getLightModeBorderMapper = memoize(
     info: theme.colors['border-info'],
     success: theme.colors['border-success'],
     warning: theme.colors['border-warning'],
-    error: theme.colors['border-danger'],
-    critical: theme.colors['border-danger-critical'],
+    danger: theme.colors['border-danger-light'],
+    critical: theme.colors['border-danger'],
   })
 )
 
@@ -197,9 +200,10 @@ const Card = forwardRef(
   ) => {
     fillLevel = useDecideFillLevel({ hue, fillLevel })
     const theme = useTheme()
-
-    console.log('crd clickable', clickable)
-    console.log('crd props', props)
+    const cardSeverity = sanitizeSeverity(severity, {
+      allowList: CARD_SEVERITIES,
+      default: 'neutral',
+    })
 
     return (
       <FillLevelProvider value={fillLevel}>
@@ -207,12 +211,16 @@ const Card = forwardRef(
           ref={ref}
           {...theme.partials.reset.button}
           cursor="unset"
-          border={`1px solid ${getBorderColor({ theme, fillLevel, severity })}`}
+          border={`1px solid ${getBorderColor({
+            theme,
+            fillLevel,
+            severity: cardSeverity,
+          })}`}
           borderRadius={cornerSizeToBorderRadius[size]}
           backgroundColor={
             selected
               ? fillToNeutralSelectedBgC[fillLevel]
-              : getBgColor({ theme, fillLevel, severity })
+              : getBgColor({ theme, fillLevel, severity: cardSeverity })
           }
           {...{
             '&:focus, &:focus-visible': {
