@@ -81,7 +81,6 @@ const getBaseTheme = ({ mode }: { mode: ColorMode }) =>
 
 const getHonorableThemeProps = ({ mode }: { mode: ColorMode }) => {
   const boxShadows = getBoxShadows({ mode })
-  const focusPartials = getFocusPartials()
 
   return {
     stylesheet: {
