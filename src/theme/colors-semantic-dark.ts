@@ -113,6 +113,14 @@ export const semanticColorsDark = {
   //
   ...colorsCloudShellDark,
 
+  // Semantic
+  semanticDefault: '#EBEFF0',
+  semanticBlue: '#99DAFF',
+  semanticGreen: '#99F5D5',
+  semanticYellow: '#FFF9C2',
+  semanticRedLight: '#F599A8',
+  semanticRedDark: '#E95374',
+
   // Deprecated (Remove after all 'error' colors converted to 'danger' in app)
   //
   'border-error': red[300],

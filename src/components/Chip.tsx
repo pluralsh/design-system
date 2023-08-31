@@ -5,8 +5,11 @@ import {
   type ReactElement,
   type Ref,
   forwardRef,
+  useMemo,
 } from 'react'
 import styled, { type DefaultTheme, useTheme } from 'styled-components'
+
+import chroma from 'chroma-js'
 
 import { Spinner } from './Spinner'
 import Card, { type BaseCardProps } from './Card'
@@ -54,6 +57,63 @@ const parentFillLevelToHue = {
   3: 'lightest',
 } as const satisfies Record<FillLevel, ChipHue>
 
+const hueToFillLevel: Record<ChipHue, FillLevel> = {
+  default: 1,
+  lighter: 2,
+  lightest: 3,
+}
+
+const useBgColor = ({
+  hue,
+  severity,
+}: {
+  hue: ChipHue
+  severity: ChipSeverity
+}) => {
+  const theme = useTheme()
+  const mapper: Record<ChipSeverity, Record<ChipHue, string>> = useMemo(
+    () => ({
+      neutral: {
+        default: theme.colors['fill-one'],
+        lighter: theme.colors['fill-two'],
+        lightest: theme.colors['fill-three'],
+      },
+      info: {
+        default: `${chroma(theme.colors.semanticBlue).alpha(0.05)}`,
+        lighter: `${chroma(theme.colors.semanticBlue).alpha(0.1)}`,
+        lightest: `${chroma(theme.colors.semanticBlue).alpha(0.2)}`,
+      },
+      success: {
+        default: `${chroma(theme.colors.semanticGreen).alpha(0.05)}`,
+        lighter: `${chroma(theme.colors.semanticGreen).alpha(0.1)}`,
+        lightest: `${chroma(theme.colors.semanticGreen).alpha(0.2)}`,
+      },
+      warning: {
+        default: `${chroma(theme.colors.semanticYellow).alpha(0.05)}`,
+        lighter: `${chroma(theme.colors.semanticYellow).alpha(0.1)}`,
+        lightest: `${chroma(theme.colors.semanticYellow).alpha(0.2)}`,
+      },
+      error: {
+        default: `${chroma(theme.colors.semanticRedLight).alpha(0.05)}`,
+        lighter: `${chroma(theme.colors.semanticRedLight).alpha(0.1)}`,
+        lightest: `${chroma(theme.colors.semanticRedLight).alpha(0.2)}`,
+      },
+      critical: {
+        default: `${chroma(theme.colors.semanticRedDark).alpha(0.05)}`,
+        lighter: `${chroma(theme.colors.semanticRedDark).alpha(0.1)}`,
+        lightest: `${chroma(theme.colors.semanticRedDark).alpha(0.2)}`,
+      },
+    }),
+    [theme]
+  )
+
+  if (theme.mode === 'dark') {
+    return null
+  }
+
+  return mapper[severity][hue]
+}
+
 const severityToColor = {
   neutral: 'text',
   info: 'text-primary-accent',
@@ -78,16 +138,19 @@ const sizeToCloseHeight = {
   large: 12,
 } as const satisfies Record<ChipSize, number>
 
-const ChipCard = styled(Card)(({ theme }) => ({
-  '.closeIcon': {
-    color: theme.colors['text-light'],
-  },
-  '&:hover': {
+const ChipCardSC = styled(Card)<{ $bgColor: string }>(
+  ({ $bgColor, theme }) => ({
+    ...($bgColor ? { '&&': { backgroundColor: $bgColor } } : {}),
     '.closeIcon': {
-      color: theme.colors.text,
+      color: theme.colors['text-light'],
     },
-  },
-}))
+    '&:hover': {
+      '.closeIcon': {
+        color: theme.colors.text,
+      },
+    },
+  })
+)
 
 function ChipRef(
   {
@@ -101,7 +164,7 @@ function ChipRef(
     clickable,
     as,
     ...props
-  }: ChipProps & { as?: ComponentProps<typeof ChipCard>['forwardedAs'] },
+  }: ChipProps & { as?: ComponentProps<typeof ChipCardSC>['forwardedAs'] },
   ref: Ref<any>
 ) {
   const parentFillLevel = useFillLevel()
@@ -111,11 +174,16 @@ function ChipRef(
   const col = severityToColor[severity] || 'text'
   const iconCol = severityToIconColor[severity] || 'icon-default'
 
+  const bgColor = useBgColor({ hue, severity })
+
+  console.log('bgColor', bgColor)
+
   return (
-    <ChipCard
+    <ChipCardSC
+      $bgColor={bgColor}
       ref={ref}
       cornerSize="medium"
-      hue={hue}
+      fillLevel={hueToFillLevel[hue]}
       clickable={clickable}
       paddingVertical={size === 'large' ? '6px' : 'xxxsmall'}
       paddingHorizontal={size === 'small' ? 'xsmall' : 'small'}
@@ -157,7 +225,7 @@ function ChipRef(
           _hover={{ color: 'blue' }}
         />
       )}
-    </ChipCard>
+    </ChipCardSC>
   )
 }
 

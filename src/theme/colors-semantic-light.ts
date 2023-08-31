@@ -90,7 +90,7 @@ export const semanticColorsLight = {
   'icon-disabled': grey[100],
   'icon-primary': purple[300],
   'icon-secondary': blue[400],
-  'icon-info': blue[200],
+  'icon-info': blue[500],
   'icon-success': green[700],
   'icon-warning': '#FF9900',
   'icon-danger': red[300],
@@ -114,6 +114,14 @@ export const semanticColorsLight = {
   // Cloud shell
   //
   ...colorsCloudShellLight,
+
+  // Semantic
+  semanticDefault: '#0E1015',
+  semanticBlue: '#539AC3',
+  semanticGreen: '#0F996A',
+  semanticYellow: '#C3B853',
+  semanticRedLight: '#F599A8',
+  semanticRedDark: '#E95374',
 
   // Deprecated (Remove after all 'error' colors converted to 'danger' in app)
   //

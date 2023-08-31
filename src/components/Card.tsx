@@ -1,6 +1,7 @@
 import { Div, type DivProps } from 'honorable'
 import { forwardRef, useMemo } from 'react'
 import { useTheme } from 'styled-components'
+import { type Merge } from 'type-fest'
 
 import {
   type FillLevel,
@@ -21,7 +22,7 @@ type BaseCardProps = {
   selected?: boolean
 }
 
-type CardProps = DivProps & BaseCardProps
+type CardProps = Merge<DivProps, BaseCardProps>
 
 const fillLevelToBGColor: Record<FillLevel, string> = {
   0: 'fill-one',
@@ -86,7 +87,7 @@ function useDecideFillLevel({
   return ret
 }
 
-const Card = forwardRef<HTMLDivElement, CardProps>(
+const Card = forwardRef(
   (
     {
       cornerSize: size = 'large',
@@ -95,17 +96,21 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       selected = false,
       clickable = false,
       ...props
-    },
+    }: CardProps,
     ref
   ) => {
     fillLevel = useDecideFillLevel({ hue, fillLevel })
     const theme = useTheme()
+
+    console.log('crd clickable', clickable)
+    console.log('crd props', props)
 
     return (
       <FillLevelProvider value={fillLevel}>
         <Div
           ref={ref}
           {...theme.partials.reset.button}
+          cursor="unset"
           border={`1px solid ${fillLevelToBorderColor[fillLevel]}`}
           borderRadius={cornerSizeToBorderRadius[size]}
           backgroundColor={
