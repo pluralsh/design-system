@@ -60,8 +60,9 @@ export const semanticColorsLight = {
   'border-secondary': blue[400],
   'border-info': blue[300],
   'border-success': green[700],
-  'border-warning': '#FFF175',
-  'border-danger': '#ED4578',
+  'border-warning': '#C3B853',
+  'border-danger': '#F599A8',
+  'border-danger-critical': '#E95374',
   'border-outline-focused': blue[400],
 
   // Text

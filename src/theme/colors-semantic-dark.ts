@@ -59,6 +59,7 @@ export const semanticColorsDark = {
   'border-success': green[300],
   'border-warning': yellow[200],
   'border-danger': red[300],
+  'border-danger-critical': red[400],
   'border-outline-focused': blue[300],
 
   // Text
