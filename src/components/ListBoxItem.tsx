@@ -54,14 +54,10 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(
     '&:last-child': {
       borderBottom: 'none',
     },
-    '&:focus-visible::after': {
-      ...theme.partials.focus.insetAbsolute,
+    '&:focus-visible': {
+      ...theme.partials.focus.outline,
     },
-    ...(focused
-      ? {
-          '&::after': { ...theme.partials.focus.insetAbsolute },
-        }
-      : {}),
+    ...(focused ? { '&': { ...theme.partials.focus.outline } } : {}),
     '.left-content': {
       marginRight: theme.spacing.small,
     },
@@ -98,7 +94,7 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(
         right: '2px',
         left: '2px',
         bottom: '2px',
-        backgroundColor: theme.colors.text,
+        backgroundColor: theme.colors['text-always-white'],
         borderRadius: '50%',
       },
     },
