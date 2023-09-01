@@ -3,7 +3,7 @@ import { A, Flex, H1 } from 'honorable'
 import Banner, { BANNER_SEVERITIES } from '../components/Banner'
 
 export default {
-  title: 'Banner (AKA Toast)',
+  title: 'Banner (AKA Toast Content)',
   component: Banner,
   argTypes: {
     closeButton: {
