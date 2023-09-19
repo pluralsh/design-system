@@ -11,7 +11,7 @@ import {
 } from 'react'
 import React from 'react'
 import { animated, useSpring } from 'react-spring'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 import useResizeObserver from '../hooks/useResizeObserver'
 import { type UseDisclosureProps, useDisclosure } from '../hooks/useDisclosure'
@@ -39,15 +39,9 @@ function AccordionTriggerUnstyled({
   )
 }
 
-const AccordionTrigger = styled(AccordionTriggerUnstyled)(({
-  theme,
-  unstyled,
-}) => {
+const AccordionTrigger = styled(AccordionTriggerUnstyled)(({ theme }) => {
   const focusInset = theme.spacing.xsmall
   const padding = theme.spacing.medium
-  const bottomPadOpen = unstyled ? padding : theme.spacing.small
-  const bottomPadClosed = padding
-  const bottomPadDiff = bottomPadClosed - bottomPadOpen
 
   return {
     display: 'flex',
@@ -55,9 +49,6 @@ const AccordionTrigger = styled(AccordionTriggerUnstyled)(({
     padding,
     ...theme.partials.text.body2Bold,
     color: theme.colors.text,
-    '&[aria-expanded="true"]': {
-      paddingBottom: bottomPadOpen,
-    },
     '.label': {
       flexGrow: 1,
     },
@@ -75,9 +66,6 @@ const AccordionTrigger = styled(AccordionTriggerUnstyled)(({
         bottom: focusInset,
         left: focusInset,
         right: focusInset,
-      },
-      '&[aria-expanded="true"]::after': {
-        bottom: focusInset - bottomPadDiff,
       },
     },
     '&:hover': {
@@ -119,6 +107,7 @@ function AccordionContentUnstyled({
       setContentHeight(eltRef.current?.offsetHeight)
     }
   }, [])
+  const theme = useTheme()
 
   useEffect(() => {
     onResize()
@@ -141,11 +130,18 @@ function AccordionContentUnstyled({
           velocity: 0.02,
         },
   })
+  const mOffset = theme.spacing.medium - theme.spacing.small
 
   return (
     <animated.div
       style={{
         overflow: 'hidden',
+        ...(!_unstyled
+          ? {
+              marginTop: -mOffset,
+              marginBottom: isOpen ? 0 : mOffset,
+            }
+          : {}),
         ...springs,
       }}
     >
@@ -160,12 +156,11 @@ function AccordionContentUnstyled({
   )
 }
 const AccordionContent = styled(AccordionContentUnstyled)(
-  ({ theme, pad, unstyled, isOpen }) =>
+  ({ theme, pad, unstyled }) =>
     unstyled
       ? {}
       : {
           transition: `marginTop ${paddingTransition}`,
-          marginTop: isOpen ? 0 : -(theme.spacing.medium - theme.spacing.small),
           ...(pad
             ? {
                 paddingLeft: theme.spacing.medium,
@@ -231,7 +226,7 @@ export default function Accordion({
 
   const Wrapper = useMemo(() => {
     if (unstyled) {
-      return function Div(props) {
+      return function Div(props: ComponentProps<'div'>) {
         return <div {...props} />
       }
     }

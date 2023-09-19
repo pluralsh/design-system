@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Accordion, Button, Card } from '..'
+import { Accordion, Button } from '..'
 
 export default {
   title: 'Accordion',
