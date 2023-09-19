@@ -79,7 +79,7 @@ export const semanticColorsLight = {
   'text-success-light': green[600],
   'text-warning': '#FADA5E',
   'text-warning-light': '#DCBC40',
-  'text-danger': '#ED4578',
+  'text-danger': '#E54064',
   'text-danger-light': red[300],
   'text-always-white': semanticColorsDark['text-always-white'],
 
