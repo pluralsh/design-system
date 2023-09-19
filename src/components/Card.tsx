@@ -2,7 +2,6 @@ import chroma from 'chroma-js'
 import { Div, type DivProps } from 'honorable'
 import { forwardRef } from 'react'
 import { type DefaultTheme, useTheme } from 'styled-components'
-import { type Merge } from 'type-fest'
 import { memoize } from 'lodash-es'
 
 import { type SeverityExt, sanitizeSeverity } from '../types'
@@ -40,7 +39,7 @@ type BaseCardProps = {
   severity?: SeverityExt
 }
 
-type CardProps = Merge<DivProps, BaseCardProps>
+type CardProps = DivProps & BaseCardProps
 
 const fillToNeutralBgC = {
   0: 'fill-one',
