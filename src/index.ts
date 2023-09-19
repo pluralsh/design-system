@@ -4,6 +4,7 @@ export { Avatar, Menu, MenuItem, Switch } from 'honorable'
 export * from './icons'
 
 // Components
+export { default as Accordion } from './components/Accordion'
 export { default as Banner } from './components/Banner'
 export { default as Button } from './components/Button'
 export type { CardProps } from './components/Card'
