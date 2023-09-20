@@ -1,4 +1,4 @@
-import { Switch } from 'honorable'
+import { Switch } from '..'
 
 export default {
   title: 'Switch',
@@ -6,11 +6,20 @@ export default {
 }
 
 function Template(args: any) {
-  return <Switch {...args} />
+  return (
+    <Switch
+      {...args}
+      onChange={(val) => {
+        console.log('Switched changed to', val)
+      }}
+    />
+  )
 }
 
 export const Default = Template.bind({})
 
 Default.args = {
   children: 'Email notifications',
+  disabled: false,
+  readOnly: false,
 }
