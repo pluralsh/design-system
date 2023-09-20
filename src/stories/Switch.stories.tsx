@@ -37,7 +37,7 @@ function LightDarkTemplate(args: any) {
 
 export const LightDarkMode = LightDarkTemplate.bind({})
 
-Default.args = {
+LightDarkMode.args = {
   disabled: false,
   readOnly: false,
 }
