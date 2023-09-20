@@ -109,7 +109,7 @@ const SliderWrap = styled.div<SliderWrapProps>(
       width: thumbRadius * 2,
       height: thumbRadius * 2,
       borderRadius: '50%',
-      background: `radial-gradient(${theme.colors['text-always-white']} 37%, ${theme.colors['fill-primary']} 40%)`,
+      background: `radial-gradient(${theme.colors['action-always-white']} 37%, ${theme.colors['fill-primary']} 40%)`,
       boxShadow: `
       3px 3px 4px 0 rgba(255, 255, 255, 0.15) inset,
       -2px -2px 3px 0 rgba(0, 0, 0, .1) inset,
@@ -117,7 +117,7 @@ const SliderWrap = styled.div<SliderWrapProps>(
     `,
 
       '&.dragging, &.focus': {
-        background: `radial-gradient(${theme.colors['text-always-white']} 37%, ${theme.colors['fill-primary-hover']} 40%)`,
+        background: `radial-gradient(${theme.colors['action-always-white']} 37%, ${theme.colors['fill-primary-hover']} 40%)`,
       },
 
       '&.disabled': {

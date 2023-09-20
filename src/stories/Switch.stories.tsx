@@ -1,4 +1,4 @@
-import { Switch } from '..'
+import { LightDarkSwitch, Switch } from '..'
 
 export default {
   title: 'Switch',
@@ -20,6 +20,24 @@ export const Default = Template.bind({})
 
 Default.args = {
   children: 'Email notifications',
+  disabled: false,
+  readOnly: false,
+}
+
+function LightDarkTemplate(args: any) {
+  return (
+    <LightDarkSwitch
+      {...args}
+      onChange={(val) => {
+        console.log('Switched changed to', val)
+      }}
+    />
+  )
+}
+
+export const LightDarkMode = LightDarkTemplate.bind({})
+
+Default.args = {
   disabled: false,
   readOnly: false,
 }

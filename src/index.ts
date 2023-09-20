@@ -104,6 +104,7 @@ export { default as Layer } from './components/Layer'
 export { Breadcrumbs } from './components/Breadcrumbs'
 export { DatePicker } from './components/DatePicker'
 export { Switch } from './components/Switch'
+export { LightDarkSwitch } from './components/LightDarkSwitch'
 
 // Hooks
 export { default as usePrevious } from './hooks/usePrevious'
