@@ -33,7 +33,9 @@ const SwitchSC = styled.label<{
               : theme.colors['action-input-hover'],
           },
           [SwitchHandleSC]: {
-            backgroundColor: theme.colors['action-link-active'],
+            backgroundColor: $checked
+              ? theme.colors['text-always-white']
+              : theme.colors['action-link-active'],
           },
         },
       }),
@@ -74,7 +76,7 @@ const SwitchHandleSC = styled.div<{ $checked: boolean; $disabled: boolean }>(
     backgroundColor: $disabled
       ? theme.colors['border-disabled']
       : $checked
-      ? theme.colors['action-link-active']
+      ? theme.colors['text-always-white']
       : theme.colors['action-link-inactive'],
     position: 'absolute',
     width: 16,

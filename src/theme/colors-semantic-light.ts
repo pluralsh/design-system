@@ -96,7 +96,7 @@ export const semanticColorsLight = {
   'icon-warning': '#FF9900',
   'icon-danger': red[300],
   'icon-danger-critical': '#ED4578',
-  'icon-always-white': semanticColorsDark['text-always-white'],
+  'icon-always-white': semanticColorsDark['icon-always-white'],
 
   // Marketing
   //
