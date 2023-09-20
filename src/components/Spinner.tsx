@@ -15,8 +15,6 @@ export function Spinner({
   as,
   ...props
 }: { color: string } & ComponentProps<typeof SpinnerSC>) {
-  console.log('color', color)
-
   return (
     <SpinnerSC
       $color={color}

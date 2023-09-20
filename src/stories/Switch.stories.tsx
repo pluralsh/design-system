@@ -10,7 +10,7 @@ function Template(args: any) {
     <Switch
       {...args}
       onChange={(val) => {
-        console.log('Switched changed to', val)
+        console.info('Switched changed to', val)
       }}
     />
   )
@@ -29,7 +29,7 @@ function LightDarkTemplate(args: any) {
     <LightDarkSwitch
       {...args}
       onChange={(val) => {
-        console.log('Switched changed to', val)
+        console.info('Switched changed to', val)
       }}
     />
   )
