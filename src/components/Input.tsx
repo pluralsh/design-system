@@ -29,7 +29,10 @@ const PrefixSuffix = styled.div(({ theme }) => ({
   alignSelf: 'stretch',
   paddingLeft: theme.spacing.small,
   paddingRight: theme.spacing.small,
-  backgroundColor: theme.colors['fill-two'],
+  backgroundColor:
+    theme.mode === 'light'
+      ? theme.colors['fill-three']
+      : theme.colors['fill-two'],
 }))
 
 const startEndStyles = {
