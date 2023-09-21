@@ -154,7 +154,7 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
 
     return (
       <FillLevelProvider value={fillLevel}>
-        <CalloutWrap
+        <CalloutSC
           className={`${className} ${classNames({ expandable })}`}
           $borderColorKey={borderColorKey}
           $fillLevel={fillLevel}
@@ -181,7 +181,15 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
               {title}
             </h6>
             <AnimateHeight
-              height={(expandable && expanded) || !expandable ? 'auto' : 0}
+              contentClassName={classNames('body', { bodyWithTitle: !!title })}
+              duration={300}
+              height={
+                (expandable && expanded) || !expandable
+                  ? 'auto'
+                  : size === 'compact'
+                  ? theme.spacing.xsmall
+                  : theme.spacing.medium
+              }
             >
               <div className="children">{children}</div>
               {buttonProps && (
@@ -215,13 +223,13 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
               />
             </Flex>
           )}
-        </CalloutWrap>
+        </CalloutSC>
       </FillLevelProvider>
     )
   }
 )
 
-const CalloutWrap = styled.div<{
+const CalloutSC = styled.div<{
   $borderColorKey: string
   $size: CalloutSize
   $fillLevel: FillLevel
@@ -240,10 +248,11 @@ const CalloutWrap = styled.div<{
   backgroundColor:
     $fillLevel >= 3 ? theme.colors['fill-three'] : theme.colors['fill-two'],
   color: theme.colors['text-light'],
+  transition: 'background-color 0.2s ease',
 
   '&.expandable': {
     cursor: $expanded ? 'inherit' : 'pointer',
-
+    paddingBottom: 0,
     ...(!$expanded && {
       '&:hover': {
         backgroundColor:
@@ -252,19 +261,22 @@ const CalloutWrap = styled.div<{
             : theme.colors['fill-two-hover'],
       },
     }),
+    '.body': {
+      paddingBottom:
+        $size === 'compact' ? theme.spacing.xsmall : theme.spacing.medium,
+    },
+    '.rah-static--height-specific': {
+      opacity: 0,
+    },
   },
-
   h6: {
     ...theme.partials.text.body1Bold,
     color: theme.colors.text,
     margin: 0,
     padding: 0,
-    marginBottom: theme.spacing.small,
-
-    '&.expandable': {
-      marginBottom: $expanded ? theme.spacing.small : 0,
-      transition: 'margin-bottom .5s',
-    },
+  },
+  '.bodyWithTitle': {
+    paddingTop: theme.spacing.small,
   },
   '.content': {
     width: '100%',
@@ -322,6 +334,21 @@ const CalloutWrap = styled.div<{
   '.expandIcon': {
     ...theme.partials.dropdown.arrowTransition({ isOpen: $expanded }),
   },
+  // Overrides for light mode
+  ...(theme.mode === 'light'
+    ? {
+        backgroundColor:
+          $fillLevel >= 3
+            ? theme.colors['fill-zero']
+            : theme.colors['fill-one'],
+        boxShadow: theme.boxShadows.moderate,
+        '&::after': {
+          borderRadius: theme.borderRadiuses.medium,
+          border:
+            $fillLevel >= 3 ? theme.borders['fill-two'] : theme.borders.default,
+        },
+      }
+    : {}),
 }))
 
 Callout.propTypes = {

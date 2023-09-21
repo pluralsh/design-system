@@ -98,7 +98,7 @@ function Template({
 }
 
 function ExpandableTemplate({ title }: CalloutProps) {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(styles.map(() => false))
 
   return (
     <Flex
@@ -106,15 +106,20 @@ function ExpandableTemplate({ title }: CalloutProps) {
       gap="large"
       maxWidth={600}
     >
-      {styles.map((style) => (
+      {styles.map((style, i) => (
         <Callout
           key={style}
           severity={style}
           title={title}
           buttonProps={{ children: 'Learn more' }}
           expandable
-          expanded={expanded}
-          onExpand={setExpanded}
+          expanded={expanded[i]}
+          onExpand={(val) => {
+            const next = [...expanded]
+
+            next[i] = val
+            setExpanded(next)
+          }}
         >
           {fullContent}
         </Callout>
