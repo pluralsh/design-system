@@ -22,7 +22,7 @@ export const semanticColorsLight = {
   'fill-two-hover': '#EBEDEE',
   'fill-two-selected': '#E6E8E9',
   // fill-three
-  'fill-three': '#ECEDF2',
+  'fill-three': '#E2E3E8',
   'fill-three-hover': '#D6D6D8',
   'fill-three-selected': '#D3D3D3',
   // primary
