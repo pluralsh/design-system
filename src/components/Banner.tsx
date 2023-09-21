@@ -61,7 +61,10 @@ const BannerOuter = styled.div<{
   display: 'inline-flex',
   align: 'flex-start',
   padding: theme.spacing.medium,
-  backgroundColor: theme.colors['fill-three'],
+  backgroundColor:
+    theme.mode === 'light'
+      ? theme.colors['fill-zero']
+      : theme.colors['fill-three'],
   borderRadius: theme.borderRadiuses.medium,
   borderTop: `3px solid ${theme.colors[$borderColorKey]}`,
   maxWidth: $fullWidth ? undefined : 480,
