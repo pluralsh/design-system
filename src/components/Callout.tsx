@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
-import { type Dispatch, type PropsWithChildren, forwardRef } from 'react'
+import { type Dispatch, type PropsWithChildren, forwardRef, useId } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 import { Flex } from 'honorable'
@@ -9,6 +9,8 @@ import AnimateHeight from 'react-animate-height'
 import { type ColorKey, type SeverityExt, sanitizeSeverity } from '../types'
 
 import { CaretDownIcon, CloseIcon } from '../icons'
+
+import { useDisclosure } from '../hooks/useDisclosure'
 
 import {
   type FillLevel,
@@ -81,10 +83,12 @@ export type CalloutProps = PropsWithChildren<{
   className?: string
   expandable?: boolean
   expanded?: boolean
+  defaultExpanded?: boolean
   onExpand?: Dispatch<boolean>
   closeable?: boolean
   closed?: boolean
   onClose?: Dispatch<boolean>
+  id?: string
 }>
 
 export function CalloutButton(props: ButtonProps) {
@@ -103,8 +107,9 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
       severity = DEFAULT_SEVERITY,
       size = 'full',
       expandable = false,
-      expanded = false,
-      onExpand,
+      expanded: expandedProp,
+      defaultExpanded = false,
+      onExpand: onExpandProp,
       closeable = false,
       closed = false,
       onClose,
@@ -112,6 +117,7 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
       className,
       buttonProps,
       children,
+      id,
     },
     ref
   ) => {
@@ -120,6 +126,19 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
         'Callout component cannot be expandable and closable at the same time'
       )
     }
+    const generatedId = useId()
+
+    id = id || generatedId
+    const {
+      triggerProps,
+      contentProps,
+      isOpen: expanded,
+    } = useDisclosure({
+      defaultOpen: defaultExpanded,
+      isOpen: expandedProp,
+      onOpenChange: onExpandProp,
+      id,
+    })
 
     severity = sanitizeSeverity(severity, {
       default: DEFAULT_SEVERITY,
@@ -161,11 +180,7 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
           $size={size}
           $expanded={expanded}
           ref={ref}
-          onClick={
-            expandable && !expanded
-              ? () => onExpand && onExpand(!expanded)
-              : null
-          }
+          {...(expandable && !expanded ? triggerProps : {})}
         >
           <div className="icon">
             <Icon
@@ -175,7 +190,10 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
               display="flex"
             />
           </div>
-          <div className="content">
+          <div
+            className="content"
+            {...(expandable ? contentProps : {})}
+          >
             <h6 className={classNames({ visuallyHidden: !title, expandable })}>
               <span className="visuallyHidden">{`${text}: `}</span>
               {title}
@@ -209,10 +227,14 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
                 display="flex"
                 size="small"
                 clickable
-                onClick={() => {
-                  if (expandable && onExpand) onExpand(!expanded)
-                  if (closeable && onClose) onClose(!closed)
-                }}
+                {...(closeable && onClose
+                  ? {
+                      onClick: () => {
+                        onClose(!closed)
+                      },
+                    }
+                  : {})}
+                {...(expandable && expanded ? triggerProps : {})}
                 icon={
                   expandable ? (
                     <CaretDownIcon className="expandIcon" />
