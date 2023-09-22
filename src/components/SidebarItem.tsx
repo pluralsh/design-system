@@ -1,9 +1,4 @@
-import {
-  type ComponentProps,
-  type Ref,
-  forwardRef,
-  isValidElement,
-} from 'react'
+import { type ComponentProps, type Ref, forwardRef } from 'react'
 import styled from 'styled-components'
 
 import Tooltip from '../components/Tooltip'
@@ -74,6 +69,7 @@ const ItemSC = styled.div<{
   flexGrow: 0,
   borderRadius: '3px',
   overflow: 'hidden',
+  color: theme.colors['icon-light'],
   backgroundColor: $active
     ? theme.mode === 'light'
       ? theme.colors['fill-one-selected']
