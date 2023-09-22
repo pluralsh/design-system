@@ -1,23 +1,43 @@
-import { Flex, type FlexProps } from 'honorable'
 import {
   Children,
+  type ComponentProps,
   type Ref,
   cloneElement,
   forwardRef,
   isValidElement,
 } from 'react'
+import styled from 'styled-components'
 
 type SidebarLayout = 'vertical' | 'horizontal'
-type SidebarProps = {
-  layout?: SidebarLayout
-} & FlexProps
+
+type SidebarProps = { layout?: SidebarLayout } & ComponentProps<
+  typeof SidebarSC
+>
+
+const SIDEBAR_WIDTH = 64
+const SIDEBAR_HEIGHT = 56
+
+const SidebarSC = styled.div<{ $isHorizontal: boolean }>(
+  ({ theme, $isHorizontal }) => ({
+    display: 'flex',
+    flexDirection: $isHorizontal ? 'row' : 'column',
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    height: $isHorizontal ? SIDEBAR_HEIGHT : '100%',
+    width: $isHorizontal ? '100%' : SIDEBAR_WIDTH,
+    maxWidth: $isHorizontal ? '100%' : SIDEBAR_WIDTH,
+    minWidth: $isHorizontal ? '100%' : SIDEBAR_WIDTH,
+    backgroundColor: 'fill-zero',
+    borderRight: $isHorizontal ? 'none' : theme.borders.default,
+    borderBottom: $isHorizontal ? theme.borders.default : 'none',
+    overflowY: 'hidden',
+  })
+)
 
 function SidebarRef(
   { layout = 'vertical', children, ...props }: SidebarProps,
   ref: Ref<any>
 ) {
-  const isHorizontal = layout === 'horizontal'
-  const size = isHorizontal ? '56px' : '64px'
   const childrenWithProps = Children.map(children, (child) =>
     isValidElement(child)
       ? cloneElement(child, { layout, ...(child as any).props })
@@ -25,23 +45,13 @@ function SidebarRef(
   )
 
   return (
-    <Flex
-      direction={isHorizontal ? 'row' : 'column'}
-      grow={1}
-      justify="flex-start"
-      height={isHorizontal ? size : '100%'}
-      width={isHorizontal ? '100%' : size}
-      maxWidth={isHorizontal ? '100%' : size}
-      minWidth={isHorizontal ? '100%' : size}
-      backgroundColor="fill-zero"
-      borderRight={isHorizontal ? '' : '1px solid border'}
-      borderBottom={isHorizontal ? '1px solid border' : ''}
-      overflowY="hidden"
+    <SidebarSC
+      $isHorizontal={layout === 'horizontal'}
       ref={ref}
       {...props}
     >
       {childrenWithProps}
-    </Flex>
+    </SidebarSC>
   )
 }
 

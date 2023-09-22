@@ -1,46 +1,30 @@
-import { Flex, type FlexProps } from 'honorable'
-import { type Ref, forwardRef } from 'react'
+import { type ComponentProps, type Ref, forwardRef } from 'react'
+import styled from 'styled-components'
 
 import Tooltip from '../components/Tooltip'
 
 import { type SidebarLayout } from './Sidebar'
 
-type SidebarItemProps = FlexProps & {
+type SidebarItemProps = ComponentProps<typeof ItemSC> & {
   clickable?: boolean
   tooltip?: string
-  href?: string
   layout?: SidebarLayout
+  active?: boolean
 }
 
 function SidebarItemRef(
-  {
-    layout = 'vertical',
-    children,
-    clickable = false,
-    tooltip = '',
-    href = '',
-    ...props
-  }: SidebarItemProps,
+  { children, clickable = false, tooltip = '', ...props }: SidebarItemProps,
   ref: Ref<any>
 ) {
   return (
-    <WithTooltip
-      layout={layout}
-      tooltip={tooltip}
-    >
-      <WithLink
-        layout={layout}
-        href={href}
+    <WithTooltip tooltip={tooltip}>
+      <Item
+        clickable={clickable}
+        ref={ref}
+        {...props}
       >
-        <Item
-          layout={layout}
-          clickable={clickable}
-          ref={ref}
-          {...props}
-        >
-          {children}
-        </Item>
-      </WithLink>
+        {children}
+      </Item>
     </WithTooltip>
   )
 }
@@ -76,41 +60,44 @@ function withTooltipRef(
   )
 }
 
-function withLinkRef(
-  {
-    layout = 'vertical',
-    children,
-    clickable,
-    href = '',
-    ...props
-  }: SidebarItemProps,
-  ref: Ref<any>
-) {
-  if (!href) return <> {children}</>
-
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-    >
-      <Item
-        layout={layout}
-        clickable={clickable}
-        ref={ref}
-        {...props}
-      >
-        {children}
-      </Item>
-    </a>
-  )
-}
+const ItemSC = styled.div<{
+  $clickable: boolean
+  $active: boolean
+  $isHorizontal: boolean
+}>(({ theme, $clickable, $active, $isHorizontal }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: $isHorizontal ? undefined : 32,
+  height: 32,
+  flexGrow: 0,
+  borderRadius: '3px',
+  overflow: 'hidden',
+  backgroundColor: $active
+    ? theme.mode === 'light'
+      ? theme.colors['fill-one-selected']
+      : theme.colors['fill-zero-selected']
+    : 'transparent',
+  ...($clickable
+    ? {
+        cursor: 'pointer',
+        ...(!$active
+          ? {
+              ':hover': {
+                backgroundColor: theme.colors['fill-zero-hover'],
+              },
+            }
+          : {}),
+      }
+    : {}),
+}))
 
 function ItemRef(
   {
     layout = 'vertical',
     children,
     clickable = false,
+    active = false,
     ...props
   }: SidebarItemProps,
   ref: Ref<any>
@@ -118,32 +105,20 @@ function ItemRef(
   const isHorizontal = layout === 'horizontal'
 
   return (
-    <Flex
-      grow={0}
-      justify="center"
-      alignItems="center"
-      width={isHorizontal ? '32' : ''}
-      height={32}
-      _hover={
-        clickable && {
-          backgroundColor: 'fill-one-hover',
-          borderRadius: '3px',
-          cursor: 'pointer',
-          overflow: 'hidden',
-        }
-      }
-      color="text"
+    <ItemSC
+      $clickable={clickable}
+      $active={active}
+      $isHorizontal={isHorizontal}
       ref={ref}
       {...props}
     >
       {children}
-    </Flex>
+    </ItemSC>
   )
 }
 
-const SidebarItem = forwardRef(SidebarItemRef)
 const Item = forwardRef(ItemRef)
 const WithTooltip = forwardRef(withTooltipRef)
-const WithLink = forwardRef(withLinkRef)
+const SidebarItem = forwardRef(SidebarItemRef)
 
 export default SidebarItem
