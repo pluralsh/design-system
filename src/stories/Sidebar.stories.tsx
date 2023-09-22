@@ -1,6 +1,6 @@
 import { Avatar, Div } from 'honorable'
 import { type MouseEvent, useState } from 'react'
-import styled, { useTheme } from 'styled-components'
+import { useTheme } from 'styled-components'
 
 import BellIcon from '../components/icons/BellIcon'
 
@@ -19,6 +19,14 @@ import { Button, IconFrame, PluralLogoMark } from '../index'
 export default {
   title: 'Sidebar',
   component: Sidebar,
+  argTypes: {
+    variant: {
+      options: ['app', 'console'],
+      control: {
+        type: 'select',
+      },
+    },
+  },
 }
 
 const items = [
@@ -44,13 +52,7 @@ const items = [
   },
 ] as const
 
-const VerticalSidebar = styled(Sidebar).attrs(() => ({ layout: 'vertical' }))(
-  (_) => ({
-    backgroundColor: 'rgb(33, 36, 44)',
-  })
-)
-
-function Template() {
+function Template({ variant }: any) {
   const theme = useTheme()
   const [activeKey, setActiveKey] = useState('Marketplace')
 
@@ -60,7 +62,10 @@ function Template() {
       height="600px"
       border="1px solid border"
     >
-      <VerticalSidebar>
+      <Sidebar
+        variant={variant}
+        layout="vertical"
+      >
         <SidebarSection>
           <SidebarItem
             as="a"
@@ -119,18 +124,12 @@ function Template() {
             <Avatar size={32} />
           </SidebarItem>
         </SidebarSection>
-      </VerticalSidebar>
+      </Sidebar>
     </Div>
   )
 }
 
-const HorizontalSidebar = styled(Sidebar).attrs(() => ({
-  layout: 'horizontal',
-}))(({ theme }) => ({
-  background: theme.colors['fill-one'],
-}))
-
-function HorizontalTemplate() {
+function HorizontalTemplate({ variant }: any) {
   const theme = useTheme()
 
   return (
@@ -139,7 +138,10 @@ function HorizontalTemplate() {
       height="600px"
       border="1px solid border"
     >
-      <HorizontalSidebar layout="horizontal">
+      <Sidebar
+        variant={variant}
+        layout="horizontal"
+      >
         <SidebarSection marginLeft="small">
           <SidebarItem href="https://app.plural.sh">
             <PluralLogoMark
@@ -181,7 +183,7 @@ function HorizontalTemplate() {
             </Button>
           </SidebarItem>
         </SidebarSection>
-      </HorizontalSidebar>
+      </Sidebar>
     </Div>
   )
 }
@@ -192,4 +194,6 @@ Default.args = {}
 
 export const Vertical = HorizontalTemplate.bind({})
 
-Vertical.args = {}
+Vertical.args = {
+  variant: 'app',
+}

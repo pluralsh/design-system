@@ -1,14 +1,18 @@
-import { type ComponentProps, type Ref, forwardRef } from 'react'
+import {
+  type ComponentProps,
+  type Ref,
+  forwardRef,
+  isValidElement,
+} from 'react'
 import styled from 'styled-components'
 
 import Tooltip from '../components/Tooltip'
 
-import { type SidebarLayout } from './Sidebar'
+import { type SidebarVariant, useSidebar } from './Sidebar'
 
 type SidebarItemProps = ComponentProps<typeof ItemSC> & {
   clickable?: boolean
   tooltip?: string
-  layout?: SidebarLayout
   active?: boolean
 }
 
@@ -29,16 +33,12 @@ function SidebarItemRef(
   )
 }
 
-function withTooltipRef(
-  {
-    layout = 'vertical',
-    children,
-    clickable,
-    tooltip = '',
-    ...props
-  }: SidebarItemProps,
+function WithTooltipRef(
+  { children, clickable, tooltip = '', ...props }: SidebarItemProps,
   ref: Ref<any>
 ) {
+  const { layout } = useSidebar()
+
   if (!tooltip) return <> {children}</>
 
   return (
@@ -64,7 +64,8 @@ const ItemSC = styled.div<{
   $clickable: boolean
   $active: boolean
   $isHorizontal: boolean
-}>(({ theme, $clickable, $active, $isHorizontal }) => ({
+  $variant: SidebarVariant
+}>(({ theme, $clickable, $active, $isHorizontal, $variant }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -76,7 +77,9 @@ const ItemSC = styled.div<{
   backgroundColor: $active
     ? theme.mode === 'light'
       ? theme.colors['fill-one-selected']
-      : theme.colors['fill-zero-selected']
+      : $variant === 'console'
+      ? theme.colors['fill-zero-selected']
+      : theme.colors['fill-one-selected']
     : 'transparent',
   ...($clickable
     ? {
@@ -84,7 +87,12 @@ const ItemSC = styled.div<{
         ...(!$active
           ? {
               ':hover': {
-                backgroundColor: theme.colors['fill-zero-hover'],
+                backgroundColor:
+                  theme.mode === 'light'
+                    ? theme.colors['fill-zero-hover']
+                    : $variant === 'console'
+                    ? theme.colors['fill-zero-hover']
+                    : theme.colors['fill-one-hover'],
               },
             }
           : {}),
@@ -93,15 +101,10 @@ const ItemSC = styled.div<{
 }))
 
 function ItemRef(
-  {
-    layout = 'vertical',
-    children,
-    clickable = false,
-    active = false,
-    ...props
-  }: SidebarItemProps,
+  { children, clickable = false, active = false, ...props }: SidebarItemProps,
   ref: Ref<any>
 ) {
+  const { layout, variant } = useSidebar()
   const isHorizontal = layout === 'horizontal'
 
   return (
@@ -109,6 +112,7 @@ function ItemRef(
       $clickable={clickable}
       $active={active}
       $isHorizontal={isHorizontal}
+      $variant={variant}
       ref={ref}
       {...props}
     >
@@ -118,7 +122,7 @@ function ItemRef(
 }
 
 const Item = forwardRef(ItemRef)
-const WithTooltip = forwardRef(withTooltipRef)
+const WithTooltip = forwardRef(WithTooltipRef)
 const SidebarItem = forwardRef(SidebarItemRef)
 
 export default SidebarItem
