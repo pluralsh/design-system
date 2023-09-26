@@ -134,7 +134,6 @@ function AccordionContentUnstyled({
   const mOffset = theme.spacing.medium - theme.spacing.small
 
   return (
-    // @ts-ignore
     <AnimatedDiv
       style={
         {
