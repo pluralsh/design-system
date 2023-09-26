@@ -45,9 +45,6 @@ const SwitchSC = styled.label<SwitchStyleProps>(
               backgroundColor: $checked
                 ? theme.colors['action-primary-hover']
                 : theme.colors['action-input-hover'],
-              borderColor: $checked
-                ? theme.colors['action-primary-hover']
-                : theme.colors['action-input-hover'],
             },
             [SwitchHandleSC]: {
               backgroundColor: $checked
@@ -81,7 +78,7 @@ const SwitchToggleSC = styled.div<SwitchStyleProps>(
         : $focused
         ? theme.colors['border-outline-focused']
         : $checked
-        ? theme.colors['action-primary']
+        ? 'transparent'
         : theme.colors['border-input'],
     transition: 'all 0.15s ease',
   })
