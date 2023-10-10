@@ -1,6 +1,5 @@
 import { Layer } from 'grommet'
 import { Div, Flex, Span } from 'honorable'
-import { type ReactNode } from 'react'
 
 import { Card, CloseIcon, IconFrame } from '../index'
 
