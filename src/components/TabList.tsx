@@ -6,10 +6,8 @@ import { type TabListState, useTabListState } from 'react-stately'
 import { type Node } from '@react-types/shared'
 import {
   Children,
-  cloneElement,
   type ComponentProps,
   type ForwardedRef,
-  forwardRef,
   type HTMLAttributes,
   type Key,
   type MutableRefObject,
@@ -17,6 +15,8 @@ import {
   type ReactNode,
   type Ref,
   type RefObject,
+  cloneElement,
+  forwardRef,
   useEffect,
   useMemo,
   useRef,
