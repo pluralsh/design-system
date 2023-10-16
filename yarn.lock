@@ -2726,7 +2726,7 @@ __metadata:
     firebase-tools: 11.30.0
     fuse.js: 6.6.2
     grommet: 2.32.2
-    grommet-icons: 4.10.0
+    grommet-icons: 4.11.0
     highlight.js: 11.8.0
     honorable: 1.0.0-beta.17
     honorable-recipe-mapper: 0.2.0
@@ -11301,40 +11301,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"grommet-icons@npm:4.10.0":
-  version: 4.10.0
-  resolution: "grommet-icons@npm:4.10.0"
-  dependencies:
-    grommet-styles: ^0.2.0
+"grommet-icons@npm:4.11.0":
+  version: 4.11.0
+  resolution: "grommet-icons@npm:4.11.0"
   peerDependencies:
     react: ^16.6.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
     styled-components: ">= 5.x"
-  checksum: 69745341a65f4e4d05bd5b207f7243b5ffa54d13a8195093cae7fb32d57b38ab55ed30cfee341b9f1f659b99743f721ee04c7ab9decd7dd7f171fcc4947af048
-  languageName: node
-  linkType: hard
-
-"grommet-icons@npm:4.8.0":
-  version: 4.8.0
-  resolution: "grommet-icons@npm:4.8.0"
-  dependencies:
-    grommet-styles: ^0.2.0
-  peerDependencies:
-    react: ^16.6.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
-    styled-components: ">= 5.x"
-  checksum: 7c0871a7ddd0cdff938d03ab08ad1fe56cbb5cbe9a2a8cece99de19641f140caf917c8a589a3bcdd2a28562083d9141e07fb5bd1fb188696d82c3815a33fbb4d
-  languageName: node
-  linkType: hard
-
-"grommet-styles@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "grommet-styles@npm:0.2.0"
-  peerDependencies:
-    react: ">= 16.4.1"
-    react-dom: ">= 16.4.1"
-    styled-components: ">= 4.X"
-  checksum: 7b29e6fd773a29a9f7b48e5b0a163e1c51b3b196891228d88a0e5b99faab4ece03b5410a97665105fe886402016a337237b956d5f46af06ec2e06e2b328a0757
+  checksum: 2fb0e94ee170abd17c80bf2d740c82ae5545d599cb53d5118994e855e188ef8afcd1a616cf99cebb08073f1b50e4c1c1b19c31b1c9b156e8e5512c3b290cd488
   languageName: node
   linkType: hard
 
