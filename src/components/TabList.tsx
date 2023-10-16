@@ -6,8 +6,10 @@ import { type TabListState, useTabListState } from 'react-stately'
 import { type Node } from '@react-types/shared'
 import {
   Children,
+  cloneElement,
   type ComponentProps,
   type ForwardedRef,
+  forwardRef,
   type HTMLAttributes,
   type Key,
   type MutableRefObject,
@@ -15,8 +17,6 @@ import {
   type ReactNode,
   type Ref,
   type RefObject,
-  cloneElement,
-  forwardRef,
   useEffect,
   useMemo,
   useRef,
@@ -40,6 +40,7 @@ type TabBaseProps = {
   active?: boolean
   activeSecondary?: boolean
   vertical?: boolean
+  disabled?: boolean
   textValue?: string
   renderer?: Renderer
   children?: ReactNode
@@ -62,6 +63,7 @@ type TabListProps = {
   as?: ReactElement & { ref?: MutableRefObject<any> }
   children?: ChildrenType
 }
+
 function TabListRef(
   { stateRef, stateProps, renderer, as, ...props }: TabListProps & FlexProps,
   incomingRef: RefObject<HTMLElement>
@@ -179,6 +181,7 @@ type TabRendererProps = {
   stateProps: AriaTabListProps<object>
   stateRef: TabStateRef
 }
+
 function TabRenderer({ item, state, stateProps, stateRef }: TabRendererProps) {
   const ref = useRef(null)
   const { tabProps: props } = useTab({ key: item.key }, state, ref)
