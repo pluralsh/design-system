@@ -1,9 +1,10 @@
-export { Avatar, Menu, MenuItem, Switch } from 'honorable'
+export { Avatar, Menu, MenuItem } from 'honorable'
 
 // Icons
 export * from './icons'
 
 // Components
+export { default as Accordion } from './components/Accordion'
 export { default as Banner } from './components/Banner'
 export { default as Button } from './components/Button'
 export type { CardProps } from './components/Card'
@@ -31,6 +32,11 @@ export type { PageCardProps } from './components/PageCard'
 export { default as PageCard } from './components/PageCard'
 export { default as PageTitle } from './components/PageTitle'
 export { default as ProgressBar } from './components/ProgressBar'
+export { default as Prop } from './components/Prop'
+export { default as PropWide } from './components/PropWide'
+export { default as PropsContainer } from './components/PropsContainer'
+export { default as InfoPanel } from './components/InfoPanel'
+export { default as UserDetails } from './components/UserDetails'
 export { default as Radio } from './components/Radio'
 export { default as RadioGroup } from './components/RadioGroup'
 export { default as AppIcon } from './components/AppIcon'
@@ -102,6 +108,9 @@ export { default as PricingCalculatorExtended } from './components/pricingcalcul
 export { default as Layer } from './components/Layer'
 export { Breadcrumbs } from './components/Breadcrumbs'
 export { DatePicker } from './components/DatePicker'
+export { Switch } from './components/Switch'
+export { LightDarkSwitch } from './components/LightDarkSwitch'
+export { AnimatedDiv } from './components/AnimatedDiv'
 
 // Hooks
 export { default as usePrevious } from './hooks/usePrevious'

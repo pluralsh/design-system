@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Div, Input } from 'honorable'
+import { Div } from 'honorable'
 
+import Input from '../components/Input'
 import FormField from '../components/FormField'
 import MagnifyingGlassIcon from '../components/icons/MagnifyingGlassIcon'
 import CaretDownIcon from '../components/icons/CaretDownIcon'
@@ -141,12 +142,15 @@ export const Caption = AllSizesTemplate.bind({})
 
 Caption.args = {
   label: 'Password',
+  caption: 'A short caption',
 }
 
 export const LongCaption = AllSizesTemplate.bind({})
 
 LongCaption.args = {
   label: 'Label',
+  caption:
+    'This will probably truncate, because it is ever so so longer than usual.',
 }
 
 export const HintText = AllSizesTemplate.bind({})

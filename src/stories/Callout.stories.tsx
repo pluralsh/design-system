@@ -25,6 +25,9 @@ export default {
         },
       },
     },
+    controlled: {
+      control: { type: 'boolean' },
+    },
   },
 }
 
@@ -97,8 +100,11 @@ function Template({
   )
 }
 
-function ExpandableTemplate({ title }: CalloutProps) {
-  const [expanded, setExpanded] = useState(false)
+function ExpandableTemplate({
+  title,
+  controlled = false,
+}: CalloutProps & { controlled?: boolean }) {
+  const [expanded, setExpanded] = useState(styles.map(() => false))
 
   return (
     <Flex
@@ -106,15 +112,28 @@ function ExpandableTemplate({ title }: CalloutProps) {
       gap="large"
       maxWidth={600}
     >
-      {styles.map((style) => (
+      {styles.map((style, i) => (
         <Callout
           key={style}
           severity={style}
           title={title}
-          buttonProps={{ children: 'Learn more' }}
+          buttonProps={{ children: 'Learn more', as: 'a' }}
           expandable
-          expanded={expanded}
-          onExpand={setExpanded}
+          defaultExpanded
+          expanded={controlled ? expanded[i] : undefined}
+          onExpand={
+            controlled
+              ? (val) => {
+                  console.info('Controlled expanded:', val)
+                  const next = [...expanded]
+
+                  next[i] = val
+                  setExpanded(next)
+                }
+              : (val) => {
+                  console.info('Uncontrolled expanded:', val)
+                }
+          }
         >
           {fullContent}
         </Callout>
@@ -137,7 +156,7 @@ function CloseableTemplate({ title }: CalloutProps) {
           key={style}
           severity={style}
           title={title}
-          buttonProps={{ children: 'Learn more' }}
+          buttonProps={{ children: 'Learn more', as: 'a' }}
           closeable
           closed={closed}
           onClose={setClosed}
@@ -192,6 +211,7 @@ WithButton.args = {
 export const Expandable = ExpandableTemplate.bind({})
 Expandable.args = {
   title: 'Why do I need to authenticate with GitHub/GitLab?',
+  controlled: 'false',
 }
 
 export const Closeable = CloseableTemplate.bind({})
