@@ -2725,6 +2725,7 @@ __metadata:
     eslint-plugin-storybook: 0.6.13
     firebase-tools: 11.30.0
     fuse.js: 6.6.2
+    grommet: 2.33.2
     highlight.js: 11.8.0
     honorable: 1.0.0-beta.17
     honorable-recipe-mapper: 0.2.0
@@ -11299,6 +11300,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"grommet-icons@npm:^4.10.0":
+  version: 4.11.0
+  resolution: "grommet-icons@npm:4.11.0"
+  peerDependencies:
+    react: ^16.6.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
+    styled-components: ">= 5.x"
+  checksum: 2fb0e94ee170abd17c80bf2d740c82ae5545d599cb53d5118994e855e188ef8afcd1a616cf99cebb08073f1b50e4c1c1b19c31b1c9b156e8e5512c3b290cd488
+  languageName: node
+  linkType: hard
+
+"grommet@npm:2.33.2":
+  version: 2.33.2
+  resolution: "grommet@npm:2.33.2"
+  dependencies:
+    grommet-icons: ^4.10.0
+    hoist-non-react-statics: ^3.2.0
+    markdown-to-jsx: ^7.2.0
+    prop-types: ^15.8.1
+  peerDependencies:
+    react: ^16.6.1 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.6.1 || ^17.0.0 || ^18.0.0
+    styled-components: ^5.1.0
+  checksum: 7756a54892932ee9cc6abe47781be32b9a5e3d636f3d1c5bb4615589036c72d34b728e143f01db22073efd40cbb055bcaa25c816cb9dada46e210afcda4bfafb
+  languageName: node
+  linkType: hard
+
 "gtoken@npm:^5.0.4":
   version: 5.3.2
   resolution: "gtoken@npm:5.3.2"
@@ -11564,7 +11592,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.0.0, hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
+"hoist-non-react-statics@npm:^3.0.0, hoist-non-react-statics@npm:^3.2.0, hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -13715,6 +13743,15 @@ __metadata:
   peerDependencies:
     react: ">= 0.14.0"
   checksum: 0c8c715229044401ea48c2fc26c2554464100074959dafacdd9e4a0e849f0a190b02f39edb373bbdd95e38b8f910074b83b63d08752b8ae6be6ddcfb40ea50a0
+  languageName: node
+  linkType: hard
+
+"markdown-to-jsx@npm:^7.2.0":
+  version: 7.3.2
+  resolution: "markdown-to-jsx@npm:7.3.2"
+  peerDependencies:
+    react: ">= 0.14.0"
+  checksum: 8885c6343b71570b0a7ec16cd85a49b853a830234790ee7430e2517ea5d8d361ff138bd52147f650790f3e7b3a28a15c755fc16f8856dd01ddf09a6161782e06
   languageName: node
   linkType: hard
 

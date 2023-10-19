@@ -45,6 +45,7 @@
     "babel-plugin-styled-components": "2.1.4",
     "chroma-js": "2.4.2",
     "classnames": "2.3.2",
+    "grommet": "2.33.2",
     "highlight.js": "11.8.0",
     "honorable-recipe-mapper": "0.2.0",
     "immer": "10.0.2",
