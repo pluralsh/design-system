@@ -2725,8 +2725,6 @@ __metadata:
     eslint-plugin-storybook: 0.6.13
     firebase-tools: 11.30.0
     fuse.js: 6.6.2
-    grommet: 2.32.2
-    grommet-icons: 4.10.0
     highlight.js: 11.8.0
     honorable: 1.0.0-beta.17
     honorable-recipe-mapper: 0.2.0
@@ -11301,59 +11299,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"grommet-icons@npm:4.10.0":
-  version: 4.10.0
-  resolution: "grommet-icons@npm:4.10.0"
-  dependencies:
-    grommet-styles: ^0.2.0
-  peerDependencies:
-    react: ^16.6.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
-    styled-components: ">= 5.x"
-  checksum: 69745341a65f4e4d05bd5b207f7243b5ffa54d13a8195093cae7fb32d57b38ab55ed30cfee341b9f1f659b99743f721ee04c7ab9decd7dd7f171fcc4947af048
-  languageName: node
-  linkType: hard
-
-"grommet-icons@npm:4.8.0":
-  version: 4.8.0
-  resolution: "grommet-icons@npm:4.8.0"
-  dependencies:
-    grommet-styles: ^0.2.0
-  peerDependencies:
-    react: ^16.6.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
-    styled-components: ">= 5.x"
-  checksum: 7c0871a7ddd0cdff938d03ab08ad1fe56cbb5cbe9a2a8cece99de19641f140caf917c8a589a3bcdd2a28562083d9141e07fb5bd1fb188696d82c3815a33fbb4d
-  languageName: node
-  linkType: hard
-
-"grommet-styles@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "grommet-styles@npm:0.2.0"
-  peerDependencies:
-    react: ">= 16.4.1"
-    react-dom: ">= 16.4.1"
-    styled-components: ">= 4.X"
-  checksum: 7b29e6fd773a29a9f7b48e5b0a163e1c51b3b196891228d88a0e5b99faab4ece03b5410a97665105fe886402016a337237b956d5f46af06ec2e06e2b328a0757
-  languageName: node
-  linkType: hard
-
-"grommet@npm:2.32.2":
-  version: 2.32.2
-  resolution: "grommet@npm:2.32.2"
-  dependencies:
-    grommet-icons: ^4.10.0
-    hoist-non-react-statics: ^3.2.0
-    markdown-to-jsx: ^7.2.0
-    prop-types: ^15.8.1
-  peerDependencies:
-    react: ^16.6.1 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.6.1 || ^17.0.0 || ^18.0.0
-    styled-components: ">= 5.1"
-  checksum: 28186d45c59e58065afde55ac0220aadb595f3bcb12acbacd87c79df229401b8911e46e77284146beec736a95b5555c809ec686ba4e31b22262e5838aee67fa3
-  languageName: node
-  linkType: hard
-
 "gtoken@npm:^5.0.4":
   version: 5.3.2
   resolution: "gtoken@npm:5.3.2"
@@ -11619,7 +11564,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.0.0, hoist-non-react-statics@npm:^3.2.0, hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
+"hoist-non-react-statics@npm:^3.0.0, hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -13764,7 +13709,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-to-jsx@npm:^7.1.8, markdown-to-jsx@npm:^7.2.0":
+"markdown-to-jsx@npm:^7.1.8":
   version: 7.2.1
   resolution: "markdown-to-jsx@npm:7.2.1"
   peerDependencies:
