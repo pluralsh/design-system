@@ -20,4 +20,5 @@ module.exports = {
     // Allow css prop for styled-components
     'react/no-unknown-property': ['error', { ignore: ['css'] }],
   },
+  ignorePatterns: ['/coverage/**/*'],
 }
