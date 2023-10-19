@@ -17,5 +17,7 @@ module.exports = {
       { fixStyle: 'inline-type-imports' },
     ],
     'import-newlines/enforce': 'off',
+    // Allow css prop for styled-components
+    'react/no-unknown-property': ['error', { ignore: ['css'] }],
   },
 }
