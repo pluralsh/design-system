@@ -93,12 +93,6 @@ function Step({
     circleSize ?? (compact ? COMPACT_CIRCLE_SIZE : DEFAULT_CIRCLE_SIZE)
   iconSize = iconSize ?? (compact ? COMPACT_ICON_SIZE : DEFAULT_ICON_SIZE)
 
-  console.log('iconcom', IconComponent)
-  console.log('shownCl', shownClassName)
-  console.log('shownCl', shownClassName)
-  console.log('canComplete', canComplete)
-  console.log('isComplete', isComplete)
-
   return (
     <div
       css={{
