@@ -21,8 +21,8 @@ const StepperStepSC = styled.div<{
 }>(({ theme, $compact, $vertical, $isActive, $circleSize }) => ({
   display: 'flex',
   width: $compact ? 'auto' : '100%',
-  minWidth: $compact ? 'auto' : '68px',
-  maxWidth: $vertical || $compact ? '100%' : '100px',
+  minWidth: $vertical || $compact ? 'auto' : 68,
+  maxWidth: $vertical || $compact ? '100%' : 100,
   flexDirection: $vertical || $compact ? 'row' : 'column',
   alignItems: 'center',
   alignSelf: 'center',
