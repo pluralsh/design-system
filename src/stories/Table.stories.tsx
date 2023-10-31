@@ -353,6 +353,9 @@ Expandable.args = {
 export const FilterableAndSortable = FilterableTemplate.bind({})
 FilterableAndSortable.args = {
   virtualizeRows: true,
+  emptyStateProps: {
+    message: 'No results match your query',
+  },
   width: 'auto',
   height: '400px',
   data: extremeLengthData,
