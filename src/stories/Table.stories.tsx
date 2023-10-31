@@ -216,9 +216,13 @@ function SelectableTemplate(args: any) {
   return (
     <Table
       {...args}
-      getRowIsSelected={(row) => row.original.id === selectedId}
       onRowClick={(_, row) => {
         setSelectedId(row.original.id)
+      }}
+      reactTableOptions={{
+        state: { rowSelection: { [selectedId]: true } },
+        enableRowSelection: true,
+        enableMultiRowSelection: false,
       }}
     />
   )
@@ -278,12 +282,12 @@ function FilterableTemplate(args: ComponentProps<typeof Table>) {
 const repeatedData = Array(25)
   .fill(data)
   .flat()
-  .map((item, i) => ({ ...item, id: i }))
+  .map((item, i) => ({ ...item, id: `id-${i}` }))
 
 const extremeLengthData = Array(200)
   .fill(data)
   .flat()
-  .map((item, i) => ({ ...item, id: i }))
+  .map((item, i) => ({ ...item, id: `id-${i}` }))
 
 export const Default = Template.bind({})
 

@@ -43,7 +43,6 @@ export type TableProps = Omit<
   | 'data'
   | 'columns'
   | 'getRowCanExpand'
-  | 'getRowIsSelected'
   | 'renderExpanded'
   | 'loose'
   | 'stickyColumn'
@@ -646,8 +645,8 @@ function TableRef(
                     key={row.id}
                     onClick={(e) => onRowClick?.(e, row)}
                     $lighter={i % 2 === 0}
-                    $selectable={!!getRowIsSelected}
-                    $selected={getRowIsSelected?.(row) ?? false}
+                    $selectable={row.getCanSelect()}
+                    $selected={row.getIsSelected() ?? false}
                     $clickable={!!onRowClick}
                     // data-index is required for virtual scrolling to work
                     data-index={row.index}
