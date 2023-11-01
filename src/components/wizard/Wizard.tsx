@@ -64,6 +64,7 @@ const Wizard = styled(WizardUnstyled)(({ theme }) => ({
 
     '.overlay': {
       background: theme.colors['fill-zero'],
+      backgroundColor: 'green',
       opacity: 0.5,
       height: '100%',
       width: '100%',

@@ -1,5 +1,5 @@
 import { type ReactNode, type Ref, forwardRef, useEffect } from 'react'
-import { Flex, H1, type ModalProps } from 'honorable'
+import { Flex, type ModalProps } from 'honorable'
 import PropTypes from 'prop-types'
 
 import styled, { type StyledComponentPropsWithRef } from 'styled-components'
@@ -15,6 +15,7 @@ import type createIcon from './icons/createIcon'
 import ErrorIcon from './icons/ErrorIcon'
 import WarningIcon from './icons/WarningIcon'
 import InfoIcon from './icons/InfoIcon'
+import WrapWithIf from './WrapWithIf'
 
 export const SEVERITIES = [
   'info',
@@ -73,10 +74,6 @@ const sizeToWidth = {
   large: 608,
 } as const satisfies Record<ModalSize, number>
 
-const ModalSC = styled.div((_) => ({
-  position: 'relative',
-}))
-
 const ModalContentSC = styled.div<{ $hasActions: boolean }>(
   ({ theme, $hasActions }) => ({
     margin: theme.spacing.large,
@@ -90,6 +87,18 @@ const ModalActionsSC = styled.div((_) => ({
   position: 'sticky',
   flexDirection: 'column',
   bottom: '0',
+}))
+
+const ModalHeaderSC = styled.div(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'start',
+  marginBottom: theme.spacing.large,
+  gap: theme.spacing.xsmall,
+  '.h': {
+    ...theme.partials.text.overline,
+    color: theme.colors['text-xlight'],
+  },
 }))
 
 function ModalRef(
@@ -118,6 +127,8 @@ function ModalRef(
     setBodyLocked(lockBody && open)
   }, [lockBody, open, setBodyLocked])
 
+  const hasActions = !!actions
+
   return (
     <HonorableModal
       open={open}
@@ -127,54 +138,58 @@ function ModalRef(
       color="text"
       width={sizeToWidth[size]}
       maxWidth={sizeToWidth[size]}
+      {...(asForm ? { as: 'form', ...formProps } : {})}
+      {...(hasActions
+        ? {
+            paddingTop: 0,
+            paddingRight: 0,
+            paddingBottom: 0,
+            paddingLeft: 0,
+          }
+        : {})}
       {...props}
     >
-      <ModalSC
-        as={asForm ? 'form' : undefined}
-        {...(asForm ? formProps : {})}
+      <WrapWithIf
+        condition={hasActions}
+        wrapper={
+          <ModalContentSC
+            className="modalContent"
+            $hasActions={!!actions}
+          />
+        }
       >
-        <ModalContentSC $hasActions={!!actions}>
-          {!!header && (
-            <Flex
-              ref={ref}
-              align="center"
-              justify="start"
-              marginBottom="large"
-              gap="xsmall"
-            >
-              {HeaderIcon && (
-                <HeaderIcon
-                  marginTop={-2} // optically center icon
-                  color={iconColorKey}
-                />
-              )}
-              <H1
-                overline
-                color="text-xlight"
-              >
-                {header}
-              </H1>
-            </Flex>
-          )}
-          {children}
-        </ModalContentSC>
-        {!!actions && (
-          <ModalActionsSC>
-            <Flex
-              background="linear-gradient(180deg, transparent 0%, fill-one 100%);"
-              height={16}
-            />
-            <Flex
-              padding="large"
-              align="center"
-              justify="flex-end"
-              backgroundColor="fill-one"
-            >
-              {actions}
-            </Flex>
-          </ModalActionsSC>
+        {!!header && (
+          <ModalHeaderSC
+            className="modalHeader"
+            ref={ref}
+          >
+            {HeaderIcon && (
+              <HeaderIcon
+                marginTop={-2} // optically center icon
+                color={iconColorKey}
+              />
+            )}
+            <h1 className="h">{header}</h1>
+          </ModalHeaderSC>
         )}
-      </ModalSC>
+        {children}
+      </WrapWithIf>
+      {hasActions && (
+        <ModalActionsSC className="modalActions">
+          <Flex
+            background="linear-gradient(180deg, transparent 0%, fill-one 100%);"
+            height={16}
+          />
+          <Flex
+            padding="large"
+            align="center"
+            justify="flex-end"
+            backgroundColor="fill-one"
+          >
+            {actions}
+          </Flex>
+        </ModalActionsSC>
+      )}
     </HonorableModal>
   )
 }

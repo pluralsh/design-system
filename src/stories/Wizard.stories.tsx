@@ -1,4 +1,4 @@
-import { Button, Flex, Modal as HonorableModal, P } from 'honorable'
+import { Button, Flex, P } from 'honorable'
 import { type ReactElement, useEffect, useMemo, useState } from 'react'
 
 import { type LayerPositionType } from '../components/Layer'
@@ -106,6 +106,86 @@ const PICKER_ITEMS: Array<StepConfig> = [
     Icon: GlobeIcon,
     node: <Application key="datadog" />,
   },
+
+  {
+    key: 'airflow2',
+    label: 'Airflow 2',
+    imageUrl: '/logos/airflow-logo.svg',
+    node: <Application key="airflow2" />,
+  },
+  {
+    key: 'airbyte2',
+    label: 'Airbyte 2',
+    imageUrl: '/logos/airbyte-logo.svg',
+    node: <Application key="airbyte2" />,
+  },
+  {
+    key: 'console2',
+    label: 'Console 2',
+    imageUrl: '/logos/console-logo.png',
+    node: <Application key="console2" />,
+  },
+  {
+    key: 'crossplane2',
+    label: 'Crossplane 2',
+    imageUrl: '/logos/crossplane-logo.png',
+    node: <Application key="crossplane2" />,
+  },
+  {
+    key: 'grafana2',
+    label: 'Grafana 2',
+    Icon: GlobeIcon,
+    node: <Application key="grafana2" />,
+  },
+  {
+    key: 'mongodb2',
+    label: 'MongoDB 2',
+    Icon: GlobeIcon,
+    node: <Application key="mongodb2" />,
+  },
+  {
+    key: 'datadog2',
+    label: 'Datadog 2',
+    Icon: GlobeIcon,
+    node: <Application key="datadog2" />,
+  },
+
+  {
+    key: 'airbyte3',
+    label: 'Airbyte 3',
+    imageUrl: '/logos/airbyte-logo.svg',
+    node: <Application key="airbyte3" />,
+  },
+  {
+    key: 'console3',
+    label: 'Console 3',
+    imageUrl: '/logos/console-logo.png',
+    node: <Application key="console3" />,
+  },
+  {
+    key: 'crossplane3',
+    label: 'Crossplane 3',
+    imageUrl: '/logos/crossplane-logo.png',
+    node: <Application key="crossplane3" />,
+  },
+  {
+    key: 'grafana3',
+    label: 'Grafana 3',
+    Icon: GlobeIcon,
+    node: <Application key="grafana3" />,
+  },
+  {
+    key: 'mongodb3',
+    label: 'MongoDB 3',
+    Icon: GlobeIcon,
+    node: <Application key="mongodb3" />,
+  },
+  {
+    key: 'datadog3',
+    label: 'Datadog 3',
+    Icon: GlobeIcon,
+    node: <Application key="datadog3" />,
+  },
 ]
 
 const DEFAULT_STEPS: Array<StepConfig> = [
@@ -139,13 +219,11 @@ function ModalTemplate() {
     <Flex>
       <Button onClick={() => setOpen(true)}>Open</Button>
 
-      <HonorableModal
+      <Modal
         open={open}
-        fontSize={16}
         width={768}
         maxWidth={768}
         height={768}
-        padding={24}
       >
         <Wizard
           onClose={() => (inProgress ? setConfirmClose(true) : setOpen(false))}
@@ -165,7 +243,7 @@ function ModalTemplate() {
             ),
           }}
         </Wizard>
-      </HonorableModal>
+      </Modal>
 
       <Modal
         header="confirm cancellation"

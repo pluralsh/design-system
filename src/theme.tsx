@@ -660,13 +660,14 @@ const getHonorableThemeProps = ({ mode }: { mode: ColorMode }) => {
     Modal: {
       Root: [
         {
+          position: 'relative',
           backgroundColor: 'fill-one',
           border: '1px solid border',
           boxShadow: 'modal',
-          paddingTop: 0,
-          paddingRight: 0,
-          paddingBottom: 0,
-          paddingLeft: 0,
+          paddingTop: 'large',
+          paddingRight: 'large',
+          paddingBottom: 'large',
+          paddingLeft: 'large',
         },
       ],
       Backdrop: [
