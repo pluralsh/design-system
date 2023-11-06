@@ -174,7 +174,6 @@ export { default as WorkspaceIcon } from './components/icons/WorkspaceIcon'
 export { default as InfoOutlineIcon } from './components/icons/InfoOutlineIcon'
 export { default as ProtectedClusterIcon } from './components/icons/ProtectedCluster'
 export { default as ManagementClusterIcon } from './components/icons/ManagementCluster'
-export { default as ProtectedManagementClusterIcon } from './components/icons/ProtectedManagementCluster'
 export { default as ShieldOutlineIcon } from './components/icons/ShieldOutline'
 // Logos
 export { default as PluralLogoFull } from './components/icons/logo/PluralLogoFull'
