@@ -65,9 +65,8 @@ export type TableProps = Omit<
   scrollTopMargin?: number
   virtualizeRows?: boolean
   lockColumnsOnFirstScroll?: boolean
-  reactVirtualOptions?: Omit<
-    Parameters<typeof useVirtualizer>[0],
-    'count' | 'getScrollElement'
+  reactVirtualOptions?: Partial<
+    Omit<Parameters<typeof useVirtualizer>[0], 'count' | 'getScrollElement'>
   >
   reactTableOptions?: Partial<Omit<TableOptions<any>, 'data' | 'columns'>>
   onRowClick?: (e: MouseEvent<HTMLTableRowElement>, row: Row<any>) => void
