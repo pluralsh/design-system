@@ -14,12 +14,12 @@ export const tabs: BaseSchema = {
       .transformChildren(config)
       .filter((child) => isTag(child) && child?.name === 'Tab')
       .map((tab) =>
-        isTag(tab)
-          ? {
-              title: tab.attributes.title,
-              children: tab.children,
-            }
-          : {}
+        isTag(tab) ?
+          {
+            title: tab.attributes.title,
+            children: tab.children,
+          }
+        : {}
       )
 
     return new Tag(this.render as any, { tabs }, node.transformChildren(config))

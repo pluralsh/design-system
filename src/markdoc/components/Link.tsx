@@ -21,9 +21,9 @@ function Link({
     <LinkComponent
       href={href}
       {...props}
-      {...(isExternalUrl(href)
-        ? { target: '_blank', rel: 'nofollow noopener' }
-        : {})}
+      {...(isExternalUrl(href) ?
+        { target: '_blank', rel: 'nofollow noopener' }
+      : {})}
     >
       {children}
     </LinkComponent>

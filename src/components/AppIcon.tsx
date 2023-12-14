@@ -155,7 +155,7 @@ function AppIconRef(
       _hover={clickable ? { backgroundColor: borderColor } : null}
       onClick={clickable ? onClose : null}
     >
-      {url ? (
+      {url ?
         <Img
           ref={ref}
           src={url}
@@ -165,8 +165,7 @@ function AppIconRef(
           objectFit="cover"
           {...props}
         />
-      ) : (
-        icon || (
+      : icon || (
           <Flex
             width="100%"
             height="100%"
@@ -179,7 +178,7 @@ function AppIconRef(
             {initials || (name ? toInitials(name) : '')}
           </Flex>
         )
-      )}
+      }
     </Flex>
   )
 }

@@ -29,11 +29,11 @@ import {
 function getCrumbKey(crumb: Breadcrumb) {
   const maybeKey = crumb?.key
 
-  return typeof maybeKey === 'string'
-    ? maybeKey
-    : `${typeof crumb.label === 'string' ? crumb.label : crumb.textValue}-${
+  return typeof maybeKey === 'string' ? maybeKey : (
+      `${typeof crumb.label === 'string' ? crumb.label : crumb.textValue}-${
         crumb.url
       }`
+    )
 }
 
 const CrumbSeparator = styled(({ className }: { className?: string }) => (
@@ -60,11 +60,9 @@ function CrumbLink({
   return (
     <CrumbLinkWrap {...(isLast ? { 'aria-current': 'page' } : {})}>
       <CrumbLinkText className={classNames({ isLast })}>
-        {isLast || typeof crumb.url !== 'string' ? (
+        {isLast || typeof crumb.url !== 'string' ?
           crumb.label
-        ) : (
-          <Link href={crumb.url}>{crumb.label}</Link>
-        )}
+        : <Link href={crumb.url}>{crumb.label}</Link>}
       </CrumbLinkText>
       {!isLast && <CrumbSeparator />}
     </CrumbLinkWrap>
@@ -217,9 +215,9 @@ function CrumbListRef(
       direction="row"
       gap="small"
       maxWidth="max-content"
-      {...(heightlessHidden && !ariaOnly
-        ? { height: 0, opacity: 0, overflow: 'hidden' }
-        : {})}
+      {...(heightlessHidden && !ariaOnly ?
+        { height: 0, opacity: 0, overflow: 'hidden' }
+      : {})}
       {...(ariaOnly ? visuallyHiddenProps : {})}
     >
       {head.map((headCrumb) => (

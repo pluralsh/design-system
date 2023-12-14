@@ -115,8 +115,9 @@ function AccordionContentUnstyled({
   useResizeObserver(eltRef, onResize)
   const springs = useSpring({
     to: { height: isOpen ? contentHeight || 'auto' : 0 },
-    config: isOpen
-      ? {
+    config:
+      isOpen ?
+        {
           clamp: true,
           mass: 0.6,
           tension: 280,
@@ -136,12 +137,12 @@ function AccordionContentUnstyled({
       style={
         {
           overflow: 'hidden',
-          ...(!_unstyled
-            ? {
-                marginTop: -mOffset,
-                marginBottom: isOpen ? 0 : mOffset,
-              }
-            : {}),
+          ...(!_unstyled ?
+            {
+              marginTop: -mOffset,
+              marginBottom: isOpen ? 0 : mOffset,
+            }
+          : {}),
           ...springs,
         } as any
       }
@@ -158,18 +159,18 @@ function AccordionContentUnstyled({
 }
 const AccordionContent = styled(AccordionContentUnstyled)(
   ({ theme, pad, unstyled }) =>
-    unstyled
-      ? {}
-      : {
-          transition: `marginTop ${paddingTransition}`,
-          ...(pad
-            ? {
-                paddingLeft: theme.spacing.medium,
-                paddingRight: theme.spacing.medium,
-                paddingBottom: theme.spacing.medium,
-              }
-            : {}),
-        }
+    unstyled ?
+      {}
+    : {
+        transition: `marginTop ${paddingTransition}`,
+        ...(pad ?
+          {
+            paddingLeft: theme.spacing.medium,
+            paddingRight: theme.spacing.medium,
+            paddingBottom: theme.spacing.medium,
+          }
+        : {}),
+      }
 )
 
 type AccordionPropsBase = {
@@ -219,9 +220,9 @@ export default function Accordion({
 
   const kids = useMemo(
     () =>
-      typeof children === 'function'
-        ? children({ isOpen: !!isOpen })
-        : children,
+      typeof children === 'function' ?
+        children({ isOpen: !!isOpen })
+      : children,
     [children, isOpen]
   )
 
@@ -239,16 +240,15 @@ export default function Accordion({
     ...triggerProps,
   }
 
-  const trigger = triggerButton ? (
-    React.cloneElement(triggerButton, finalTriggerProps)
-  ) : (
-    <AccordionTrigger
-      unstyled={unstyled}
-      {...finalTriggerProps}
-    >
-      {label}
-    </AccordionTrigger>
-  )
+  const trigger =
+    triggerButton ?
+      React.cloneElement(triggerButton, finalTriggerProps)
+    : <AccordionTrigger
+        unstyled={unstyled}
+        {...finalTriggerProps}
+      >
+        {label}
+      </AccordionTrigger>
 
   return (
     <Wrapper {...props}>

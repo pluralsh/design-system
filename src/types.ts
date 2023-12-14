@@ -48,8 +48,8 @@ export function sanitizeSeverity<T extends SeverityExt>(
     `Warning: Severity of "${severity}" is not allowed. Using default of "${opts.default}"`
   )
 
-  return opts.allowList.includes('neutral' as T)
-    ? ('neutral' as T)
+  return opts.allowList.includes('neutral' as T) ?
+      ('neutral' as T)
     : opts.default
 }
 

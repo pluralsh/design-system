@@ -26,13 +26,11 @@ const SelectItemWrap = styled.label<SelectItemWrapProps>(
     padding: `${theme.spacing.xxsmall}px ${theme.spacing.small}px`,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: selected
-      ? theme.colors['fill-two-selected']
-      : 'transparent',
+    backgroundColor:
+      selected ? theme.colors['fill-two-selected'] : 'transparent',
     border: theme.borders.default,
-    borderColor: selected
-      ? theme.colors['border-selected']
-      : theme.colors['border-input'],
+    borderColor:
+      selected ? theme.colors['border-selected'] : theme.colors['border-input'],
     borderRadius: theme.borderRadiuses.medium,
     color: selected ? theme.colors.text : theme.colors['text-light'],
     cursor: 'pointer',

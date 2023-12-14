@@ -35,9 +35,9 @@ function ContextAwareStepper(): JSX.Element {
   const { active } = useActive()
   const { selectedCount } = usePicker()
   const filteredWizardSteps =
-    isFirst && selectedCount < limit
-      ? wizardSteps
-      : wizardSteps.filter((i) => !i.isPlaceholder)
+    isFirst && selectedCount < limit ?
+      wizardSteps
+    : wizardSteps.filter((i) => !i.isPlaceholder)
   const stepperSteps: StepperSteps = Array.from(
     toStepperSteps(filteredWizardSteps)
   )

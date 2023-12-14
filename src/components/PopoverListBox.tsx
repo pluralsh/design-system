@@ -38,8 +38,9 @@ export const PopoverWrapper = styled.div<{
   ...(placement.endsWith('end') && { right: 0, left: 'auto' }),
   pointerEvents: 'none',
   zIndex: theme.zIndexes.selectPopover,
-  clipPath: placement.startsWith('top')
-    ? `polygon(-100px calc(100% + ${theme.spacing.xxsmall}px), calc(100% + 100px) calc(100% + ${theme.spacing.xxsmall}px), calc(100% + 100px) -100px, -100px -100px)`
+  clipPath:
+    placement.startsWith('top') ?
+      `polygon(-100px calc(100% + ${theme.spacing.xxsmall}px), calc(100% + 100px) calc(100% + ${theme.spacing.xxsmall}px), calc(100% + 100px) -100px, -100px -100px)`
     : `polygon(-100px ${-theme.spacing
         .xxsmall}px, -100px calc(100% + 100px), calc(100% + 100px) calc(100% + 100px), calc(100% + 100px) ${-theme
         .spacing.xxsmall}px)`,
@@ -77,8 +78,9 @@ function PopoverListBox({
     from: { ...out, delay: 1000 },
     enter: { opacity: 1, yOffset: 0 },
     leave: out,
-    config: isOpen
-      ? {
+    config:
+      isOpen ?
+        {
           mass: 0.6,
           tension: 280,
           velocity: 0.02,

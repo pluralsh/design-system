@@ -16,9 +16,8 @@ function Template(args: any) {
       css={{
         display: 'flex',
         maxWidth: args.containerWidth || undefined,
-        background: args.showContainer
-          ? 'rgba(255, 255, 255, 0.05)'
-          : undefined,
+        background:
+          args.showContainer ? 'rgba(255, 255, 255, 0.05)' : undefined,
         overflow: 'auto',
       }}
     >

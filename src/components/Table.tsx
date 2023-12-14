@@ -100,11 +100,9 @@ function getGridTemplateCols(columnDefs: ColumnDef<unknown>[] = []): string {
     .reduce(
       (val: string[], columnDef): string[] => [
         ...val,
-        columnDef.meta?.gridTemplate
-          ? columnDef.meta?.gridTemplate
-          : columnDef.meta?.truncate
-          ? 'minmax(100px, 1fr)'
-          : 'auto',
+        columnDef.meta?.gridTemplate ? columnDef.meta?.gridTemplate
+        : columnDef.meta?.truncate ? 'minmax(100px, 1fr)'
+        : 'auto',
       ],
       [] as string[]
     )
@@ -175,19 +173,18 @@ const Tr = styled.tr<{
     $selected: selected = false,
   }) => ({
     display: 'contents',
-    backgroundColor: selected
-      ? theme.colors['fill-one-selected']
-      : lighter || (selectable && !selected)
-      ? theme.colors['fill-one']
+    backgroundColor:
+      selected ? theme.colors['fill-one-selected']
+      : lighter || (selectable && !selected) ? theme.colors['fill-one']
       : theme.colors['fill-one-hover'],
 
     ...(clickable && {
       cursor: 'pointer',
 
       '&:hover': {
-        backgroundColor: selectable
-          ? selected
-            ? theme.colors['fill-one-selected']
+        backgroundColor:
+          selectable ?
+            selected ? theme.colors['fill-one-selected']
             : theme.colors['fill-one-hover']
           : theme.colors['fill-one-selected'],
       },
@@ -235,18 +232,18 @@ const Th = styled.th<{
     },
   },
   '&:first-child': {
-    ...(stickyColumn
-      ? {
-          backgroundColor: 'inherit',
-          position: 'sticky',
-          left: 0,
+    ...(stickyColumn ?
+      {
+        backgroundColor: 'inherit',
+        position: 'sticky',
+        left: 0,
+        zIndex: 5,
+        '.thOuterWrap': {
+          boxShadow: theme.boxShadows.slight,
           zIndex: 5,
-          '.thOuterWrap': {
-            boxShadow: theme.boxShadows.slight,
-            zIndex: 5,
-          },
-        }
-      : {}),
+        },
+      }
+    : {}),
   },
 }))
 
@@ -278,24 +275,25 @@ const Td = styled.td<{
     color: theme.colors.text,
 
     padding: loose ? '16px 12px' : '8px 12px',
-    '&:first-child': stickyColumn
-      ? {
+    '&:first-child':
+      stickyColumn ?
+        {
           boxShadow: theme.boxShadows.slight,
           position: 'sticky',
           left: 0,
           zIndex: 1,
         }
       : {},
-    ...(truncateColumn
-      ? {
-          '*': {
-            width: '100%',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          },
-        }
-      : {}),
+    ...(truncateColumn ?
+      {
+        '*': {
+          width: '100%',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+        },
+      }
+    : {}),
   })
 )
 
@@ -430,18 +428,18 @@ function FillerRows({
       <FillerRow
         height={position === 'top' ? 0 : height}
         index={
-          position === 'top'
-            ? rows[0].index - 2
-            : rows[rows.length - 1].index + 1
+          position === 'top' ?
+            rows[0].index - 2
+          : rows[rows.length - 1].index + 1
         }
         {...props}
       />
       <FillerRow
         height={position === 'top' ? height : 0}
         index={
-          position === 'top'
-            ? rows[0].index - 1
-            : rows[rows.length - 1].index + 2
+          position === 'top' ?
+            rows[0].index - 1
+          : rows[rows.length - 1].index + 2
         }
         {...props}
       />
@@ -633,13 +631,13 @@ function TableRef(
   const { paddingTop, paddingBottom } = useMemo(
     () => ({
       paddingTop:
-        virtualizeRows && virtualRows.length > 0
-          ? virtualRows?.[0]?.start || 0
-          : 0,
+        virtualizeRows && virtualRows.length > 0 ?
+          virtualRows?.[0]?.start || 0
+        : 0,
       paddingBottom:
-        virtualizeRows && virtualRows.length > 0
-          ? virtualHeight - (virtualRows?.[virtualRows.length - 1]?.end || 0)
-          : 0,
+        virtualizeRows && virtualRows.length > 0 ?
+          virtualHeight - (virtualRows?.[virtualRows.length - 1]?.end || 0)
+        : 0,
     }),
     [virtualHeight, virtualRows, virtualizeRows]
   )
@@ -699,27 +697,25 @@ function TableRef(
                   <Th
                     key={header.id}
                     $stickyColumn={stickyColumn}
-                    {...(header.column.getCanSort()
-                      ? {
-                          $cursor:
-                            header.column.getIsSorted() === 'asc'
-                              ? 's-resize'
-                              : header.column.getIsSorted() === 'desc'
-                              ? 'ns-resize'
-                              : 'n-resize',
-                          onClick: header.column.getToggleSortingHandler(),
-                        }
-                      : {})}
+                    {...(header.column.getCanSort() ?
+                      {
+                        $cursor:
+                          header.column.getIsSorted() === 'asc' ? 's-resize'
+                          : header.column.getIsSorted() === 'desc' ? 'ns-resize'
+                          : 'n-resize',
+                        onClick: header.column.getToggleSortingHandler(),
+                      }
+                    : {})}
                   >
                     <div className="thOuterWrap">
                       <div className="thSortIndicatorWrap">
                         <div>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                          {header.isPlaceholder ? null : (
+                            flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )
+                          )}
                         </div>
                         <SortIndicator
                           direction={header.column.getIsSorted()}
@@ -745,10 +741,9 @@ function TableRef(
             {rows.map((maybeRow) => {
               const i = maybeRow.index
               const isLoaderRow = i > tableRows.length - 1
-              const row: Row<unknown> | null = isRow(maybeRow)
-                ? maybeRow
-                : isLoaderRow
-                ? null
+              const row: Row<unknown> | null =
+                isRow(maybeRow) ? maybeRow
+                : isLoaderRow ? null
                 : tableRows[maybeRow.index]
               const key = row?.id ?? maybeRow.index
               const lighter = i % 2 === 0
@@ -764,11 +759,11 @@ function TableRef(
                     $clickable={!!onRowClick}
                     // data-index is required for virtual scrolling to work
                     data-index={row?.index}
-                    {...(virtualizeRows
-                      ? { ref: rowVirtualizer.measureElement }
-                      : {})}
+                    {...(virtualizeRows ?
+                      { ref: rowVirtualizer.measureElement }
+                    : {})}
                   >
-                    {isNil(row) && isLoaderRow ? (
+                    {isNil(row) && isLoaderRow ?
                       <TdLoading
                         key={i}
                         $firstRow={i === 0}
@@ -781,8 +776,7 @@ function TableRef(
                         <div>Loading</div>
                         <Spinner color={theme.colors['text-xlight']} />
                       </TdLoading>
-                    ) : (
-                      row?.getVisibleCells().map((cell) => (
+                    : row?.getVisibleCells().map((cell) => (
                         <Td
                           key={cell.id}
                           $firstRow={i === 0}
@@ -799,7 +793,7 @@ function TableRef(
                           )}
                         </Td>
                       ))
-                    )}
+                    }
                   </Tr>
                   {row?.getIsExpanded() && (
                     <Tr $lighter={i % 2 === 0}>

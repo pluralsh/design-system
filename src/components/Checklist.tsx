@@ -218,9 +218,9 @@ function ChecklistUnstyled({
       <div
         className={finished ? 'finishContainer grow' : 'finishContainer shrink'}
         style={
-          isFirstRender.current || finished
-            ? { maxHeight: finishedContainerHeight }
-            : { maxHeight: 0, padding: 0 }
+          isFirstRender.current || finished ?
+            { maxHeight: finishedContainerHeight }
+          : { maxHeight: 0, padding: 0 }
         }
         ref={finishedContainerRef}
       >

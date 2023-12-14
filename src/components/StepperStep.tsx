@@ -34,9 +34,9 @@ const StepperStepSC = styled.div<{
     marginRight: $vertical || $compact ? 'none' : 'auto',
     borderRadius: '100%',
     backgroundColor:
-      theme.mode === 'light'
-        ? theme.colors['fill-zero']
-        : theme.colors['fill-one'],
+      theme.mode === 'light' ?
+        theme.colors['fill-zero']
+      : theme.colors['fill-one'],
     border: `1px solid ${
       $isActive ? theme.colors['border-selected'] : theme.colors.border
     }`,
@@ -129,9 +129,9 @@ export function StepperStep({
               <IconComponent
                 size={iconSize}
                 color={
-                  isActive
-                    ? theme.colors['icon-default']
-                    : theme.colors['icon-xlight']
+                  isActive ?
+                    theme.colors['icon-default']
+                  : theme.colors['icon-xlight']
                 }
               />
             )}
@@ -151,9 +151,9 @@ export function StepperStep({
           >
             <StatusOkIcon
               color={
-                compact
-                  ? theme.colors['text-xlight']
-                  : theme.colors['icon-success']
+                compact ?
+                  theme.colors['text-xlight']
+                : theme.colors['icon-success']
               }
               size={iconSize}
             />

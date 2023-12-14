@@ -4,9 +4,9 @@ export type PrefixString<
 > = `${Prefix}${T}`
 
 export type PrefixKeys<T extends object, Prefix extends string, Val = void> = {
-  [key in keyof T as PrefixString<key & string, Prefix>]: Val extends void
-    ? T[key]
-    : Val
+  [key in keyof T as PrefixString<key & string, Prefix>]: Val extends void ?
+    T[key]
+  : Val
 }
 
 export type SuffixString<
@@ -15,9 +15,9 @@ export type SuffixString<
 > = `${T}${Suffix}`
 
 export type SuffixKeys<T extends object, Suffix extends string, Val = void> = {
-  [key in keyof T as SuffixString<key & string, Suffix>]: Val extends void
-    ? T[key]
-    : Val
+  [key in keyof T as SuffixString<key & string, Suffix>]: Val extends void ?
+    T[key]
+  : Val
 }
 
 export function prefixKeys<T extends object, Prefix extends string>(

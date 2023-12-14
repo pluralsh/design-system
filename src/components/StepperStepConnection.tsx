@@ -8,22 +8,31 @@ const StepperStepConnectionSC = styled.div<{
   $isActive: boolean
   $circleSize: number
 }>(({ theme, $vertical, $compact, $isActive, $circleSize }) => ({
-  width: $compact ? '16px' : $vertical ? 1 : '100%',
+  width:
+    $compact ? '16px'
+    : $vertical ? 1
+    : '100%',
   height: $vertical ? 30 : 1,
   flexGrow: $compact ? 0 : 1,
   backgroundColor: theme.colors.border,
   position: 'relative',
   alignSelf: $compact ? 'center' : 'none',
-  marginTop: $vertical
-    ? theme.spacing.small
-    : $compact
-    ? 0
+  marginTop:
+    $vertical ? theme.spacing.small
+    : $compact ? 0
     : ($circleSize || DEFAULT_CIRCLE_SIZE) / 2,
   marginBottom: $vertical ? theme.spacing.small : 'none',
   marginLeft: $vertical ? theme.spacing.large : 'none',
   '.stepConnectionInner': {
-    width: $vertical ? 1 : $isActive ? '100%' : 0,
-    height: $vertical ? ($isActive ? 30 : 0) : '100%',
+    width:
+      $vertical ? 1
+      : $isActive ? '100%'
+      : 0,
+    height:
+      $vertical ?
+        $isActive ? 30
+        : 0
+      : '100%',
     position: 'absolute',
     left: 0,
     top: 0,

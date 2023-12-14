@@ -74,9 +74,9 @@ function Shadows() {
         'slight',
         'moderate',
         'modal',
-        ...(theme.mode === 'light'
-          ? ['slightPurple', 'moderatePurple', 'modalPurple']
-          : []),
+        ...(theme.mode === 'light' ?
+          ['slightPurple', 'moderatePurple', 'modalPurple']
+        : []),
         'focused',
       ].map((key) => (
         <BlockWrapper key={key}>

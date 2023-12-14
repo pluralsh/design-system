@@ -63,9 +63,9 @@ const ListBoxCard = styled(Card).attrs(({ theme }) => ({
   overflowY: 'hidden',
   '.footerFixed': {
     borderTop:
-      theme.mode === 'light'
-        ? theme.borders['fill-one']
-        : theme.borders['fill-two'],
+      theme.mode === 'light' ?
+        theme.borders['fill-one']
+      : theme.borders['fill-two'],
   },
 }))
 
@@ -95,13 +95,12 @@ function propsToTextValue(props: Record<string, unknown> | null | undefined) {
   }
   const { textValue, children, label } = props
 
-  return typeof textValue === 'string' && textValue
-    ? textValue
-    : typeof label === 'string' && label
-    ? label
-    : typeof children === 'string' && children
-    ? children
+  return (
+    typeof textValue === 'string' && textValue ? textValue
+    : typeof label === 'string' && label ? label
+    : typeof children === 'string' && children ? children
     : ''
+  )
 }
 
 function useItemWrappedChildren(

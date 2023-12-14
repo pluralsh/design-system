@@ -36,7 +36,7 @@ const ChipListUnstyled = forwardRef<HTMLDivElement, ChipListProps>(
 
     const extra = useMemo(
       () =>
-        showExtra && restChips.length > 0 ? (
+        showExtra && restChips.length > 0 ?
           <Tooltip
             key="extra"
             placement="top"
@@ -56,7 +56,7 @@ const ChipListUnstyled = forwardRef<HTMLDivElement, ChipListProps>(
           >
             <Chip size="small">{`+${restChips.length}`}</Chip>
           </Tooltip>
-        ) : null,
+        : null,
       [restChips, showExtra]
     )
 

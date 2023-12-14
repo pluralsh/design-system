@@ -218,11 +218,9 @@ const Wrapper = forwardRef<HTMLDivElement, DivProps & { centered: boolean }>(
       {...exitStyles}
       {...props}
     >
-      {centered ? (
+      {centered ?
         <CenteringWrapper>{children}</CenteringWrapper>
-      ) : (
-        <WrapperBase>{children}</WrapperBase>
-      )}
+      : <WrapperBase>{children}</WrapperBase>}
     </Div>
   )
 )

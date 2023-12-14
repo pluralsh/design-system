@@ -129,9 +129,8 @@ const CustomLinkWrappedTab = styled(
   )
 )(({ active, theme }) => ({
   display: 'block',
-  backgroundColor: active
-    ? theme.colors['fill-one']
-    : theme.colors['fill-zero'],
+  backgroundColor:
+    active ? theme.colors['fill-one'] : theme.colors['fill-zero'],
   textDecoration: 'none',
 }))
 
@@ -150,11 +149,10 @@ const MyCustomTab2 = forwardRef<any, any>(({ selectedKey, ...props }, ref) => (
       subtitle2
       padding="small"
       background={
-        selectedKey === 'bears'
-          ? 'action-primary'
-          : selectedKey === 'tigers'
-          ? 'icon-danger'
-          : 'fill-two'
+        selectedKey === 'bears' ? 'action-primary'
+        : selectedKey === 'tigers' ?
+          'icon-danger'
+        : 'fill-two'
       }
     >
       Com&shy;plete&shy;ly custom bears
@@ -188,13 +186,12 @@ function TemplateComplex() {
               padding="10px"
               border="1px solid"
               borderColor={
-                selectedKey === 'lions'
-                  ? 'border.primary'
-                  : selectedKey === 'tigers'
-                  ? 'border-warning'
-                  : selectedKey === 'bears'
-                  ? 'border-success'
-                  : 'border-danger'
+                selectedKey === 'lions' ? 'border.primary'
+                : selectedKey === 'tigers' ?
+                  'border-warning'
+                : selectedKey === 'bears' ?
+                  'border-success'
+                : 'border-danger'
               }
             />
           }

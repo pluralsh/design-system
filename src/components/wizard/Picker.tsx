@@ -136,9 +136,9 @@ function PickerUnstyled({ items, ...props }: PickerProps): JSX.Element {
               checked={selected.findIndex((s) => s.label === item.label) > -1}
               disabled={isDisabled(item)}
               tooltip={
-                item.isRequired
-                  ? item.tooltip || 'This is a required application.'
-                  : undefined
+                item.isRequired ?
+                  item.tooltip || 'This is a required application.'
+                : undefined
               }
             />
           ))}

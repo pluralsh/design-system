@@ -70,30 +70,27 @@ const ItemSC = styled.div<{
   borderRadius: '3px',
   overflow: 'hidden',
   color: theme.colors['icon-light'],
-  backgroundColor: $active
-    ? theme.mode === 'light'
-      ? theme.colors['fill-one-selected']
-      : $variant === 'console'
-      ? theme.colors['fill-zero-selected']
+  backgroundColor:
+    $active ?
+      theme.mode === 'light' ? theme.colors['fill-one-selected']
+      : $variant === 'console' ? theme.colors['fill-zero-selected']
       : theme.colors['fill-one-selected']
     : 'transparent',
-  ...($clickable
-    ? {
-        cursor: 'pointer',
-        ...(!$active
-          ? {
-              ':hover': {
-                backgroundColor:
-                  theme.mode === 'light'
-                    ? theme.colors['fill-zero-hover']
-                    : $variant === 'console'
-                    ? theme.colors['fill-zero-hover']
-                    : theme.colors['fill-one-hover'],
-              },
-            }
-          : {}),
-      }
-    : {}),
+  ...($clickable ?
+    {
+      cursor: 'pointer',
+      ...(!$active ?
+        {
+          ':hover': {
+            backgroundColor:
+              theme.mode === 'light' ? theme.colors['fill-zero-hover']
+              : $variant === 'console' ? theme.colors['fill-zero-hover']
+              : theme.colors['fill-one-hover'],
+          },
+        }
+      : {}),
+    }
+  : {}),
 }))
 
 function ItemRef(

@@ -19,9 +19,9 @@ function typeToBG(theme: typeof styledTheme): Record<Type, string> {
     secondary: 'transparent',
     tertiary: 'transparent',
     floating:
-      theme.mode === 'light'
-        ? theme.colors['fill-three']
-        : theme.colors['fill-two'],
+      theme.mode === 'light' ?
+        theme.colors['fill-three']
+      : theme.colors['fill-two'],
   }
 }
 
@@ -30,9 +30,9 @@ function typeToHoverBG(theme: typeof styledTheme): Record<Type, string> {
     secondary: theme.colors['action-input-hover'],
     tertiary: theme.colors['action-input-hover'],
     floating:
-      theme.mode === 'light'
-        ? theme.colors['fill-three-hover']
-        : theme.colors['fill-two-hover'],
+      theme.mode === 'light' ?
+        theme.colors['fill-three-hover']
+      : theme.colors['fill-two-hover'],
   }
 }
 
@@ -41,9 +41,9 @@ function typeToSelectedBG(theme: typeof styledTheme): Record<Type, string> {
     secondary: undefined,
     tertiary: undefined,
     floating:
-      theme.mode === 'light'
-        ? theme.colors['fill-three-selected']
-        : theme.colors['fill-two-selected'],
+      theme.mode === 'light' ?
+        theme.colors['fill-three-selected']
+      : theme.colors['fill-two-selected'],
   }
 }
 
@@ -52,9 +52,9 @@ function typeToFocusBG(theme: typeof styledTheme): Record<Type, string> {
     secondary: undefined,
     tertiary: undefined,
     floating:
-      theme.mode === 'light'
-        ? theme.colors['fill-three-selected']
-        : theme.colors['fill-two-selected'],
+      theme.mode === 'light' ?
+        theme.colors['fill-three-selected']
+      : theme.colors['fill-two-selected'],
   }
 }
 
@@ -105,42 +105,42 @@ const IconFrameSC = styled(Flex)<{
   justifyContent: 'center',
   width: sizeToFrameSize[$size],
   height: sizeToFrameSize[$size],
-  backgroundColor: $selected
-    ? typeToSelectedBG(theme)[$type]
-    : typeToBG(theme)[$type],
+  backgroundColor:
+    $selected ? typeToSelectedBG(theme)[$type] : typeToBG(theme)[$type],
   border: typeToBorder(theme)[$type],
   borderRadius: theme.borderRadiuses.medium,
 
   '&:focus,&:focus-visible': { outline: 'none' },
   '&:focus-visible,&:hover:focus-visible': {
     ...theme.partials.focus.default,
-    ...(typeToFocusBG(theme)[$type]
-      ? { backgroundColor: typeToFocusBG(theme)[$type] }
-      : {}),
+    ...(typeToFocusBG(theme)[$type] ?
+      { backgroundColor: typeToFocusBG(theme)[$type] }
+    : {}),
   },
   '&,&:any-link': {
     textDecoration: 'none',
     color: 'unset',
     appearance: 'unset',
   },
-  ...($clickable
-    ? {
-        cursor: 'pointer',
-        '&:hover': {
-          backgroundColor: $selected
-            ? typeToSelectedBG(theme)[$type]
-            : $clickable && typeToHoverBG(theme)[$type],
-        },
-      }
-    : {}),
-  ...($type === 'floating'
-    ? {
-        boxShadow:
-          theme.mode === 'light'
-            ? theme.boxShadows.slight
-            : theme.boxShadows.moderate,
-      }
-    : {}),
+  ...($clickable ?
+    {
+      cursor: 'pointer',
+      '&:hover': {
+        backgroundColor:
+          $selected ?
+            typeToSelectedBG(theme)[$type]
+          : $clickable && typeToHoverBG(theme)[$type],
+      },
+    }
+  : {}),
+  ...($type === 'floating' ?
+    {
+      boxShadow:
+        theme.mode === 'light' ?
+          theme.boxShadows.slight
+        : theme.boxShadows.moderate,
+    }
+  : {}),
 }))
 
 const IconFrame = forwardRef<HTMLDivElement, IconFrameProps>(

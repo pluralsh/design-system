@@ -46,8 +46,9 @@ const HonorableLabelStyled = styled(Label)<{
   gap: theme.spacing.small,
   alignItems: 'center',
   padding: theme.spacing.xxsmall,
-  color: $disabled
-    ? theme.colors['text-input-disabled']
+  color:
+    $disabled ?
+      theme.colors['text-input-disabled']
     : theme.colors['text-light'],
   cursor: $disabled ? 'not-allowed' : 'pointer',
   margin: 0,
@@ -62,61 +63,60 @@ const HonorableLabelStyled = styled(Label)<{
     flexGrow: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    ...($isFocusVisible
-      ? { ...theme.partials.focus.outline, border: 'none' }
-      : {}),
+    ...($isFocusVisible ?
+      { ...theme.partials.focus.outline, border: 'none' }
+    : {}),
     borderRadius: '50%',
     border: theme.borders.input,
-    borderColor: $disabled
-      ? theme.colors['border-disabled']
+    borderColor:
+      $disabled ?
+        theme.colors['border-disabled']
       : theme.colors['border-input'],
-    backgroundColor: $disabled
-      ? theme.colors['action-primary-disabled']
-      : $isFocusVisible
-      ? theme.colors['action-input-hover']
+    backgroundColor:
+      $disabled ? theme.colors['action-primary-disabled']
+      : $isFocusVisible ? theme.colors['action-input-hover']
       : 'transparent',
     '.icon': {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      color: $disabled
-        ? theme.colors['action-primary-disabled']
-        : $isFocusVisible
-        ? theme.colors['action-primary-hover']
+      color:
+        $disabled ? theme.colors['action-primary-disabled']
+        : $isFocusVisible ? theme.colors['action-primary-hover']
         : theme.colors['action-primary'],
     },
   },
-  ...(!$disabled
-    ? {
-        ':hover': {
+  ...(!$disabled ?
+    {
+      ':hover': {
+        color: theme.colors.text,
+        ':not(.checked) .box': {
+          backgroundColor: theme.colors['action-input-hover'],
+        },
+        '.icon': {
+          color: theme.colors['action-primary-hover'],
+        },
+      },
+      ...($isFocusVisible ?
+        {
           color: theme.colors.text,
           ':not(.checked) .box': {
             backgroundColor: theme.colors['action-input-hover'],
           },
-          '.icon': {
-            color: theme.colors['action-primary-hover'],
-          },
-        },
-        ...($isFocusVisible
-          ? {
-              color: theme.colors.text,
-              ':not(.checked) .box': {
-                backgroundColor: theme.colors['action-input-hover'],
-              },
-            }
-          : {}),
-        '&.checked': {
-          color: theme.colors.text,
-          ...(!$isFocusVisible
-            ? {
-                '.box': {
-                  borderColor: theme.colors['border-selected'],
-                },
-              }
-            : {}),
-        },
-      }
-    : {}),
+        }
+      : {}),
+      '&.checked': {
+        color: theme.colors.text,
+        ...(!$isFocusVisible ?
+          {
+            '.box': {
+              borderColor: theme.colors['border-selected'],
+            },
+          }
+        : {}),
+      },
+    }
+  : {}),
 }))
 
 export type RadioProps = AriaRadioProps & {

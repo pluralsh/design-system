@@ -142,15 +142,14 @@ function CalendarGrid({
         {[...new Array(weeksInMonth).keys()].map((weekIndex) => (
           <tr key={weekIndex}>
             {state.getDatesInWeek(weekIndex).map((date, i) =>
-              date ? (
+              date ?
                 <CalendarCell
                   key={i}
                   state={state}
                   date={date}
                 />
-              ) : (
-                <td key={i} />
-              )
+                // eslint-disable-next-line jsx-a11y/control-has-associated-label
+              : <td key={i} />
             )}
           </tr>
         ))}
@@ -198,9 +197,9 @@ const NextPrevButtonSC = styled(IconFrame)<{ $disabled: boolean }>(
   ({ $disabled, theme }) => ({
     '&&': {
       border: theme.borders.input,
-      ...($disabled
-        ? { cursor: 'not-allowed', color: theme.colors['icon-disabled'] }
-        : {}),
+      ...($disabled ?
+        { cursor: 'not-allowed', color: theme.colors['icon-disabled'] }
+      : {}),
     },
   })
 )

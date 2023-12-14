@@ -86,19 +86,19 @@ const CodeHeader = styled(CodeHeaderUnstyled)<{ $visuallyHidden?: boolean }>(
     gap: theme.spacing.medium,
     borderTopLeftRadius: theme.borderRadiuses.medium + 2,
     borderTopRightRadius: theme.borderRadiuses.medium + 2,
-    ...($visuallyHidden
-      ? {
-          pointerEvents: 'none',
-          height: 0,
-          opacity: 0,
-          overflow: 'hidden',
-          minHeight: 0,
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          left: 0,
-        }
-      : {}),
+    ...($visuallyHidden ?
+      {
+        pointerEvents: 'none',
+        height: 0,
+        opacity: 0,
+        overflow: 'hidden',
+        minHeight: 0,
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        left: 0,
+      }
+    : {}),
   })
 )
 
@@ -370,7 +370,10 @@ function CodeRef(
   props.height = props.height || undefined
   const hasSetHeight = !!props.height || !!props.minHeight
 
-  showHeader = tabs ? true : showHeader === undefined ? !!language : showHeader
+  showHeader =
+    tabs ? true
+    : showHeader === undefined ? !!language
+    : showHeader
 
   const uiContext: TabsContext = useMemo(
     () => ({
@@ -390,21 +393,21 @@ function CodeRef(
   )
 
   const titleArea =
-    (tabs && title) || !tabs ? (
+    (tabs && title) || !tabs ?
       <TitleArea $shrinkable={tabInterface === 'dropdown' || !tabs}>
         <FileIcon />
         {(title || language) && <div>{title || language}</div>}
       </TitleArea>
-    ) : undefined
+    : undefined
 
   const content = (
     <Card
       ref={ref}
       fillLevel={toFillLevel(Math.min(parentFillLevel + 1, 2))}
       borderColor={
-        parentFillLevel >= 1
-          ? theme.colors['border-fill-three']
-          : theme.colors['border-fill-two']
+        parentFillLevel >= 1 ?
+          theme.colors['border-fill-three']
+        : theme.colors['border-fill-two']
       }
       {...props}
     >
@@ -430,7 +433,7 @@ function CodeRef(
             )}
           </>
         )}
-        {tabs ? (
+        {tabs ?
           tabs.map((tab) => (
             <TabPanel
               key={tab.key}
@@ -454,8 +457,7 @@ function CodeRef(
               </CodeContent>
             </TabPanel>
           ))
-        ) : (
-          <Div
+        : <Div
             position="relative"
             height="100%"
             overflow="hidden"
@@ -468,7 +470,7 @@ function CodeRef(
               {children}
             </CodeContent>
           </Div>
-        )}
+        }
       </Flex>
     </Card>
   )

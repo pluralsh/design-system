@@ -14,13 +14,13 @@ export function toCodeString({
   content: string
   children: RenderableTreeNode[] | RenderableTreeNode
 }): string {
-  return process
-    ? typeof children === 'string'
-      ? children
-      : Array.isArray(children)
-      ? children.join('')
+  return (
+    process ?
+      typeof children === 'string' ? children
+      : Array.isArray(children) ? children.join('')
       : ''
     : content || ''
+  )
 }
 
 export const FenceInner = styled(CodeBase)(({ theme }) => ({

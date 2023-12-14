@@ -100,8 +100,9 @@ const SunSC = styled.svg<SwitchStyleProps>((_) => ({
 
 function Sun(props: SwitchStyleProps) {
   const theme = useTheme()
-  const color = !props.$checked
-    ? theme.colors.yellow[500]
+  const color =
+    !props.$checked ?
+      theme.colors.yellow[500]
     : theme.colors['text-primary-disabled']
 
   return (
@@ -144,18 +145,21 @@ const SwitchSC = styled.label<SwitchStyleProps>(
     columnGap: theme.spacing.xsmall,
     alignItems: 'center',
     ...theme.partials.text.body2,
-    cursor: $disabled ? 'not-allowed' : $readOnly ? 'default' : 'pointer',
+    cursor:
+      $disabled ? 'not-allowed'
+      : $readOnly ? 'default'
+      : 'pointer',
     color: theme.colors['text-light'],
-    ...($disabled || $readOnly
-      ? {}
-      : {
-          '&:hover': {
-            color: theme.colors.text,
-            [SwitchToggleSC]: {
-              backgroundColor: theme.colors['action-input-hover'],
-            },
+    ...($disabled || $readOnly ?
+      {}
+    : {
+        '&:hover': {
+          color: theme.colors.text,
+          [SwitchToggleSC]: {
+            backgroundColor: theme.colors['action-input-hover'],
           },
-        }),
+        },
+      }),
   })
 )
 
@@ -169,10 +173,9 @@ const SwitchToggleSC = styled.div<SwitchStyleProps>(
     outlineWidth: 1,
     outlineStyle: 'solid',
     outlineOffset: -1,
-    outlineColor: $disabled
-      ? theme.colors['border-disabled']
-      : $focused
-      ? theme.colors['border-outline-focused']
+    outlineColor:
+      $disabled ? theme.colors['border-disabled']
+      : $focused ? theme.colors['border-outline-focused']
       : theme.colors['border-input'],
     transition: 'all 0.15s ease',
   })
@@ -196,9 +199,9 @@ const SwitchHandleSC = styled(
         left: '50%',
         borderRadius: `${HANDLE_SIZE / 2}px`,
         transform: `translateX(${
-          $checked
-            ? SWITCH_WIDTH / 2 - (HANDLE_SIZE - HANDLE_MARGIN)
-            : -(SWITCH_WIDTH / 2 - (HANDLE_SIZE - HANDLE_MARGIN))
+          $checked ?
+            SWITCH_WIDTH / 2 - (HANDLE_SIZE - HANDLE_MARGIN)
+          : -(SWITCH_WIDTH / 2 - (HANDLE_SIZE - HANDLE_MARGIN))
         }px)`,
       },
     })
@@ -206,7 +209,11 @@ const SwitchHandleSC = styled(
 )`
   &::before {
     animation-name: ${(p) =>
-      p.$animate ? (p.$checked ? slideOnAnim : slideOffAnim) : 'none'};
+      p.$animate ?
+        p.$checked ?
+          slideOnAnim
+        : slideOffAnim
+      : 'none'};
     animation-duration: 0.2s;
     animation-iteration-count: 1;
   }

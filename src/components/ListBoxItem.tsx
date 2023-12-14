@@ -41,16 +41,17 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(
     position: 'relative',
     width: 'auto',
     borderBottom:
-      theme.mode === 'light'
-        ? theme.borders.default
-        : theme.borders['fill-two'],
+      theme.mode === 'light' ?
+        theme.borders.default
+      : theme.borders['fill-two'],
     padding: `${theme.spacing.xsmall}px ${theme.spacing.medium}px`,
     backgroundColor: 'none',
     cursor: 'pointer',
     '&:hover': {
-      backgroundColor: !disabled
-        ? theme.mode === 'light'
-          ? theme.colors['fill-one-hover']
+      backgroundColor:
+        !disabled ?
+          theme.mode === 'light' ?
+            theme.colors['fill-one-hover']
           : theme.colors['fill-two-hover']
         : 'none',
     },
@@ -83,10 +84,9 @@ const ListBoxItemInner = styled.div<Partial<ListBoxItemProps>>(
     },
     '.label': {
       ...theme.partials.text.body2,
-      color: disabled
-        ? theme.colors['text-primary-disabled']
-        : destructive
-        ? theme.colors['text-danger']
+      color:
+        disabled ? theme.colors['text-primary-disabled']
+        : destructive ? theme.colors['text-danger']
         : theme.colors.text,
     },
     '.description': {
@@ -177,9 +177,9 @@ const ListBoxFooterInner = styled.button<{ focused?: boolean }>(
     padding: `${theme.spacing.small}px ${theme.spacing.medium}px`,
     '&:hover': {
       backgroundColor:
-        theme.mode === 'light'
-          ? theme.colors['fill-one-hover']
-          : theme.colors['fill-two-hover'],
+        theme.mode === 'light' ?
+          theme.colors['fill-one-hover']
+        : theme.colors['fill-two-hover'],
     },
     '.children': {
       flexGrow: 1,
@@ -196,11 +196,11 @@ const ListBoxFooterInner = styled.button<{ focused?: boolean }>(
     '&:focus-visible::after': {
       ...theme.partials.focus.insetAbsolute,
     },
-    ...(focused
-      ? {
-          '&::after': { ...theme.partials.focus.insetAbsolute },
-        }
-      : {}),
+    ...(focused ?
+      {
+        '&::after': { ...theme.partials.focus.insetAbsolute },
+      }
+    : {}),
   })
 )
 const ListBoxFooter = forwardRef<HTMLButtonElement, ListBoxFooterProps>(

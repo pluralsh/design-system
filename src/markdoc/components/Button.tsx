@@ -49,15 +49,15 @@ function Button({
         {...buttonProps}
         {...(Icon ? { startIcon: <Icon size={16} /> } : {})}
         href={href}
-        {...(isExternalUrl(href)
-          ? {
-              as: 'a',
-              target: '_blank',
-              rel: 'nofollow noopener',
-            }
-          : {
-              as: LinkComponent,
-            })}
+        {...(isExternalUrl(href) ?
+          {
+            as: 'a',
+            target: '_blank',
+            rel: 'nofollow noopener',
+          }
+        : {
+            as: LinkComponent,
+          })}
       >
         {children}
       </PluralButton>

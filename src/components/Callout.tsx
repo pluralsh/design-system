@@ -155,9 +155,9 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
     fillLevel = toFillLevel(
       Math.max(
         2,
-        isFillLevel(fillLevel) && fillLevel >= 0
-          ? fillLevel
-          : parentFillLevel + 1
+        isFillLevel(fillLevel) && fillLevel >= 0 ?
+          fillLevel
+        : parentFillLevel + 1
       )
     )
 
@@ -202,11 +202,10 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
               contentClassName={classNames('body', { bodyWithTitle: !!title })}
               duration={300}
               height={
-                (expandable && expanded) || !expandable
-                  ? 'auto'
-                  : size === 'compact'
-                  ? theme.spacing.xsmall
-                  : theme.spacing.medium
+                (expandable && expanded) || !expandable ? 'auto'
+                : size === 'compact' ?
+                  theme.spacing.xsmall
+                : theme.spacing.medium
               }
             >
               <div className="children">{children}</div>
@@ -227,20 +226,18 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
                 display="flex"
                 size="small"
                 clickable
-                {...(closeable && onClose
-                  ? {
-                      onClick: () => {
-                        onClose(!closed)
-                      },
-                    }
-                  : {})}
+                {...(closeable && onClose ?
+                  {
+                    onClick: () => {
+                      onClose(!closed)
+                    },
+                  }
+                : {})}
                 {...(expandable && expanded ? triggerProps : {})}
                 icon={
-                  expandable ? (
+                  expandable ?
                     <CaretDownIcon className="expandIcon" />
-                  ) : (
-                    <CloseIcon />
-                  )
+                  : <CloseIcon />
                 }
               />
             </Flex>
@@ -261,9 +258,9 @@ const CalloutSC = styled.div<{
   display: 'flex',
   gap: theme.spacing.small,
   padding:
-    $size === 'compact'
-      ? `${theme.spacing.xsmall}px ${theme.spacing.medium}px`
-      : `${theme.spacing.medium}px`,
+    $size === 'compact' ?
+      `${theme.spacing.xsmall}px ${theme.spacing.medium}px`
+    : `${theme.spacing.medium}px`,
   margin: 0,
   borderRadius: theme.borderRadiuses.medium,
   ...theme.partials.text.body2LooseLineHeight,
@@ -278,9 +275,9 @@ const CalloutSC = styled.div<{
     ...(!$expanded && {
       '&:hover': {
         backgroundColor:
-          $fillLevel >= 3
-            ? theme.colors['fill-three-hover']
-            : theme.colors['fill-two-hover'],
+          $fillLevel >= 3 ?
+            theme.colors['fill-three-hover']
+          : theme.colors['fill-two-hover'],
       },
     }),
     '.body': {
@@ -359,20 +356,18 @@ const CalloutSC = styled.div<{
     ...theme.partials.dropdown.arrowTransition({ isOpen: $expanded }),
   },
   // Overrides for light mode
-  ...(theme.mode === 'light'
-    ? {
-        backgroundColor:
-          $fillLevel >= 3
-            ? theme.colors['fill-zero']
-            : theme.colors['fill-one'],
-        boxShadow: theme.boxShadows.moderate,
-        '&::after': {
-          borderRadius: theme.borderRadiuses.medium,
-          border:
-            $fillLevel >= 3 ? theme.borders['fill-two'] : theme.borders.default,
-        },
-      }
-    : {}),
+  ...(theme.mode === 'light' ?
+    {
+      backgroundColor:
+        $fillLevel >= 3 ? theme.colors['fill-zero'] : theme.colors['fill-one'],
+      boxShadow: theme.boxShadows.moderate,
+      '&::after': {
+        borderRadius: theme.borderRadiuses.medium,
+        border:
+          $fillLevel >= 3 ? theme.borders['fill-two'] : theme.borders.default,
+      },
+    }
+  : {}),
 }))
 
 Callout.propTypes = {

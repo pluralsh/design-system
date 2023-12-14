@@ -88,9 +88,9 @@ const ChipCardSC = styled(Card)<{ $size: ChipSize; $severity: ChipSeverity }>(({
   theme,
 }) => {
   const textColor =
-    theme.mode === 'light'
-      ? theme.colors['text-light']
-      : theme.colors[severityToColor[$severity]] || theme.colors.text
+    theme.mode === 'light' ?
+      theme.colors['text-light']
+    : theme.colors[severityToColor[$severity]] || theme.colors.text
 
   return {
     '.closeIcon': {

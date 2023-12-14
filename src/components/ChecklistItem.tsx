@@ -24,8 +24,9 @@ const ChecklistItemInner = styled(ChecklistItemInnerUnstyled)(
       display: 'flex',
       gap: 12,
       alignItems: 'center',
-      color: selected
-        ? theme.colors['action-link-active']
+      color:
+        selected ?
+          theme.colors['action-link-active']
         : theme.colors['action-link-inactive'],
       cursor: 'pointer',
 

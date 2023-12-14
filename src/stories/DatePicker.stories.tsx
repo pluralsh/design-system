@@ -45,11 +45,10 @@ function Template() {
     <FormField
       label="Choose a date"
       hint={
-        !date
-          ? 'Date has not been set'
-          : isInvalid
-          ? 'Date must be in the last 4 months'
-          : undefined
+        !date ? 'Date has not been set'
+        : isInvalid ?
+          'Date must be in the last 4 months'
+        : undefined
       }
       error={isInvalid}
     >

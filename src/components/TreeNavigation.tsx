@@ -353,8 +353,9 @@ export function TreeNavEntry({
   const expand = useSpring({
     height: isOpen ? `${height}px` : '0px',
     immediate: !prevHeight,
-    config: isOpen
-      ? {
+    config:
+      isOpen ?
+        {
           mass: 0.6,
           tension: 280,
           velocity: 0.02,
