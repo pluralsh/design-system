@@ -4113,9 +4113,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@markdoc/markdoc@npm:0.3.2":
-  version: 0.3.2
-  resolution: "@markdoc/markdoc@npm:0.3.2"
+"@markdoc/markdoc@npm:0.3.5":
+  version: 0.3.5
+  resolution: "@markdoc/markdoc@npm:0.3.5"
   dependencies:
     "@types/markdown-it": 12.2.3
   peerDependencies:
@@ -4129,7 +4129,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 18a6899df76389aafc46002e8b6c04770b85a8566594a68b5aacc6938ddb68f97b9434e2f28fe5b93a253d7a77e5b82cece1d4cceb6d281ea8e5ee5502a00317
+  checksum: 620232293342afbba0cd9f49422478a58da73d2ac2a48911e00519c3cd33b66727a1d1dc8ab6fd88c25fc80d25484bb669c90f2ad93c46f2b2f3014f9ef5e0db
   languageName: node
   linkType: hard
 
@@ -4268,7 +4268,7 @@ __metadata:
     "@emotion/styled": 11.11.0
     "@floating-ui/react-dom-interactions": 0.13.3
     "@loomhq/loom-embed": 1.5.0
-    "@markdoc/markdoc": 0.3.2
+    "@markdoc/markdoc": 0.3.5
     "@monaco-editor/react": 4.5.1
     "@pluralsh/eslint-config-typescript": 2.5.112
     "@react-aria/utils": 3.22.0
