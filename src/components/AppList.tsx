@@ -290,6 +290,7 @@ function AppUnstyled({
         url={logoUrl}
         icon={icon}
         size="xsmall"
+        hue="lightest"
       />
       <div className="text-container">
         <div className="title">{name}</div>
