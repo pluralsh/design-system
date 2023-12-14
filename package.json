@@ -120,7 +120,7 @@
     "storybook": "7.6.3",
     "styled-components": "5.3.11",
     "typescript": "5.2.2",
-    "vite": "4.5.0",
+    "vite": "4.5.1",
     "vitest": "0.34.6"
   },
   "peerDependencies": {
