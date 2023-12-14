@@ -2,7 +2,6 @@
   "name": "@pluralsh/design-system",
   "version": "0.1.0",
   "description": "Pluralsh Design System",
-  "type": "module",
   "main": "dist/index.js",
   "files": [
     "dist/**/*",
@@ -120,9 +119,9 @@
     "rimraf": "5.0.1",
     "storybook": "7.6.4",
     "styled-components": "5.3.11",
-    "typescript": "5.3.3",
+    "typescript": "5.2.2",
     "vite": "5.0.9",
-    "vitest": "1.0.4"
+    "vitest": "0.34.6"
   },
   "peerDependencies": {
     "@emotion/react": ">=11.11.0",
