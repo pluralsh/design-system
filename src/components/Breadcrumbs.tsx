@@ -163,13 +163,21 @@ function CrumbSelect({
         triggerButton={<CrumbSelectTrigger />}
         width="180px"
       >
-        {breadcrumbs.map((crumb) => (
-          <ListBoxItem
-            key={getCrumbKey(crumb)}
-            label={crumb.label}
-            textValue={crumb.textValue || ''}
-          />
-        ))}
+        {breadcrumbs.map((crumb) => {
+          const textValue = crumb.textValue
+            ? crumb.textValue
+            : typeof crumb.label === 'string'
+            ? crumb.label
+            : null
+
+          return (
+            <ListBoxItem
+              key={getCrumbKey(crumb)}
+              label={crumb.label}
+              {...(textValue ? { textValue } : {})}
+            />
+          )
+        })}
       </Select>
       {!isLast && <CrumbSeparator />}
     </CrumbLinkWrap>
