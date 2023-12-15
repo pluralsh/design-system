@@ -169,17 +169,17 @@ const expandingColumns = [
           size={8}
           cursor="pointer"
           style={
-            row.getIsExpanded() ?
-              {
-                transform: 'rotate(270deg)',
-                transitionDuration: '.2s',
-                transitionProperty: 'transform',
-              }
-            : {
-                transform: 'rotate(180deg)',
-                transitionDuration: '.2s',
-                transitionProperty: 'transform',
-              }
+            row.getIsExpanded()
+              ? {
+                  transform: 'rotate(270deg)',
+                  transitionDuration: '.2s',
+                  transitionProperty: 'transform',
+                }
+              : {
+                  transform: 'rotate(180deg)',
+                  transitionDuration: '.2s',
+                  transitionProperty: 'transform',
+                }
           }
           onClick={row.getToggleExpandedHandler()}
         />

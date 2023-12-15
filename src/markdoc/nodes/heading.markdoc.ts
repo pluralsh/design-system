@@ -15,9 +15,11 @@ function generateID(
   return toHtmlId(
     children
       .map((child) =>
-        typeof child === 'string' ? child
-        : Array.isArray(child?.children) ? generateID(child.children)
-        : ''
+        typeof child === 'string'
+          ? child
+          : Array.isArray(child?.children)
+          ? generateID(child.children)
+          : ''
       )
       .join(' ')
   )

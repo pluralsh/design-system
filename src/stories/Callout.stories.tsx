@@ -122,17 +122,17 @@ function ExpandableTemplate({
           defaultExpanded
           expanded={controlled ? expanded[i] : undefined}
           onExpand={
-            controlled ?
-              (val) => {
-                console.info('Controlled expanded:', val)
-                const next = [...expanded]
+            controlled
+              ? (val) => {
+                  console.info('Controlled expanded:', val)
+                  const next = [...expanded]
 
-                next[i] = val
-                setExpanded(next)
-              }
-            : (val) => {
-                console.info('Uncontrolled expanded:', val)
-              }
+                  next[i] = val
+                  setExpanded(next)
+                }
+              : (val) => {
+                  console.info('Uncontrolled expanded:', val)
+                }
           }
         >
           {fullContent}

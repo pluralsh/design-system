@@ -703,19 +703,22 @@ const getHonorableThemeProps = ({ mode }: { mode: ColorMode }) => {
             backgroundColor: checked ? 'action-primary' : 'transparent',
             border: '1px solid border-input',
             '> span': {
-              backgroundColor:
-                checked ? 'action-link-active' : 'action-link-inactive',
+              backgroundColor: checked
+                ? 'action-link-active'
+                : 'action-link-inactive',
             },
           },
           ':hover': {
             color: 'text',
             '> div:first-of-type': {
-              backgroundColor:
-                checked ? 'action-primary-hover' : 'action-input-hover',
+              backgroundColor: checked
+                ? 'action-primary-hover'
+                : 'action-input-hover',
               border: '1px solid border-input',
               '> span': {
-                backgroundColor:
-                  checked ? 'action-link-active' : 'action-link-active',
+                backgroundColor: checked
+                  ? 'action-link-active'
+                  : 'action-link-active',
               },
             },
           },

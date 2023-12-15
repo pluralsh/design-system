@@ -96,8 +96,8 @@ function useDecideFillLevel({
     return toFillLevel(Math.max(1, fillLevel)) as CardFillLevel
   }
 
-  return isFillLevel(hueToFill[hue]) ?
-      hueToFill[hue]
+  return isFillLevel(hueToFill[hue])
+    ? hueToFill[hue]
     : (toFillLevel(parentFillLevel + 1) as CardFillLevel)
 }
 
@@ -217,9 +217,9 @@ const Card = forwardRef(
           })}`}
           borderRadius={cornerSizeToBorderRadius[size]}
           backgroundColor={
-            selected ?
-              fillToNeutralSelectedBgC[fillLevel]
-            : getBgColor({ theme, fillLevel, severity: cardSeverity })
+            selected
+              ? fillToNeutralSelectedBgC[fillLevel]
+              : getBgColor({ theme, fillLevel, severity: cardSeverity })
           }
           {...{
             '&:focus, &:focus-visible': {

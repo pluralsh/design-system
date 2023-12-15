@@ -109,9 +109,7 @@ function Tooltip({
   const [open, setOpen] = useState(false)
   const arrowRef = useRef()
   const isOpen =
-    displayOn === 'none' ? false
-    : displayOn === 'manual' ? manualOpen
-    : open
+    displayOn === 'none' ? false : displayOn === 'manual' ? manualOpen : open
 
   const totalOffset =
     (showArrow ? ARROW_LENGTH : 0) +

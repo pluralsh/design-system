@@ -152,11 +152,13 @@ function RepositoryCardRef(
               <Flex direction="column">
                 <H1
                   color="text"
-                  {...(variant === 'marketing' ?
-                    featuredLabel ? { title2: true }
-                    : { subtitle1: true }
-                  : size === 'large' ? { title1: true }
-                  : { title2: true })}
+                  {...(variant === 'marketing'
+                    ? featuredLabel
+                      ? { title2: true }
+                      : { subtitle1: true }
+                    : size === 'large'
+                    ? { title1: true }
+                    : { title2: true })}
                 >
                   {title}
                   {!!verified && (
@@ -171,9 +173,9 @@ function RepositoryCardRef(
                 </H1>
                 <H3
                   body2
-                  {...(variant === 'marketing' && !featuredLabel ?
-                    { caption: true }
-                  : { body2: true })}
+                  {...(variant === 'marketing' && !featuredLabel
+                    ? { caption: true }
+                    : { body2: true })}
                   color="text-xlight"
                   marginBottom={size === 'large' ? 'small' : 0}
                 >

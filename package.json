@@ -112,7 +112,7 @@
     "jsdom": "23.0.1",
     "lint-staged": "15.2.0",
     "npm-run-all": "4.1.5",
-    "prettier": "3.1.1",
+    "prettier": "3.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-transition-group": "4.4.5",

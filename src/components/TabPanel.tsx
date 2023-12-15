@@ -95,9 +95,9 @@ function WrappedTabPanel({
     tabPanelProps = {
       'aria-labelledby': thisTabProps.id,
       id: thisTabProps['aria-controls'],
-      ...(state.selectedKey !== tabKey ?
-        { ...visuallyHiddenProps, 'aria-hidden': true }
-      : {}),
+      ...(state.selectedKey !== tabKey
+        ? { ...visuallyHiddenProps, 'aria-hidden': true }
+        : {}),
     }
   }
 

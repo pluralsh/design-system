@@ -63,9 +63,8 @@ const HonorableLabelStyled = styled(Label)<{
   gap: theme.spacing.small,
   alignItems: 'center',
   padding: theme.spacing.xxsmall,
-  color:
-    $disabled ?
-      theme.colors['text-input-disabled']
+  color: $disabled
+    ? theme.colors['text-input-disabled']
     : theme.colors['text-light'],
   cursor: $disabled ? 'not-allowed' : 'pointer',
   margin: 0,
@@ -76,9 +75,9 @@ const HonorableLabelStyled = styled(Label)<{
     width: $small ? theme.spacing.medium : theme.spacing.large,
     height: $small ? theme.spacing.medium : theme.spacing.large,
     position: 'relative',
-    ...($isFocusVisible ?
-      { ...theme.partials.focus.outline, border: 'none' }
-    : {}),
+    ...($isFocusVisible
+      ? { ...theme.partials.focus.outline, border: 'none' }
+      : {}),
     '::before, .icon': {
       position: 'absolute',
       content: '""',
@@ -94,12 +93,12 @@ const HonorableLabelStyled = styled(Label)<{
     '::before': {
       zIndex: 0,
       border: theme.borders.input,
-      ...($disabled ?
-        {
-          borderColor: theme.colors['border-disabled'],
-          backgroundColor: theme.colors['action-primary-disabled'],
-        }
-      : {}),
+      ...($disabled
+        ? {
+            borderColor: theme.colors['border-disabled'],
+            backgroundColor: theme.colors['action-primary-disabled'],
+          }
+        : {}),
     },
     '.icon': {
       zIndex: 2,
@@ -108,37 +107,36 @@ const HonorableLabelStyled = styled(Label)<{
       flexGrow: 0,
       alignItems: 'center',
       justifyContent: 'center',
-      color:
-        !$disabled ?
-          theme.colors['icon-always-white']
+      color: !$disabled
+        ? theme.colors['icon-always-white']
         : theme.colors['icon-disabled'],
     },
   },
-  ...(!$disabled ?
-    {
-      ':hover': {
-        color: theme.colors.text,
-        '> span': {
-          backgroundColor: theme.colors['action-input-hover'],
+  ...(!$disabled
+    ? {
+        ':hover': {
+          color: theme.colors.text,
+          '> span': {
+            backgroundColor: theme.colors['action-input-hover'],
+          },
         },
-      },
-      '&.checked': {
-        color: theme.colors.text,
-      },
-      '&.checked, &.indeterminate': {
-        '.box::before': {
-          border: 'none',
-          backgroundColor: theme.colors['action-primary'],
+        '&.checked': {
+          color: theme.colors.text,
         },
-      },
-      ':hover.checked, :hover.indeterminate': {
-        '.box::before': {
-          border: 'none',
-          backgroundColor: theme.colors['action-primary-hover'],
+        '&.checked, &.indeterminate': {
+          '.box::before': {
+            border: 'none',
+            backgroundColor: theme.colors['action-primary'],
+          },
         },
-      },
-    }
-  : {}),
+        ':hover.checked, :hover.indeterminate': {
+          '.box::before': {
+            border: 'none',
+            backgroundColor: theme.colors['action-primary-hover'],
+          },
+        },
+      }
+    : {}),
 }))
 
 export type CheckboxProps = {
@@ -196,10 +194,11 @@ function Checkbox(
     inputRef
   )
 
-  const icon =
-    indeterminate ? <IndeterminateIcon small={small} />
-    : toggleState.isSelected ? <CheckedIcon small={small} />
-    : null
+  const icon = indeterminate ? (
+    <IndeterminateIcon small={small} />
+  ) : toggleState.isSelected ? (
+    <CheckedIcon small={small} />
+  ) : null
 
   return (
     <HonorableLabelStyled

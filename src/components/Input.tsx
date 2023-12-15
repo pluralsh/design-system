@@ -30,9 +30,9 @@ const PrefixSuffix = styled.div(({ theme }) => ({
   paddingLeft: theme.spacing.small,
   paddingRight: theme.spacing.small,
   backgroundColor:
-    theme.mode === 'light' ?
-      theme.colors['fill-three']
-    : theme.colors['fill-two'],
+    theme.mode === 'light'
+      ? theme.colors['fill-three']
+      : theme.colors['fill-two'],
 }))
 
 const startEndStyles = {
@@ -106,15 +106,17 @@ const Input = forwardRef(
         ],
         InputBase: [
           {
-            paddingLeft:
-              prefix ? 'xsmall'
-              : titleContent ?
-                startIcon ? 'xsmall'
+            paddingLeft: prefix
+              ? 'xsmall'
+              : titleContent
+              ? startIcon
+                ? 'xsmall'
                 : 'small'
               : 'medium',
-            paddingRight:
-              suffix ? 'xsmall'
-              : showClearButton || endIcon ? 'xsmall'
+            paddingRight: suffix
+              ? 'xsmall'
+              : showClearButton || endIcon
+              ? 'xsmall'
               : 'medium',
           },
         ],
@@ -138,9 +140,10 @@ const Input = forwardRef(
     themeExtension = mergeTheme(themeExtension, themeExtensionProp)
 
     const parentFillLevel = useFillLevel()
-    const size =
-      (props as any).large ? 'large'
-      : (props as any).small ? 'small'
+    const size = (props as any).large
+      ? 'large'
+      : (props as any).small
+      ? 'small'
       : 'medium'
 
     inputProps = mergeProps(useFormField()?.fieldProps ?? {}, inputProps)
@@ -165,17 +168,17 @@ const Input = forwardRef(
                     }}
                   />
                 )}
-                {endIcon || suffix ?
+                {endIcon || suffix ? (
                   <>
                     {endIcon}
                     {suffix && <PrefixSuffix>{suffix}</PrefixSuffix>}
                   </>
-                : undefined}
+                ) : undefined}
               </>
             )
           }
           startIcon={
-            hasStartIcon ?
+            hasStartIcon ? (
               <>
                 {(titleContent && (
                   <InputTitleContent
@@ -188,7 +191,7 @@ const Input = forwardRef(
                   (prefix && <PrefixSuffix>{prefix}</PrefixSuffix>)}
                 {startIcon}
               </>
-            : undefined
+            ) : undefined
           }
           inputProps={inputProps}
           {...props}

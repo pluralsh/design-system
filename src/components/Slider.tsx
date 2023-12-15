@@ -263,15 +263,17 @@ function Thumb({ state, trackRef, index, tooltip }: any) {
     </div>
   )
 
-  return !tooltip ? thumb : (
-      <Tooltip
-        arrow
-        placement="top"
-        label={state.getThumbValueLabel(0) || 0}
-      >
-        {thumb}
-      </Tooltip>
-    )
+  return !tooltip ? (
+    thumb
+  ) : (
+    <Tooltip
+      arrow
+      placement="top"
+      label={state.getThumbValueLabel(0) || 0}
+    >
+      {thumb}
+    </Tooltip>
+  )
 }
 
 export default Slider

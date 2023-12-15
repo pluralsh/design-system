@@ -207,19 +207,20 @@ function AppIconRef(
       onClick={clickable ? onClose : null}
       {...props}
     >
-      {url ?
+      {url ? (
         <ImgSC
           ref={ref}
           src={url}
           alt={alt}
           $iconWidth={iconWidth}
         />
-      : icon || (
+      ) : (
+        icon || (
           <InitialsSC $size={size}>
             {initials || (name ? toInitials(name) : '')}
           </InitialsSC>
         )
-      }
+      )}
     </AppIconSC>
   )
 }

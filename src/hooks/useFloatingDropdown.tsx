@@ -43,27 +43,30 @@ export function useFloatingDropdown({
         apply(args: any) {
           const { elements, availableHeight, rects } = args
           const maxW =
-            typeof width === 'string' && width ?
-              width
-            : `${typeof width === 'number' ? width : rects.reference.width}px`
+            typeof width === 'string' && width
+              ? width
+              : `${typeof width === 'number' ? width : rects.reference.width}px`
           const minW =
-            typeof minWidth === 'string' && minWidth ?
-              minWidth === 'reference' ?
-                `${rects.reference.width}px`
-              : minWidth
-            : typeof minWidth === 'number' ? `${minWidth}px`
-            : null
+            typeof minWidth === 'string' && minWidth
+              ? minWidth === 'reference'
+                ? `${rects.reference.width}px`
+                : minWidth
+              : typeof minWidth === 'number'
+              ? `${minWidth}px`
+              : null
           const maxH =
-            typeof maxHeight === 'string' && maxHeight ?
-              maxHeight
-            : `${Math.min(
-                availableHeight,
-                typeof maxHeight === 'number' ? maxHeight : DEFAULT_MAX_HEIGHT
-              )}px`
+            typeof maxHeight === 'string' && maxHeight
+              ? maxHeight
+              : `${Math.min(
+                  availableHeight,
+                  typeof maxHeight === 'number' ? maxHeight : DEFAULT_MAX_HEIGHT
+                )}px`
           const minH =
-            typeof minHeight === 'string' && minHeight ? minHeight
-            : typeof minHeight === 'number' ? `${minHeight}px`
-            : null
+            typeof minHeight === 'string' && minHeight
+              ? minHeight
+              : typeof minHeight === 'number'
+              ? `${minHeight}px`
+              : null
 
           Object.assign(elements.floating.style, {
             maxWidth: maxW,

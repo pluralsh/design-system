@@ -43,9 +43,9 @@ export function BreadcrumbsProvider({
   const contextVal = useMemo(
     () => ({
       breadcrumbs:
-        typeof breadcrumbsTransform === 'function' ?
-          breadcrumbsTransform(breadcrumbs)
-        : breadcrumbs,
+        typeof breadcrumbsTransform === 'function'
+          ? breadcrumbsTransform(breadcrumbs)
+          : breadcrumbs,
       setBreadcrumbs,
     }),
     [breadcrumbsTransform, breadcrumbs]

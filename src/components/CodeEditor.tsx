@@ -76,9 +76,9 @@ export default function CodeEditor({
     <Card
       fillLevel={toFillLevel(Math.min(parentFillLevel + 1, 2))}
       borderColor={
-        parentFillLevel >= 1 ?
-          theme.colors['border-fill-three']
-        : theme.colors['border-fill-two']
+        parentFillLevel >= 1
+          ? theme.colors['border-fill-three']
+          : theme.colors['border-fill-two']
       }
       display="flex"
       flexDirection="column"

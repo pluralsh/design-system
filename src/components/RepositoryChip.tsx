@@ -66,7 +66,7 @@ function RepositoryChipRef(
           align="center"
           overflow="hidden"
         >
-          {icon ?
+          {icon ? (
             <Flex
               align="center"
               justify="center"
@@ -74,13 +74,13 @@ function RepositoryChipRef(
             >
               {icon}
             </Flex>
-          : imageUrl ?
+          ) : imageUrl ? (
             <Img
               src={imageUrl}
               objectPosition="center"
               {...iconProps}
             />
-          : null}
+          ) : null}
           <P
             body2
             marginLeft="medium"

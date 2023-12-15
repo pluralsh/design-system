@@ -57,13 +57,9 @@ const getTransitionProps = ({
   const from = {
     opacity: 0,
     translateX:
-      direction === 'right' ? '-100%'
-      : direction === 'left' ? '100%'
-      : '0%',
+      direction === 'right' ? '-100%' : direction === 'left' ? '100%' : '0%',
     translateY:
-      direction === 'down' ? '-100%'
-      : direction === 'up' ? '100%'
-      : '0%',
+      direction === 'down' ? '-100%' : direction === 'up' ? '100%' : '0%',
     scale: type === 'scale' ? '10%' : '100%',
   }
 
@@ -78,9 +74,8 @@ const getTransitionProps = ({
     from,
     enter: to,
     leave: { ...from, opacity: type === 'fade' ? 0 : -1.5 },
-    config:
-      isOpen ?
-        {
+    config: isOpen
+      ? {
           mass: 0.6,
           tension: 280,
           velocity: 0.02,
@@ -132,13 +127,15 @@ const LayerWrapper = styled.div<{
     pointerEvents: 'auto',
   },
   overflow: 'hidden',
-  alignItems:
-    position.startsWith('top') ? 'start'
-    : position.startsWith('bottom') ? 'end'
+  alignItems: position.startsWith('top')
+    ? 'start'
+    : position.startsWith('bottom')
+    ? 'end'
     : 'center',
-  justifyContent:
-    position.endsWith('left') ? 'start'
-    : position.endsWith('right') ? 'end'
+  justifyContent: position.endsWith('left')
+    ? 'start'
+    : position.endsWith('right')
+    ? 'end'
     : 'center',
   top: 0,
   left: 0,
@@ -213,18 +210,18 @@ function LayerRef(
       ...(margin.bottom ? { bottom: margin.bottom } : {}),
       ...(margin.left ? { left: margin.left } : {}),
       ...(margin.right ? { right: margin.right } : {}),
-      ...(margin.vertical ?
-        {
-          top: margin.vertical,
-          bottom: margin.vertical,
-        }
-      : {}),
-      ...(margin.horizontal ?
-        {
-          left: margin.horizontal,
-          right: margin.horizontal,
-        }
-      : {}),
+      ...(margin.vertical
+        ? {
+            top: margin.vertical,
+            bottom: margin.vertical,
+          }
+        : {}),
+      ...(margin.horizontal
+        ? {
+            left: margin.horizontal,
+            right: margin.horizontal,
+          }
+        : {}),
     }
   } else {
     margin = {}
@@ -248,11 +245,14 @@ function LayerRef(
       transitionDirection = undefined
     } else {
       transitionType = 'slide'
-      transitionDirection =
-        position.startsWith('top') ? 'down'
-        : position.startsWith('bottom') ? 'up'
-        : position.endsWith('left') ? 'right'
-        : position.endsWith('right') ? 'left'
+      transitionDirection = position.startsWith('top')
+        ? 'down'
+        : position.startsWith('bottom')
+        ? 'up'
+        : position.endsWith('left')
+        ? 'right'
+        : position.endsWith('right')
+        ? 'left'
         : DEFAULT_DIRECTION
     }
   } else if (animation.startsWith('slide')) {

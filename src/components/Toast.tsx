@@ -49,12 +49,12 @@ const Toast = forwardRef(
     }, [setOpen])
 
     const closeTimeout: 'none' | number =
-      closeTimeoutProp === 'none' || +closeTimeoutProp <= 0 ? 'none'
-      : (
-        typeof closeTimeoutProp === 'number' && !Number.isNaN(closeTimeoutProp)
-      ) ?
-        closeTimeoutProp
-      : defaults.closeTimeout
+      closeTimeoutProp === 'none' || +closeTimeoutProp <= 0
+        ? 'none'
+        : typeof closeTimeoutProp === 'number' &&
+          !Number.isNaN(closeTimeoutProp)
+        ? closeTimeoutProp
+        : defaults.closeTimeout
 
     useEffect(() => {
       setOpen(show)

@@ -255,16 +255,16 @@ function Template({
             inputProps={{
               placeholder: 'Pick something',
             }}
-            {...(withTitleContent ?
-              {
-                titleContent: (
-                  <>
-                    <BrowseAppsIcon marginRight="small" />
-                    Marketplace
-                  </>
-                ),
-              }
-            : {})}
+            {...(withTitleContent
+              ? {
+                  titleContent: (
+                    <>
+                      <BrowseAppsIcon marginRight="small" />
+                      Marketplace
+                    </>
+                  ),
+                }
+              : {})}
             {...args}
           >
             {searchResults.map(
@@ -409,24 +409,24 @@ function TagsTemplate({
               setIsOpen(isOpen)
             }}
             dropdownFooter={
-              newKey ?
+              newKey ? (
                 <ListBoxFooterPlus>
                   Create new tag, '{newKey}'
                 </ListBoxFooterPlus>
-              : undefined
+              ) : undefined
             }
             maxHeight={232}
             allowsEmptyCollection={!!newKey}
-            {...(withTitleContent ?
-              {
-                titleContent: (
-                  <>
-                    <BrowseAppsIcon marginRight="small" />
-                    Marketplace
-                  </>
-                ),
-              }
-            : {})}
+            {...(withTitleContent
+              ? {
+                  titleContent: (
+                    <>
+                      <BrowseAppsIcon marginRight="small" />
+                      Marketplace
+                    </>
+                  ),
+                }
+              : {})}
             {...args}
           >
             {searchResults.map(

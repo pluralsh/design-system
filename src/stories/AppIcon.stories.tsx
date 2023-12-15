@@ -46,9 +46,11 @@ const sizes = [
 
 function Template({ onFillLevel, icon, ...args }: any) {
   const iconProps =
-    icon === 'Airflow' ? { url: '/logos/airflow-logo.svg' }
-    : icon === 'Airbyte' ? { url: '/logos/airbyte-logo.svg' }
-    : { icon: <PluralLogoMark /> }
+    icon === 'Airflow'
+      ? { url: '/logos/airflow-logo.svg' }
+      : icon === 'Airbyte'
+      ? { url: '/logos/airbyte-logo.svg' }
+      : { icon: <PluralLogoMark /> }
 
   return (
     <Flex

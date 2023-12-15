@@ -46,13 +46,15 @@ function TabRef(
         vertical ? null : `1px solid ${active ? 'border-primary' : 'border'}`
       }
       borderRight={
-        vertical ?
-          `1px solid ${
-            active ? 'border-primary'
-            : activeSecondary ? 'border-fill-two'
-            : 'border'
-          }`
-        : null
+        vertical
+          ? `1px solid ${
+              active
+                ? 'border-primary'
+                : activeSecondary
+                ? 'border-fill-two'
+                : 'border'
+            }`
+          : null
       }
       {...borderRadiuses}
       _focusVisible={{
@@ -67,20 +69,22 @@ function TabRef(
         paddingBottom="xsmall"
         align="center"
         borderBottom={
-          vertical ? null : (
-            `${TAB_INDICATOR_THICKNESS - 1}px solid ${
-              active ? 'border-primary' : 'transparent'
-            }`
-          )
+          vertical
+            ? null
+            : `${TAB_INDICATOR_THICKNESS - 1}px solid ${
+                active ? 'border-primary' : 'transparent'
+              }`
         }
         borderRight={
-          vertical ?
-            `${TAB_INDICATOR_THICKNESS - 1}px solid ${
-              active ? 'border-primary'
-              : activeSecondary ? 'border-fill-two'
-              : 'transparent'
-            }`
-          : null
+          vertical
+            ? `${TAB_INDICATOR_THICKNESS - 1}px solid ${
+                active
+                  ? 'border-primary'
+                  : activeSecondary
+                  ? 'border-fill-two'
+                  : 'transparent'
+              }`
+            : null
         }
         {...borderRadiuses}
         color={active || activeSecondary ? 'text' : 'text-xlight'}
@@ -89,9 +93,9 @@ function TabRef(
         }
         _hover={{
           color: 'text',
-          ...(!(!active && activeSecondary) ?
-            { backgroundColor: 'fill-zero-hover' }
-          : {}),
+          ...(!(!active && activeSecondary)
+            ? { backgroundColor: 'fill-zero-hover' }
+            : {}),
         }}
         transition="background-color 150ms ease, border-color 150ms ease, color 150ms ease"
         {...innerProps}

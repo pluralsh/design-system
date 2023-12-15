@@ -71,11 +71,11 @@ export const ComboBoxInputInner = styled.div<{ isOpen: boolean }>(
       display: 'flex',
       marginLeft: theme.spacing.medium,
       alignItems: 'center',
-      ...(isOpen ?
-        {
-          transform: 'scaleY(-100%)',
-        }
-      : {}),
+      ...(isOpen
+        ? {
+            transform: 'scaleY(-100%)',
+          }
+        : {}),
     },
   })
 )
@@ -198,13 +198,13 @@ function ComboBoxInput({
         loading ? <Spinner color={theme.colors['icon-xlight']} /> : startIcon
       }
       endIcon={
-        showArrow ?
+        showArrow ? (
           <OpenButton
             isOpen={isOpen}
             buttonRef={buttonRef}
             buttonProps={buttonProps}
           />
-        : undefined
+        ) : undefined
       }
       inputProps={{
         ref: inputRef,
@@ -380,9 +380,9 @@ function ComboBox({
 
   outerInputProps = {
     ...outerInputProps,
-    ...(outerInputProps.ref ?
-      { ref: mergeRefs([outerInputProps.ref, triggerRef]) }
-    : { ref: triggerRef }),
+    ...(outerInputProps.ref
+      ? { ref: mergeRefs([outerInputProps.ref, triggerRef]) }
+      : { ref: triggerRef }),
   }
 
   return (

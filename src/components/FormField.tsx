@@ -144,7 +144,7 @@ function FormFieldRef(
           color="text-light"
           marginTop="xsmall"
         >
-          {typeof hint === 'string' ?
+          {typeof hint === 'string' ? (
             <P
               flexGrow={1}
               caption
@@ -152,7 +152,9 @@ function FormFieldRef(
             >
               {hint}
             </P>
-          : hint}
+          ) : (
+            hint
+          )}
           {typeof maxLength === 'number' && (
             <P
               caption

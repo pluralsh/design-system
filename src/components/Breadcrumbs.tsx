@@ -29,11 +29,11 @@ import { SetInert } from './SetInert'
 function getCrumbKey(crumb: Breadcrumb) {
   const maybeKey = crumb?.key
 
-  return typeof maybeKey === 'string' ? maybeKey : (
-      `${typeof crumb.label === 'string' ? crumb.label : crumb.textValue}-${
+  return typeof maybeKey === 'string'
+    ? maybeKey
+    : `${typeof crumb.label === 'string' ? crumb.label : crumb.textValue}-${
         crumb.url
       }`
-    )
 }
 
 const CrumbSeparator = styled(({ className }: { className?: string }) => (
@@ -60,9 +60,11 @@ function CrumbLink({
   return (
     <CrumbLinkWrap {...(isLast ? { 'aria-current': 'page' } : {})}>
       <CrumbLinkText className={classNames({ isLast })}>
-        {isLast || typeof crumb.url !== 'string' ?
+        {isLast || typeof crumb.url !== 'string' ? (
           crumb.label
-        : <Link href={crumb.url}>{crumb.label}</Link>}
+        ) : (
+          <Link href={crumb.url}>{crumb.label}</Link>
+        )}
       </CrumbLinkText>
       {!isLast && <CrumbSeparator />}
     </CrumbLinkWrap>
@@ -186,20 +188,20 @@ const CrumbListSC = styled.ol<{
   flexDirection: 'row',
   gap: theme.spacing.small,
   maxWidth: 'max-content',
-  ...($variant === CrumbListVariant.heightlessHidden ?
-    {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: 0,
-      opacity: 0,
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      clipPath: 'inset(50%)',
-      pointerEvents: 'none',
-    }
-  : {}),
+  ...($variant === CrumbListVariant.heightlessHidden
+    ? {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: 0,
+        opacity: 0,
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        clipPath: 'inset(50%)',
+        pointerEvents: 'none',
+      }
+    : {}),
 }))
 
 function CrumbListRef(
@@ -221,9 +223,9 @@ function CrumbListRef(
   }
   maxLength = Math.min(maxLength, breadcrumbs.length)
   const variant =
-    visibleListId !== id ?
-      CrumbListVariant.heightlessHidden
-    : CrumbListVariant.normal
+    visibleListId !== id
+      ? CrumbListVariant.heightlessHidden
+      : CrumbListVariant.normal
 
   const head = maxLength > 1 ? [breadcrumbs[0]] : []
   const middle = breadcrumbs.slice(

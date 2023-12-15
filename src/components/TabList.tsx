@@ -168,11 +168,11 @@ const TabClone = styled(
   '&:focus-visible': {
     ...theme.partials.focus.default,
   },
-  ...(vertical ?
-    {
-      width: '100%',
-    }
-  : {}),
+  ...(vertical
+    ? {
+        width: '100%',
+      }
+    : {}),
 }))
 
 type TabRendererProps = {

@@ -213,14 +213,15 @@ function Template({ onFillLevel }: { onFillLevel: any }) {
   )
 
   const curItem = items.find((item) => item.key === selectedKey)
-  const customLabel =
-    curItem ? `You have selected ${curItem.label}` : 'Select an item please'
+  const customLabel = curItem
+    ? `You have selected ${curItem.label}`
+    : 'Select an item please'
 
   const curItems = items.filter((item) => selectedKeys.has(item.key))
   const customLabelMultiple =
-    curItems.length > 0 ?
-      `Selections: ${curItems.map((item) => item.label).join(', ')}`
-    : 'Select items'
+    curItems.length > 0
+      ? `Selections: ${curItems.map((item) => item.label).join(', ')}`
+      : 'Select items'
 
   const createNewHandler = () => {
     alert('You selected "Create new."')

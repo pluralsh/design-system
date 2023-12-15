@@ -32,23 +32,20 @@ const SubTabBase = styled.div<{
   disabled: boolean
   parentFillLevel: FillLevel
 }>(({ theme, active, disabled, size, parentFillLevel }) => ({
-  ...(size === 'small' ?
-    theme.partials.text.buttonSmall
-  : theme.partials.text.buttonMedium),
+  ...(size === 'small'
+    ? theme.partials.text.buttonSmall
+    : theme.partials.text.buttonMedium),
   tabIndex: 0,
   userSelect: 'none',
-  cursor:
-    disabled ? 'default'
-    : active ? 'default'
-    : 'pointer',
+  cursor: disabled ? 'default' : active ? 'default' : 'pointer',
   pointerEvents: disabled ? 'none' : 'all',
-  color:
-    disabled ? theme.colors['text-disabled']
-    : active ? theme.colors.text
+  color: disabled
+    ? theme.colors['text-disabled']
+    : active
+    ? theme.colors.text
     : theme.colors['text-xlight'],
-  backgroundColor:
-    active ?
-      theme.colors[parentFillLevelToActiveBG[parentFillLevel]]
+  backgroundColor: active
+    ? theme.colors[parentFillLevelToActiveBG[parentFillLevel]]
     : 'transparent',
   borderRadius: theme.borderRadiuses.medium,
   focusVisible: {
@@ -61,9 +58,9 @@ const SubTabBase = styled.div<{
   align: 'center',
   ':hover': {
     backgroundColor:
-      !active && !disabled ?
-        theme.colors[parentFillLevelToHoverBG[parentFillLevel]]
-      : undefined,
+      !active && !disabled
+        ? theme.colors[parentFillLevelToHoverBG[parentFillLevel]]
+        : undefined,
   },
   transition:
     'background-color 150ms ease, border-color 150ms ease, color 150ms ease',

@@ -4,9 +4,8 @@ type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> }
 
 type Cast<X, Y> = X extends Y ? X : Y
 
-type FromEntries<T> =
-  T extends [infer Key, any][] ?
-    { [K in Cast<Key, PropertyKey>]: Extract<ArrayElement<T>, [K, any]>[1] } // <- Change here `string` -> `PropertyKey`.
+type FromEntries<T> = T extends [infer Key, any][]
+  ? { [K in Cast<Key, PropertyKey>]: Extract<ArrayElement<T>, [K, any]>[1] } // <- Change here `string` -> `PropertyKey`.
   : { [key in string]: any }
 
 export type FromEntriesWithReadOnly<T> = FromEntries<DeepWriteable<T>>

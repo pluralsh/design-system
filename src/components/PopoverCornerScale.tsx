@@ -76,9 +76,8 @@ function PopoverCornerScale({
     from: { ...outProps, delay: 1000 },
     enter: inProps,
     leave: outProps,
-    config:
-      isOpen ?
-        {
+    config: isOpen
+      ? {
           mass: 0.6,
           tension: 280,
           velocity: 0.02,
