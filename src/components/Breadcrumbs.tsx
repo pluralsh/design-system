@@ -1,4 +1,4 @@
-import React, {
+import {
   type MutableRefObject,
   type ReactNode,
   forwardRef,
@@ -9,11 +9,10 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { Flex, type FlexProps, Nav, Ol } from 'honorable'
-import styled, { useTheme } from 'styled-components'
+import { Nav, type NavProps } from 'honorable'
+import styled from 'styled-components'
 import classNames from 'classnames'
 import { SwitchTransition, Transition } from 'react-transition-group'
-import { useVisuallyHidden } from 'react-aria'
 
 import useResizeObserver from '../hooks/useResizeObserver'
 import usePrevious from '../hooks/usePrevious'
@@ -25,6 +24,7 @@ import {
   type Breadcrumb,
   BreadcrumbsContext,
 } from './contexts/BreadcrumbsContext'
+import { SetInert } from './SetInert'
 
 function getCrumbKey(crumb: Breadcrumb) {
   const maybeKey = crumb?.key
@@ -136,9 +136,11 @@ const CrumbSelectTrigger = styled(CrumbSelectTriggerUnstyled)(({ theme }) => ({
 function CrumbSelect({
   breadcrumbs,
   isLast,
+  isDisabled = false,
 }: {
   breadcrumbs: Breadcrumb[]
   isLast: boolean
+  isDisabled?: boolean
 }) {
   const { useNavigate } = useNavigationContext()
   const navigate = useNavigate()
@@ -146,6 +148,7 @@ function CrumbSelect({
   return (
     <CrumbLinkWrap>
       <Select
+        isDisabled={isDisabled}
         selectedKey={null}
         onSelectionChange={(key) => {
           const url = breadcrumbs[key as number]?.url
@@ -158,9 +161,9 @@ function CrumbSelect({
         triggerButton={<CrumbSelectTrigger />}
         width="180px"
       >
-        {breadcrumbs.map((crumb, i) => (
+        {breadcrumbs.map((crumb) => (
           <ListBoxItem
-            key={String(i)}
+            key={getCrumbKey(crumb)}
             label={crumb.label}
             textValue={crumb.textValue || ''}
           />
@@ -171,29 +174,56 @@ function CrumbSelect({
   )
 }
 
+enum CrumbListVariant {
+  heightlessHidden,
+  normal,
+}
+const CrumbListSC = styled.ol<{
+  $variant: CrumbListVariant
+}>(({ theme, $variant }) => ({
+  ...theme.partials.reset.list,
+  display: 'flex',
+  flexDirection: 'row',
+  gap: theme.spacing.small,
+  maxWidth: 'max-content',
+  ...($variant === CrumbListVariant.heightlessHidden ?
+    {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: 0,
+      opacity: 0,
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      clipPath: 'inset(50%)',
+      pointerEvents: 'none',
+    }
+  : {}),
+}))
+
 function CrumbListRef(
   {
     breadcrumbs,
     maxLength,
     visibleListId,
-    ariaOnly = false,
   }: {
     breadcrumbs: Breadcrumb[]
     maxLength: number
     visibleListId?: string
-    ariaOnly?: boolean
   },
-  ref: MutableRefObject<HTMLDivElement>
+  ref: MutableRefObject<any>
 ) {
   const id = useId()
-  const { visuallyHiddenProps } = useVisuallyHidden()
-  const theme = useTheme()
 
   if (breadcrumbs?.length < 1) {
     return null
   }
   maxLength = Math.min(maxLength, breadcrumbs.length)
-  const heightlessHidden = visibleListId !== id
+  const variant =
+    visibleListId !== id ?
+      CrumbListVariant.heightlessHidden
+    : CrumbListVariant.normal
 
   const head = maxLength > 1 ? [breadcrumbs[0]] : []
   const middle = breadcrumbs.slice(
@@ -204,44 +234,39 @@ function CrumbListRef(
     breadcrumbs.length + head.length - maxLength,
     breadcrumbs.length
   )
+  const isDisabled = variant === CrumbListVariant.heightlessHidden
 
   return (
-    <Ol
-      id={id}
-      ref={ref}
-      display="flex"
-      {...theme.partials.reset.list}
-      className={ariaOnly ? '' : 'crumbList'}
-      direction="row"
-      gap="small"
-      maxWidth="max-content"
-      {...(heightlessHidden && !ariaOnly ?
-        { height: 0, opacity: 0, overflow: 'hidden' }
-      : {})}
-      {...(ariaOnly ? visuallyHiddenProps : {})}
-    >
-      {head.map((headCrumb) => (
-        <CrumbLink
-          key={getCrumbKey(headCrumb)}
-          crumb={headCrumb}
-          isLast={tail.length === 0}
-        />
-      ))}
-      {middle.length > 0 && (
-        <CrumbSelect
-          breadcrumbs={middle}
-          isLast={tail.length === 0}
-        />
-      )}
-
-      {tail.map((crumb, i) => (
-        <CrumbLink
-          key={getCrumbKey(crumb)}
-          crumb={crumb}
-          isLast={i === tail.length - 1}
-        />
-      ))}
-    </Ol>
+    <SetInert inert={isDisabled}>
+      <CrumbListSC
+        id={id}
+        ref={ref}
+        $variant={variant}
+        {...{ [CRUMB_LIST_ATTR]: '' }}
+        aria-hidden={isDisabled}
+      >
+        {head.map((headCrumb) => (
+          <CrumbLink
+            key={getCrumbKey(headCrumb)}
+            crumb={headCrumb}
+            isLast={tail.length === 0}
+          />
+        ))}
+        {middle.length > 0 && (
+          <CrumbSelect
+            breadcrumbs={middle}
+            isLast={tail.length === 0}
+          />
+        )}
+        {tail.map((crumb, i) => (
+          <CrumbLink
+            key={getCrumbKey(crumb)}
+            crumb={crumb}
+            isLast={i === tail.length - 1}
+          />
+        ))}
+      </CrumbListSC>
+    </SetInert>
   )
 }
 
@@ -254,12 +279,20 @@ const transitionStyles = {
   exited: { display: 'none' },
 }
 
-type BreadcrumbsProps = {
+type BreadcrumbPropsBase = {
   minLength?: number
   maxLength?: number
   collapsible?: boolean
   breadcrumbs?: Breadcrumb[]
-} & FlexProps
+}
+type BreadcrumbsProps = BreadcrumbPropsBase
+
+const DynamicBreadcrumbsSC = styled.div((_) => ({
+  position: 'relative',
+  display: 'flex',
+  flexDirection: 'column',
+}))
+const CRUMB_LIST_ATTR = 'data-crumblist' as const
 
 export function DynamicBreadcrumbs({
   minLength = 0,
@@ -268,9 +301,9 @@ export function DynamicBreadcrumbs({
   breadcrumbs,
   wrapperRef: transitionRef,
   ...props
-}: BreadcrumbsProps & {
-  breadcrumbs: Breadcrumb[]
+}: BreadcrumbPropsBase & {
   wrapperRef?: MutableRefObject<HTMLDivElement>
+  style: any
 }) {
   const wrapperRef = useRef<HTMLDivElement | undefined>()
   const [visibleListId, setVisibleListId] = useState<string>('')
@@ -298,7 +331,7 @@ export function DynamicBreadcrumbs({
   const refitCrumbList = useCallback(
     ({ width: wrapperWidth }: { width: number }) => {
       const lists = Array.from(
-        wrapperRef?.current?.getElementsByClassName('crumbList')
+        wrapperRef?.current?.querySelectorAll(`[${CRUMB_LIST_ATTR}]`)
       )
       const { id } = lists.reduce(
         (prev, next) => {
@@ -341,11 +374,7 @@ export function DynamicBreadcrumbs({
   }, [visibleListId])
 
   return (
-    <Flex
-      // Hide dynamic breadcrumb list from screen readers.
-      // A screen reader-only list is provided in root component.
-      aria-hidden
-      direction="column"
+    <DynamicBreadcrumbsSC
       ref={(elt: any) => {
         wrapperRef.current = elt
         if (transitionRef) transitionRef.current = elt
@@ -353,7 +382,7 @@ export function DynamicBreadcrumbs({
       {...props}
     >
       {children}
-    </Flex>
+    </DynamicBreadcrumbsSC>
   )
 }
 
@@ -363,7 +392,7 @@ export function Breadcrumbs({
   collapsible = true,
   breadcrumbs: propsCrumbs,
   ...props
-}: BreadcrumbsProps) {
+}: BreadcrumbsProps & NavProps) {
   const contextCrumbs = useContext(BreadcrumbsContext)?.breadcrumbs
   const breadcrumbs = propsCrumbs || contextCrumbs
 
@@ -408,12 +437,6 @@ export function Breadcrumbs({
           )}
         </Transition>
       </SwitchTransition>
-      {/* Provide stable, but visually hidden crumb list for screen readers */}
-      <CrumbList
-        ariaOnly
-        breadcrumbs={breadcrumbs}
-        maxLength={Infinity}
-      />
     </Nav>
   )
 }
