@@ -30,8 +30,6 @@ const ChecklistItemInner = styled(ChecklistItemInnerUnstyled)(
       ':hover': {
         background: theme.colors['fill-two-hover'],
       },
-      borderColor: 'red',
-
       ':focus': {
         outline: `${theme.colors['border-outline-focused']} solid 1px`,
       },
