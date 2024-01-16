@@ -15,6 +15,8 @@ import {
   WrapWithIf,
 } from '..'
 
+import { InternalTagsTemplate } from './InternalTagsTemplate'
+
 export default {
   title: 'Combo Box',
   component: 'ComboBox',
@@ -93,7 +95,7 @@ type Item = {
   version?: string
 }
 
-const items: Item[] = [
+export const items: Item[] = [
   {
     key: 'ratatouille',
     label: 'Ratatouille',
@@ -117,6 +119,7 @@ const items: Item[] = [
   },
   {
     key: 'couscous',
+    tag: 'route:short-name',
     label: 'Couscous',
     description: 'With ham and cheese',
     chips: chips.slice(4),
@@ -166,19 +169,19 @@ const items: Item[] = [
   },
 ]
 
-const itemsByKey = items.reduce(
+export const itemsByKey = items.reduce(
   (obj, item) => ({ ...obj, [item.key]: item }),
   {}
 )
-const itemKeys = items.map((item) => item.key)
+export const itemKeys = items.map((item) => item.key)
 
-const TagPicker = styled.div(({ theme }) => ({
+export const TagPicker = styled.div(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing.small,
 }))
 
-const ChipList = styled(ListBoxItemChipList)(({ theme: _ }) => ({
+export const ChipList = styled(ListBoxItemChipList)(({ theme: _ }) => ({
   justifyContent: 'start',
 }))
 
@@ -475,6 +478,12 @@ Default.args = {
 
 export const Tags = TagsTemplate.bind({})
 Tags.args = {
+  loading: false,
+  withTitleContent: false,
+}
+
+export const InternalTags = InternalTagsTemplate.bind({})
+InternalTags.args = {
   loading: false,
   withTitleContent: false,
 }

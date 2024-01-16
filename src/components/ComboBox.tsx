@@ -1,4 +1,3 @@
-import { mergeTheme } from 'honorable'
 import { omitBy } from 'lodash'
 import { isUndefined, omit, pick } from 'lodash-es'
 import {
@@ -27,7 +26,7 @@ import { useFloatingDropdown } from '../hooks/useFloatingDropdown'
 
 import DropdownArrowIcon from './icons/DropdownArrowIcon'
 import SearchIcon from './icons/SearchIcon'
-import Input, { type InputProps } from './Input'
+import { type InputProps } from './Input'
 import { Spinner } from './Spinner'
 
 import { type ListBoxItemBaseProps } from './ListBoxItem'
@@ -37,6 +36,7 @@ import {
   setNextFocusedKey,
   useSelectComboStateProps,
 } from './SelectComboShared'
+import Input2 from './Input2'
 
 type Placement = 'left' | 'right'
 
@@ -91,48 +91,48 @@ type ComboBoxInputProps = {
   loading?: boolean
 }
 
-const OpenButton = styled(
-  ({
-    isOpen: _isOpen,
-    buttonRef,
-    buttonProps,
-    ...props
-  }: HTMLAttributes<HTMLDivElement> & {
-    isOpen?: boolean
-    buttonRef: RefObject<any>
-    buttonProps: AriaButtonProps
-  }) => {
-    const { buttonProps: useButtonProps } = useButton(
-      { ...buttonProps, elementType: 'div' },
-      buttonRef
-    )
-
-    return (
-      <div
-        ref={buttonRef}
-        {...props}
-        {...useButtonProps}
-      >
-        <DropdownArrowIcon />
-      </div>
-    )
-  }
-)(({ theme, isOpen }) => ({
+const OpenButtonSC = styled.div(({ theme }) => ({
   cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
+  alignSelf: 'stretch',
   paddingLeft: theme.spacing.medium,
   paddingRight: theme.spacing.medium,
-  height: '100%',
-  ...theme.partials.dropdown.arrowTransition({ isOpen }),
-  '&:focus': {
+  borderRadius: theme.borderRadiuses.medium - theme.borderWidths.default,
+  ...theme.partials.dropdown.arrowTransition({ isOpen: false }),
+  '&[aria-expanded=true]': {
+    ...theme.partials.dropdown.arrowTransition({ isOpen: true }),
+  },
+  '&:focus, &:focus-visible': {
     outline: 'none',
   },
-  borderRadius: theme.borderRadiuses.medium - theme.borderWidths.default,
-  '&:focus-visible': {
-    ...theme.partials.focus.outline,
-  },
 }))
+
+function OpenButton({
+  isOpen: _isOpen,
+  buttonRef,
+  buttonProps,
+  ...props
+}: HTMLAttributes<HTMLDivElement> & {
+  isOpen?: boolean
+  buttonRef: RefObject<any>
+  buttonProps: AriaButtonProps
+}) {
+  const { buttonProps: useButtonProps } = useButton(
+    { ...buttonProps, elementType: 'div' },
+    buttonRef
+  )
+
+  return (
+    <OpenButtonSC
+      ref={buttonRef}
+      {...props}
+      {...useButtonProps}
+    >
+      <DropdownArrowIcon />
+    </OpenButtonSC>
+  )
+}
 
 const honorableInputPropNames = [
   'onChange',
@@ -171,33 +171,13 @@ function ComboBoxInput({
     [inputProps]
   )
 
-  let themeExtension: any = {}
-
-  if (showArrow) {
-    themeExtension = mergeTheme(themeExtension, {
-      Input: {
-        Root: [{ paddingRight: 0 }],
-        InputBase: [{ paddingRight: 0 }],
-        EndIcon: [
-          {
-            alignSelf: 'stretch',
-            paddingLeft: 0,
-            paddingRight: 0,
-            marginLeft: 0,
-            marginRight: 0,
-          },
-        ],
-      },
-    })
-  }
-
   return (
-    <Input
-      themeExtension={themeExtension}
+    <Input2
       startIcon={
         loading ? <Spinner color={theme.colors['icon-xlight']} /> : startIcon
       }
-      endIcon={
+      endIcon={<SearchIcon />}
+      dropdownButton={
         showArrow ? (
           <OpenButton
             isOpen={isOpen}

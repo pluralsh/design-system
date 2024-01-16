@@ -22,4 +22,9 @@ export const resetPartials = {
     margin: 0,
     padding: 0,
   },
+  input: {
+    border: 'none',
+    outline: 'none',
+    background: 'none',
+  },
 } as const satisfies Record<string, CSSObject>
