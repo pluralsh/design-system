@@ -95,7 +95,7 @@ type Item = {
   version?: string
 }
 
-export const items: Item[] = [
+const items: Item[] = [
   {
     key: 'ratatouille',
     label: 'Ratatouille',
@@ -119,7 +119,6 @@ export const items: Item[] = [
   },
   {
     key: 'couscous',
-    tag: 'route:short-name',
     label: 'Couscous',
     description: 'With ham and cheese',
     chips: chips.slice(4),
@@ -169,11 +168,11 @@ export const items: Item[] = [
   },
 ]
 
-export const itemsByKey = items.reduce(
+const itemsByKey = items.reduce(
   (obj, item) => ({ ...obj, [item.key]: item }),
   {}
 )
-export const itemKeys = items.map((item) => item.key)
+const itemKeys = items.map((item) => item.key)
 
 export const TagPicker = styled.div(({ theme }) => ({
   display: 'flex',

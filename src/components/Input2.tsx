@@ -271,7 +271,6 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
 
     const outerOnClick: InputPropsFull['onClick'] = useCallback((e) => {
       e.preventDefault()
-      console.log('clicked')
       inputRef?.current?.focus()
     }, [])
 
