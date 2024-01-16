@@ -6,11 +6,29 @@ import isEmpty from 'lodash-es/isEmpty'
 
 import { isEqual, uniqWith } from 'lodash-es'
 
-import { Card, Chip, ComboBox, ListBoxItem, TagIcon, WrapWithIf } from '..'
+import styled from 'styled-components'
+
+import {
+  Card,
+  Chip,
+  ComboBox,
+  ListBoxItem,
+  ListBoxItemChipList,
+  TagIcon,
+  WrapWithIf,
+} from '..'
 
 import { isNonNullable } from '../utils/isNonNullable'
 
-import { ChipList, TagPicker } from './ComboBox.stories'
+const TagPicker = styled.div(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing.small,
+}))
+
+const ChipList = styled(ListBoxItemChipList)(({ theme: _ }) => ({
+  justifyContent: 'start',
+}))
 
 type Tag = {
   name: string
@@ -37,7 +55,7 @@ function keyToTag(key: Key) {
   return { name: split[0], value: split[1] }
 }
 
-export function InternalTagsTemplate({
+export function ClusterTagsTemplate({
   onFillLevel,
   withTitleContent,
   ...args
@@ -95,6 +113,8 @@ export function InternalTagsTemplate({
     setInputValue(value)
   }
 
+  // return <div>Hi</div>
+
   return (
     <WrapWithIf
       condition={onFillLevel > 0}
@@ -137,6 +157,7 @@ export function InternalTagsTemplate({
                   ),
                 }
               : {})}
+            showArrow
             {...args}
           >
             {searchResults

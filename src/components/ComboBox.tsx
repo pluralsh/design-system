@@ -176,7 +176,6 @@ function ComboBoxInput({
       startIcon={
         loading ? <Spinner color={theme.colors['icon-xlight']} /> : startIcon
       }
-      endIcon={<SearchIcon />}
       dropdownButton={
         showArrow ? (
           <OpenButton

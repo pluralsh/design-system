@@ -15,7 +15,7 @@ import {
   WrapWithIf,
 } from '..'
 
-import { InternalTagsTemplate } from './InternalTagsTemplate'
+import { ClusterTagsTemplate } from './ClusterTagsTemplate'
 
 export default {
   title: 'Combo Box',
@@ -174,13 +174,13 @@ const itemsByKey = items.reduce(
 )
 const itemKeys = items.map((item) => item.key)
 
-export const TagPicker = styled.div(({ theme }) => ({
+const TagPicker = styled.div(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing.small,
 }))
 
-export const ChipList = styled(ListBoxItemChipList)(({ theme: _ }) => ({
+const ChipList = styled(ListBoxItemChipList)(({ theme: _ }) => ({
   justifyContent: 'start',
 }))
 
@@ -481,8 +481,8 @@ Tags.args = {
   withTitleContent: false,
 }
 
-export const InternalTags = InternalTagsTemplate.bind({})
-InternalTags.args = {
+export const ClusterTags = ClusterTagsTemplate.bind({})
+ClusterTags.args = {
   loading: false,
   withTitleContent: false,
 }

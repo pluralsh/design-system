@@ -18,7 +18,8 @@ function InputSet(props: any) {
   return (
     <Flex
       direction="column"
-      gap="small"
+      maxWidth="400px"
+      gap="large"
     >
       <Input {...props} />
       <Input
@@ -238,7 +239,7 @@ Version2.args = {
   ),
   placeholder: 'Search the marketplace',
   showClearButton: true,
-  suffix: 'suffix',
+  suffix: '',
   disabled: false,
-  error: true,
+  error: false,
 }
