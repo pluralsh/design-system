@@ -31,7 +31,9 @@ type CardHue = (typeof HUES)[number]
 type CardSeverity = Extract<SeverityExt, (typeof CARD_SEVERITIES)[number]>
 
 type BaseCardProps = {
-  hue?: CardHue // Deprecated, prefer fillLevel
+  /** @deprecated Colors set by `FillLevelContext`. If you need to override context, use `fillLevel` */
+  hue?: CardHue
+  /** Used to override a fill level set by `FillLevelContext`  */
   fillLevel?: FillLevel
   cornerSize?: CornerSize
   clickable?: boolean

@@ -31,7 +31,7 @@ export type ChipProps = Omit<FlexProps, 'size'> &
     closeButton?: boolean
     clickable?: boolean
     [x: string]: unknown
-  }
+  } & ({ severity?: ChipSeverity } | { severity: 'error' })
 
 const propTypes = {
   size: PropTypes.oneOf(SIZES),
@@ -61,7 +61,7 @@ const severityToColor = {
   warning: 'text-warning-light',
   danger: 'text-danger-light',
   critical: 'text-danger',
-  // deprecated
+  // @ts-expect-error deprecated, should match 'danger'
   error: 'text-danger-light',
 } as const satisfies Record<ChipSeverity, string>
 
@@ -72,7 +72,7 @@ const severityToIconColor = {
   warning: 'icon-warning',
   danger: 'icon-danger',
   critical: 'icon-danger-critical',
-  // deprecated
+  // @ts-expect-error deprecated, should match 'danger'
   error: 'icon-danger',
 } as const satisfies Record<ChipSeverity, keyof DefaultTheme['colors']>
 
