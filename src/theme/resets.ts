@@ -8,10 +8,12 @@ export const resetPartials = {
     border: 'none',
     padding: 0,
     font: 'inherit',
-    cursor: 'pointer',
     outline: 'unset',
     alignItems: 'unset',
     appearance: 'none',
+    'button&:not(:disabled)': {
+      cursor: 'pointer',
+    },
   },
   list: {
     margin: 0,

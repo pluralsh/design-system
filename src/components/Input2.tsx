@@ -89,6 +89,8 @@ function ClearButton({
   className,
   ...props
 }: Omit<ComponentProps<typeof IconFrame>, 'clickable' | 'icon' | 'size'>) {
+  console.log('props.disabled', props.disabled)
+
   return (
     <ClearButtonSC className={className}>
       <Tooltip
@@ -131,9 +133,11 @@ const InputRootSC = styled.div<{
   '&:focus-within': {
     borderColor: theme.colors['border-outline-focused'],
   },
-  '&[aria-disabled=true], &[aria-disabled=true] *': {
-    color: theme.colors['text-disabled'],
+  '&[aria-disabled=true]': {
     borderColor: theme.colors['border-disabled'],
+  },
+  '&[aria-disabled=true], &[aria-disabled=true] *': {
+    color: theme.colors['text-input-disabled'],
   },
 }))
 const InputBaseSC = styled.input<{
@@ -158,14 +162,13 @@ const InputBaseSC = styled.input<{
     $hasDropdownButton,
     $hasInputContent,
     $size,
-    disabled,
   }) => ({
     ...theme.partials.reset.input,
     width: '100%',
-    flex: '1 1',
+    flex: '1 0 120px',
     height: $size === 'small' ? 30 : $size === 'large' ? 46 : 38,
     lineHeight: $size === 'small' ? 30 : $size === 'large' ? 46 : 38,
-    color: disabled ? theme.colors['text-input-disabled'] : theme.colors.text,
+    color: theme.colors.text,
     paddingLeft: $hasInputContent
       ? theme.spacing.xxsmall
       : $hasPrefix
@@ -182,10 +185,13 @@ const InputBaseSC = styled.input<{
       : $hasDropdownButton
       ? 0
       : theme.spacing.medium,
-    ':placeholder': {
-      color: disabled
-        ? theme.colors['text-input-disabled']
-        : theme.colors['text-xlight'],
+    '&::placeholder': {
+      color: theme.colors['text-xlight'],
+    },
+    '&[disabled]': {
+      '&, &::placeholder': {
+        color: theme.colors['text-disabled'],
+      },
     },
   })
 )
@@ -215,7 +221,8 @@ const EndIcon = styled(BaseIcon)<{
 const InputContentSC = styled.div<{ $leftPad: keyof DefaultTheme['spacing'] }>(
   ({ theme, $leftPad }) => ({
     display: 'flex',
-
+    alignSelf: 'stretch',
+    flexShrink: 1,
     paddingLeft: $leftPad ? theme.spacing[$leftPad] : 0,
   })
 )
@@ -332,6 +339,7 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
           $hasStartIcon={!!startIcon}
           $hasInputContent={!isEmpty(inputContent)}
           $hasEndIcon={!!endIcon}
+          $hasDropdownButton={!!dropdownButton}
           $size={size}
           disabled={disabled}
           value={value}
@@ -345,6 +353,7 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
         />
         {hasClearButton && (
           <ClearButton
+            disabled={disabled}
             onClick={() => {
               const input = inputRef?.current
 

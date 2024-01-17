@@ -235,8 +235,11 @@ function Template({ onFillLevel, asLink, ...args }: any) {
 
 export const Default = Template.bind({})
 Default.args = {
-  closeButton: false,
-  clickable: false,
+  closeButton: true,
+  clickable: true,
+  disabled: false,
   asLink: false,
   onFillLevel: 0,
+  tooltip: false,
+  condensed: false,
 }

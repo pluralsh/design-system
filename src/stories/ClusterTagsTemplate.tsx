@@ -58,6 +58,7 @@ function tagToKey(tag: Tag) {
 
 const InputChipList = styled.div(({ theme }) => ({
   display: 'flex',
+  alignItems: 'center',
   gap: theme.spacing.xxsmall,
 }))
 const InputChip = styled(Chip)((_) => ({
@@ -144,6 +145,7 @@ export function ClusterTagsTemplate({
               <InputChipList>
                 {selectedTagArr.map((key) => (
                   <Tooltip
+                    key={key}
                     placement="top"
                     label={key}
                     textValue={key}
@@ -153,14 +155,15 @@ export function ClusterTagsTemplate({
                       size="small"
                       maxWidth={100}
                       overflowEdge="start"
-                      clickable
-                      onClick={() => {
-                        const newKeys = new Set(selectedTagKeys)
-
-                        newKeys.delete(key)
-                        setSelectedTagKeys(newKeys)
-                      }}
                       closeButton
+                      closeButtonProps={{
+                        onClick: () => {
+                          const newKeys = new Set(selectedTagKeys)
+
+                          newKeys.delete(key)
+                          setSelectedTagKeys(newKeys)
+                        },
+                      }}
                     >
                       {key}
                     </InputChip>
