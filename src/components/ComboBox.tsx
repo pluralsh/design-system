@@ -1,6 +1,7 @@
 import { omitBy } from 'lodash'
 import { isUndefined, omit, pick } from 'lodash-es'
 import {
+  type ComponentProps,
   type HTMLAttributes,
   type Key,
   type MouseEventHandler,
@@ -58,7 +59,8 @@ type ComboBoxProps = Exclude<ComboBoxInputProps, 'children'> & {
   filter?: ComboBoxStateOptions<object>['defaultFilter']
   loading?: boolean
   titleContent?: ReactNode
-  tags?: ReactElement[]
+  inputContent?: ComponentProps<typeof Input2>['inputContent']
+  onDeleteInputContent?: ComponentProps<typeof Input2>['onDeleteInputContent']
 } & Pick<InputProps, 'suffix' | 'prefix' | 'titleContent' | 'showClearButton'> &
   Omit<
     ComboBoxStateOptions<object>,
@@ -226,7 +228,8 @@ function ComboBox({
   prefix,
   titleContent,
   showClearButton,
-  tags,
+  inputContent,
+  onDeleteInputContent,
   ...props
 }: ComboBoxProps) {
   const nextFocusedKeyRef = useRef<Key>(null)
@@ -362,13 +365,14 @@ function ComboBox({
 
   outerInputProps = useMemo(
     () => ({
-      ...(tags ? { inputContent: tags } : {}),
+      ...(inputContent ? { inputContent } : {}),
+      ...(onDeleteInputContent ? { onDeleteInputContent } : {}),
       ...outerInputProps,
       ...(outerInputProps.ref
         ? { ref: mergeRefs([outerInputProps.ref, triggerRef]) }
         : { ref: triggerRef }),
     }),
-    [outerInputProps, tags, triggerRef]
+    [inputContent, onDeleteInputContent, outerInputProps, triggerRef]
   )
 
   return (

@@ -30,6 +30,8 @@ export type ChipProps = Omit<FlexProps, 'size'> &
     loading?: boolean
     closeButton?: boolean
     clickable?: boolean
+    maxWidth?: number
+    overflowEdge?: 'start' | 'end'
     [x: string]: unknown
   } & ({ severity?: ChipSeverity } | { severity: 'error' })
 
@@ -82,11 +84,12 @@ const sizeToCloseHeight = {
   large: 12,
 } as const satisfies Record<ChipSize, number>
 
-const ChipCardSC = styled(Card)<{ $size: ChipSize; $severity: ChipSeverity }>(({
-  $size,
-  $severity,
-  theme,
-}) => {
+const ChipCardSC = styled(Card)<{
+  $size: ChipSize
+  $severity: ChipSeverity
+  $maxWidth?: number
+  $overflowEdge?: 'start' | 'end'
+}>(({ $size, $severity, $maxWidth, $overflowEdge, theme }) => {
   const textColor =
     theme.mode === 'light'
       ? theme.colors['text-light']
@@ -116,6 +119,18 @@ const ChipCardSC = styled(Card)<{ $size: ChipSize; $severity: ChipSeverity }>(({
       fontWeight: $size === 'small' ? 400 : 600,
       lineHeight: $size === 'small' ? '16px' : '20px',
       gap: 4,
+      ...($maxWidth
+        ? {
+            display: 'block',
+            maxWidth: $maxWidth,
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            ...($overflowEdge === 'start'
+              ? { direction: 'rtl', textAlign: 'left' }
+              : {}),
+          }
+        : {}),
     },
   }
 })
@@ -125,6 +140,8 @@ function ChipRef(
     children,
     size = 'medium',
     severity = 'neutral',
+    maxWidth,
+    overflowEdge,
     hue,
     loading = false,
     icon,
@@ -142,6 +159,8 @@ function ChipRef(
 
   const iconCol = severityToIconColor[severity] || 'icon-default'
 
+  console.log({ maxWidth, overflowEdge })
+
   return (
     <ChipCardSC
       severity={severity}
@@ -156,6 +175,8 @@ function ChipRef(
       textDecoration="none"
       $size={size}
       $severity={severity}
+      $maxWidth={maxWidth}
+      $overflowEdge={overflowEdge}
       {...(as ? { forwardedAs: as } : {})}
       {...props}
     >

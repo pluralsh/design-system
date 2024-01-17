@@ -2,8 +2,6 @@ import { Flex } from 'honorable'
 import { type ComponentProps, type Key, useMemo, useState } from 'react'
 import Fuse from 'fuse.js'
 
-import isEmpty from 'lodash-es/isEmpty'
-
 import { isEqual, uniqWith } from 'lodash-es'
 
 import styled from 'styled-components'
@@ -13,8 +11,8 @@ import {
   Chip,
   ComboBox,
   ListBoxItem,
-  ListBoxItemChipList,
   TagIcon,
+  Tooltip,
   WrapWithIf,
 } from '..'
 
@@ -24,10 +22,6 @@ const TagPicker = styled.div(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing.small,
-}))
-
-const ChipList = styled(ListBoxItemChipList)(({ theme: _ }) => ({
-  justifyContent: 'start',
 }))
 
 type Tag = {
@@ -56,11 +50,21 @@ const tags = uniqWith(TAGS, isEqual)
 function tagToKey(tag: Tag) {
   return `${tag.name}:${tag.value}`
 }
-function keyToTag(key: Key) {
-  const split = `${key}`.split(':')
+// function keyToTag(key: Key) {
+//   const split = `${key}`.split(':')
 
-  return { name: split[0], value: split[1] }
-}
+//   return { name: split[0], value: split[1] }
+// }
+
+const InputChipList = styled.div(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing.xxsmall,
+}))
+const InputChip = styled(Chip)((_) => ({
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+}))
 
 export function ClusterTagsTemplate({
   onFillLevel,
@@ -71,10 +75,7 @@ export function ClusterTagsTemplate({
   withTitleContent: boolean
 }) {
   const [selectedTagKeys, setSelectedTagKeys] = useState(new Set<Key>())
-  const selectedTags = useMemo(
-    () => [...selectedTagKeys].map(keyToTag),
-    [selectedTagKeys]
-  )
+  const selectedTagArr = useMemo(() => [...selectedTagKeys], [selectedTagKeys])
   const [inputValue, setInputValue] = useState('')
   const [isOpen, setIsOpen] = useState(false)
 
@@ -105,7 +106,7 @@ export function ClusterTagsTemplate({
     typeof ComboBox
   >['onSelectionChange'] = (key) => {
     if (key) {
-      setSelectedTagKeys(new Set([...selectedTagKeys, key]))
+      setSelectedTagKeys(new Set([...selectedTagArr, key]))
       setInputValue('')
     }
   }
@@ -132,7 +133,6 @@ export function ClusterTagsTemplate({
       <Flex
         flexDirection="column"
         gap="large"
-        maxWidth={512}
       >
         <TagPicker>
           <ComboBox
@@ -140,22 +140,40 @@ export function ClusterTagsTemplate({
             inputValue={inputValue}
             onSelectionChange={onSelectionChange}
             onInputChange={onInputChange}
-            tags={[...selectedTagKeys].map((key) => (
-              <Chip
-                key={key}
-                size="small"
-                clickable
-                onClick={() => {
-                  const newKeys = new Set(selectedTagKeys)
+            inputContent={
+              <InputChipList>
+                {selectedTagArr.map((key) => (
+                  <Tooltip
+                    placement="top"
+                    label={key}
+                    textValue={key}
+                  >
+                    <InputChip
+                      key={key}
+                      size="small"
+                      maxWidth={100}
+                      overflowEdge="start"
+                      clickable
+                      onClick={() => {
+                        const newKeys = new Set(selectedTagKeys)
 
-                  newKeys.delete(key)
-                  setSelectedTagKeys(newKeys)
-                }}
-                closeButton
-              >
-                {key}
-              </Chip>
-            ))}
+                        newKeys.delete(key)
+                        setSelectedTagKeys(newKeys)
+                      }}
+                      closeButton
+                    >
+                      {key}
+                    </InputChip>
+                  </Tooltip>
+                ))}
+              </InputChipList>
+            }
+            onDeleteInputContent={() => {
+              const newKeys = new Set(selectedTagKeys)
+
+              newKeys.delete(selectedTagArr[selectedTagArr.length - 1])
+              setSelectedTagKeys(newKeys)
+            }}
             inputProps={{
               placeholder: 'Tag filters',
             }}
@@ -203,27 +221,6 @@ export function ClusterTagsTemplate({
               })
               .filter(isNonNullable)}
           </ComboBox>
-          {!isEmpty(selectedTags) && (
-            <ChipList
-              maxVisible={Infinity}
-              chips={[...selectedTagKeys].map((key) => (
-                <Chip
-                  key={key}
-                  size="small"
-                  clickable
-                  onClick={() => {
-                    const newKeys = new Set(selectedTagKeys)
-
-                    newKeys.delete(key)
-                    setSelectedTagKeys(newKeys)
-                  }}
-                  closeButton
-                >
-                  {key}
-                </Chip>
-              ))}
-            />
-          )}
         </TagPicker>
       </Flex>
     </WrapWithIf>

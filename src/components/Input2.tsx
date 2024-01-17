@@ -3,7 +3,6 @@ import {
   type ComponentPropsWithRef,
   type KeyboardEventHandler,
   type MouseEventHandler,
-  type ReactElement,
   type ReactNode,
   forwardRef,
   useCallback,
@@ -34,7 +33,7 @@ export type InputProps = {
   startIcon?: ReactNode
   endIcon?: ReactNode
   dropdownButton?: ReactNode
-  inputContent?: ReactElement[]
+  inputContent?: ReactNode
   inputProps?: ComponentProps<typeof InputBaseSC>
   /**
    * @deprecated use `size`
@@ -51,6 +50,7 @@ export type InputProps = {
   size?: 'small' | 'medium' | 'large'
   error?: boolean
   onEnter?: KeyboardEventHandler<HTMLInputElement>
+  onDeleteInputContent?: KeyboardEventHandler<HTMLInputElement>
   onClick?: MouseEventHandler<HTMLDivElement>
 }
 export type InputPropsFull = InputProps & { className?: string } & Pick<
@@ -215,15 +215,8 @@ const EndIcon = styled(BaseIcon)<{
 const InputContentSC = styled.div<{ $leftPad: keyof DefaultTheme['spacing'] }>(
   ({ theme, $leftPad }) => ({
     display: 'flex',
-    gap: theme.spacing.xxxsmall,
-    alignItems: 'center',
+
     paddingLeft: $leftPad ? theme.spacing[$leftPad] : 0,
-    '& > *': {
-      maxWidth: 60,
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-    },
   })
 )
 
@@ -242,6 +235,7 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
       small,
       large,
       onEnter,
+      onDeleteInputContent,
       inputContent,
       inputProps,
       //   Input props
@@ -286,11 +280,14 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
         if (e.key === 'Enter' && typeof onEnter === 'function') {
           onEnter?.(e)
         }
+        if (e.key === 'Backspace' && inputRef?.current?.selectionStart === 0) {
+          onDeleteInputContent?.(e)
+        }
         if (typeof onKeyDown === 'function') {
           onKeyDown?.(e)
         }
       },
-      [onEnter, onKeyDown]
+      [onDeleteInputContent, onEnter, onKeyDown]
     )
 
     const outerOnClick: InputPropsFull['onClick'] = useCallback((e) => {
