@@ -58,6 +58,7 @@ type ComboBoxProps = Exclude<ComboBoxInputProps, 'children'> & {
   filter?: ComboBoxStateOptions<object>['defaultFilter']
   loading?: boolean
   titleContent?: ReactNode
+  tags?: ReactElement[]
 } & Pick<InputProps, 'suffix' | 'prefix' | 'titleContent' | 'showClearButton'> &
   Omit<
     ComboBoxStateOptions<object>,
@@ -163,6 +164,7 @@ function ComboBoxInput({
       'onChange' | 'onFocus' | 'onBlur' | 'onKeyDown' | 'onKeyUp'
     >),
   }
+
   const theme = useTheme()
   // Need to filter out undefined properties so they won't override
   // outerInputProps for honorable <Input> component
@@ -224,6 +226,7 @@ function ComboBox({
   prefix,
   titleContent,
   showClearButton,
+  tags,
   ...props
 }: ComboBoxProps) {
   const nextFocusedKeyRef = useRef<Key>(null)
@@ -357,12 +360,16 @@ function ComboBox({
     placement,
   })
 
-  outerInputProps = {
-    ...outerInputProps,
-    ...(outerInputProps.ref
-      ? { ref: mergeRefs([outerInputProps.ref, triggerRef]) }
-      : { ref: triggerRef }),
-  }
+  outerInputProps = useMemo(
+    () => ({
+      ...(tags ? { inputContent: tags } : {}),
+      ...outerInputProps,
+      ...(outerInputProps.ref
+        ? { ref: mergeRefs([outerInputProps.ref, triggerRef]) }
+        : { ref: triggerRef }),
+    }),
+    [outerInputProps, tags, triggerRef]
+  )
 
   return (
     <ComboBoxInner>

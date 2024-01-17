@@ -3,14 +3,17 @@ import {
   type ComponentPropsWithRef,
   type KeyboardEventHandler,
   type MouseEventHandler,
+  type ReactElement,
   type ReactNode,
   forwardRef,
   useCallback,
   useRef,
 } from 'react'
-import styled from 'styled-components'
+import styled, { type DefaultTheme } from 'styled-components'
 import { mergeRefs } from 'react-merge-refs'
 import { mergeProps } from 'react-aria'
+
+import { isEmpty } from 'lodash-es'
 
 import { simulateInputChange } from '../utils/simulateInputChange'
 
@@ -31,6 +34,7 @@ export type InputProps = {
   startIcon?: ReactNode
   endIcon?: ReactNode
   dropdownButton?: ReactNode
+  inputContent?: ReactElement[]
   inputProps?: ComponentProps<typeof InputBaseSC>
   /**
    * @deprecated use `size`
@@ -140,6 +144,7 @@ const InputBaseSC = styled.input<{
   $hasStartIcon: boolean
   $hasEndIcon: boolean
   $hasDropdownButton: boolean
+  $hasInputContent: boolean
   $size: InputProps['size']
 }>(
   ({
@@ -151,6 +156,7 @@ const InputBaseSC = styled.input<{
     $hasStartIcon,
     $hasEndIcon,
     $hasDropdownButton,
+    $hasInputContent,
     $size,
     disabled,
   }) => ({
@@ -160,7 +166,9 @@ const InputBaseSC = styled.input<{
     height: $size === 'small' ? 30 : $size === 'large' ? 46 : 38,
     lineHeight: $size === 'small' ? 30 : $size === 'large' ? 46 : 38,
     color: disabled ? theme.colors['text-input-disabled'] : theme.colors.text,
-    paddingLeft: $hasPrefix
+    paddingLeft: $hasInputContent
+      ? theme.spacing.xxsmall
+      : $hasPrefix
       ? theme.spacing.xsmall
       : $hasTitleContent
       ? $hasStartIcon
@@ -204,6 +212,21 @@ const EndIcon = styled(BaseIcon)<{
     ? 0
     : theme.spacing.medium,
 }))
+const InputContentSC = styled.div<{ $leftPad: keyof DefaultTheme['spacing'] }>(
+  ({ theme, $leftPad }) => ({
+    display: 'flex',
+    gap: theme.spacing.xxxsmall,
+    alignItems: 'center',
+    paddingLeft: $leftPad ? theme.spacing[$leftPad] : 0,
+    '& > *': {
+      maxWidth: 60,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
+  })
+)
+
 const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
   (
     {
@@ -219,6 +242,7 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
       small,
       large,
       onEnter,
+      inputContent,
       inputProps,
       //   Input props
       disabled,
@@ -296,12 +320,20 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
         {startIcon && (
           <StartIcon $hasStartContent={hasStartContent}>{startIcon}</StartIcon>
         )}
+        {!isEmpty(inputContent) && (
+          <InputContentSC
+            $leftPad={hasStartContent || !!startIcon ? 'medium' : 'xxsmall'}
+          >
+            {inputContent}
+          </InputContentSC>
+        )}
         <InputBaseSC
           $hasPrefix={!!prefix}
           $hasSuffix={!!suffix}
           $hasTitleContent={!!titleContent}
           $hasClearButton={hasClearButton}
           $hasStartIcon={!!startIcon}
+          $hasInputContent={!isEmpty(inputContent)}
           $hasEndIcon={!!endIcon}
           $size={size}
           disabled={disabled}
@@ -311,8 +343,7 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
           onChange={wrappedOnChange}
           onFocus={onFocus}
           onBlur={onBlur}
-          onEnter={onEnter}
-          onKeydown={wrappedOnKeyDown}
+          onKeyDown={wrappedOnKeyDown}
           {...inputProps}
         />
         {hasClearButton && (

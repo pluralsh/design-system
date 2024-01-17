@@ -43,6 +43,13 @@ const TAGS: Tag[] = [
   { name: 'stage', value: 'canary' },
   { name: 'route', value: 'some-very-very-long-tag-value' },
   { name: 'route', value: 'short-name' },
+  { name: 'local2', value: 'true' },
+  { name: 'local2', value: 'false' },
+  { name: 'stage2', value: 'dev' },
+  { name: 'stage2', value: 'prod' },
+  { name: 'stage2', value: 'canary' },
+  { name: 'route2', value: 'some-very-very-long-tag-value' },
+  { name: 'route2', value: 'short-name' },
 ]
 const tags = uniqWith(TAGS, isEqual)
 
@@ -89,14 +96,10 @@ export function ClusterTagsTemplate({
       ret = fuse.search(inputValue)
     } else {
       ret = tags.map((tag, i) => ({ item: tag, score: 1, refIndex: i }))
-      console.log('ret', ret)
     }
 
     return ret.filter((tag) => !selectedTagKeys.has(tagToKey(tag.item)))
   }, [fuse, inputValue, selectedTagKeys])
-
-  console.log('tags', tags)
-  console.log('searchResults', searchResults)
 
   const onSelectionChange: ComponentProps<
     typeof ComboBox
@@ -112,8 +115,6 @@ export function ClusterTagsTemplate({
   ) => {
     setInputValue(value)
   }
-
-  // return <div>Hi</div>
 
   return (
     <WrapWithIf
@@ -139,8 +140,24 @@ export function ClusterTagsTemplate({
             inputValue={inputValue}
             onSelectionChange={onSelectionChange}
             onInputChange={onInputChange}
+            tags={[...selectedTagKeys].map((key) => (
+              <Chip
+                key={key}
+                size="small"
+                clickable
+                onClick={() => {
+                  const newKeys = new Set(selectedTagKeys)
+
+                  newKeys.delete(key)
+                  setSelectedTagKeys(newKeys)
+                }}
+                closeButton
+              >
+                {key}
+              </Chip>
+            ))}
             inputProps={{
-              placeholder: 'Pick something',
+              placeholder: 'Tag filters',
             }}
             onOpenChange={(isOpen, _trigger) => {
               setIsOpen(isOpen)
@@ -191,6 +208,7 @@ export function ClusterTagsTemplate({
               maxVisible={Infinity}
               chips={[...selectedTagKeys].map((key) => (
                 <Chip
+                  key={key}
                   size="small"
                   clickable
                   onClick={() => {
