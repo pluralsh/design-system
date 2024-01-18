@@ -1,7 +1,7 @@
 import chroma from 'chroma-js'
 import { Div, type DivProps } from 'honorable'
 import { forwardRef } from 'react'
-import styled, { type DefaultTheme, useTheme } from 'styled-components'
+import styled, { type DefaultTheme } from 'styled-components'
 import { memoize } from 'lodash-es'
 
 import { type Severity, type SeverityExt, sanitizeSeverity } from '../types'
@@ -188,6 +188,7 @@ const CardSC = styled(Div)<{
   $severity: Severity
   $selected: boolean
   $clickable: boolean
+  disabled: boolean
 }>(
   ({
     theme,
@@ -245,7 +246,6 @@ const Card = forwardRef(
     ref
   ) => {
     fillLevel = useDecideFillLevel({ hue, fillLevel })
-    const theme = useTheme()
     const cardSeverity = sanitizeSeverity(severity, {
       allowList: CARD_SEVERITIES,
       default: 'neutral',

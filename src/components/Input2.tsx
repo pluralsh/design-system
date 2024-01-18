@@ -12,8 +12,6 @@ import styled, { type DefaultTheme } from 'styled-components'
 import { mergeRefs } from 'react-merge-refs'
 import { mergeProps } from 'react-aria'
 
-import { isEmpty } from 'lodash-es'
-
 import { simulateInputChange } from '../utils/simulateInputChange'
 
 import { useFillLevel } from './contexts/FillLevelContext'
@@ -89,8 +87,6 @@ function ClearButton({
   className,
   ...props
 }: Omit<ComponentProps<typeof IconFrame>, 'clickable' | 'icon' | 'size'>) {
-  console.log('props.disabled', props.disabled)
-
   return (
     <ClearButtonSC className={className}>
       <Tooltip
@@ -124,11 +120,13 @@ const InputRootSC = styled.div<{
   justifyContent: 'space-between',
   alignItems: 'center',
   height: 'auto',
-  minHeight: 'auto',
+  minHeight: $size === 'large' ? 48 : $size === 'small' ? 32 : 40,
   width: 'auto',
   padding: 0,
   border: theme.borders.input,
-  borderColor: $error ? theme.colors['border-danger'] : theme.colors.border,
+  borderColor: $error
+    ? theme.colors['border-danger']
+    : theme.colors['border-input'],
   borderRadius: theme.borderRadiuses.normal,
   '&:focus-within': {
     borderColor: theme.colors['border-outline-focused'],
@@ -141,64 +139,33 @@ const InputRootSC = styled.div<{
   },
 }))
 const InputBaseSC = styled.input<{
-  $hasPrefix: boolean
-  $hasSuffix: boolean
-  $hasTitleContent: boolean
-  $hasClearButton: boolean
-  $hasStartIcon: boolean
-  $hasEndIcon: boolean
-  $hasDropdownButton: boolean
-  $hasInputContent: boolean
-  $size: InputProps['size']
-}>(
-  ({
-    theme,
-    $hasPrefix,
-    $hasSuffix,
-    $hasTitleContent,
-    $hasClearButton,
-    $hasStartIcon,
-    $hasEndIcon,
-    $hasDropdownButton,
-    $hasInputContent,
-    $size,
-  }) => ({
-    ...theme.partials.reset.input,
-    width: '100%',
-    flex: '1 0 120px',
-    height: $size === 'small' ? 30 : $size === 'large' ? 46 : 38,
-    lineHeight: $size === 'small' ? 30 : $size === 'large' ? 46 : 38,
-    color: theme.colors.text,
-    paddingLeft: $hasInputContent
-      ? theme.spacing.xxsmall
-      : $hasPrefix
-      ? theme.spacing.xsmall
-      : $hasTitleContent
-      ? $hasStartIcon
-        ? theme.spacing.xsmall
-        : theme.spacing.small
-      : theme.spacing.medium,
-    paddingRight: $hasSuffix
-      ? theme.spacing.xsmall
-      : $hasClearButton || $hasEndIcon
-      ? theme.spacing.xsmall
-      : $hasDropdownButton
-      ? 0
-      : theme.spacing.medium,
-    '&::placeholder': {
-      color: theme.colors['text-xlight'],
+  $padStart: 'xsmall' | 'small' | 'medium' | undefined | null
+  $padEnd: 'xsmall' | 'small' | 'medium' | undefined | null
+}>(({ theme, $padStart, $padEnd }) => ({
+  ...theme.partials.reset.input,
+  width: '100%',
+  flex: '1 0',
+  alignSelf: 'stretch',
+  minHeight: 22,
+  lineHeight: '22px',
+  color: theme.colors.text,
+  ...($padStart ? { paddingLeft: theme.spacing[$padStart] } : {}),
+  ...($padEnd ? { paddingRight: theme.spacing[$padEnd] } : {}),
+  '&::placeholder': {
+    color: theme.colors['text-xlight'],
+  },
+  '&[disabled]': {
+    '&, &::placeholder': {
+      color: theme.colors['text-disabled'],
     },
-    '&[disabled]': {
-      '&, &::placeholder': {
-        color: theme.colors['text-disabled'],
-      },
-    },
-  })
-)
+  },
+}))
 
 const BaseIcon = styled.div((_) => ({
   alignSelf: 'stretch',
   display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   gap: 'small',
   margin: 0,
   padding: 0,
@@ -206,6 +173,10 @@ const BaseIcon = styled.div((_) => ({
 const StartIcon = styled(BaseIcon)<{ $hasStartContent: boolean }>(
   ({ theme, $hasStartContent }) => ({
     paddingLeft: $hasStartContent ? theme.spacing.small : theme.spacing.medium,
+    paddingRight: $hasStartContent
+      ? theme.spacing.xsmall
+      : theme.spacing.medium,
+    zIndex: 1,
   })
 )
 const EndIcon = styled(BaseIcon)<{
@@ -217,13 +188,20 @@ const EndIcon = styled(BaseIcon)<{
     : $hasDropdownButton
     ? 0
     : theme.spacing.medium,
+  paddingLeft: $hasEndContent ? theme.spacing.xsmall : theme.spacing.medium,
 }))
-const InputContentSC = styled.div<{ $leftPad: keyof DefaultTheme['spacing'] }>(
-  ({ theme, $leftPad }) => ({
+
+const InputAreaSC = styled.div((_) => ({
+  display: 'flex',
+  alignSelf: 'stretch',
+  flex: '1 1',
+  overflowX: 'auto',
+}))
+const InputContentSC = styled.div<{ $padStart: keyof DefaultTheme['spacing'] }>(
+  ({ theme, $padStart }) => ({
     display: 'flex',
     alignSelf: 'stretch',
-    flexShrink: 1,
-    paddingLeft: $leftPad ? theme.spacing[$leftPad] : 0,
+    paddingLeft: theme.spacing[$padStart],
   })
 )
 
@@ -259,6 +237,7 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
     ref
   ) => {
     const inputRef = useRef<HTMLInputElement>(null)
+    const inputAreaRef = useRef<HTMLDivElement>(null)
 
     inputProps = {
       ...(inputProps ?? {}),
@@ -267,13 +246,19 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
 
     const parentFillLevel = useFillLevel()
 
-    size = size || large ? 'large' : small ? 'small' : 'medium'
+    size = size || (large ? 'large' : small ? 'small' : 'medium')
 
     inputProps = mergeProps(useFormField()?.fieldProps ?? {}, inputProps)
 
     const hasEndContent = !!suffix
     const hasStartContent = !!prefix || !!titleContent
     const hasClearButton = showClearButton && value
+    const inputPadStart = startIcon
+      ? null
+      : hasStartContent
+      ? 'small'
+      : 'medium'
+    const inputPadEnd = endIcon ? null : hasEndContent ? 'small' : 'medium'
 
     const wrappedOnChange: InputPropsFull['onChange'] = useCallback(
       (e) => {
@@ -324,33 +309,26 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
         {startIcon && (
           <StartIcon $hasStartContent={hasStartContent}>{startIcon}</StartIcon>
         )}
-        {!isEmpty(inputContent) && (
-          <InputContentSC
-            $leftPad={hasStartContent || !!startIcon ? 'medium' : 'xxsmall'}
-          >
-            {inputContent}
-          </InputContentSC>
-        )}
-        <InputBaseSC
-          $hasPrefix={!!prefix}
-          $hasSuffix={!!suffix}
-          $hasTitleContent={!!titleContent}
-          $hasClearButton={hasClearButton}
-          $hasStartIcon={!!startIcon}
-          $hasInputContent={!isEmpty(inputContent)}
-          $hasEndIcon={!!endIcon}
-          $hasDropdownButton={!!dropdownButton}
-          $size={size}
-          disabled={disabled}
-          value={value}
-          error={error}
-          placeholder={placeholder}
-          onChange={wrappedOnChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          onKeyDown={wrappedOnKeyDown}
-          {...inputProps}
-        />
+        <InputAreaSC ref={inputAreaRef}>
+          {inputContent && (
+            <InputContentSC $padStart={inputPadStart}>
+              {inputContent}
+            </InputContentSC>
+          )}
+          <InputBaseSC
+            $padStart={!inputContent ? inputPadStart : 'xxsmall'}
+            $padEnd={inputPadEnd}
+            disabled={disabled}
+            value={value}
+            error={error}
+            placeholder={placeholder}
+            onChange={wrappedOnChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            onKeyDown={wrappedOnKeyDown}
+            {...inputProps}
+          />
+        </InputAreaSC>
         {hasClearButton && (
           <ClearButton
             disabled={disabled}

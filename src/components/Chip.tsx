@@ -39,7 +39,6 @@ export type ChipProps = Omit<FlexProps, 'size'> &
     loading?: boolean
     closeButton?: boolean
     closeButtonProps?: ComponentProps<StyledComponent<'button', DefaultTheme>>
-    onClickClose?: boolean
     clickable?: boolean
     truncateWidth?: number
     truncateEdge?: 'start' | 'end'

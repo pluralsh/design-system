@@ -6,15 +6,7 @@ import { isEqual, uniqWith } from 'lodash-es'
 
 import styled from 'styled-components'
 
-import {
-  Card,
-  Chip,
-  ComboBox,
-  ListBoxItem,
-  TagIcon,
-  Tooltip,
-  WrapWithIf,
-} from '..'
+import { Card, Chip, ComboBox, ListBoxItem, TagIcon, WrapWithIf } from '..'
 
 import { isNonNullable } from '../utils/isNonNullable'
 
@@ -50,22 +42,6 @@ const tags = uniqWith(TAGS, isEqual)
 function tagToKey(tag: Tag) {
   return `${tag.name}:${tag.value}`
 }
-// function keyToTag(key: Key) {
-//   const split = `${key}`.split(':')
-
-//   return { name: split[0], value: split[1] }
-// }
-
-const InputChipList = styled.div(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: theme.spacing.xxsmall,
-}))
-const InputChip = styled(Chip)((_) => ({
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
-}))
 
 export function ClusterTagsTemplate({
   onFillLevel,
@@ -141,40 +117,14 @@ export function ClusterTagsTemplate({
             inputValue={inputValue}
             onSelectionChange={onSelectionChange}
             onInputChange={onInputChange}
-            inputContent={
-              <InputChipList>
-                {selectedTagArr.map((key) => (
-                  <Tooltip
-                    key={key}
-                    placement="top"
-                    label={key}
-                    textValue={key}
-                  >
-                    <InputChip
-                      key={key}
-                      size="small"
-                      maxWidth={100}
-                      overflowEdge="start"
-                      closeButton
-                      closeButtonProps={{
-                        onClick: () => {
-                          const newKeys = new Set(selectedTagKeys)
-
-                          newKeys.delete(key)
-                          setSelectedTagKeys(newKeys)
-                        },
-                      }}
-                    >
-                      {key}
-                    </InputChip>
-                  </Tooltip>
-                ))}
-              </InputChipList>
-            }
-            onDeleteInputContent={() => {
+            chips={selectedTagArr.map((key) => ({
+              key,
+              children: key,
+            }))}
+            onDeleteChip={(chipKey) => {
               const newKeys = new Set(selectedTagKeys)
 
-              newKeys.delete(selectedTagArr[selectedTagArr.length - 1])
+              newKeys.delete(chipKey)
               setSelectedTagKeys(newKeys)
             }}
             inputProps={{
@@ -187,10 +137,11 @@ export function ClusterTagsTemplate({
             allowsEmptyCollection
             {...(withTitleContent
               ? {
+                  startIcon: null,
                   titleContent: (
                     <>
                       <TagIcon marginRight="small" />
-                      Tags
+                      Search tags
                     </>
                   ),
                 }

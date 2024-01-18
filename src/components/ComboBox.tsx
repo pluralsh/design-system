@@ -1,5 +1,5 @@
 import { omitBy } from 'lodash'
-import { isUndefined, omit, pick } from 'lodash-es'
+import { isEmpty, isUndefined, omit, pick } from 'lodash-es'
 import {
   type ComponentProps,
   type HTMLAttributes,
@@ -38,6 +38,7 @@ import {
   useSelectComboStateProps,
 } from './SelectComboShared'
 import Input2 from './Input2'
+import Chip from './Chip'
 
 type Placement = 'left' | 'right'
 
@@ -59,6 +60,8 @@ type ComboBoxProps = Exclude<ComboBoxInputProps, 'children'> & {
   filter?: ComboBoxStateOptions<object>['defaultFilter']
   loading?: boolean
   titleContent?: ReactNode
+  chips?: ComponentProps<typeof Chip>[]
+  onDeleteChip?: (key: string) => void
   inputContent?: ComponentProps<typeof Input2>['inputContent']
   onDeleteInputContent?: ComponentProps<typeof Input2>['onDeleteInputContent']
 } & Pick<InputProps, 'suffix' | 'prefix' | 'titleContent' | 'showClearButton'> &
@@ -137,6 +140,15 @@ function OpenButton({
   )
 }
 
+const InputChipList = styled.div(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing.xxsmall,
+}))
+const onChipClick = (e: Event) => {
+  e.stopPropagation()
+}
+
 const honorableInputPropNames = [
   'onChange',
   'onFocus',
@@ -193,6 +205,7 @@ function ComboBoxInput({
         ref: inputRef,
         onClick: onInputClick,
         ...innerInputProps,
+        style: { minWidth: 120, ...(innerInputProps?.style || {}) },
       }}
       {...outerInputProps}
       {...props}
@@ -228,8 +241,8 @@ function ComboBox({
   prefix,
   titleContent,
   showClearButton,
-  inputContent,
-  onDeleteInputContent,
+  chips,
+  onDeleteChip,
   ...props
 }: ComboBoxProps) {
   const nextFocusedKeyRef = useRef<Key>(null)
@@ -365,14 +378,43 @@ function ComboBox({
 
   outerInputProps = useMemo(
     () => ({
-      ...(inputContent ? { inputContent } : {}),
-      ...(onDeleteInputContent ? { onDeleteInputContent } : {}),
+      ...(!isEmpty(chips)
+        ? {
+            inputContent: (
+              <InputChipList>
+                {chips.map((chipProps) => (
+                  <Chip
+                    size="small"
+                    condensed
+                    truncateWidth={100}
+                    truncateEdge="start"
+                    closeButton
+                    tooltip
+                    onClick={onChipClick}
+                    closeButtonProps={{
+                      onClick: () => {
+                        onDeleteChip?.(chipProps?.key)
+                      },
+                    }}
+                    {...chipProps}
+                  />
+                ))}
+              </InputChipList>
+            ),
+          }
+        : {}),
+      ...(onDeleteChip
+        ? {
+            onDeleteInputContent: () =>
+              onDeleteChip?.(chips?.[chips.length - 1]?.key),
+          }
+        : {}),
       ...outerInputProps,
       ...(outerInputProps.ref
         ? { ref: mergeRefs([outerInputProps.ref, triggerRef]) }
         : { ref: triggerRef }),
     }),
-    [inputContent, onDeleteInputContent, outerInputProps, triggerRef]
+    [chips, onDeleteChip, outerInputProps, triggerRef]
   )
 
   return (

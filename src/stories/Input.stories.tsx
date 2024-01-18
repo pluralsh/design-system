@@ -125,32 +125,9 @@ function CustomInputV2Template(args: any) {
       direction="column"
       maxWidth="400px"
     >
-      <Div>
-        <Input
-          large
-          width="100%"
-          {...props}
-        />
-      </Div>
-      <Div marginTop="medium">
-        <Input
-          width="100%"
-          value={inputVal}
-          {...props}
-        />
-      </Div>
-      <Div marginTop="medium">
-        <Input
-          small
-          width="100%"
-          value={inputVal}
-          {...props}
-        />
-      </Div>
-      <h2>V2</h2>
       <Div marginTop="medium">
         <Input2
-          large
+          size="large"
           width="100%"
           {...props}
         />
@@ -164,7 +141,7 @@ function CustomInputV2Template(args: any) {
       </Div>
       <Div marginTop="medium">
         <Input2
-          small
+          size="small"
           width="100%"
           value={inputVal}
           {...props}
@@ -230,7 +207,7 @@ export const Version2 = CustomInputV2Template.bind({})
 
 Version2.args = {
   startIcon: <SearchIcon />,
-  // endIcon: <SearchIcon />,
+  // endIcon: <TagIcon />,
   titleContent: (
     <>
       <BrowseAppsIcon marginRight="small" />
@@ -240,6 +217,7 @@ Version2.args = {
   placeholder: 'Search the marketplace',
   showClearButton: true,
   suffix: '',
+  prefix: '',
   disabled: false,
   error: false,
 }
