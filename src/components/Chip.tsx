@@ -25,6 +25,7 @@ import Card, {
 import CloseIcon from './icons/CloseIcon'
 import Tooltip from './Tooltip'
 
+export const CHIP_CLOSE_ATTR_KEY = 'data-close-button' as const
 const SIZES = ['small', 'medium', 'large'] as const
 
 type ChipSize = (typeof SIZES)[number]
@@ -152,6 +153,9 @@ const CloseButtonSC = styled.button<{
     '.closeIcon': {
       color: theme.colors['text-light'],
     },
+    '&:focus-visible': {
+      ...theme.partials.focus.outline,
+    },
     '&:not(:disabled)': {
       '&:focus-visible, &:hover, [data-clickable=true]:hover > &': {
         backgroundColor:
@@ -234,6 +238,9 @@ function ChipRef(
           disabled={disabled}
           $fillLevel={fillLevel}
           $severity={severity}
+          {...{
+            [CHIP_CLOSE_ATTR_KEY]: '',
+          }}
           {...(clickable ? { as: 'div' } : {})}
           {...(closeButtonProps || {})}
         >

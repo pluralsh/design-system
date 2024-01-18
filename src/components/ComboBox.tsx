@@ -4,9 +4,12 @@ import {
   type ComponentProps,
   type HTMLAttributes,
   type Key,
+  type KeyboardEvent,
+  type KeyboardEventHandler,
   type MouseEventHandler,
   type ReactElement,
   type ReactNode,
+  type RefCallback,
   type RefObject,
   useCallback,
   useEffect,
@@ -38,9 +41,10 @@ import {
   useSelectComboStateProps,
 } from './SelectComboShared'
 import Input2 from './Input2'
-import Chip from './Chip'
+import Chip, { CHIP_CLOSE_ATTR_KEY } from './Chip'
 
 type Placement = 'left' | 'right'
+const CHIP_ATTR_KEY = 'data-chip-key' as const
 
 type ComboBoxProps = Exclude<ComboBoxInputProps, 'children'> & {
   children:
@@ -242,7 +246,7 @@ function ComboBox({
   titleContent,
   showClearButton,
   chips,
-  onDeleteChip,
+  onDeleteChip: onDeleteChipProp,
   ...props
 }: ComboBoxProps) {
   const nextFocusedKeyRef = useRef<Key>(null)
@@ -376,12 +380,117 @@ function ComboBox({
     placement,
   })
 
+  const mutationCb: MutationCallback = useCallback((mutations) => {
+    mutations.forEach((r) => {
+      for (const node of r.removedNodes) {
+        if (!(node instanceof HTMLElement)) break
+        const key = node.getAttribute(CHIP_ATTR_KEY)
+
+        if (!key) break
+      }
+    })
+  }, [])
+  const observerRef = useRef<MutationObserver | null>(null)
+  const chipListRef = useRef<HTMLDivElement>(null)
+  const chipListRefCb = useCallback<RefCallback<HTMLDivElement>>(
+    (node) => {
+      observerRef.current?.disconnect?.()
+      chipListRef.current = node
+      if (!node) {
+        observerRef.current = null
+
+        return
+      }
+      observerRef.current = new MutationObserver(mutationCb)
+      observerRef.current.observe(node, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeOldValue: true,
+      })
+    },
+    [mutationCb, observerRef]
+  )
+  const onDeleteChip = useCallback(
+    (key: string) => {
+      const elt = chipListRef?.current?.querySelector(
+        `[${CHIP_ATTR_KEY}="${CSS.escape(key)}"]`
+      )
+      const prevChipClose = elt?.previousElementSibling?.querySelector(
+        '[data-close-button]'
+      )
+
+      if (prevChipClose instanceof HTMLElement) {
+        prevChipClose.focus()
+      } else {
+        const nextChipClose = elt?.nextElementSibling?.querySelector(
+          '[data-close-button]'
+        )
+
+        if (nextChipClose instanceof HTMLElement) {
+          nextChipClose.focus?.()
+        } else {
+          inputRef.current?.querySelector('input')?.focus?.()
+        }
+      }
+
+      onDeleteChipProp?.(key)
+    },
+    [onDeleteChipProp]
+  )
+  const handleKeyDown = useCallback<KeyboardEventHandler>((e) => {
+    const elt = e.currentTarget
+
+    const dir: 0 | 1 | -1 =
+      e.code === 'ArrowLeft' ? -1 : e.code === 'ArrowRight' ? 1 : 0
+
+    if (dir === 0) return
+
+    if (elt instanceof HTMLInputElement) {
+      if (elt.selectionStart !== 0 || dir !== -1) {
+        return
+      }
+
+      const lastChipClose = chipListRef.current?.querySelector(
+        `:last-of-type[${CHIP_ATTR_KEY}] [${CHIP_CLOSE_ATTR_KEY}]`
+      )
+
+      if (lastChipClose instanceof HTMLElement) {
+        lastChipClose.focus()
+      }
+    } else if (
+      elt instanceof HTMLElement &&
+      elt.contains(document.activeElement)
+    ) {
+      const chip = document.activeElement?.closest(`[${CHIP_ATTR_KEY}]`)
+
+      if (dir === 1) {
+        if (!chip.nextElementSibling) {
+          inputRef.current?.querySelector('input')?.focus()
+        } else {
+          chip?.nextElementSibling
+            ?.querySelector(`[${CHIP_CLOSE_ATTR_KEY}]`)
+            // @ts-ignore
+            ?.focus?.()
+        }
+      } else if (dir === -1) {
+        chip.previousElementSibling
+          ?.querySelector(`[${CHIP_CLOSE_ATTR_KEY}]`)
+          // @ts-ignore
+          ?.focus?.()
+      }
+    }
+  }, [])
+
   outerInputProps = useMemo(
     () => ({
       ...(!isEmpty(chips)
         ? {
             inputContent: (
-              <InputChipList>
+              <InputChipList
+                ref={chipListRefCb}
+                onKeyDown={handleKeyDown}
+              >
                 {chips.map((chipProps) => (
                   <Chip
                     size="small"
@@ -395,7 +504,9 @@ function ComboBox({
                       onClick: () => {
                         onDeleteChip?.(chipProps?.key)
                       },
+                      'aria-label': `Remove ${chipProps.key}`,
                     }}
+                    {...{ [CHIP_ATTR_KEY]: chipProps?.key }}
                     {...chipProps}
                   />
                 ))}
@@ -403,10 +514,10 @@ function ComboBox({
             ),
           }
         : {}),
-      ...(onDeleteChip
+      ...(onDeleteChipProp
         ? {
             onDeleteInputContent: () =>
-              onDeleteChip?.(chips?.[chips.length - 1]?.key),
+              onDeleteChipProp?.(chips?.[chips.length - 1]?.key),
           }
         : {}),
       ...outerInputProps,
@@ -414,13 +525,27 @@ function ComboBox({
         ? { ref: mergeRefs([outerInputProps.ref, triggerRef]) }
         : { ref: triggerRef }),
     }),
-    [chips, onDeleteChip, outerInputProps, triggerRef]
+    [
+      chipListRefCb,
+      chips,
+      handleKeyDown,
+      onDeleteChip,
+      onDeleteChipProp,
+      outerInputProps,
+      triggerRef,
+    ]
   )
 
   return (
     <ComboBoxInner>
       <ComboBoxInput
-        inputProps={inputProps}
+        inputProps={{
+          ...inputProps,
+          onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => {
+            handleKeyDown(e)
+            inputProps?.onKeyDown?.(e)
+          },
+        }}
         buttonRef={buttonRef}
         buttonProps={buttonProps}
         showArrow={showArrow}
