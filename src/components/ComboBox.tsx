@@ -9,7 +9,6 @@ import {
   type MouseEventHandler,
   type ReactElement,
   type ReactNode,
-  type RefCallback,
   type RefObject,
   useCallback,
   useEffect,
@@ -99,6 +98,7 @@ type ComboBoxInputProps = {
   buttonRef?: RefObject<HTMLDivElement>
   buttonProps?: AriaButtonProps
   loading?: boolean
+  hasChips?: boolean
 }
 
 const OpenButtonSC = styled.div(({ theme }) => ({
@@ -170,6 +170,7 @@ function ComboBoxInput({
   buttonRef,
   buttonProps,
   showArrow = true,
+  hasChips = false,
   isOpen,
   onInputClick,
   loading,
@@ -209,7 +210,10 @@ function ComboBoxInput({
         ref: inputRef,
         onClick: onInputClick,
         ...innerInputProps,
-        style: { minWidth: 120, ...(innerInputProps?.style || {}) },
+        style: {
+          ...(hasChips ? { minWidth: 150 } : {}),
+          ...(innerInputProps?.style || {}),
+        },
       }}
       {...outerInputProps}
       {...props}
@@ -380,37 +384,8 @@ function ComboBox({
     placement,
   })
 
-  const mutationCb: MutationCallback = useCallback((mutations) => {
-    mutations.forEach((r) => {
-      for (const node of r.removedNodes) {
-        if (!(node instanceof HTMLElement)) break
-        const key = node.getAttribute(CHIP_ATTR_KEY)
-
-        if (!key) break
-      }
-    })
-  }, [])
-  const observerRef = useRef<MutationObserver | null>(null)
   const chipListRef = useRef<HTMLDivElement>(null)
-  const chipListRefCb = useCallback<RefCallback<HTMLDivElement>>(
-    (node) => {
-      observerRef.current?.disconnect?.()
-      chipListRef.current = node
-      if (!node) {
-        observerRef.current = null
 
-        return
-      }
-      observerRef.current = new MutationObserver(mutationCb)
-      observerRef.current.observe(node, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeOldValue: true,
-      })
-    },
-    [mutationCb, observerRef]
-  )
   const onDeleteChip = useCallback(
     (key: string) => {
       const elt = chipListRef?.current?.querySelector(
@@ -488,7 +463,7 @@ function ComboBox({
         ? {
             inputContent: (
               <InputChipList
-                ref={chipListRefCb}
+                ref={chipListRef}
                 onKeyDown={handleKeyDown}
               >
                 {chips.map((chipProps) => (
@@ -526,7 +501,6 @@ function ComboBox({
         : { ref: triggerRef }),
     }),
     [
-      chipListRefCb,
       chips,
       handleKeyDown,
       onDeleteChip,
@@ -558,6 +532,7 @@ function ComboBox({
         startIcon={startIcon}
         outerInputProps={outerInputProps}
         loading={loading}
+        hasChips={!!chips}
         onInputClick={() => {
           setIsOpen(true)
           // Need to also manually open with state to override

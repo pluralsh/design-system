@@ -175,7 +175,6 @@ const IconFrame = forwardRef<
     }
     const forwardedAs = as || (clickable ? ButtonBase : undefined)
 
-    console.log('props', props)
     let content = (
       <IconFrameSC
         $clickable={clickable}

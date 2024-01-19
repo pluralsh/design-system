@@ -13,6 +13,7 @@ import { mergeRefs } from 'react-merge-refs'
 import { mergeProps } from 'react-aria'
 
 import { simulateInputChange } from '../utils/simulateInputChange'
+import { useRefResizeObserver } from '../hooks/useRefResizeObserver'
 
 import { useFillLevel } from './contexts/FillLevelContext'
 import { TitleContent } from './Select'
@@ -223,7 +224,7 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
       onDeleteInputContent,
       inputContent,
       inputProps,
-      //   Input props
+      // Input props
       disabled,
       value,
       error,
@@ -238,6 +239,32 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
   ) => {
     const inputRef = useRef<HTMLInputElement>(null)
     const inputAreaRef = useRef<HTMLDivElement>(null)
+    const inputContentRef = useRef<HTMLDivElement>(null)
+    const inputContentWidthRef = useRef<number>(0)
+    const onInputContentResize = useCallback<
+      Parameters<typeof useRefResizeObserver>[1]
+    >((entry) => {
+      const prevWidth = inputContentWidthRef.current
+
+      inputContentWidthRef.current = entry.contentRect.width
+      if (entry.contentRect.width <= prevWidth) {
+        return
+      }
+      const scrollDiff =
+        (inputAreaRef.current?.scrollWidth ?? 0) -
+        (inputAreaRef.current?.getBoundingClientRect().width ?? 0)
+
+      if (scrollDiff > 0) {
+        inputAreaRef.current.scrollTo({
+          left: scrollDiff + 1,
+          behavior: 'smooth',
+        })
+      }
+    }, [])
+    const inputContentRefCb = useRefResizeObserver(
+      inputContentRef,
+      onInputContentResize
+    )
 
     inputProps = {
       ...(inputProps ?? {}),
@@ -311,7 +338,10 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
         )}
         <InputAreaSC ref={inputAreaRef}>
           {inputContent && (
-            <InputContentSC $padStart={inputPadStart}>
+            <InputContentSC
+              ref={inputContentRefCb}
+              $padStart={inputPadStart}
+            >
               {inputContent}
             </InputContentSC>
           )}
