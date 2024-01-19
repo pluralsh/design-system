@@ -39,8 +39,8 @@ function typeToHoverBG(theme: typeof styledTheme): Record<Type, string> {
 
 function typeToSelectedBG(theme: typeof styledTheme): Record<Type, string> {
   return {
-    secondary: undefined,
-    tertiary: undefined,
+    secondary: theme.colors['fill-zero-selected'],
+    tertiary: theme.colors['fill-zero-selected'],
     floating:
       theme.mode === 'light'
         ? theme.colors['fill-three-selected']

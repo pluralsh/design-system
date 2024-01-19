@@ -21,6 +21,7 @@ const sizes: IconFrameProps['size'][] = [
 
 function Template({
   clickable,
+  selected,
   icon,
   textValue,
   tooltip,
@@ -47,6 +48,7 @@ function Template({
             <IconFrame
               size={size || 'medium'}
               clickable={clickable === undefined ? true : clickable}
+              selected={selected}
               icon={icon || <TrashCanIcon />}
               textValue={textValue || 'Delete'}
               tooltip={tooltip}
@@ -64,6 +66,7 @@ function Template({
 export const Default = Template.bind({})
 Default.args = {
   clickable: true,
+  selected: false,
   tooltip: true,
   tooltipProps: {
     displayOn: 'hover',
