@@ -28,8 +28,8 @@ function typeToBG(theme: typeof styledTheme): Record<Type, string> {
 
 function typeToHoverBG(theme: typeof styledTheme): Record<Type, string> {
   return {
-    secondary: theme.colors['action-input-hover'],
-    tertiary: theme.colors['action-input-hover'],
+    secondary: theme.colors['fill-zero-hover'],
+    tertiary: theme.colors['fill-zero-hover'],
     floating:
       theme.mode === 'light'
         ? theme.colors['fill-three-hover']
