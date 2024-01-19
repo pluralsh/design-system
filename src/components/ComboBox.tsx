@@ -119,7 +119,6 @@ const OpenButtonSC = styled.div(({ theme }) => ({
 }))
 
 function OpenButton({
-  isOpen: _isOpen,
   buttonRef,
   buttonProps,
   ...props

@@ -216,7 +216,6 @@ const Input2 = forwardRef<HTMLDivElement, InputPropsFull>(
       prefix,
       showClearButton,
       titleContent,
-      startContent: _startContent,
       size,
       small,
       large,
