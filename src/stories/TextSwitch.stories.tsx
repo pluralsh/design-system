@@ -1,14 +1,17 @@
 import { type ComponentProps, useState } from 'react'
-import { useTheme } from 'styled-components'
-
 import { Flex } from 'honorable'
 
-import Button from '../components/Button'
 import TextSwitch from '../components/TextSwitch'
 
 export default {
   title: 'TextSwitch',
   component: TextSwitch,
+  argTypes: {
+    size: {
+      options: ['small'],
+      control: { type: 'select' },
+    },
+  },
 }
 
 const options1 = [
@@ -24,19 +27,19 @@ const options1 = [
 const options2 = [
   {
     value: '0',
-    label: '1',
+    label: 'one',
   },
   {
     value: '1',
-    label: '2',
+    label: 'two',
   },
   {
     value: '2',
-    label: '3',
+    label: 'three',
   },
   {
     value: '3',
-    label: '4',
+    label: 'four',
   },
 ] as const satisfies ComponentProps<typeof TextSwitch>['options']
 
@@ -54,16 +57,16 @@ function Template({ label, ...args }: ComponentProps<typeof TextSwitch>) {
       flexDirection="column"
     >
       <TextSwitch
-        name="radio-group-controlled"
-        label={label || 'Match:'}
+        name="radio-group-controlled1"
+        label={label || 'Match'}
         value={selectedValue1}
         onChange={setSelectedValue1}
         options={options1}
         {...args}
       />
       <TextSwitch
-        name="radio-group-controlled"
-        label={label || 'Tabs'}
+        name="radio-group-controlled2"
+        label={label || 'Options'}
         labelPosition="end"
         value={selectedValue2}
         onChange={setSelectedValue2}
@@ -74,8 +77,8 @@ function Template({ label, ...args }: ComponentProps<typeof TextSwitch>) {
   )
 }
 
-export const Small = Template.bind({})
-Small.args = {
+export const Default = Template.bind({})
+Default.args = {
   size: 'small',
   label: '',
   isDisabled: false,
