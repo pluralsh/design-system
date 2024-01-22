@@ -1,0 +1,343 @@
+import {
+  type ComponentProps,
+  type ReactElement,
+  type ReactFragment,
+  createContext,
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
+import {
+  type AriaRadioGroupProps,
+  type AriaRadioProps,
+  useRadio,
+  useRadioGroup,
+} from 'react-aria'
+import { useRadioGroupState } from 'react-stately'
+
+import classNames from 'classnames'
+import styled from 'styled-components'
+import { VisuallyHidden, useFocusRing } from 'react-aria'
+import { type ComponentPropsWithRef, useSpring } from '@react-spring/web'
+
+import { AnimatedDiv } from './AnimatedDiv'
+
+const sizeToHeight = { small: 20 } as const satisfies Record<
+  TextSwitchSize,
+  number
+>
+
+type TextSwitchSize = 'small'
+type TextSwitchOption = { value: string } & (
+  | {
+      label: ReactElement | ReactFragment
+      textValue: string
+    }
+  | { label: string }
+)
+type TextSwitchOptions = TextSwitchOption[]
+
+type TextSwitchProps = Omit<AriaRadioGroupProps, 'orientation'> & {
+  options: TextSwitchOptions
+  labelPosition: 'start' | 'end'
+} & ComponentPropsWithRef<typeof TextSwitchSC>
+
+const TextSwitchSC = styled.div<{ $size: TextSwitchSize }>(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing.xxsmall,
+  alignItems: 'center',
+  ...theme.partials.text.overline,
+  color: theme.colors['text-light'],
+}))
+const SwitchSC = styled.div<{ $size: TextSwitchSize }>(({ theme, $size }) => ({
+  position: 'relative',
+  display: 'flex',
+  border: theme.borders.input,
+  borderRadius: sizeToHeight[$size] / 2,
+  height: sizeToHeight[$size],
+  '&:focus-within': {
+    ...theme.partials.focus.outline,
+  },
+  '@supports selector(:has(*))': {
+    '&:focus-within': {
+      outline: 'none',
+    },
+    '&:has(:focus-visible)': {
+      ...theme.partials.focus.outline,
+    },
+  },
+}))
+
+export const TextSwitchContext = createContext(null)
+
+const SwitchHandleSC = styled(AnimatedDiv)<{
+  $size: TextSwitchSize
+  $disabled: boolean
+}>(({ theme, $disabled, $size }) => {
+  const height = sizeToHeight[$size as TextSwitchSize]
+
+  return {
+    position: 'absolute',
+    backgroundColor: $disabled
+      ? theme.colors['action-link-active-disabled']
+      : theme.colors['action-primary'],
+    top: 0,
+    bottom: 0,
+    left: 0,
+    width: 10,
+    borderRadius: (height - 2) / 2,
+    zIndex: -1,
+  }
+})
+
+function TextSwitch(
+  {
+    name,
+    label,
+    labelPosition = 'start',
+    description,
+    errorMessage,
+    isDisabled = false,
+    isReadOnly = false,
+    value,
+    defaultValue,
+    onChange,
+    isRequired,
+    options,
+    size,
+    ...props
+  }: TextSwitchProps,
+  refProp: any
+) {
+  const switchRef = useRef<HTMLDivElement>(null)
+  const selectedElt = useRef<HTMLElement>(null)
+
+  const [selectedLeft, setSelectedLeft] = useState<number | undefined>(
+    undefined
+  )
+  const [selectedWidth, setSelectedWidth] = useState<number | undefined>(
+    undefined
+  )
+
+  useLayoutEffect(() => {
+    console.log('outer', switchRef?.current)
+    selectedElt.current = switchRef?.current?.querySelector(
+      `[data-value="${value}"]`
+    )
+
+    const parentLeft = switchRef.current?.getBoundingClientRect()?.left
+    const selectedR = selectedElt.current?.getBoundingClientRect()
+
+    setSelectedLeft(
+      !selectedR.left ? undefined : selectedR.left - parentLeft - 1
+    )
+    setSelectedWidth(!selectedR?.width ? undefined : selectedR?.width)
+  }, [value])
+  const stateProps: AriaRadioGroupProps = {
+    name,
+    label,
+    description,
+    errorMessage,
+    isDisabled,
+    isReadOnly,
+    value,
+    defaultValue,
+    onChange,
+    isRequired,
+    orientation: 'horizontal',
+  }
+  const state = useRadioGroupState(stateProps)
+  const { radioGroupProps, labelProps } = useRadioGroup(stateProps, state)
+
+  console.log({ selectedLeft, selectedWidth })
+  const springs = useSpring({
+    to: { left: selectedLeft, width: selectedWidth },
+    config: {
+      clamp: true,
+      mass: 0.6,
+      tension: 280,
+      velocity: 0.02,
+    },
+  })
+
+  return (
+    <TextSwitchSC
+      ref={refProp}
+      $size={size}
+      {...props}
+      {...radioGroupProps}
+    >
+      {label && labelPosition === 'start' && <div {...labelProps}>{label}</div>}
+      <TextSwitchContext.Provider value={state}>
+        <SwitchSC
+          ref={switchRef}
+          $size={size}
+        >
+          {options.map((option) => (
+            <TextSwitchOption
+              key={option.value}
+              size={size}
+              isDisabled={isDisabled}
+              {...option}
+            />
+          ))}
+          <SwitchHandleSC
+            $disabled={isDisabled}
+            $size={size}
+            style={{ ...springs }}
+          />
+        </SwitchSC>
+      </TextSwitchContext.Provider>
+      {label && labelPosition === 'end' && <div {...labelProps}>{label}</div>}
+    </TextSwitchSC>
+  )
+}
+
+const TextSwitchOptionSC = styled.label<{
+  $size: TextSwitchSize
+  $isFocusVisible: boolean
+  $disabled: boolean
+}>(({ $size, $disabled = false, $isFocusVisible, theme }) => ({
+  ...theme.partials.text.body2,
+  display: 'flex',
+  flexShrink: 0,
+  flexGrow: 0,
+  gap: theme.spacing.small,
+  alignItems: 'center',
+  padding: `${0} ${6}px`,
+  color: $disabled
+    ? theme.colors['text-input-disabled']
+    : theme.colors['text-xlight'],
+  cursor: $disabled ? 'not-allowed' : 'pointer',
+  margin: 0,
+  justifyContent: 'center',
+  borderRadius: (sizeToHeight[$size] - 2) / 2,
+  '&::before': {
+    position: 'absolute',
+    content: '""',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1,
+    backgroundColor: 'transparent',
+  },
+  ':focus': {
+    outline: 'none',
+  },
+  ...(!$disabled
+    ? {
+        '&:hover': {
+          color: theme.colors.text,
+          ':not(.selected)': {
+            backgroundColor: theme.colors['action-input-hover'],
+          },
+          '.icon': {
+            color: theme.colors['action-primary-hover'],
+          },
+        },
+        '&.selected': {
+          color: theme.colors['action-always-white'],
+          '&::before': {
+            backgroundColor: 'transparent',
+          },
+        },
+      }
+    : {
+        '&.selected': {
+          color: theme.colors['text-primary-disabled'],
+        },
+      }),
+}))
+
+export type RadioProps = AriaRadioProps & {
+  size?: 'small'
+  disabled?: boolean
+  defaultSelected?: boolean
+  selected?: boolean
+  name?: string
+  onChange?: ComponentProps<'input'>['onChange']
+} & ComponentProps<typeof TextSwitchOptionSC>
+
+function TextSwitchOption({
+  size,
+  value,
+  selected: selectedProp,
+  disabled,
+  defaultSelected,
+  'aria-describedby': ariaDescribedBy,
+  onChange,
+  onBlur,
+  onFocus,
+  onKeyDown,
+  onKeyUp,
+  name,
+  label,
+  ...props
+}: RadioProps) {
+  const [selected, setSelected] = useState(defaultSelected || selectedProp)
+  const state = useContext(TextSwitchContext) || {
+    setSelectedValue: () => {},
+    selectedValue: selectedProp || selected ? value : undefined,
+  }
+
+  useEffect(() => {
+    setSelected(selectedProp)
+  }, [selectedProp])
+
+  const labelId = useId()
+  const inputRef = useRef<any>()
+  const { isFocusVisible, focusProps } = useFocusRing()
+  const { inputProps, isSelected, isDisabled } = useRadio(
+    {
+      value,
+      'aria-describedby': ariaDescribedBy,
+      'aria-labelledby': labelId,
+      isDisabled: disabled,
+      onBlur,
+      onFocus,
+      onKeyDown,
+      onKeyUp,
+    },
+    state,
+    inputRef
+  )
+
+  return (
+    <TextSwitchOptionSC
+      htmlFor={inputProps.id}
+      id={labelId}
+      //   ref={ref}
+      className={classNames({ selected: isSelected })}
+      $isFocusVisible={isFocusVisible}
+      $size={size}
+      $disabled={isDisabled}
+      data-value={value}
+      {...props}
+    >
+      <VisuallyHidden>
+        <input
+          {...inputProps}
+          {...focusProps}
+          name={inputProps.name || name}
+          onChange={(e) => {
+            if (typeof onChange === 'function') {
+              onChange(e)
+            }
+            setSelected(!selected)
+            inputProps.onChange(e)
+          }}
+          ref={inputRef}
+        />
+      </VisuallyHidden>
+      <div className="label">{label}</div>
+    </TextSwitchOptionSC>
+  )
+}
+
+export default forwardRef(TextSwitch)
