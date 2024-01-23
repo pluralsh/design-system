@@ -20,16 +20,16 @@ import {
 import { useRadioGroupState } from 'react-stately'
 
 import classNames from 'classnames'
-import styled from 'styled-components'
+import styled, {
+  type DefaultTheme,
+  type StyledComponent,
+} from 'styled-components'
 import { VisuallyHidden, useFocusRing } from 'react-aria'
 import { type ComponentPropsWithRef, useSpring } from '@react-spring/web'
 
-import { AnimatedDiv } from './AnimatedDiv'
+import { type SetRequired } from 'type-fest'
 
-const sizeToHeight = { small: 20 } as const satisfies Record<
-  TextSwitchSize,
-  number
->
+import { AnimatedDiv } from './AnimatedDiv'
 
 type TextSwitchSize = 'small'
 type TextSwitchOption = { value: string } & (
@@ -41,10 +41,19 @@ type TextSwitchOption = { value: string } & (
 )
 type TextSwitchOptions = TextSwitchOption[]
 
-type TextSwitchProps = Omit<AriaRadioGroupProps, 'orientation'> & {
+type TextSwitchProps = SetRequired<
+  Omit<AriaRadioGroupProps, 'orientation'>,
+  'value'
+> & {
+  size: TextSwitchSize
   options: TextSwitchOptions
-  labelPosition: 'start' | 'end'
-} & ComponentPropsWithRef<typeof TextSwitchSC>
+  labelPosition?: 'start' | 'end'
+} & ComponentPropsWithRef<StyledComponent<'div', DefaultTheme>>
+
+const sizeToHeight = { small: 22 } as const satisfies Record<
+  TextSwitchSize,
+  number
+>
 
 const TextSwitchSC = styled.div<{ $size: TextSwitchSize }>(({ theme }) => ({
   display: 'flex',
@@ -213,12 +222,13 @@ const TextSwitchOptionSC = styled.label<{
   position: 'relative',
   overflow: 'hidden',
   whiteSpace: 'nowrap',
+  userSelect: 'none',
   display: 'flex',
   flexShrink: 0,
   flexGrow: 0,
   gap: theme.spacing.small,
   alignItems: 'center',
-  padding: `${0} ${6}px`,
+  padding: `${0} ${8}px`,
   color: $disabled
     ? theme.colors['text-input-disabled']
     : theme.colors['text-xlight'],
