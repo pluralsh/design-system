@@ -186,7 +186,3 @@ export { default as WavingHandIcon } from './components/icons/WavingHandIcon'
 export { default as WebhooksIcon } from './components/icons/WebhooksIcon'
 export { default as WindowsLogoIcon } from './components/icons/WindowsLogoIcon'
 export { default as WorkspaceIcon } from './components/icons/WorkspaceIcon'
-// Logos
-export { default as PluralLogoFull } from './components/icons/logo/PluralLogoFull'
-export { default as PluralLogoMark } from './components/icons/logo/PluralLogoMark'
-export { default as PluralLogoWord } from './components/icons/logo/PluralLogoWord'
