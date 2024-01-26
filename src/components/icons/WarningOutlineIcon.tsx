@@ -1,6 +1,6 @@
 import createIcon from './createIcon'
 
-export default createIcon(({ size, color, secondaryColor }) => (
+export default createIcon(({ size, color }) => (
   <svg
     width={size}
     viewBox="0 0 16 16"
