@@ -30,7 +30,7 @@ export const modalParts = ['Backdrop'] as const
 
 export type ModalBaseProps = {
   open?: boolean
-  onClose?: (event: MouseEvent | KeyboardEvent) => void
+  onClose?: (event?: MouseEvent | KeyboardEvent) => void
   fade?: boolean
   transitionDuration?: number
   disableEscapeKey?: boolean
