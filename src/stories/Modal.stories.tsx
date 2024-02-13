@@ -61,7 +61,6 @@ function Template(args: any) {
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        scrollable={false}
         actions={
           args.hasActions && (
             <>
@@ -69,7 +68,7 @@ function Template(args: any) {
                 secondary
                 onClick={() => setOpen(false)}
               >
-                Close
+                Cancel
               </Button>
               <Button
                 type="submit"
@@ -93,7 +92,6 @@ function Template(args: any) {
       >
         {!args.form && (
           <>
-            Bare text
             <P marginBottom={16}>
               Uninstalling this application will disable all future upgrades.
             </P>
