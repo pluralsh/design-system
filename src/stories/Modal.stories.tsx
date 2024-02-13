@@ -1,8 +1,11 @@
 import { Div, H3, P } from 'honorable'
 import { useState } from 'react'
 
-import { Button, Card, FormField, Input, Modal } from '..'
+import styled from 'styled-components'
+
+import { Button, Card, Code, FormField, Input, Modal } from '..'
 import { SEVERITIES } from '../components/Modal'
+import { jsCode } from '../constants'
 
 export default {
   title: 'Modal',
@@ -23,6 +26,31 @@ export default {
   },
 }
 
+function ExtraContent() {
+  return (
+    <Div maxWidth={500}>
+      <P marginBottom="medium">
+        Some extra content to check that body scroll is disabled when Modal is
+        open.
+      </P>
+      {Array.from({ length: 5 }).map(() => (
+        <P marginBottom="medium">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+          tempor, mi pulvinar vestibulum viverra, magnan ipsum suscipit turpis,
+          molestie imperdiet nisi lorem id erat. Vestibulum pellentesque vel
+          odio et consequat. Sed lacinia leo sit amet velit consequat lobortis.
+          Vivamus facilisis sagittis est vel pellentesque. Sed quis ipsum
+          ullamcorper, posuere ipsum a, tincidunt tellus. Cras tortor purus,
+          dictum sit amet facilisis vitae, commodo vitae elit. Duis a diam
+          blandit, hendrerit velit non, tincidunt turpis. Ut at lectus ornare,
+          volutpat elit interdum, placerat dolor. Pellentesque et semper massa.
+          Aliquam nec nisl eu nibh fringilla vehicula. Suspendisse a purus quam.
+        </P>
+      ))}
+    </Div>
+  )
+}
+
 function Template(args: any) {
   const [open, setOpen] = useState(false)
 
@@ -33,6 +61,7 @@ function Template(args: any) {
       <Modal
         open={open}
         onClose={() => setOpen(false)}
+        scrollable={false}
         actions={
           args.hasActions && (
             <>
@@ -40,7 +69,7 @@ function Template(args: any) {
                 secondary
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                Close
               </Button>
               <Button
                 type="submit"
@@ -64,6 +93,7 @@ function Template(args: any) {
       >
         {!args.form && (
           <>
+            Bare text
             <P marginBottom={16}>
               Uninstalling this application will disable all future upgrades.
             </P>
@@ -118,77 +148,48 @@ function Template(args: any) {
         width="100%"
         padding="medium"
       >
-        <Div maxWidth={500}>
-          <P marginBottom="medium">
-            Some extra content to check that body scroll is disabled when Modal
-            is open.
-          </P>
-          <P marginBottom="medium">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            tempor, mi pulvinar vestibulum viverra, magnan ipsum suscipit
-            turpis, molestie imperdiet nisi lorem id erat. Vestibulum
-            pellentesque vel odio et consequat. Sed lacinia leo sit amet velit
-            consequat lobortis. Vivamus facilisis sagittis est vel pellentesque.
-            Sed quis ipsum ullamcorper, posuere ipsum a, tincidunt tellus. Cras
-            tortor purus, dictum sit amet facilisis vitae, commodo vitae elit.
-            Duis a diam blandit, hendrerit velit non, tincidunt turpis. Ut at
-            lectus ornare, volutpat elit interdum, placerat dolor. Pellentesque
-            et semper massa. Aliquam nec nisl eu nibh fringilla vehicula.
-            Suspendisse a purus quam.
-          </P>
-          <P marginBottom="medium">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            tempor, mi pulvinar vestibulum viverra, magnan ipsum suscipit
-            turpis, molestie imperdiet nisi lorem id erat. Vestibulum
-            pellentesque vel odio et consequat. Sed lacinia leo sit amet velit
-            consequat lobortis. Vivamus facilisis sagittis est vel pellentesque.
-            Sed quis ipsum ullamcorper, posuere ipsum a, tincidunt tellus. Cras
-            tortor purus, dictum sit amet facilisis vitae, commodo vitae elit.
-            Duis a diam blandit, hendrerit velit non, tincidunt turpis. Ut at
-            lectus ornare, volutpat elit interdum, placerat dolor. Pellentesque
-            et semper massa. Aliquam nec nisl eu nibh fringilla vehicula.
-            Suspendisse a purus quam.
-          </P>
-          <P marginBottom="medium">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            tempor, mi pulvinar vestibulum viverra, magnan ipsum suscipit
-            turpis, molestie imperdiet nisi lorem id erat. Vestibulum
-            pellentesque vel odio et consequat. Sed lacinia leo sit amet velit
-            consequat lobortis. Vivamus facilisis sagittis est vel pellentesque.
-            Sed quis ipsum ullamcorper, posuere ipsum a, tincidunt tellus. Cras
-            tortor purus, dictum sit amet facilisis vitae, commodo vitae elit.
-            Duis a diam blandit, hendrerit velit non, tincidunt turpis. Ut at
-            lectus ornare, volutpat elit interdum, placerat dolor. Pellentesque
-            et semper massa. Aliquam nec nisl eu nibh fringilla vehicula.
-            Suspendisse a purus quam.
-          </P>
-          <P marginBottom="medium">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            tempor, mi pulvinar vestibulum viverra, magnan ipsum suscipit
-            turpis, molestie imperdiet nisi lorem id erat. Vestibulum
-            pellentesque vel odio et consequat. Sed lacinia leo sit amet velit
-            consequat lobortis. Vivamus facilisis sagittis est vel pellentesque.
-            Sed quis ipsum ullamcorper, posuere ipsum a, tincidunt tellus. Cras
-            tortor purus, dictum sit amet facilisis vitae, commodo vitae elit.
-            Duis a diam blandit, hendrerit velit non, tincidunt turpis. Ut at
-            lectus ornare, volutpat elit interdum, placerat dolor. Pellentesque
-            et semper massa. Aliquam nec nisl eu nibh fringilla vehicula.
-            Suspendisse a purus quam.
-          </P>
-          <P marginBottom="medium">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            tempor, mi pulvinar vestibulum viverra, magnan ipsum suscipit
-            turpis, molestie imperdiet nisi lorem id erat. Vestibulum
-            pellentesque vel odio et consequat. Sed lacinia leo sit amet velit
-            consequat lobortis. Vivamus facilisis sagittis est vel pellentesque.
-            Sed quis ipsum ullamcorper, posuere ipsum a, tincidunt tellus. Cras
-            tortor purus, dictum sit amet facilisis vitae, commodo vitae elit.
-            Duis a diam blandit, hendrerit velit non, tincidunt turpis. Ut at
-            lectus ornare, volutpat elit interdum, placerat dolor. Pellentesque
-            et semper massa. Aliquam nec nisl eu nibh fringilla vehicula.
-            Suspendisse a purus quam.
-          </P>
-        </Div>
+        <ExtraContent />
+      </Card>
+    </>
+  )
+}
+
+const NonScrollCode = styled(Code)((_) => ({
+  overflow: 'hidden',
+}))
+
+function NonScrollTemplate(args: any) {
+  const [open, setOpen] = useState(false)
+
+  console.log('args', args)
+
+  return (
+    <>
+      <H3 marginBottom={8}>{args.header} Modal</H3>
+      <Button onClick={() => setOpen(true)}>Open</Button>
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        actions={
+          args.hasActions && (
+            <Button
+              secondary
+              onClick={() => setOpen(false)}
+            >
+              Close
+            </Button>
+          )
+        }
+        {...args}
+      >
+        <NonScrollCode language="js">{jsCode}</NonScrollCode>
+      </Modal>
+      <Card
+        marginTop="xlarge"
+        width="100%"
+        padding="medium"
+      >
+        <ExtraContent />
       </Card>
     </>
   )
@@ -288,27 +289,36 @@ export const Default = Template.bind({})
 
 Default.args = {
   header: 'Default',
-  title: 'Confirm Uninstall',
   form: false,
   size: 'medium',
   hasActions: true,
+  scrollable: true,
 }
 
 export const Form = Template.bind({})
 
 Form.args = {
   header: 'Form',
-  title: 'Access Policy',
   form: true,
   hasActions: true,
+  scrollable: true,
 }
 
 export const PinnedToTop = PinnedToTopTemplate.bind({})
 
-Default.args = {
+PinnedToTop.args = {
   header: 'Default',
-  title: 'Confirm Uninstall',
   form: false,
   size: 'medium',
+  hasActions: true,
+  scrollable: true,
+}
+
+export const NonScrollable = NonScrollTemplate.bind({})
+
+NonScrollable.args = {
+  header: 'Non-scrollable',
+  size: 'large',
+  scrollable: false,
   hasActions: true,
 }
