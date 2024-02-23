@@ -15,11 +15,13 @@ import { useTheme } from 'styled-components'
 import {
   AppIcon,
   ArrowRightLeftIcon,
+  Button,
   CollapseIcon,
   IconFrame,
   InfoIcon,
   LogsIcon,
   Table,
+  TableInteractive,
   Tooltip,
 } from '..'
 
@@ -204,6 +206,25 @@ const expandingColumns = [
     id: 'description',
     cell: (info: any) => <span>{info.getValue()}</span>,
     header: () => <span>Description</span>,
+  }),
+]
+
+const clickableColumns = [
+  columns[0],
+  columns[columns.length - 1],
+  columnHelper.display({
+    id: 'actions',
+    cell: () => (
+      <TableInteractive>
+        <Button
+          secondary
+          clickable
+          onClick={() => console.info('Button clicked')}
+        >
+          Row shouldn't highlight on hover
+        </Button>
+      </TableInteractive>
+    ),
   }),
 ]
 
@@ -402,8 +423,9 @@ Clickable.args = {
   width: '900px',
   height: '400px',
   data: repeatedData,
-  columns: expandingColumns,
-  onRowClick: (e: MouseEvent, row: Row<any>) => console.info(row?.original),
+  columns: clickableColumns,
+  onRowClick: (e: MouseEvent, row: Row<any>) =>
+    console.info(`Row clicked: ${row?.original.function}`),
 }
 
 export const StickyColumn = Template.bind({})

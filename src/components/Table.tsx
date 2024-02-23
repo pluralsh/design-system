@@ -42,6 +42,7 @@ import ArrowRightIcon from './icons/ArrowRightIcon'
 import { FillLevelProvider } from './contexts/FillLevelContext'
 import EmptyState from './EmptyState'
 import { Spinner } from './Spinner'
+import { tableInteractiveTargetingProp } from './TableInteractive'
 
 export type TableProps = Omit<
   DivProps,
@@ -173,26 +174,31 @@ const Tr = styled.tr<{
     $lighter: lighter = false,
     $selectable: selectable = false,
     $selected: selected = false,
-  }) => ({
-    display: 'contents',
-    backgroundColor: selected
+  }) => {
+    const defaultBGColor = selected
       ? theme.colors['fill-one-selected']
       : lighter || (selectable && !selected)
       ? theme.colors['fill-one']
-      : theme.colors['fill-one-hover'],
+      : theme.colors['fill-one-hover']
 
-    ...(clickable && {
-      cursor: 'pointer',
-
-      '&:hover': {
-        backgroundColor: selectable
-          ? selected
-            ? theme.colors['fill-one-selected']
-            : theme.colors['fill-one-hover']
-          : theme.colors['fill-one-selected'],
-      },
-    }),
-  })
+    return {
+      display: 'contents',
+      backgroundColor: defaultBGColor,
+      ...(clickable && {
+        cursor: 'pointer',
+        '&:hover': {
+          backgroundColor: selectable
+            ? selected
+              ? theme.colors['fill-one-selected']
+              : theme.colors['fill-one-hover']
+            : theme.colors['fill-one-selected'],
+          [`&:has([${tableInteractiveTargetingProp}]:hover)`]: {
+            backgroundColor: defaultBGColor,
+          },
+        },
+      }),
+    }
+  }
 )
 
 const Th = styled.th<{
