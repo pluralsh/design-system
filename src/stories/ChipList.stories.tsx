@@ -5,7 +5,6 @@ import Card from '../components/Card'
 import ChipList from '../components/ChipList'
 import WrapWithIf from '../components/WrapWithIf'
 import { SEVERITIES } from '../types'
-import { useDialog, useModal } from 'react-aria'
 
 const sizes: ComponentProps<typeof Chip>['size'][] = [
   'small',

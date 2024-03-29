@@ -2,7 +2,7 @@ import { Flex, Span } from 'honorable'
 import isEmpty from 'lodash-es/isEmpty'
 import {
   type ComponentProps,
-  Dispatch,
+  type Dispatch,
   type ReactElement,
   useState,
 } from 'react'
@@ -48,6 +48,7 @@ function ChipList<TValue = string>({
         ))}
       {values.slice(0, collapsed ? limit : undefined).map((v, i) => {
         const clickable = onClickCondition?.(v) ?? false
+
         return (
           <Chip
             key={(v as any).key || i}
