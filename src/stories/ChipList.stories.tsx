@@ -5,6 +5,7 @@ import Card from '../components/Card'
 import ChipList from '../components/ChipList'
 import WrapWithIf from '../components/WrapWithIf'
 import { SEVERITIES } from '../types'
+import { useDialog, useModal } from 'react-aria'
 
 const sizes: ComponentProps<typeof Chip>['size'][] = [
   'small',
@@ -40,6 +41,35 @@ export default {
 }
 
 function TextTemplate({ onFillLevel, ...args }: any) {
+  const VALUES = [
+    'avengers',
+    'iron man',
+    'doctor strange',
+    'thor',
+    'black panther',
+    'guardians of the galaxy',
+  ]
+
+  return (
+    <WrapWithIf
+      condition={onFillLevel > 0}
+      wrapper={
+        <Card
+          width="600px"
+          padding="medium"
+          fillLevel={onFillLevel}
+        />
+      }
+    >
+      <ChipList
+        values={VALUES}
+        {...args}
+      />
+    </WrapWithIf>
+  )
+}
+
+function CustomClickTemplate({ onFillLevel, ...args }: any) {
   const VALUES = [
     'avengers',
     'iron man',
@@ -141,4 +171,13 @@ Empty.args = {
   severity: 'info',
   size: 'small',
   onFillLevel: 0,
+}
+
+export const CustomClick = CustomClickTemplate.bind({})
+CustomClick.args = {
+  severity: 'info',
+  size: 'small',
+  onFillLevel: 0,
+  onClickCondition: (value: string) => value === 'avengers',
+  onClick: (value: string) => alert(value),
 }
