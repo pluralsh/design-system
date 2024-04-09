@@ -22,9 +22,10 @@ type FlyoverPropsType = Omit<ModalProps, 'size'> & {
 }
 
 const propTypes = {
-  form: PropTypes.bool,
   header: PropTypes.node,
   lockBody: PropTypes.bool,
+  scrollable: PropTypes.bool,
+  asForm: PropTypes.bool,
 } as const
 
 const FlyoverSC = styled.div(({ theme }) => ({
@@ -77,7 +78,6 @@ function FlyoverRef(
     children,
     header,
     open = false,
-    // form = false,
     onClose,
     lockBody = true,
     asForm = false,
