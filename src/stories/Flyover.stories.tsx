@@ -47,27 +47,7 @@ function Template(args: any) {
       <Flyover
         open={open}
         onClose={() => setOpen(false)}
-        actions={
-          args.hasActions && (
-            <>
-              <Button
-                secondary
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                primary
-                destructive={!args.form}
-                marginLeft="medium"
-              >
-                {args.form ? 'Save' : 'Uninstall'}
-              </Button>
-            </>
-          )
-        }
-        asForm={!!args.form}
+        asForm={!!args.asForm}
         formProps={{
           onSubmit: (e) => {
             e.preventDefault()
@@ -76,7 +56,7 @@ function Template(args: any) {
         }}
         {...args}
       >
-        {!args.form && (
+        {!args.asForm && (
           <>
             <P marginBottom={16}>
               Uninstalling this application will disable all future upgrades.
@@ -89,7 +69,7 @@ function Template(args: any) {
           </>
         )}
 
-        {args.form && (
+        {args.asForm && (
           <Flex
             gap="medium"
             direction="column"
@@ -140,8 +120,6 @@ const NonScrollCode = styled(Code)((_) => ({
 function NonScrollTemplate(args: any) {
   const [open, setOpen] = useState(false)
 
-  console.log('args', args)
-
   return (
     <>
       <H3 marginBottom={8}>{args.header} Flyover</H3>
@@ -149,16 +127,6 @@ function NonScrollTemplate(args: any) {
       <Flyover
         open={open}
         onClose={() => setOpen(false)}
-        actions={
-          args.hasActions && (
-            <Button
-              secondary
-              onClick={() => setOpen(false)}
-            >
-              Close
-            </Button>
-          )
-        }
         {...args}
       >
         <NonScrollCode language="js">{jsCode}</NonScrollCode>
@@ -178,9 +146,7 @@ export const Default = Template.bind({})
 
 Default.args = {
   header: 'Default',
-  form: false,
-  size: 'medium',
-  hasActions: true,
+  asForm: false,
   scrollable: true,
 }
 
@@ -188,8 +154,7 @@ export const Form = Template.bind({})
 
 Form.args = {
   header: 'Form',
-  form: true,
-  hasActions: true,
+  asForm: true,
   scrollable: true,
 }
 
@@ -197,7 +162,5 @@ export const NonScrollable = NonScrollTemplate.bind({})
 
 NonScrollable.args = {
   header: 'Non-scrollable',
-  size: 'large',
   scrollable: false,
-  hasActions: true,
 }
