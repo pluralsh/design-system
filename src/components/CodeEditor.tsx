@@ -87,16 +87,25 @@ export default function CodeEditor({
       height={height}
       {...props}
     >
-      <Editor
-        language={language}
-        value={value}
-        onChange={(v) => {
-          setCurrent(v)
-          if (onChange) onChange(v)
+      <div
+        css={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          overflow: 'hidden',
         }}
-        options={merge(defaultOptions, options)}
-        theme={theme.mode === 'light' ? 'plural-light' : 'plural-dark'}
-      />
+      >
+        <Editor
+          language={language}
+          value={value}
+          onChange={(v) => {
+            setCurrent(v)
+            if (onChange) onChange(v)
+          }}
+          options={merge(defaultOptions, options)}
+          theme={theme.mode === 'light' ? 'plural-light' : 'plural-dark'}
+        />
+      </div>
       {save && (
         <Flex
           align="center"
