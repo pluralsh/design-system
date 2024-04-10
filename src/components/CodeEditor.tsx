@@ -35,6 +35,8 @@ const defaultOptions = {
     verticalScrollbarSize: 5,
   },
   scrollBeyondLastLine: false,
+  // Fixes cursor alignment issues when using custom font
+  fontLigatures: '',
 }
 
 export default function CodeEditor({
