@@ -18,6 +18,8 @@ type FlyoverPropsType = Omit<ModalProps, 'size'> & {
   scrollable?: boolean
   asForm?: boolean
   formProps?: StyledComponentPropsWithRef<'form'>
+  width?: string
+  minWidth?: number
   [x: string]: unknown
 }
 
@@ -26,6 +28,8 @@ const propTypes = {
   lockBody: PropTypes.bool,
   scrollable: PropTypes.bool,
   asForm: PropTypes.bool,
+  width: PropTypes.string,
+  minWidth: PropTypes.number,
 } as const
 
 const FlyoverSC = styled.div(({ theme }) => ({
@@ -83,6 +87,8 @@ function FlyoverRef(
     asForm = false,
     formProps = {},
     scrollable = true,
+    width = '40%',
+    minWidth = 570,
     ...props
   }: FlyoverPropsType,
   ref: Ref<any>
@@ -103,8 +109,8 @@ function FlyoverRef(
       padding={0}
       right="100%"
       height="100%"
-      width="40%"
-      minWidth={570}
+      width={width}
+      minWidth={minWidth}
       alignSelf="flex-end"
       BackdropProps={{ backgroundColor: 'transparent' }}
       {...props}
