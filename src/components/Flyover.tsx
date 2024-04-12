@@ -113,6 +113,17 @@ function FlyoverRef(
       minWidth={minWidth}
       alignSelf="flex-end"
       BackdropProps={{ backgroundColor: 'transparent' }}
+      InnerDefaultStyle={{
+        opacity: 0,
+        transform: 'translateX(0)',
+        transition: 'transform 300ms ease, opacity 300ms ease',
+      }}
+      InnerTransitionStyle={{
+        entering: { opacity: 1, transform: 'translateX(0)' },
+        entered: { opacity: 1, transform: 'translateX(0)' },
+        exiting: { opacity: 0, transform: 'translateX(1000px)' },
+        exited: { opacity: 0, transform: 'translateX(1000px)' },
+      }}
       {...props}
     >
       <FlyoverSC
