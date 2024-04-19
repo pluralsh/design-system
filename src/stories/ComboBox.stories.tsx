@@ -3,6 +3,8 @@ import { type ComponentProps, type Key, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Fuse from 'fuse.js'
 
+import { isEqual, uniqWith } from 'lodash-es'
+
 import {
   AppIcon,
   BrowseAppsIcon,
@@ -12,8 +14,11 @@ import {
   ListBoxFooterPlus,
   ListBoxItem,
   ListBoxItemChipList,
+  TagMultiSelect,
   WrapWithIf,
 } from '..'
+
+import { type MultiSelectTag } from '../components/TagMultiSelect'
 
 import { ClusterTagsTemplate } from './ClusterTagsTemplate'
 
@@ -485,4 +490,54 @@ export const ClusterTags = ClusterTagsTemplate.bind({})
 ClusterTags.args = {
   loading: false,
   withTitleContent: false,
+}
+
+const TAGS = [
+  { name: 'local', value: 'true' },
+  { name: 'local', value: 'false' },
+  { name: 'stage', value: 'dev' },
+  { name: 'stage', value: 'prod' },
+  { name: 'stage', value: 'canary' },
+  { name: 'route', value: 'some-very-very-long-tag-value' },
+  { name: 'route', value: 'short-name' },
+  { name: 'local2', value: 'true' },
+  { name: 'local2', value: 'false' },
+  { name: 'stage2', value: 'dev' },
+  { name: 'stage2', value: 'prod' },
+  { name: 'stage2', value: 'canary' },
+  { name: 'route2', value: 'some-very-very-long-tag-value' },
+  { name: 'route2', value: 'short-name' },
+]
+const tags = uniqWith(TAGS, isEqual)
+
+function TagMultiSelectTemplate({
+  loading,
+  tags,
+  width,
+  onChange,
+}: {
+  loading: boolean
+  tags: MultiSelectTag[]
+  width: number
+  onChange?: (keys: Set<Key>) => void
+}) {
+  return (
+    <div style={{ width: `${width}%` }}>
+      <TagMultiSelect
+        loading={loading}
+        tags={tags}
+        onChange={onChange}
+      />
+    </div>
+  )
+}
+
+export const TagMultiSelectStory = TagMultiSelectTemplate.bind({})
+TagMultiSelectStory.args = {
+  loading: false,
+  tags,
+  width: 100,
+  onChange: (keys: Set<Key>) => {
+    console.log('Selected keys:', keys)
+  },
 }
