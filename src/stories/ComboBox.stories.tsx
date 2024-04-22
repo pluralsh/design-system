@@ -14,13 +14,11 @@ import {
   ListBoxFooterPlus,
   ListBoxItem,
   ListBoxItemChipList,
-  TagMultiSelect,
   WrapWithIf,
 } from '..'
 
-import { type MultiSelectTag } from '../components/TagMultiSelect'
-
 import { ClusterTagsTemplate } from './ClusterTagsTemplate'
+import TagMultiSelectTemplate from './TagMultiselectTemplate'
 
 export default {
   title: 'Combo Box',
@@ -510,30 +508,8 @@ const TAGS = [
 ]
 const tags = uniqWith(TAGS, isEqual)
 
-function TagMultiSelectTemplate({
-  loading,
-  tags,
-  width,
-  onChange,
-}: {
-  loading: boolean
-  tags: MultiSelectTag[]
-  width: number
-  onChange?: (keys: Set<Key>) => void
-}) {
-  return (
-    <div style={{ width: `${width}%` }}>
-      <TagMultiSelect
-        loading={loading}
-        tags={tags}
-        onSelectedTagsChange={onChange}
-      />
-    </div>
-  )
-}
-
-export const TagMultiSelectStory = TagMultiSelectTemplate.bind({})
-TagMultiSelectStory.args = {
+export const TagMultiSelect = TagMultiSelectTemplate.bind({})
+TagMultiSelect.args = {
   loading: false,
   tags,
   width: 100,
