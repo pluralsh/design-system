@@ -30,11 +30,13 @@ const matchOptions = [
 export function TagMultiSelect({
   tags,
   loading,
-  onChange,
+  onSelectedTagsChange,
+  onFilterChange,
 }: {
   tags: MultiSelectTag[]
   loading: boolean
-  onChange?: (keys: Set<Key>) => void
+  onSelectedTagsChange?: (keys: Set<Key>) => void
+  onFilterChange?: (value: string) => void
 }) {
   const theme = useTheme()
   const [selectedTagKeys, setSelectedTagKeys] = useState(new Set<Key>())
@@ -76,8 +78,12 @@ export function TagMultiSelect({
   }
 
   useEffect(() => {
-    onChange?.(selectedTagKeys)
-  }, [selectedTagKeys, onChange])
+    onSelectedTagsChange?.(selectedTagKeys)
+  }, [selectedTagKeys, onSelectedTagsChange])
+
+  useEffect(() => {
+    onFilterChange?.(inputValue)
+  }, [inputValue, onFilterChange])
 
   const onInputChange: ComponentProps<typeof ComboBox>['onInputChange'] = (
     value

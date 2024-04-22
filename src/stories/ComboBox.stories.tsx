@@ -526,7 +526,7 @@ function TagMultiSelectTemplate({
       <TagMultiSelect
         loading={loading}
         tags={tags}
-        onChange={onChange}
+        onSelectedTagsChange={onChange}
       />
     </div>
   )
