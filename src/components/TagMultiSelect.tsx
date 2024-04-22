@@ -26,6 +26,7 @@ const matchOptions = [
 type TagMultiSelectProps = {
   options: string[]
   loading: boolean
+  selectedMatchType?: 'AND' | 'OR'
   onSelectedTagsChange?: (keys: Set<Key>) => void
   onFilterChange?: (value: string) => void
   onChangeMatchType?: (value: 'AND' | 'OR') => void
@@ -34,6 +35,7 @@ type TagMultiSelectProps = {
 function TagMultiSelect({
   options,
   loading,
+  selectedMatchType,
   onSelectedTagsChange,
   onFilterChange,
   onChangeMatchType,
@@ -43,7 +45,9 @@ function TagMultiSelect({
   const selectedTagArr = useMemo(() => [...selectedTagKeys], [selectedTagKeys])
   const [inputValue, setInputValue] = useState('')
   const [isOpen, setIsOpen] = useState(false)
-  const [searchLogic, setSearchLogic] = useState<string>(matchOptions[0].value)
+  const [searchLogic, setSearchLogic] = useState<string>(
+    selectedMatchType || matchOptions[0].value
+  )
 
   const onSelectionChange: ComponentProps<
     typeof ComboBox
