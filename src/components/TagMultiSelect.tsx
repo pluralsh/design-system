@@ -6,7 +6,6 @@ import {
   useMemo,
   useState,
 } from 'react'
-import Fuse from 'fuse.js'
 
 import { useTheme } from 'styled-components'
 
@@ -19,21 +18,18 @@ export type MultiSelectTag = {
   value: string
 }
 
-function tagToKey(tag: MultiSelectTag) {
-  return `${tag.name}:${tag.value}`
-}
 const matchOptions = [
   { label: 'All', value: 'AND' },
   { label: 'Any', value: 'OR' },
 ]
 
 export function TagMultiSelect({
-  tags,
+  options,
   loading,
   onSelectedTagsChange,
   onFilterChange,
 }: {
-  tags: MultiSelectTag[]
+  options: string[]
   loading: boolean
   onSelectedTagsChange?: (keys: Set<Key>) => void
   onFilterChange?: (value: string) => void
@@ -44,29 +40,6 @@ export function TagMultiSelect({
   const [inputValue, setInputValue] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [searchLogic, setSearchLogic] = useState<string>(matchOptions[0].value)
-
-  const fuse = useMemo(
-    () =>
-      new Fuse(tags, {
-        includeScore: true,
-        shouldSort: true,
-        threshold: 0.3,
-        keys: ['name', 'value'],
-      }),
-    [tags]
-  )
-
-  const searchResults = useMemo(() => {
-    let ret: Fuse.FuseResult<MultiSelectTag>[]
-
-    if (inputValue) {
-      ret = fuse.search(inputValue)
-    } else {
-      ret = tags.map((tag, i) => ({ item: tag, score: 1, refIndex: i }))
-    }
-
-    return ret.filter((tag) => !selectedTagKeys.has(tagToKey(tag.item)))
-  }, [fuse, inputValue, selectedTagKeys, tags])
 
   const onSelectionChange: ComponentProps<
     typeof ComboBox
@@ -156,10 +129,8 @@ export function TagMultiSelect({
         loading={loading}
         containerProps={{ style: { flexGrow: 1 } }}
       >
-        {searchResults
-          .map(({ item: tag, score: _score, refIndex: _refIndex }) => {
-            const tagStr = tagToKey(tag)
-
+        {options
+          .map((tagStr) => {
             if (selectedTagKeys.has(tagStr)) {
               return null
             }

@@ -511,7 +511,7 @@ const tags = uniqWith(TAGS, isEqual)
 export const TagMultiSelect = TagMultiSelectTemplate.bind({})
 TagMultiSelect.args = {
   loading: false,
-  tags,
+  options: tags.map((tag) => `${tag.name}:${tag.value}`),
   width: 100,
   onSelectedTagsChange: (keys: Set<Key>) => {
     console.log('Selected keys:', keys)

@@ -1,19 +1,16 @@
 import { type Key } from 'react'
 
-import {
-  type MultiSelectTag,
-  TagMultiSelect,
-} from '../components/TagMultiSelect'
+import { TagMultiSelect } from '../components/TagMultiSelect'
 
 export default function TagMultiSelectTemplate({
   loading,
-  tags,
+  options,
   width,
   onSelectedTagsChange,
   onFilterChange,
 }: {
   loading: boolean
-  tags: MultiSelectTag[]
+  options: string[]
   width: number
   onSelectedTagsChange?: (keys: Set<Key>) => void
   onFilterChange?: (value: string) => void
@@ -22,7 +19,7 @@ export default function TagMultiSelectTemplate({
     <div style={{ width: `${width}%` }}>
       <TagMultiSelect
         loading={loading}
-        tags={tags}
+        options={options}
         onSelectedTagsChange={onSelectedTagsChange}
         onFilterChange={onFilterChange}
       />
