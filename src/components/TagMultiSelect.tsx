@@ -137,6 +137,7 @@ function TagMultiSelect({
         allowsEmptyCollection
         loading={loading}
         containerProps={{ style: { flexGrow: 1 } }}
+        showArrow={false}
       >
         {options
           .map((tagStr) => {
