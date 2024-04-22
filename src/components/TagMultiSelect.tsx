@@ -21,19 +21,23 @@ export type MultiSelectTag = {
 const matchOptions = [
   { label: 'All', value: 'AND' },
   { label: 'Any', value: 'OR' },
-]
+] as const
 
-export function TagMultiSelect({
-  options,
-  loading,
-  onSelectedTagsChange,
-  onFilterChange,
-}: {
+type TagMultiSelectProps = {
   options: string[]
   loading: boolean
   onSelectedTagsChange?: (keys: Set<Key>) => void
   onFilterChange?: (value: string) => void
-}) {
+  onChangeMatchType?: (value: 'AND' | 'OR') => void
+}
+
+function TagMultiSelect({
+  options,
+  loading,
+  onSelectedTagsChange,
+  onFilterChange,
+  onChangeMatchType,
+}: TagMultiSelectProps) {
   const theme = useTheme()
   const [selectedTagKeys, setSelectedTagKeys] = useState(new Set<Key>())
   const selectedTagArr = useMemo(() => [...selectedTagKeys], [selectedTagKeys])
@@ -72,8 +76,9 @@ export function TagMultiSelect({
       <Select
         label="Pick search logic"
         selectedKey={searchLogic}
-        onSelectionChange={(key: string) => {
-          setSearchLogic(key)
+        onSelectionChange={(value: 'AND' | 'OR') => {
+          setSearchLogic(value)
+          onChangeMatchType?.(value)
         }}
         defaultOpen={false}
         triggerButton={
@@ -156,3 +161,6 @@ export function TagMultiSelect({
     </Flex>
   )
 }
+
+export type { TagMultiSelectProps }
+export { TagMultiSelect }
