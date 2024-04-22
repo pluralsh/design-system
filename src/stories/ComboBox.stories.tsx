@@ -520,6 +520,6 @@ TagMultiSelect.args = {
     console.log('Filter:', filter)
   },
   onChangeMatchType: (matchType: 'AND' | 'OR') => {
-    console.log('Match type:', matchType)
+    console.log('Match type: ', matchType)
   },
 }
