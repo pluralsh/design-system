@@ -9,19 +9,22 @@ export default function TagMultiSelectTemplate({
   loading,
   tags,
   width,
-  onChange,
+  onSelectedTagsChange,
+  onFilterChange,
 }: {
   loading: boolean
   tags: MultiSelectTag[]
   width: number
-  onChange?: (keys: Set<Key>) => void
+  onSelectedTagsChange?: (keys: Set<Key>) => void
+  onFilterChange?: (value: string) => void
 }) {
   return (
     <div style={{ width: `${width}%` }}>
       <TagMultiSelect
         loading={loading}
         tags={tags}
-        onSelectedTagsChange={onChange}
+        onSelectedTagsChange={onSelectedTagsChange}
+        onFilterChange={onFilterChange}
       />
     </div>
   )

@@ -513,7 +513,10 @@ TagMultiSelect.args = {
   loading: false,
   tags,
   width: 100,
-  onChange: (keys: Set<Key>) => {
+  onSelectedTagsChange: (keys: Set<Key>) => {
     console.log('Selected keys:', keys)
+  },
+  onFilterChange: (filter: string) => {
+    console.log('Filter:', filter)
   },
 }
