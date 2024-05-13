@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { SIDEBAR_WIDTH, useSidebar } from './Sidebar'
 
-const SIDEBAR_EXPANDED_WIDTH = 180
+export const SIDEBAR_EXPANDED_WIDTH = 180
 
 function SidebarExpandWrapper(props: any) {
   const { layout, isExpanded, setIsExpanded } = useSidebar()
