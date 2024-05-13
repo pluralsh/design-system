@@ -35,6 +35,7 @@ const Animated = styled.div<{
 }>(({ theme, $isExpanded, $isHorizontal }) => ({
   display: 'flex',
   flexDirection: $isHorizontal ? 'row' : 'column',
+  position: 'relative',
   alignItems: 'center',
   borderBottom: $isHorizontal ? '' : `1px solid ${theme.colors.border}`,
   gap: $isHorizontal ? theme.spacing.medium : theme.spacing.xsmall,
