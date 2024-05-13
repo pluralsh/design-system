@@ -1,5 +1,5 @@
 import { useOutsideClick } from 'honorable'
-import { useRef } from 'react'
+import { type ReactNode, useEffect, useRef } from 'react'
 
 import styled from 'styled-components'
 
@@ -7,7 +7,13 @@ import { SIDEBAR_WIDTH, useSidebar } from './Sidebar'
 
 export const SIDEBAR_EXPANDED_WIDTH = 180
 
-function SidebarExpandWrapper(props: any) {
+function SidebarExpandWrapper({
+  pathname,
+  ...props
+}: {
+  pathname?: string
+  children: ReactNode[]
+}) {
   const { layout, isExpanded, setIsExpanded } = useSidebar()
   const isHorizontal = layout === 'horizontal'
   const ref = useRef(null)
@@ -15,6 +21,11 @@ function SidebarExpandWrapper(props: any) {
   useOutsideClick(ref, () => {
     setIsExpanded(false)
   })
+
+  useEffect(() => {
+    setIsExpanded(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
 
   return (
     <Animated
@@ -31,7 +42,6 @@ export default SidebarExpandWrapper
 const Animated = styled.div<{
   $isExpanded: boolean
   $isHorizontal: boolean
-  $grow: number
 }>(({ theme, $isExpanded, $isHorizontal }) => ({
   display: 'flex',
   flexDirection: $isHorizontal ? 'row' : 'column',
