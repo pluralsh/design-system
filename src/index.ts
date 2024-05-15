@@ -3,6 +3,9 @@ export { Avatar, Menu, MenuItem } from 'honorable'
 // Icons
 export * from './icons'
 
+// PluralLogos
+export * from './plural-logos'
+
 // Components
 export { default as Accordion } from './components/Accordion'
 export { default as Banner } from './components/Banner'
@@ -27,6 +30,7 @@ export { default as Highlight } from './components/Highlight'
 export type { IconFrameProps } from './components/IconFrame'
 export { default as IconFrame } from './components/IconFrame'
 export { default as Input } from './components/Input'
+export { default as Input2 } from './components/Input2'
 export { default as Markdown } from './components/Markdown'
 export type { PageCardProps } from './components/PageCard'
 export { default as PageCard } from './components/PageCard'
@@ -64,10 +68,17 @@ export {
 export type { TooltipProps } from './components/Tooltip'
 export { default as Tooltip } from './components/Tooltip'
 export { default as FormTitle } from './components/FormTitle'
-export { default as Sidebar } from './components/Sidebar'
+export { default as Sidebar, SIDEBAR_WIDTH } from './components/Sidebar'
 export { default as SidebarSection } from './components/SidebarSection'
+export { default as SidebarExpandButton } from './components/SidebarExpandButton'
+export {
+  default as SidebarExpandWrapper,
+  SIDEBAR_EXPANDED_WIDTH,
+} from './components/SidebarExpandWrapper'
 export { default as SidebarItem } from './components/SidebarItem'
 export { default as Modal } from './components/Modal'
+export { default as Flyover } from './components/Flyover'
+export { HonorableModal } from './components/HonorableModal'
 export type {
   ChecklistProps,
   ChecklistStateProps,
@@ -97,6 +108,8 @@ export type {
 export { default as LoadingSpinner } from './components/LoadingSpinner'
 export { default as LoopingLogo } from './components/LoopingLogo'
 export { ComboBox } from './components/ComboBox'
+export type { TagMultiSelectProps } from './components/TagMultiSelect'
+export { TagMultiSelect } from './components/TagMultiSelect'
 export { Toast, GraphQLToast } from './components/Toast'
 export { default as WrapWithIf } from './components/WrapWithIf'
 export type {
@@ -116,6 +129,7 @@ export { LightDarkSwitch } from './components/LightDarkSwitch'
 export { AnimatedDiv } from './components/AnimatedDiv'
 export { Spinner } from './components/Spinner'
 export { SetInert } from './components/SetInert'
+export { default as TextSwitch } from './components/TextSwitch'
 
 // Hooks
 export { useInert } from './hooks/useInert'
@@ -132,6 +146,7 @@ export {
   useFillLevel,
   toFillLevel,
   isFillLevel,
+  type FillLevel,
 } from './components/contexts/FillLevelContext'
 export * from './components/contexts/NavigationContext'
 export * from './components/TreeNavigation'

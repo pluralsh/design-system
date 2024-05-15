@@ -17,8 +17,7 @@ import {
   useState,
 } from 'react'
 import { createPortal } from 'react-dom'
-import { Transition } from 'react-transition-group'
-import PropTypes from 'prop-types'
+import { Transition, type TransitionStatus } from 'react-transition-group'
 
 import { Div, useTheme } from 'honorable'
 import useRootStyles from 'honorable/dist/hooks/useRootStyles.js'
@@ -26,32 +25,34 @@ import { useKeyDown } from '@react-hooks-library/core'
 import { type ComponentProps } from 'honorable/dist/types.js'
 import resolvePartStyles from 'honorable/dist/resolvers/resolvePartStyles.js'
 import filterUndefinedValues from 'honorable/dist/utils/filterUndefinedValues.js'
+import { type CSSObject } from 'styled-components'
 
 export const modalParts = ['Backdrop'] as const
 
-export const modalPropTypes = {
-  open: PropTypes.bool,
-  onClose: PropTypes.func,
-  fade: PropTypes.bool,
-  transitionDuration: PropTypes.number,
-  disableEscapeKey: PropTypes.bool,
-  portal: PropTypes.bool,
-}
-
 export type ModalBaseProps = {
   open?: boolean
-  onClose?: (event: MouseEvent | KeyboardEvent) => void
+  onClose?: (event?: MouseEvent | KeyboardEvent) => void
   fade?: boolean
   transitionDuration?: number
+  InnerTransitionStyle?: transitionConfig
+  InnerDefaultStyle?: CSSObject
   disableEscapeKey?: boolean
   portal?: boolean
 }
 
-export type ModalProps = ComponentProps<
-  ModalBaseProps,
-  'div',
-  (typeof modalParts)[number]
->
+export type ModalProps = ModalBaseProps &
+  ComponentProps<ModalBaseProps, 'div', (typeof modalParts)[number]>
+
+type transitionConfig = {
+  [key in TransitionStatus]?: CSSObject
+}
+
+const defaultInnerTransitionStyle: transitionConfig = {
+  entering: { opacity: 0 },
+  entered: { opacity: 1 },
+  exiting: { opacity: 0 },
+  exited: { opacity: 0 },
+}
 
 function ModalRef(props: ModalProps, ref: Ref<any>) {
   const {
@@ -61,6 +62,8 @@ function ModalRef(props: ModalProps, ref: Ref<any>) {
     transitionDuration = 250,
     disableEscapeKey = false,
     portal = false,
+    InnerTransitionStyle,
+    InnerDefaultStyle,
     ...otherProps
   } = props
   const theme = useTheme()
@@ -172,18 +175,9 @@ function ModalRef(props: ModalProps, ref: Ref<any>) {
   function wrapFadeInner(element: ReactElement) {
     if (!fade) return element
 
-    const defaultStyle = {
+    const defaultInnerStyle = {
       opacity: 0,
       transition: `opacity ${transitionDuration}ms ease`,
-      ...resolvePartStyles('InnerDefaultStyle', props, theme),
-    }
-
-    const transitionStyles = {
-      entering: { opacity: 1 },
-      entered: { opacity: 1 },
-      exiting: { opacity: 0 },
-      exited: { opacity: 0 },
-      ...resolvePartStyles('InnerTransitionStyle', props, theme),
     }
 
     return (
@@ -191,11 +185,11 @@ function ModalRef(props: ModalProps, ref: Ref<any>) {
         in={isOpen && !isClosing}
         timeout={transitionDuration}
       >
-        {(state: string) =>
+        {(state) =>
           cloneElement(element, {
             ...element.props,
-            ...defaultStyle,
-            ...transitionStyles[state as keyof typeof transitionStyles],
+            ...(InnerDefaultStyle || defaultInnerStyle),
+            ...(InnerTransitionStyle || defaultInnerTransitionStyle)[state],
           })
         }
       </Transition>
@@ -225,7 +219,7 @@ function ModalRef(props: ModalProps, ref: Ref<any>) {
             ref={ref}
             backgroundColor="background"
             overflowY="auto"
-            margin={32}
+            margin="xlarge"
             {...rootStyles}
             {...filterUndefinedValues(otherProps)}
           />
@@ -238,6 +232,5 @@ function ModalRef(props: ModalProps, ref: Ref<any>) {
 const BaseModal = forwardRef(ModalRef)
 
 BaseModal.displayName = 'Modal'
-BaseModal.propTypes = modalPropTypes
 
 export const HonorableModal = memo(BaseModal)
