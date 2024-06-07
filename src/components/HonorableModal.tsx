@@ -152,6 +152,7 @@ function ModalRef(props: ModalProps, ref: Ref<any>) {
 
     return (
       <Transition
+        nodeRef={backdropRef}
         in={isOpen && !isClosing}
         timeout={transitionDuration}
       >
@@ -182,6 +183,7 @@ function ModalRef(props: ModalProps, ref: Ref<any>) {
 
     return (
       <Transition
+        nodeRef={backdropRef}
         in={isOpen && !isClosing}
         timeout={transitionDuration}
       >

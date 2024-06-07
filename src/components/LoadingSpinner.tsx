@@ -269,6 +269,7 @@ const LoadingSpinner = forwardRef<HTMLDivElement, LoadingSpinnerProps>(
 
     return (
       <CSSTransition
+        nodeRef={ref}
         in={delayFinished && show}
         appear
         timeout={animateTransitions ? 400 : 0}

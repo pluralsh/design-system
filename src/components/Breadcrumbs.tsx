@@ -414,6 +414,7 @@ export function Breadcrumbs({
   }
   const prevBreadcrumbs = usePrevious(breadcrumbs)
   const transitionKey = useRef<number>(0)
+  const breadcrumbsRef = useRef<HTMLDivElement | undefined>(undefined)
 
   if (prevBreadcrumbs !== breadcrumbs) {
     transitionKey.current++
@@ -428,6 +429,7 @@ export function Breadcrumbs({
       change and waiting for refit before making visible and removing old breadcrumbs */}
       <SwitchTransition mode="in-out">
         <Transition
+          nodeRef={breadcrumbsRef}
           key={String(transitionKey.current)}
           timeout={200}
           // Typing for 'addEndListener' on <Transition> component is incorrect

@@ -5,6 +5,7 @@ import {
   type Ref,
   forwardRef,
   useEffect,
+  useRef,
   useState,
 } from 'react'
 import { CSSTransition } from 'react-transition-group'
@@ -98,6 +99,7 @@ function CarouselRef(
   ref: Ref<any>
 ) {
   const [activeIndex, setActiveIndex] = useState(0)
+  const nodeRef = useRef(undefined)
 
   useEffect(() => {
     if (autoAdvanceTime <= 0) return
@@ -132,11 +134,13 @@ function CarouselRef(
             pointerEvents={activeIndex === i ? 'auto' : 'none'}
           >
             <CSSTransition
+              nodeRef={nodeRef}
               in={activeIndex === i}
               appear
               timeout={2000}
             >
               <Flex
+                ref={nodeRef}
                 width="100%"
                 alignItems="center"
                 {...transitionStyles}
