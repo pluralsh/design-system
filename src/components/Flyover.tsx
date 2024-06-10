@@ -1,5 +1,4 @@
 import { type ReactNode, type Ref, forwardRef, useEffect } from 'react'
-import PropTypes from 'prop-types'
 
 import styled, { type StyledComponentPropsWithRef } from 'styled-components'
 
@@ -22,15 +21,6 @@ type FlyoverPropsType = Omit<ModalProps, 'size'> & {
   minWidth?: number
   [x: string]: unknown
 }
-
-const propTypes = {
-  header: PropTypes.node,
-  lockBody: PropTypes.bool,
-  scrollable: PropTypes.bool,
-  asForm: PropTypes.bool,
-  width: PropTypes.string,
-  minWidth: PropTypes.number,
-} as const
 
 const FlyoverSC = styled.div(({ theme }) => ({
   position: 'relative',
@@ -112,7 +102,6 @@ function FlyoverRef(
       width={width}
       minWidth={minWidth}
       alignSelf="flex-end"
-      BackdropProps={{ backgroundColor: 'transparent' }}
       InnerDefaultStyle={{
         opacity: 0,
         transform: 'translateX(0)',
@@ -150,7 +139,5 @@ function FlyoverRef(
 }
 
 const Flyover = forwardRef(FlyoverRef)
-
-Flyover.propTypes = propTypes
 
 export default Flyover
