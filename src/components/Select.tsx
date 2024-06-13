@@ -113,8 +113,6 @@ export const TitleContent = styled.div<{
     const hPad = theme.spacing.small
     const vPad = size === 'small' ? 5 : 9
 
-    console.log('title', parentFillLevel)
-
     return {
       ...theme.partials.text.caption,
       alignItems: 'center',
@@ -220,8 +218,6 @@ const SelectButton = forwardRef<
     ref
   ) => {
     const parentFillLevel = useFillLevel()
-
-    console.log('select', parentFillLevel)
 
     return (
       <SelectButtonInner
