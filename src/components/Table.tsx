@@ -66,11 +66,13 @@ export type TableProps = Omit<
 > & {
   data: any[]
   columns: any[]
+  hideHeader?: boolean
   getRowCanExpand?: any
   renderExpanded?: any
   loose?: boolean
   stickyColumn?: boolean
   scrollTopMargin?: number
+  flush?: boolean
   virtualizeRows?: boolean
   lockColumnsOnScroll?: boolean
   reactVirtualOptions?: Partial<
@@ -92,8 +94,6 @@ type VirtualSlice = {
   start: VirtualItem | undefined
   end: VirtualItem | undefined
 }
-
-const propTypes = {}
 
 function getGridTemplateCols(columnDefs: ColumnDef<unknown>[] = []): string {
   return columnDefs
@@ -198,57 +198,67 @@ const Tr = styled.tr<{
 const Th = styled.th<{
   $stickyColumn: boolean
   $cursor?: CSSProperties['cursor']
-}>(({ theme, $stickyColumn: stickyColumn, $cursor: cursor }) => ({
-  padding: 0,
-  position: 'sticky',
-  top: 0,
-  zIndex: 4,
-  '.thOuterWrap': {
-    position: 'relative',
-    backgroundColor: theme.colors['fill-two'],
+  $hideHeader?: boolean
+}>(
+  ({
+    theme,
+    $stickyColumn: stickyColumn,
+    $cursor: cursor,
+    $hideHeader: hideHeader,
+  }) => ({
+    padding: 0,
+    position: 'sticky',
+    top: 0,
     zIndex: 4,
-    borderBottom: theme.borders['fill-three'],
-    color: theme.colors.text,
-    height: 48,
-    minHeight: 48,
-    whiteSpace: 'nowrap',
-    padding: '14px 12px',
-    textAlign: 'left',
-    ...(cursor ? { cursor } : {}),
-    '.thSortIndicatorWrap': {
-      display: 'flex',
-      gap: theme.spacing.xsmall,
-    },
-  },
-  '&:last-child': {
-    /* Hackery to hide unpredictable visible gap between columns */
-    zIndex: 3,
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      bottom: 0,
-      width: 10000,
+    '.thOuterWrap': {
+      alignItems: 'center',
+      display: hideHeader ? 'none' : 'flex',
+      position: 'relative',
       backgroundColor: theme.colors['fill-two'],
+      zIndex: 4,
       borderBottom: theme.borders['fill-three'],
+      color: theme.colors.text,
+      height: 48,
+      minHeight: 48,
+      whiteSpace: 'nowrap',
+      padding: '0 12px',
+      textAlign: 'left',
+      ...(cursor ? { cursor } : {}),
+      '.thSortIndicatorWrap': {
+        display: 'flex',
+        gap: theme.spacing.xsmall,
+      },
     },
-  },
-  '&:first-child': {
-    ...(stickyColumn
-      ? {
-          backgroundColor: 'inherit',
-          position: 'sticky',
-          left: 0,
-          zIndex: 5,
-          '.thOuterWrap': {
-            boxShadow: theme.boxShadows.slight,
+    '&:last-child': {
+      /* Hackery to hide unpredictable visible gap between columns */
+      zIndex: 3,
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        width: 10000,
+        backgroundColor: theme.colors['fill-two'],
+        borderBottom: hideHeader ? 'none' : theme.borders['fill-three'],
+      },
+    },
+    '&:first-child': {
+      ...(stickyColumn
+        ? {
+            backgroundColor: 'inherit',
+            position: 'sticky',
+            left: 0,
             zIndex: 5,
-          },
-        }
-      : {}),
-  },
-}))
+            '.thOuterWrap': {
+              boxShadow: theme.boxShadows.slight,
+              zIndex: 5,
+            },
+          }
+        : {}),
+    },
+  })
+)
 
 // TODO: Set vertical align to top for tall cells (~3 lines of text or more). See ENG-683.
 const Td = styled.td<{
@@ -266,6 +276,7 @@ const Td = styled.td<{
     $truncateColumn: truncateColumn = false,
     $center: center,
   }) => ({
+    ...theme.partials.text.body2LooseLineHeight,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -275,7 +286,7 @@ const Td = styled.td<{
 
     backgroundColor: 'inherit',
     borderTop: firstRow ? '' : theme.borders.default,
-    color: theme.colors.text,
+    color: theme.colors['text-light'],
 
     padding: loose ? '16px 12px' : '8px 12px',
     '&:first-child': stickyColumn
@@ -304,7 +315,7 @@ const TdExpand = styled.td(({ theme }) => ({
     gridColumn: '2 / -1',
   },
   backgroundColor: 'inherit',
-  color: theme.colors.text,
+  color: theme.colors['text-light'],
   height: 'auto',
   minHeight: 52,
   padding: '16px 12px',
@@ -519,11 +530,13 @@ function TableRef(
   {
     data,
     columns,
+    hideHeader = false,
     getRowCanExpand,
     renderExpanded,
     loose = false,
     stickyColumn = false,
     scrollTopMargin = 500,
+    flush = false,
     width,
     virtualizeRows = false,
     lockColumnsOnScroll,
@@ -681,8 +694,12 @@ function TableRef(
     >
       <Div
         backgroundColor="fill-two"
-        border="1px solid border-fill-two"
-        borderRadius="large"
+        border={flush ? 'none' : '1px solid border-fill-two'}
+        borderRadius={
+          flush
+            ? `0 0 ${theme.borderRadiuses.large}px ${theme.borderRadiuses.large}px`
+            : 'large'
+        }
         overflow="auto"
         ref={tableContainerRef}
         onScroll={({ target }: { target: HTMLDivElement }) =>
@@ -698,6 +715,7 @@ function TableRef(
                 {headerGroup.headers.map((header) => (
                   <Th
                     key={header.id}
+                    $hideHeader={hideHeader}
                     $stickyColumn={stickyColumn}
                     {...(header.column.getCanSort()
                       ? {
@@ -853,7 +871,5 @@ function TableRef(
 }
 
 const Table = forwardRef(TableRef)
-
-Table.propTypes = propTypes
 
 export default Table
