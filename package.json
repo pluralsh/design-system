@@ -124,7 +124,7 @@
     "storybook": "7.6.5",
     "styled-components": "5.3.11",
     "typescript": "^5.4.5",
-    "vite": "5.0.10",
+    "vite": "5.0.13",
     "vitest": "1.0.4"
   },
   "peerDependencies": {
