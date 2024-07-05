@@ -27,7 +27,7 @@
     "firebase:start": "yarn build:storybook && npx firebase emulators:start"
   },
   "engines": {
-    "node": "18.16.0"
+    "node": "18.20.3"
   },
   "dependencies": {
     "@floating-ui/react-dom-interactions": "0.13.3",
