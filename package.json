@@ -74,7 +74,7 @@
     "@babel/preset-react": "7.23.3",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
-    "@pluralsh/eslint-config-typescript": "2.5.147",
+    "@pluralsh/eslint-config-typescript": "2.5.191",
     "@storybook/addon-actions": "7.6.5",
     "@storybook/addon-docs": "7.6.5",
     "@storybook/addon-essentials": "7.6.5",
