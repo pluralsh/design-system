@@ -137,7 +137,7 @@
     "react-transition-group": ">=4.4.5",
     "styled-components": ">=5.3.11"
   },
-  "packageManager": "yarn@3.3.1",
+  "packageManager": "yarn@3.8.3",
   "resolutions": {
     "@storybook/mdx2-csf": "0.1.0-next.8"
   },
