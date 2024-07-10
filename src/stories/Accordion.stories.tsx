@@ -8,7 +8,6 @@ export default {
 }
 
 const CustomContent = styled.div(({ theme }) => ({
-  paddingTop: theme.spacing.medium,
   ...theme.partials.text.subtitle1,
 }))
 
