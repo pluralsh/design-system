@@ -187,7 +187,6 @@ const AccordionContent = styled(AccordionContentUnstyled)(
 )
 
 type AccordionPropsBase = {
-  textValue?: string
   padContent?: boolean
   horizontal?: boolean
   unstyled?: boolean
@@ -207,7 +206,6 @@ type AccordionPropsWithLabel = AccordionPropsBase & {
 export type AccordionProps = AccordionPropsWithTrigger | AccordionPropsWithLabel
 
 export default function Accordion({
-  textValue,
   label,
   triggerButton,
   padContent = true,
@@ -221,10 +219,6 @@ export default function Accordion({
   ...props
 }: AccordionProps) {
   const theme = useTheme()
-
-  if (!textValue && typeof label === 'string') {
-    textValue = label
-  }
 
   const { triggerProps, contentProps, isOpen } = useDisclosure({
     defaultOpen,
