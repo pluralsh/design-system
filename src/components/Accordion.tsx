@@ -93,19 +93,25 @@ function AccordionContentUnstyled({
   children,
   pad: _pad,
   unstyled: _unstyled,
+  horizontal = false,
   ...props
 }: {
   isOpen?: boolean
   pad?: boolean
   unstyled?: boolean
+  horizontal?: boolean
 } & HTMLAttributes<HTMLDivElement>) {
   const eltRef = useRef<HTMLDivElement>(null)
-  const [contentHeight, setContentHeight] = useState(0)
+  const [contentSize, setContentSize] = useState(0)
   const onResize = useCallback(() => {
-    if (eltRef.current?.offsetHeight) {
-      setContentHeight(eltRef.current?.offsetHeight)
+    if (!horizontal && eltRef.current?.offsetHeight) {
+      setContentSize(eltRef.current?.offsetHeight)
     }
-  }, [])
+
+    if (horizontal && eltRef.current?.offsetWidth) {
+      setContentSize(eltRef.current?.offsetWidth)
+    }
+  }, [horizontal])
   const theme = useTheme()
 
   useEffect(() => {
@@ -114,7 +120,9 @@ function AccordionContentUnstyled({
 
   useResizeObserver(eltRef, onResize)
   const springs = useSpring({
-    to: { height: isOpen ? contentHeight || 'auto' : 0 },
+    to: horizontal
+      ? { width: isOpen ? contentSize || 'auto' : 0 }
+      : { height: isOpen ? contentSize || 'auto' : 0 },
     config: isOpen
       ? {
           clamp: true,
@@ -136,6 +144,7 @@ function AccordionContentUnstyled({
       style={
         {
           overflow: 'hidden',
+          ...(horizontal ? { display: 'flex' } : {}),
           ...(!_unstyled
             ? {
                 marginTop: -mOffset,
@@ -175,6 +184,7 @@ const AccordionContent = styled(AccordionContentUnstyled)(
 type AccordionPropsBase = {
   textValue?: string
   padContent?: boolean
+  horizontal?: boolean
   unstyled?: boolean
   children?: ReactNode | ((props: { isOpen: boolean }) => ReactNode)
 } & UseDisclosureProps
@@ -197,6 +207,7 @@ export default function Accordion({
   triggerButton,
   padContent = true,
   unstyled = false,
+  horizontal = false,
   children,
   isOpen: isOpenProp,
   onOpenChange,
@@ -257,6 +268,7 @@ export default function Accordion({
         isOpen={isOpen}
         pad={padContent}
         unstyled={unstyled}
+        horizontal={horizontal}
         {...contentProps}
       >
         {kids}
