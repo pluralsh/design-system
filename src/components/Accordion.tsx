@@ -22,6 +22,11 @@ import { AnimatedDiv } from './AnimatedDiv'
 
 const paddingTransition = '0.2s ease'
 
+const horizontalCard = styled(Card)(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing.medium,
+}))
+
 function AccordionTriggerUnstyled({
   children,
   isOpen: _isOpen,
@@ -215,6 +220,8 @@ export default function Accordion({
   id,
   ...props
 }: AccordionProps) {
+  const theme = useTheme()
+
   if (!textValue && typeof label === 'string') {
     textValue = label
   }
@@ -242,13 +249,19 @@ export default function Accordion({
         ? function Div(props: ComponentProps<'div'>) {
             return (
               <div
-                style={horizontal ? { display: 'flex' } : {}}
+                style={
+                  horizontal
+                    ? { display: 'flex', gap: theme.spacing.medium }
+                    : {}
+                }
                 {...props}
               />
             )
           }
+        : horizontal
+        ? horizontalCard
         : Card,
-    [horizontal, unstyled]
+    [horizontal, theme.spacing.medium, unstyled]
   )
   const finalTriggerProps = { isOpen, ...triggerProps }
 

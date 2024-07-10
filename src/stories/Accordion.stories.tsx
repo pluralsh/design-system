@@ -56,6 +56,7 @@ Horizontal.args = {
   defaultOpen: true,
   customTrigger: true,
   customContent: true,
+  padContent: false,
   label: 'Title',
   children: (
     <div>
