@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import { Accordion, Button, CloseIcon, Input } from '..'
+import { Accordion, Button, Card, CloseIcon, Input } from '..'
 
 export default {
   title: 'Accordion',
@@ -52,37 +52,39 @@ function HorizontalTemplate({ ...args }: any) {
   const [visible, setVisible] = useState(false)
 
   return (
-    <Accordion
-      {...args}
-      isOpen={visible}
-      unstyled
-      horizontal
-      triggerButton={
-        <div>
-          {!visible && (
-            <Button
-              secondary
-              backgroundColor="fill-one"
-              onClick={() => setVisible(!visible)}
-            >
-              Show
-            </Button>
-          )}
+    <Card css={{ width: 500, padding: 8, direction: 'rtl' }}>
+      <Accordion
+        {...args}
+        isOpen={visible}
+        unstyled
+        horizontal
+        triggerButton={
+          <div>
+            {!visible && (
+              <Button
+                secondary
+                backgroundColor="fill-one"
+                onClick={() => setVisible(!visible)}
+              >
+                Show
+              </Button>
+            )}
+          </div>
+        }
+      >
+        <div css={{ display: 'flex' }}>
+          <Input
+            width={250}
+            suffix={
+              <CloseIcon
+                cursor="pointer"
+                onClick={() => setVisible(false)}
+              />
+            }
+          />
         </div>
-      }
-    >
-      <div css={{ display: 'flex' }}>
-        <Input
-          width={250}
-          suffix={
-            <CloseIcon
-              cursor="pointer"
-              onClick={() => setVisible(false)}
-            />
-          }
-        />
-      </div>
-    </Accordion>
+      </Accordion>
+    </Card>
   )
 }
 
