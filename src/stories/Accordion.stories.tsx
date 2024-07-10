@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Accordion, Button } from '..'
+import { Accordion, Button, Input } from '..'
 
 export default {
   title: 'Accordion',
@@ -14,7 +14,11 @@ const CustomContent = styled.div(({ theme }) => ({
 
 function Template({ customTrigger, customContent, ...args }: any) {
   if (customTrigger) {
-    args.triggerButton = <Button primary>Show more</Button>
+    args.triggerButton = (
+      <div>
+        <Button primary>Show more</Button>
+      </div>
+    )
   }
   if (customContent) {
     args.children = <CustomContent>{args.children}</CustomContent>
@@ -49,9 +53,16 @@ export const Horizontal = Template.bind({})
 Horizontal.args = {
   unstyled: true,
   horizontal: true,
+  defaultOpen: true,
   customTrigger: true,
   customContent: true,
   label: 'Title',
-  children:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  children: (
+    <div>
+      <Input
+        titleContent="Test"
+        width={250}
+      />
+    </div>
+  ),
 }
