@@ -236,19 +236,21 @@ export default function Accordion({
     [children, isOpen]
   )
 
-  const Wrapper = useMemo(() => {
-    if (unstyled) {
-      return function Div(props: ComponentProps<'div'>) {
-        return <div {...props} />
-      }
-    }
-
-    return Card
-  }, [unstyled])
-  const finalTriggerProps = {
-    isOpen,
-    ...triggerProps,
-  }
+  const Wrapper = useMemo(
+    () =>
+      unstyled
+        ? function Div(props: ComponentProps<'div'>) {
+            return (
+              <div
+                style={horizontal ? { display: 'flex' } : {}}
+                {...props}
+              />
+            )
+          }
+        : Card,
+    [horizontal, unstyled]
+  )
+  const finalTriggerProps = { isOpen, ...triggerProps }
 
   const trigger = triggerButton ? (
     React.cloneElement(triggerButton, finalTriggerProps)
