@@ -37,6 +37,8 @@ const useAccordionContext = () => {
 export function useIsItemOpen(itemValue: string) {
   const { openItems } = useAccordionContext()
 
+  if (!openItems) return false
+
   return typeof openItems === 'string'
     ? openItems === itemValue
     : (openItems as string[]).includes(itemValue)
@@ -97,6 +99,7 @@ function AccordionRef(
         collapsible={props.collapsible ?? true}
         value={openItems as string & string[]}
         onValueChange={onValueChange}
+        css={{ overflow: 'hidden' }}
         {...props}
       >
         <Card>{children}</Card>

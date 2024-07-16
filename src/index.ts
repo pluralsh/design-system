@@ -7,6 +7,7 @@ export * from './icons'
 export * from './plural-logos'
 
 // Components
+export { default as AccordionOLD } from './components/AccordionOLD'
 export type { AccordionProps } from './components/Accordion'
 export {
   default as Accordion,
