@@ -203,7 +203,9 @@ const Callout = forwardRef<HTMLDivElement, CalloutProps>(
               {title}
             </h6>
             <AnimateHeight
-              contentClassName={classNames('body', { bodyWithTitle: !!title })}
+              contentClassName={classNames('body', {
+                bodyWithTitle: !!title && !!children,
+              })}
               duration={300}
               height={
                 (expandable && expanded) || !expandable
