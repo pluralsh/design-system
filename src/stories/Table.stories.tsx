@@ -212,7 +212,13 @@ export default {
 }
 
 function Template(args: any) {
-  return <Table {...args} />
+  return (
+    <Table
+      {...args}
+      highlightedRowId={2}
+      reactTableOptions={{ getRowId: (_, index) => index }}
+    />
+  )
 }
 
 function PagedTemplate({ data, pageSize, ...args }: any) {

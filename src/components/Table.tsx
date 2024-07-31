@@ -50,6 +50,7 @@ export type TableProps = DivProps & {
   hideHeader?: boolean
   padCells?: boolean
   rowBg?: 'base' | 'raised' | 'stripes'
+  highlightedRowId?: string
   getRowCanExpand?: any
   renderExpanded?: any
   loose?: boolean
@@ -145,6 +146,7 @@ const Tbody = styled(TbodyUnstyled)(({ theme }) => ({
 }))
 
 const Tr = styled.tr<{
+  $highlighted?: boolean
   $selected?: boolean
   $selectable?: boolean
   $clickable?: boolean
@@ -156,9 +158,12 @@ const Tr = styled.tr<{
     $raised: raised = false,
     $selectable: selectable = false,
     $selected: selected = false,
+    $highlighted: highlighted = false,
   }) => ({
     display: 'contents',
-    backgroundColor: selected
+    backgroundColor: highlighted
+      ? theme.colors['fill-two']
+      : selected
       ? theme.colors['fill-zero-hover']
       : raised || (selectable && !selected)
       ? theme.colors['fill-zero-selected']
@@ -535,6 +540,7 @@ function TableRef(
     lockColumnsOnScroll,
     reactVirtualOptions,
     reactTableOptions,
+    highlightedRowId,
     onRowClick,
     emptyStateProps,
     hasNextPage,
@@ -777,6 +783,7 @@ function TableRef(
                     key={key}
                     onClick={(e) => onRowClick?.(e, row)}
                     $raised={raised}
+                    $highlighted={row.id === highlightedRowId}
                     $selectable={row?.getCanSelect() ?? false}
                     $selected={row?.getIsSelected() ?? false}
                     $clickable={!!onRowClick}
