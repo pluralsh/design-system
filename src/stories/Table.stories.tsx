@@ -129,6 +129,7 @@ const columns = [
     ),
     header: () => <span>Input (type)</span>,
     meta: {
+      highlight: true,
       truncate: true,
       gridTemplate: 'minmax(150px, 1fr)',
     },

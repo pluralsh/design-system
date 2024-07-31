@@ -180,12 +180,14 @@ const Tr = styled.tr<{
 
 const Th = styled.th<{
   $stickyColumn: boolean
+  $highlight?: boolean
   $cursor?: CSSProperties['cursor']
   $hideHeader?: boolean
 }>(
   ({
     theme,
     $stickyColumn: stickyColumn,
+    $highlight: highlight,
     $cursor: cursor,
     $hideHeader: hideHeader,
   }) => ({
@@ -197,7 +199,9 @@ const Th = styled.th<{
       alignItems: 'center',
       display: hideHeader ? 'none' : 'flex',
       position: 'relative',
-      backgroundColor: theme.colors['fill-one'],
+      backgroundColor: highlight
+        ? theme.colors['fill-two']
+        : theme.colors['fill-one'],
       zIndex: 4,
       borderBottom: theme.borders.default,
       color: theme.colors.text,
@@ -249,6 +253,7 @@ const Td = styled.td<{
   $loose?: boolean
   $padCells?: boolean
   $stickyColumn: boolean
+  $highlight?: boolean
   $truncateColumn: boolean
   $center?: boolean
 }>(
@@ -258,6 +263,7 @@ const Td = styled.td<{
     $loose: loose,
     $padCells: padCells,
     $stickyColumn: stickyColumn,
+    $highlight: highlight,
     $truncateColumn: truncateColumn = false,
     $center: center,
   }) => ({
@@ -269,7 +275,7 @@ const Td = styled.td<{
     height: 'auto',
     minHeight: 52,
 
-    backgroundColor: 'inherit',
+    backgroundColor: highlight ? theme.colors['fill-two'] : 'inherit',
     borderTop: firstRow ? '' : theme.borders.default,
     color: theme.colors['text-light'],
 
@@ -704,6 +710,7 @@ function TableRef(
                     key={header.id}
                     $hideHeader={hideHeader}
                     $stickyColumn={stickyColumn}
+                    $highlight={header.column.columnDef?.meta?.highlight}
                     {...(header.column.getCanSort()
                       ? {
                           $cursor:
@@ -801,6 +808,7 @@ function TableRef(
                           $padCells={padCells}
                           $loose={loose}
                           $stickyColumn={stickyColumn}
+                          $highlight={cell.column?.columnDef?.meta?.highlight}
                           $truncateColumn={
                             cell.column?.columnDef?.meta?.truncate
                           }

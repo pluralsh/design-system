@@ -7,5 +7,6 @@ declare module '@tanstack/table-core' {
     gridTemplate?: string
     center?: boolean
     tooltip?: string
+    highlight?: boolean
   }
 }
