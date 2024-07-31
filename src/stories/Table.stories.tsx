@@ -129,7 +129,6 @@ const columns = [
     ),
     header: () => <span>Input (type)</span>,
     meta: {
-      highlight: true,
       truncate: true,
       gridTemplate: 'minmax(150px, 1fr)',
     },
@@ -364,8 +363,35 @@ Default.args = {
   height: '400px',
   data: repeatedData,
   columns,
+}
+
+export const Highlighted = Template.bind({})
+Highlighted.args = {
+  width: '900px',
+  height: '400px',
+  data: repeatedData,
+  columns: (() => {
+    const c = [...columns]
+
+    c.splice(
+      2,
+      0,
+      columnHelper.accessor((row) => row.id, {
+        id: 'h',
+        cell: ({ getValue }) => getValue(),
+        header: 'Highlight',
+        meta: {
+          highlight: true,
+          truncate: true,
+          gridTemplate: 'minmax(150px, 1fr)',
+        },
+      })
+    )
+
+    return c
+  })(),
   reactTableOptions: { getRowId: (_: any, index: any) => index },
-  highlightedRowId: 2,
+  highlightedRowId: 1,
 }
 
 export const VirtualizedRows = Template.bind({})
