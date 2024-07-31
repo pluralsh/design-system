@@ -16,8 +16,6 @@ import {
   AppIcon,
   ArrowRightLeftIcon,
   CollapseIcon,
-  IconFrame,
-  InfoIcon,
   LogsIcon,
   Table,
   Tooltip,
@@ -145,6 +143,7 @@ const columns = [
   columnHelper.accessor((row) => row.description, {
     id: 'description',
     enableGlobalFilter: true,
+    meta: { tooltip: 'Tooltip message' },
     cell: (info: any) => <span>{info.getValue()}</span>,
     header: () => (
       <Flex
@@ -152,13 +151,7 @@ const columns = [
         alignItems="center"
         justifyContent="space-between"
       >
-        Description{' '}
-        <IconFrame
-          clickable
-          textValue="Book"
-          icon={<InfoIcon />}
-          size="small"
-        />
+        Description
       </Flex>
     ),
   }),

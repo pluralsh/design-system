@@ -35,6 +35,7 @@ import styled, { useTheme } from 'styled-components'
 import { isEmpty, isNil } from 'lodash-es'
 
 import usePrevious from '../hooks/usePrevious'
+import { InfoOutlineIcon, Tooltip } from '../index'
 
 import Button from './Button'
 import CaretUpIcon from './icons/CaretUpIcon'
@@ -725,6 +726,11 @@ function TableRef(
                                 header.getContext()
                               )}
                         </div>
+                        {header.column.columnDef.meta?.tooltip && (
+                          <Tooltip label={header.column.columnDef.meta.tooltip}>
+                            <InfoOutlineIcon />
+                          </Tooltip>
+                        )}
                         <SortIndicator
                           direction={header.column.getIsSorted()}
                         />
