@@ -212,13 +212,7 @@ export default {
 }
 
 function Template(args: any) {
-  return (
-    <Table
-      {...args}
-      highlightedRowId={2}
-      reactTableOptions={{ getRowId: (_, index) => index }}
-    />
-  )
+  return <Table {...args} />
 }
 
 function PagedTemplate({ data, pageSize, ...args }: any) {
@@ -365,12 +359,13 @@ const extremeLengthData = Array(200)
   .map((item, i) => ({ ...item, id: `id-${i}` }))
 
 export const Default = Template.bind({})
-
 Default.args = {
   width: '900px',
   height: '400px',
   data: repeatedData,
   columns,
+  reactTableOptions: { getRowId: (_: any, index: any) => index },
+  highlightedRowId: 2,
 }
 
 export const VirtualizedRows = Template.bind({})
