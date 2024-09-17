@@ -13,6 +13,10 @@ import styled, {
   useTheme,
 } from 'styled-components'
 
+import { VisuallyHidden } from 'react-aria'
+
+import * as Dialog from '@radix-ui/react-dialog'
+
 import { type ColorKey, type Nullable, type SeverityExt } from '../types'
 
 import useLockedBody from '../hooks/useLockedBody'
@@ -195,6 +199,9 @@ function ModalRef(
           $scrollable={scrollable}
           $hasActions={!!actions}
         >
+          <VisuallyHidden>
+            <Dialog.Title>{header}</Dialog.Title>
+          </VisuallyHidden>
           {!!header && (
             <ModalHeaderWrapSC ref={ref}>
               {HeaderIcon && (
