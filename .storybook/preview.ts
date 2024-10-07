@@ -1,15 +1,20 @@
 import { type Preview } from '@storybook/react'
 import { fn } from '@storybook/test'
 import { themes } from '@storybook/theming'
-import { COLOR_MODES, DEFAULT_COLOR_MODE } from '../src/theme'
+
+import { DEFAULT_COLOR_MODE } from '../src/theme'
 import themeDecorator from '../src/ThemeDecorator'
 
 // Copied from https://github.com/storybookjs/storybook/blob/v8.2.5/code/core/src/theming/utils.ts
 const { window: globalWindow } = global
+
 export const getPreferredColorScheme = () => {
   if (!globalWindow || !globalWindow.matchMedia) return 'light'
 
-  const isDarkThemePreferred = globalWindow.matchMedia('(prefers-color-scheme: dark)').matches
+  const isDarkThemePreferred = globalWindow.matchMedia(
+    '(prefers-color-scheme: dark)'
+  ).matches
+
   if (isDarkThemePreferred) return 'dark'
 
   return 'light'
