@@ -33,7 +33,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import styled, { useTheme } from 'styled-components'
 import { isEmpty, isNil } from 'lodash-es'
 
-import { type FillLevel, InfoOutlineIcon, Tooltip } from '../../index'
+import { InfoOutlineIcon, Tooltip } from '../../index'
 
 import Button from '../Button'
 import CaretUpIcon from '../icons/CaretUpIcon'
@@ -43,6 +43,7 @@ import EmptyState, { type EmptyStateProps } from '../EmptyState'
 import { Spinner } from '../Spinner'
 
 import {
+  type TableFillLevel,
   tableFillLevelToBg,
   tableFillLevelToBorder,
   tableFillLevelToBorderColor,
@@ -61,7 +62,7 @@ export type TableProps = DivProps & {
   columns: any[]
   hideHeader?: boolean
   padCells?: boolean
-  fillLevel?: FillLevel
+  fillLevel?: TableFillLevel
   rowBg?: 'base' | 'raised' | 'stripes'
   highlightedRowId?: string
   getRowCanExpand?: any
@@ -151,7 +152,7 @@ const Tbody = styled(TbodyUnstyled)(() => ({
 }))
 
 export const Tr = styled.tr<{
-  $fillLevel: FillLevel
+  $fillLevel: TableFillLevel
   $highlighted?: boolean
   $selected?: boolean
   $selectable?: boolean
@@ -192,7 +193,7 @@ export const Tr = styled.tr<{
 )
 
 const Th = styled.th<{
-  $fillLevel: FillLevel
+  $fillLevel: TableFillLevel
   $stickyColumn: boolean
   $highlight?: boolean
   $cursor?: CSSProperties['cursor']
@@ -266,7 +267,7 @@ const Th = styled.th<{
 
 // TODO: Set vertical align to top for tall cells (~3 lines of text or more). See ENG-683.
 export const Td = styled.td<{
-  $fillLevel: FillLevel
+  $fillLevel: TableFillLevel
   $firstRow?: boolean
   $loose?: boolean
   $padCells?: boolean
