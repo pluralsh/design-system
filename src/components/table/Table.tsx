@@ -4,7 +4,6 @@ import {
   type ComponentProps,
   Fragment,
   type MouseEvent,
-  type MutableRefObject,
   type Ref,
   forwardRef,
   useCallback,
@@ -34,7 +33,6 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import styled, { useTheme } from 'styled-components'
 import { isEmpty, isNil } from 'lodash-es'
 
-import usePrevious from '../../hooks/usePrevious'
 import { type FillLevel, InfoOutlineIcon, Tooltip } from '../../index'
 
 import Button from '../Button'
@@ -55,6 +53,8 @@ import {
   tableFillLevelToScrollbarBg,
   tableFillLevelToSelectedCellBg,
 } from './colors'
+import { FillerRows } from './FillerRows'
+import { useIsScrolling, useOnVirtualSliceChange } from './hooks'
 
 export type TableProps = DivProps & {
   data: any[]
@@ -85,11 +85,6 @@ export type TableProps = DivProps & {
     start: VirtualItem | undefined
     end: VirtualItem | undefined
   }) => void
-}
-
-type VirtualSlice = {
-  start: VirtualItem | undefined
-  end: VirtualItem | undefined
 }
 
 function getGridTemplateCols(columnDefs: ColumnDef<unknown>[] = []): string {
@@ -155,7 +150,7 @@ const Tbody = styled(TbodyUnstyled)(() => ({
   display: 'contents',
 }))
 
-const Tr = styled.tr<{
+export const Tr = styled.tr<{
   $fillLevel: FillLevel
   $highlighted?: boolean
   $selected?: boolean
@@ -270,7 +265,7 @@ const Th = styled.th<{
 )
 
 // TODO: Set vertical align to top for tall cells (~3 lines of text or more). See ENG-683.
-const Td = styled.td<{
+export const Td = styled.td<{
   $fillLevel: FillLevel
   $firstRow?: boolean
   $loose?: boolean
@@ -397,158 +392,6 @@ function SortIndicator({
   if (!direction) return null
 
   return sortDirToIcon[direction]
-}
-
-function FillerRow({
-  columns,
-  height,
-  index,
-  stickyColumn,
-  selectable,
-  fillLevel,
-  ...props
-}: {
-  columns: unknown[]
-  height: number
-  index: number
-  stickyColumn: boolean
-  selectable?: boolean
-  fillLevel: FillLevel
-}) {
-  return (
-    <Tr
-      aria-hidden="true"
-      $raised={index % 2 === 1}
-      $selected={false}
-      $selectable={selectable}
-      $fillLevel={fillLevel}
-    >
-      <Td
-        aria-hidden="true"
-        $fillLevel={fillLevel}
-        $stickyColumn={stickyColumn}
-        style={{
-          height,
-          minHeight: height,
-          maxHeight: height,
-          padding: 0,
-          gridColumn: '1 / -1',
-        }}
-        colSpan={columns.length}
-        $truncateColumn={false}
-        $center={false}
-        {...props}
-      />
-    </Tr>
-  )
-}
-
-function FillerRows({
-  rows,
-  height,
-  position,
-  fillLevel,
-  ...props
-}: {
-  rows: Row<unknown>[] | VirtualItem[]
-  columns: unknown[]
-  height: number
-  position: 'top' | 'bottom'
-  stickyColumn: boolean
-  clickable?: boolean
-  selectable?: boolean
-  fillLevel: FillLevel
-}) {
-  return (
-    <>
-      <FillerRow
-        height={position === 'top' ? 0 : height}
-        index={
-          position === 'top'
-            ? rows[0].index - 2
-            : rows[rows.length - 1].index + 1
-        }
-        fillLevel={fillLevel}
-        {...props}
-      />
-      <FillerRow
-        height={position === 'top' ? height : 0}
-        index={
-          position === 'top'
-            ? rows[0].index - 1
-            : rows[rows.length - 1].index + 2
-        }
-        fillLevel={fillLevel}
-        {...props}
-      />
-    </>
-  )
-}
-
-function useIsScrolling(
-  ref: MutableRefObject<HTMLElement>,
-  {
-    onIsScrollingChange: onScrollingChange,
-    restDelay = 350,
-  }: { onIsScrollingChange: (isScrolling: boolean) => void; restDelay?: number }
-) {
-  const [isScrolling, setIsScrolling] = useState(false)
-  const timeout = useRef<number | null>(null)
-
-  useEffect(() => {
-    onScrollingChange?.(isScrolling)
-  }, [isScrolling, onScrollingChange])
-
-  useEffect(() => {
-    if (ref.current) {
-      const el = ref.current
-
-      const scrollHandler = () => {
-        setIsScrolling(true)
-        window.clearTimeout(timeout.current)
-        timeout.current = window.setTimeout(() => {
-          setIsScrolling(false)
-        }, restDelay)
-      }
-
-      el.addEventListener('scroll', scrollHandler, { passive: true })
-
-      return () => {
-        el.removeEventListener('scroll', scrollHandler)
-      }
-    }
-  }, [ref, restDelay])
-}
-
-function useOnVirtualSliceChange({
-  virtualRows,
-  virtualizeRows,
-  onVirtualSliceChange,
-}: {
-  virtualRows: VirtualItem[]
-  virtualizeRows: boolean
-  onVirtualSliceChange: (slice: VirtualSlice) => void
-}) {
-  const sliceStartRow = virtualRows[0]
-  const sliceEndRow: VirtualItem = virtualRows[virtualRows.length - 1]
-  const prevSliceStartRow = usePrevious(virtualRows[0])
-  const prevSliceEndRow = usePrevious(virtualRows[virtualRows.length - 1])
-
-  useEffect(() => {
-    if (
-      virtualizeRows &&
-      (prevSliceEndRow !== sliceEndRow || prevSliceStartRow !== sliceStartRow)
-    ) {
-      onVirtualSliceChange?.({ start: sliceStartRow, end: sliceEndRow })
-    }
-  }, [
-    sliceStartRow,
-    sliceEndRow,
-    virtualizeRows,
-    onVirtualSliceChange,
-    prevSliceEndRow,
-    prevSliceStartRow,
-  ])
 }
 
 function TableRef(
