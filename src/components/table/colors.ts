@@ -18,31 +18,25 @@ export const tableFillLevelToBg = {
   2: 'fill-two',
 } as const satisfies Record<TableFillLevel, string>
 
-export const tableFillLevelToHeaderBg = {
+const tableFillLevelToHeaderBg = {
   0: 'fill-one',
   1: 'fill-two',
   2: 'fill-three',
 } as const satisfies Record<TableFillLevel, string>
 
-export const tableFillLevelToCellBg = {
+const tableFillLevelToCellBg = {
   0: 'fill-zero',
   1: 'fill-one',
   2: 'fill-two',
 } as const satisfies Record<TableFillLevel, string>
 
-export const tableFillLevelToRaisedCellBg = {
+const tableFillLevelToRaisedCellBg = {
   0: 'fill-zero-selected',
   1: 'fill-one-selected',
   2: 'fill-two-selected',
 } as const satisfies Record<TableFillLevel, string>
 
-export const tableFillLevelToSelectedCellBg = {
-  0: 'fill-zero-hover',
-  1: 'fill-one-hover',
-  2: 'fill-two-hover',
-} as const satisfies Record<TableFillLevel, string>
-
-export const tableFillLevelToHoverCellBg = {
+const tableFillLevelToSelectedCellBg = {
   0: 'fill-zero-hover',
   1: 'fill-one-hover',
   2: 'fill-two-hover',
@@ -54,4 +48,42 @@ export const tableFillLevelToHighlightedCellBg = {
   2: 'fill-three',
 } as const satisfies Record<TableFillLevel, string>
 
-// TODO: Color getters.
+const tableFillLevelToHoverCellBg = {
+  0: 'fill-zero-hover',
+  1: 'fill-one-hover',
+  2: 'fill-two-hover',
+} as const satisfies Record<TableFillLevel, string>
+
+export const tableHeaderColor = (
+  fillLevel: TableFillLevel,
+  highlighted: boolean
+) =>
+  highlighted
+    ? tableFillLevelToHighlightedCellBg[fillLevel]
+    : tableFillLevelToHeaderBg[fillLevel]
+
+export const tableCellColor = (
+  fillLevel: TableFillLevel,
+  highlighted: boolean,
+  raised: boolean,
+  selectable: boolean,
+  selected: boolean
+) =>
+  highlighted
+    ? tableFillLevelToHighlightedCellBg[fillLevel]
+    : selected
+    ? tableFillLevelToSelectedCellBg[fillLevel]
+    : raised || (selectable && !selected)
+    ? tableFillLevelToRaisedCellBg[fillLevel]
+    : tableFillLevelToCellBg[fillLevel]
+
+export const tableCellHoverColor = (
+  fillLevel: TableFillLevel,
+  selectable: boolean,
+  selected: boolean
+) =>
+  selectable
+    ? selected
+      ? tableFillLevelToSelectedCellBg[fillLevel]
+      : tableFillLevelToRaisedCellBg[fillLevel]
+    : tableFillLevelToHoverCellBg[fillLevel]

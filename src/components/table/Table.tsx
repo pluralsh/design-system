@@ -42,15 +42,13 @@ import EmptyState, { type EmptyStateProps } from '../EmptyState'
 import { Spinner } from '../Spinner'
 
 import {
+  tableCellColor,
+  tableCellHoverColor,
   tableFillLevelToBg,
   tableFillLevelToBorder,
   tableFillLevelToBorderColor,
-  tableFillLevelToCellBg,
-  tableFillLevelToHeaderBg,
   tableFillLevelToHighlightedCellBg,
-  tableFillLevelToHoverCellBg,
-  tableFillLevelToRaisedCellBg,
-  tableFillLevelToSelectedCellBg,
+  tableHeaderColor,
 } from './colors'
 import { FillerRows } from './FillerRows'
 import { useIsScrolling, useOnVirtualSliceChange } from './hooks'
@@ -171,24 +169,18 @@ export const Tr = styled.tr<{
     $fillLevel: fillLevel,
   }) => ({
     display: 'contents',
-    backgroundColor: highlighted
-      ? theme.colors[tableFillLevelToHighlightedCellBg[fillLevel]]
-      : selected
-      ? theme.colors[tableFillLevelToSelectedCellBg[fillLevel]]
-      : raised || (selectable && !selected)
-      ? theme.colors[tableFillLevelToRaisedCellBg[fillLevel]]
-      : theme.colors[tableFillLevelToCellBg[fillLevel]],
+    backgroundColor:
+      theme.colors[
+        tableCellColor(fillLevel, highlighted, raised, selectable, selected)
+      ],
 
     ...(clickable && {
       cursor: 'pointer',
 
       // highlight when hovered, but don't highlight if a child button is hovered
       '&:not(:has(button:hover)):hover': {
-        backgroundColor: selectable
-          ? selected
-            ? theme.colors[tableFillLevelToSelectedCellBg[fillLevel]]
-            : theme.colors[tableFillLevelToRaisedCellBg[fillLevel]]
-          : theme.colors[tableFillLevelToHoverCellBg[fillLevel]],
+        backgroundColor:
+          theme.colors[tableCellHoverColor(fillLevel, selectable, selected)],
       },
     }),
   })
@@ -217,9 +209,7 @@ const Th = styled.th<{
       alignItems: 'center',
       display: hideHeader ? 'none' : 'flex',
       position: 'relative',
-      backgroundColor: highlight
-        ? theme.colors[tableFillLevelToHighlightedCellBg[fillLevel]]
-        : theme.colors[tableFillLevelToHeaderBg[fillLevel]],
+      backgroundColor: theme.colors[tableHeaderColor(fillLevel, highlight)],
       zIndex: 4,
       borderBottom: theme.borders[tableFillLevelToBorder[fillLevel]],
       color: theme.colors.text,
@@ -244,7 +234,7 @@ const Th = styled.th<{
         right: 0,
         bottom: 0,
         width: 10000,
-        backgroundColor: theme.colors[tableFillLevelToHeaderBg[fillLevel]],
+        backgroundColor: theme.colors[tableHeaderColor(fillLevel, false)],
         borderBottom: hideHeader
           ? 'none'
           : theme.borders[tableFillLevelToBorder[fillLevel]],
