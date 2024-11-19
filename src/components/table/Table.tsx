@@ -43,6 +43,7 @@ import EmptyState, { type EmptyStateProps } from '../EmptyState'
 import { Spinner } from '../Spinner'
 
 import {
+  tableFillLevelToBg,
   tableFillLevelToBorder,
   tableFillLevelToBorderColor,
   tableFillLevelToCellBg,
@@ -50,7 +51,6 @@ import {
   tableFillLevelToHighlightedCellBg,
   tableFillLevelToHoverCellBg,
   tableFillLevelToRaisedCellBg,
-  tableFillLevelToScrollbarBg,
   tableFillLevelToSelectedCellBg,
 } from './colors'
 import { FillerRows } from './FillerRows'
@@ -565,7 +565,7 @@ function TableRef(
       ref={forwardRef}
     >
       <Div
-        backgroundColor={tableFillLevelToScrollbarBg[fillLevel]}
+        backgroundColor={tableFillLevelToBg[fillLevel]}
         border={
           flush ? 'none' : `1px solid ${tableFillLevelToBorderColor[fillLevel]}`
         }
@@ -741,7 +741,6 @@ function TableRef(
         {isEmpty(rows) && (
           <EmptyState
             message="No results match your query"
-            style={{ background: theme.colors['fill-zero-hover'] }}
             {...emptyStateProps}
           />
         )}

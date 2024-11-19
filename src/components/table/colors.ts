@@ -14,10 +14,10 @@ export const tableFillLevelToBorderColor = {
   3: 'border-fill-three',
 } as const satisfies Record<FillLevel, string>
 
-export const tableFillLevelToScrollbarBg = {
-  0: 'fill-two',
-  1: 'fill-three',
-  2: 'fill-three',
+export const tableFillLevelToBg = {
+  0: 'fill-zero',
+  1: 'fill-one',
+  2: 'fill-two',
   3: 'fill-three',
 } as const satisfies Record<FillLevel, string>
 
