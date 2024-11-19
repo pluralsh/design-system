@@ -1,7 +1,5 @@
 import { Div, type DivProps } from 'honorable'
 import {
-  type CSSProperties,
-  type ComponentProps,
   Fragment,
   type MouseEvent,
   type Ref,
@@ -16,7 +14,6 @@ import type {
   ColumnDef,
   FilterFn,
   Row,
-  SortDirection,
   TableOptions,
 } from '@tanstack/react-table'
 import {
@@ -30,28 +27,25 @@ import {
 import { rankItem } from '@tanstack/match-sorter-utils'
 import type { VirtualItem } from '@tanstack/react-virtual'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import styled, { useTheme } from 'styled-components'
+import { useTheme } from 'styled-components'
 import { isEmpty, isNil } from 'lodash-es'
 
 import { type FillLevel, InfoOutlineIcon, Tooltip } from '../../index'
 import Button from '../Button'
 import CaretUpIcon from '../icons/CaretUpIcon'
-import ArrowRightIcon from '../icons/ArrowRightIcon'
-import { FillLevelProvider } from '../contexts/FillLevelContext'
 import EmptyState, { type EmptyStateProps } from '../EmptyState'
 import { Spinner } from '../Spinner'
 
-import {
-  tableCellColor,
-  tableCellHoverColor,
-  tableFillLevelToBg,
-  tableFillLevelToBorder,
-  tableFillLevelToBorderColor,
-  tableFillLevelToHighlightedCellBg,
-  tableHeaderColor,
-} from './colors'
+import { tableFillLevelToBg, tableFillLevelToBorderColor } from './colors'
 import { FillerRows } from './FillerRows'
 import { useIsScrolling, useOnVirtualSliceChange } from './hooks'
+import { SortIndicator } from './SortIndicator'
+import { T } from './T'
+import { Tbody } from './Tbody'
+import { Td, TdExpand, TdLoading } from './Td'
+import { Th } from './Th'
+import { Thead } from './Thead'
+import { Tr } from './Tr'
 
 export type TableProps = DivProps & {
   data: any[]
@@ -104,240 +98,6 @@ function getGridTemplateCols(columnDefs: ColumnDef<unknown>[] = []): string {
     .join(' ')
 }
 
-const T = styled.table<{ $gridTemplateColumns: string }>(
-  ({ theme, $gridTemplateColumns }) => ({
-    gridTemplateColumns: $gridTemplateColumns,
-    borderSpacing: 0,
-    display: 'grid',
-    borderCollapse: 'collapse',
-    minWidth: '100%',
-    width: '100%',
-    ...theme.partials.text.body2LooseLineHeight,
-  })
-)
-
-const TheadUnstyled = forwardRef<
-  HTMLTableSectionElement,
-  ComponentProps<'thead'>
->((props, ref) => (
-  <FillLevelProvider value={2}>
-    <thead
-      {...props}
-      ref={ref}
-    />
-  </FillLevelProvider>
-))
-
-const Thead = styled(TheadUnstyled)(() => ({
-  display: 'contents',
-  position: 'sticky',
-  top: 0,
-  zIndex: 3,
-}))
-
-const TbodyUnstyled = forwardRef<
-  HTMLTableSectionElement,
-  ComponentProps<'tbody'>
->((props, ref) => (
-  <FillLevelProvider value={1}>
-    <tbody
-      ref={ref}
-      {...props}
-    />
-  </FillLevelProvider>
-))
-
-const Tbody = styled(TbodyUnstyled)(() => ({
-  display: 'contents',
-}))
-
-export const Tr = styled.tr<{
-  $fillLevel: TableFillLevel
-  $highlighted?: boolean
-  $selected?: boolean
-  $selectable?: boolean
-  $clickable?: boolean
-  $raised?: boolean
-}>(
-  ({
-    theme,
-    $clickable: clickable = false,
-    $raised: raised = false,
-    $selectable: selectable = false,
-    $selected: selected = false,
-    $highlighted: highlighted = false,
-    $fillLevel: fillLevel,
-  }) => ({
-    display: 'contents',
-    backgroundColor:
-      theme.colors[
-        tableCellColor(fillLevel, highlighted, raised, selectable, selected)
-      ],
-
-    ...(clickable && {
-      cursor: 'pointer',
-
-      // highlight when hovered, but don't highlight if a child button is hovered
-      '&:not(:has(button:hover)):hover': {
-        backgroundColor:
-          theme.colors[tableCellHoverColor(fillLevel, selectable, selected)],
-      },
-    }),
-  })
-)
-
-const Th = styled.th<{
-  $fillLevel: TableFillLevel
-  $stickyColumn: boolean
-  $highlight?: boolean
-  $cursor?: CSSProperties['cursor']
-  $hideHeader?: boolean
-}>(
-  ({
-    theme,
-    $fillLevel: fillLevel,
-    $stickyColumn: stickyColumn,
-    $highlight: highlight,
-    $cursor: cursor,
-    $hideHeader: hideHeader,
-  }) => ({
-    padding: 0,
-    position: 'sticky',
-    top: 0,
-    zIndex: 4,
-    '.thOuterWrap': {
-      alignItems: 'center',
-      display: hideHeader ? 'none' : 'flex',
-      position: 'relative',
-      backgroundColor: theme.colors[tableHeaderColor(fillLevel, highlight)],
-      zIndex: 4,
-      borderBottom: theme.borders[tableFillLevelToBorder[fillLevel]],
-      color: theme.colors.text,
-      height: 48,
-      minHeight: 48,
-      whiteSpace: 'nowrap',
-      padding: '0 12px',
-      textAlign: 'left',
-      ...(cursor ? { cursor } : {}),
-      '.thSortIndicatorWrap': {
-        display: 'flex',
-        gap: theme.spacing.xsmall,
-      },
-    },
-    '&:last-child': {
-      /* Hackery to hide unpredictable visible gap between columns */
-      zIndex: 3,
-      '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        width: 10000,
-        backgroundColor: theme.colors[tableHeaderColor(fillLevel, false)],
-        borderBottom: hideHeader
-          ? 'none'
-          : theme.borders[tableFillLevelToBorder[fillLevel]],
-      },
-    },
-    '&:first-child': {
-      ...(stickyColumn
-        ? {
-            backgroundColor: 'inherit',
-            position: 'sticky',
-            left: 0,
-            zIndex: 5,
-            '.thOuterWrap': {
-              boxShadow: theme.boxShadows.slight,
-              zIndex: 5,
-            },
-          }
-        : {}),
-    },
-  })
-)
-
-// TODO: Set vertical align to top for tall cells (~3 lines of text or more). See ENG-683.
-export const Td = styled.td<{
-  $fillLevel: TableFillLevel
-  $firstRow?: boolean
-  $loose?: boolean
-  $padCells?: boolean
-  $stickyColumn: boolean
-  $highlight?: boolean
-  $truncateColumn: boolean
-  $center?: boolean
-}>(
-  ({
-    theme,
-    $fillLevel: fillLevel,
-    $firstRow: firstRow,
-    $loose: loose,
-    $padCells: padCells,
-    $stickyColumn: stickyColumn,
-    $highlight: highlight,
-    $truncateColumn: truncateColumn = false,
-    $center: center,
-  }) => ({
-    ...theme.partials.text.body2LooseLineHeight,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: center ? 'center' : 'flex-start',
-    height: 'auto',
-    minHeight: 52,
-
-    backgroundColor: highlight
-      ? theme.colors[tableFillLevelToHighlightedCellBg[fillLevel]]
-      : 'inherit',
-    borderTop: firstRow ? '' : theme.borders[tableFillLevelToBorder[fillLevel]],
-    color: theme.colors['text-light'],
-
-    padding: padCells ? (loose ? '16px 12px' : '8px 12px') : 0,
-    '&:first-child': stickyColumn
-      ? {
-          boxShadow: theme.boxShadows.slight,
-          position: 'sticky',
-          left: 0,
-          zIndex: 1,
-        }
-      : {},
-    ...(truncateColumn
-      ? {
-          '*': {
-            width: '100%',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          },
-        }
-      : {}),
-  })
-)
-
-const TdExpand = styled.td(({ theme }) => ({
-  '&:last-child': {
-    gridColumn: '2 / -1',
-  },
-  backgroundColor: 'inherit',
-  color: theme.colors['text-light'],
-  height: 'auto',
-  minHeight: 52,
-  padding: '16px 12px',
-}))
-
-const TdLoading = styled(Td)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gridColumn: '1 / -1',
-  textAlign: 'center',
-  gap: theme.spacing.xsmall,
-  color: theme.colors['text-xlight'],
-  minHeight: theme.spacing.large * 2 + theme.spacing.xlarge,
-}))
-
 function isRow<T>(row: Row<T> | VirtualItem): row is Row<T> {
   return typeof (row as Row<T>).getVisibleCells === 'function'
 }
@@ -360,31 +120,6 @@ const defaultGlobalFilterFn: FilterFn<any> = (
 
   // Return if the item should be filtered in/out
   return itemRank.passed
-}
-
-const sortDirToIcon = {
-  asc: (
-    <ArrowRightIcon
-      size={12}
-      transform="rotate(-90deg)"
-    />
-  ),
-  desc: (
-    <ArrowRightIcon
-      size={12}
-      transform="rotate(90deg)"
-    />
-  ),
-}
-
-function SortIndicator({
-  direction = false,
-}: {
-  direction: false | SortDirection
-}) {
-  if (!direction) return null
-
-  return sortDirToIcon[direction]
 }
 
 function TableRef(
