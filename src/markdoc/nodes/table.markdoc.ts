@@ -1,6 +1,6 @@
 import { Tag } from '@markdoc/markdoc'
 
-import Table from '../components/table/Table'
+import Table from '../components/Table'
 import { type BaseSchema, isTag } from '../types'
 
 export const table: BaseSchema = {
