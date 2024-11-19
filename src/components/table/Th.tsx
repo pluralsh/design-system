@@ -29,7 +29,9 @@ export const Th = styled.th<{
       position: 'relative',
       backgroundColor: theme.colors[tableHeaderColor(fillLevel, highlight)],
       zIndex: 4,
-      borderBottom: theme.borders[tableFillLevelToBorder[fillLevel]],
+      borderBottom: highlight
+        ? undefined
+        : theme.borders[tableFillLevelToBorder[fillLevel]],
       color: theme.colors.text,
       height: 48,
       minHeight: 48,

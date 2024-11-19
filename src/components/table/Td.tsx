@@ -38,7 +38,10 @@ export const Td = styled.td<{
     backgroundColor: highlight
       ? theme.colors[tableFillLevelToHighlightedCellBg[fillLevel]]
       : 'inherit',
-    borderTop: firstRow ? '' : theme.borders[tableFillLevelToBorder[fillLevel]],
+    borderTop:
+      firstRow || highlight
+        ? ''
+        : theme.borders[tableFillLevelToBorder[fillLevel]],
     color: theme.colors['text-light'],
 
     padding: padCells ? (loose ? '16px 12px' : '8px 12px') : 0,
