@@ -3,41 +3,7 @@ import { type MutableRefObject, useEffect, useRef, useState } from 'react'
 
 import usePrevious from '../../hooks/usePrevious'
 
-type VirtualSlice = {
-  start: VirtualItem | undefined
-  end: VirtualItem | undefined
-}
-
-export function useOnVirtualSliceChange({
-  virtualRows,
-  virtualizeRows,
-  onVirtualSliceChange,
-}: {
-  virtualRows: VirtualItem[]
-  virtualizeRows: boolean
-  onVirtualSliceChange: (slice: VirtualSlice) => void
-}) {
-  const sliceStartRow = virtualRows[0]
-  const sliceEndRow: VirtualItem = virtualRows[virtualRows.length - 1]
-  const prevSliceStartRow = usePrevious(virtualRows[0])
-  const prevSliceEndRow = usePrevious(virtualRows[virtualRows.length - 1])
-
-  useEffect(() => {
-    if (
-      virtualizeRows &&
-      (prevSliceEndRow !== sliceEndRow || prevSliceStartRow !== sliceStartRow)
-    ) {
-      onVirtualSliceChange?.({ start: sliceStartRow, end: sliceEndRow })
-    }
-  }, [
-    sliceStartRow,
-    sliceEndRow,
-    virtualizeRows,
-    onVirtualSliceChange,
-    prevSliceEndRow,
-    prevSliceStartRow,
-  ])
-}
+import { type VirtualSlice } from './Table'
 
 export function useIsScrolling(
   ref: MutableRefObject<HTMLElement>,
@@ -72,4 +38,35 @@ export function useIsScrolling(
       }
     }
   }, [ref, restDelay])
+}
+
+export function useOnVirtualSliceChange({
+  virtualRows,
+  virtualizeRows,
+  onVirtualSliceChange,
+}: {
+  virtualRows: VirtualItem[]
+  virtualizeRows: boolean
+  onVirtualSliceChange: (slice: VirtualSlice) => void
+}) {
+  const sliceStartRow = virtualRows[0]
+  const sliceEndRow: VirtualItem = virtualRows[virtualRows.length - 1]
+  const prevSliceStartRow = usePrevious(virtualRows[0])
+  const prevSliceEndRow = usePrevious(virtualRows[virtualRows.length - 1])
+
+  useEffect(() => {
+    if (
+      virtualizeRows &&
+      (prevSliceEndRow !== sliceEndRow || prevSliceStartRow !== sliceStartRow)
+    ) {
+      onVirtualSliceChange?.({ start: sliceStartRow, end: sliceEndRow })
+    }
+  }, [
+    sliceStartRow,
+    sliceEndRow,
+    virtualizeRows,
+    onVirtualSliceChange,
+    prevSliceEndRow,
+    prevSliceStartRow,
+  ])
 }

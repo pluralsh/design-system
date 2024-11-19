@@ -1,9 +1,7 @@
 import type { Row } from '@tanstack/react-table'
 import type { VirtualItem } from '@tanstack/react-virtual'
 
-import type { FillLevel } from '../contexts/FillLevelContext'
-
-import { Td, Tr } from './Table'
+import { type TableFillLevel, Td, Tr } from './Table'
 
 function FillerRow({
   columns,
@@ -19,7 +17,7 @@ function FillerRow({
   index: number
   stickyColumn: boolean
   selectable?: boolean
-  fillLevel: FillLevel
+  fillLevel: TableFillLevel
 }) {
   return (
     <Tr
@@ -63,7 +61,7 @@ export function FillerRows({
   stickyColumn: boolean
   clickable?: boolean
   selectable?: boolean
-  fillLevel: FillLevel
+  fillLevel: TableFillLevel
 }) {
   return (
     <>

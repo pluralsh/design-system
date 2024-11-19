@@ -33,8 +33,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import styled, { useTheme } from 'styled-components'
 import { isEmpty, isNil } from 'lodash-es'
 
-import { InfoOutlineIcon, Tooltip } from '../../index'
-
+import { type FillLevel, InfoOutlineIcon, Tooltip } from '../../index'
 import Button from '../Button'
 import CaretUpIcon from '../icons/CaretUpIcon'
 import ArrowRightIcon from '../icons/ArrowRightIcon'
@@ -43,7 +42,6 @@ import EmptyState, { type EmptyStateProps } from '../EmptyState'
 import { Spinner } from '../Spinner'
 
 import {
-  type TableFillLevel,
   tableFillLevelToBg,
   tableFillLevelToBorder,
   tableFillLevelToBorderColor,
@@ -82,10 +80,14 @@ export type TableProps = DivProps & {
   hasNextPage?: boolean
   fetchNextPage?: () => void
   isFetchingNextPage?: boolean
-  onVirtualSliceChange?: (slice: {
-    start: VirtualItem | undefined
-    end: VirtualItem | undefined
-  }) => void
+  onVirtualSliceChange?: (slice: VirtualSlice) => void
+}
+
+export type TableFillLevel = Exclude<FillLevel, 3>
+
+export type VirtualSlice = {
+  start: VirtualItem | undefined
+  end: VirtualItem | undefined
 }
 
 function getGridTemplateCols(columnDefs: ColumnDef<unknown>[] = []): string {
@@ -242,7 +244,7 @@ const Th = styled.th<{
         right: 0,
         bottom: 0,
         width: 10000,
-        backgroundColor: theme.colors['fill-two'], // TODO
+        backgroundColor: theme.colors[tableFillLevelToHeaderBg[fillLevel]],
         borderBottom: hideHeader
           ? 'none'
           : theme.borders[tableFillLevelToBorder[fillLevel]],

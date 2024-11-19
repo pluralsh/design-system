@@ -1,6 +1,4 @@
-import type { FillLevel } from '../contexts/FillLevelContext'
-
-export type TableFillLevel = Exclude<FillLevel, 3>
+import { type TableFillLevel } from './Table'
 
 export const tableFillLevelToBorder = {
   0: 'fill-two',
