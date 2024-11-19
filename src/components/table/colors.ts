@@ -49,6 +49,13 @@ export const tableFillLevelToSelectedCellBg = {
   3: 'fill-three-hover',
 } as const satisfies Record<FillLevel, string>
 
+export const tableFillLevelToHoverCellBg = {
+  0: 'fill-zero-hover',
+  1: 'fill-one-hover',
+  2: 'fill-two-hover',
+  3: 'fill-three-hover',
+} as const satisfies Record<FillLevel, string>
+
 export const tableFillLevelToHighlightedCellBg = {
   0: 'fill-two',
   1: 'fill-three',

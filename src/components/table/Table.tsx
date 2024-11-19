@@ -50,6 +50,7 @@ import {
   tableFillLevelToCellBg,
   tableFillLevelToHeaderBg,
   tableFillLevelToHighlightedCellBg,
+  tableFillLevelToHoverCellBg,
   tableFillLevelToRaisedCellBg,
   tableFillLevelToScrollbarBg,
   tableFillLevelToSelectedCellBg,
@@ -187,9 +188,9 @@ const Tr = styled.tr<{
       '&:not(:has(button:hover)):hover': {
         backgroundColor: selectable
           ? selected
-            ? theme.colors['fill-zero-hover']
-            : theme.colors['fill-zero-selected']
-          : theme.colors['fill-zero-hover'],
+            ? theme.colors[tableFillLevelToSelectedCellBg[fillLevel]]
+            : theme.colors[tableFillLevelToRaisedCellBg[fillLevel]]
+          : theme.colors[tableFillLevelToHoverCellBg[fillLevel]],
       },
     }),
   })
