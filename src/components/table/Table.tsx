@@ -34,21 +34,33 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import styled, { useTheme } from 'styled-components'
 import { isEmpty, isNil } from 'lodash-es'
 
-import usePrevious from '../hooks/usePrevious'
-import { InfoOutlineIcon, Tooltip } from '../index'
+import usePrevious from '../../hooks/usePrevious'
+import { type FillLevel, InfoOutlineIcon, Tooltip } from '../../index'
 
-import Button from './Button'
-import CaretUpIcon from './icons/CaretUpIcon'
-import ArrowRightIcon from './icons/ArrowRightIcon'
-import { FillLevelProvider } from './contexts/FillLevelContext'
-import EmptyState, { type EmptyStateProps } from './EmptyState'
-import { Spinner } from './Spinner'
+import Button from '../Button'
+import CaretUpIcon from '../icons/CaretUpIcon'
+import ArrowRightIcon from '../icons/ArrowRightIcon'
+import { FillLevelProvider } from '../contexts/FillLevelContext'
+import EmptyState, { type EmptyStateProps } from '../EmptyState'
+import { Spinner } from '../Spinner'
+
+import {
+  tableFillLevelToBorder,
+  tableFillLevelToBorderColor,
+  tableFillLevelToCellBg,
+  tableFillLevelToHeaderBg,
+  tableFillLevelToHighlightedCellBg,
+  tableFillLevelToRaisedCellBg,
+  tableFillLevelToScrollbarBg,
+  tableFillLevelToSelectedCellBg,
+} from './colors'
 
 export type TableProps = DivProps & {
   data: any[]
   columns: any[]
   hideHeader?: boolean
   padCells?: boolean
+  fillLevel?: FillLevel
   rowBg?: 'base' | 'raised' | 'stripes'
   highlightedRowId?: string
   getRowCanExpand?: any
@@ -98,7 +110,6 @@ function getGridTemplateCols(columnDefs: ColumnDef<unknown>[] = []): string {
 const T = styled.table<{ $gridTemplateColumns: string }>(
   ({ theme, $gridTemplateColumns }) => ({
     gridTemplateColumns: $gridTemplateColumns,
-    backgroundColor: theme.colors['fill-one'],
     borderSpacing: 0,
     display: 'grid',
     borderCollapse: 'collapse',
@@ -120,12 +131,11 @@ const TheadUnstyled = forwardRef<
   </FillLevelProvider>
 ))
 
-const Thead = styled(TheadUnstyled)(({ theme }) => ({
+const Thead = styled(TheadUnstyled)(() => ({
   display: 'contents',
   position: 'sticky',
   top: 0,
   zIndex: 3,
-  backgroundColor: theme.colors['fill-two'],
 }))
 
 const TbodyUnstyled = forwardRef<
@@ -140,12 +150,12 @@ const TbodyUnstyled = forwardRef<
   </FillLevelProvider>
 ))
 
-const Tbody = styled(TbodyUnstyled)(({ theme }) => ({
+const Tbody = styled(TbodyUnstyled)(() => ({
   display: 'contents',
-  backgroundColor: theme.colors['fill-one'],
 }))
 
 const Tr = styled.tr<{
+  $fillLevel: FillLevel
   $highlighted?: boolean
   $selected?: boolean
   $selectable?: boolean
@@ -159,15 +169,16 @@ const Tr = styled.tr<{
     $selectable: selectable = false,
     $selected: selected = false,
     $highlighted: highlighted = false,
+    $fillLevel: fillLevel,
   }) => ({
     display: 'contents',
     backgroundColor: highlighted
-      ? theme.colors['fill-two']
+      ? theme.colors[tableFillLevelToHighlightedCellBg[fillLevel]]
       : selected
-      ? theme.colors['fill-zero-hover']
+      ? theme.colors[tableFillLevelToSelectedCellBg[fillLevel]]
       : raised || (selectable && !selected)
-      ? theme.colors['fill-zero-selected']
-      : theme.colors['fill-zero'],
+      ? theme.colors[tableFillLevelToRaisedCellBg[fillLevel]]
+      : theme.colors[tableFillLevelToCellBg[fillLevel]],
 
     ...(clickable && {
       cursor: 'pointer',
@@ -185,6 +196,7 @@ const Tr = styled.tr<{
 )
 
 const Th = styled.th<{
+  $fillLevel: FillLevel
   $stickyColumn: boolean
   $highlight?: boolean
   $cursor?: CSSProperties['cursor']
@@ -192,6 +204,7 @@ const Th = styled.th<{
 }>(
   ({
     theme,
+    $fillLevel: fillLevel,
     $stickyColumn: stickyColumn,
     $highlight: highlight,
     $cursor: cursor,
@@ -206,10 +219,10 @@ const Th = styled.th<{
       display: hideHeader ? 'none' : 'flex',
       position: 'relative',
       backgroundColor: highlight
-        ? theme.colors['fill-two']
-        : theme.colors['fill-one'],
+        ? theme.colors[tableFillLevelToHighlightedCellBg[fillLevel]]
+        : theme.colors[tableFillLevelToHeaderBg[fillLevel]],
       zIndex: 4,
-      borderBottom: theme.borders.default,
+      borderBottom: theme.borders[tableFillLevelToBorder[fillLevel]],
       color: theme.colors.text,
       height: 48,
       minHeight: 48,
@@ -233,7 +246,9 @@ const Th = styled.th<{
         bottom: 0,
         width: 10000,
         backgroundColor: theme.colors['fill-two'],
-        borderBottom: hideHeader ? 'none' : theme.borders.default,
+        borderBottom: hideHeader
+          ? 'none'
+          : theme.borders[tableFillLevelToBorder[fillLevel]],
       },
     },
     '&:first-child': {
@@ -255,6 +270,7 @@ const Th = styled.th<{
 
 // TODO: Set vertical align to top for tall cells (~3 lines of text or more). See ENG-683.
 const Td = styled.td<{
+  $fillLevel: FillLevel
   $firstRow?: boolean
   $loose?: boolean
   $padCells?: boolean
@@ -265,6 +281,7 @@ const Td = styled.td<{
 }>(
   ({
     theme,
+    $fillLevel: fillLevel,
     $firstRow: firstRow,
     $loose: loose,
     $padCells: padCells,
@@ -281,8 +298,10 @@ const Td = styled.td<{
     height: 'auto',
     minHeight: 52,
 
-    backgroundColor: highlight ? theme.colors['fill-two'] : 'inherit',
-    borderTop: firstRow ? '' : theme.borders.default,
+    backgroundColor: highlight
+      ? theme.colors[tableFillLevelToHighlightedCellBg[fillLevel]]
+      : 'inherit',
+    borderTop: firstRow ? '' : theme.borders[tableFillLevelToBorder[fillLevel]],
     color: theme.colors['text-light'],
 
     padding: padCells ? (loose ? '16px 12px' : '8px 12px') : 0,
@@ -385,6 +404,7 @@ function FillerRow({
   index,
   stickyColumn,
   selectable,
+  fillLevel,
   ...props
 }: {
   columns: unknown[]
@@ -392,6 +412,7 @@ function FillerRow({
   index: number
   stickyColumn: boolean
   selectable?: boolean
+  fillLevel: FillLevel
 }) {
   return (
     <Tr
@@ -399,9 +420,11 @@ function FillerRow({
       $raised={index % 2 === 1}
       $selected={false}
       $selectable={selectable}
+      $fillLevel={fillLevel}
     >
       <Td
         aria-hidden="true"
+        $fillLevel={fillLevel}
         $stickyColumn={stickyColumn}
         style={{
           height,
@@ -423,6 +446,7 @@ function FillerRows({
   rows,
   height,
   position,
+  fillLevel,
   ...props
 }: {
   rows: Row<unknown>[] | VirtualItem[]
@@ -432,6 +456,7 @@ function FillerRows({
   stickyColumn: boolean
   clickable?: boolean
   selectable?: boolean
+  fillLevel: FillLevel
 }) {
   return (
     <>
@@ -442,6 +467,7 @@ function FillerRows({
             ? rows[0].index - 2
             : rows[rows.length - 1].index + 1
         }
+        fillLevel={fillLevel}
         {...props}
       />
       <FillerRow
@@ -451,6 +477,7 @@ function FillerRows({
             ? rows[0].index - 1
             : rows[rows.length - 1].index + 2
         }
+        fillLevel={fillLevel}
         {...props}
       />
     </>
@@ -532,6 +559,7 @@ function TableRef(
     renderExpanded,
     loose = false,
     padCells = true,
+    fillLevel = 0,
     rowBg = 'stripes',
     stickyColumn = false,
     scrollTopMargin = 500,
@@ -693,8 +721,10 @@ function TableRef(
       ref={forwardRef}
     >
       <Div
-        backgroundColor="fill-two"
-        border={flush ? 'none' : '1px solid border-fill-two'}
+        backgroundColor={tableFillLevelToScrollbarBg[fillLevel]}
+        border={
+          flush ? 'none' : `1px solid ${tableFillLevelToBorderColor[fillLevel]}`
+        }
         borderRadius={
           flush
             ? `0 0 ${theme.borderRadiuses.large}px ${theme.borderRadiuses.large}px`
@@ -711,10 +741,14 @@ function TableRef(
         <T $gridTemplateColumns={gridTemplateColumns}>
           <Thead>
             {headerGroups.map((headerGroup) => (
-              <Tr key={headerGroup.id}>
+              <Tr
+                key={headerGroup.id}
+                $fillLevel={fillLevel}
+              >
                 {headerGroup.headers.map((header) => (
                   <Th
                     key={header.id}
+                    $fillLevel={fillLevel}
                     $hideHeader={hideHeader}
                     $stickyColumn={stickyColumn}
                     $highlight={header.column.columnDef?.meta?.highlight}
@@ -764,6 +798,7 @@ function TableRef(
                 position="top"
                 stickyColumn={stickyColumn}
                 clickable={!!onRowClick}
+                fillLevel={fillLevel}
               />
             )}
             {rows.map((maybeRow) => {
@@ -783,6 +818,7 @@ function TableRef(
                   <Tr
                     key={key}
                     onClick={(e) => onRowClick?.(e, row)}
+                    $fillLevel={fillLevel}
                     $raised={raised}
                     $highlighted={row?.id === highlightedRowId}
                     $selectable={row?.getCanSelect() ?? false}
@@ -797,6 +833,7 @@ function TableRef(
                     {isNil(row) && isLoaderRow ? (
                       <TdLoading
                         key={i}
+                        $fillLevel={fillLevel}
                         $firstRow={i === 0}
                         $padCells={padCells}
                         $loose={loose}
@@ -812,6 +849,7 @@ function TableRef(
                       row?.getVisibleCells().map((cell) => (
                         <Td
                           key={cell.id}
+                          $fillLevel={fillLevel}
                           $firstRow={i === 0}
                           $padCells={padCells}
                           $loose={loose}
@@ -831,7 +869,10 @@ function TableRef(
                     )}
                   </Tr>
                   {row?.getIsExpanded() && (
-                    <Tr $raised={i % 2 === 1}>
+                    <Tr
+                      $fillLevel={fillLevel}
+                      $raised={i % 2 === 1}
+                    >
                       <TdExpand />
                       <TdExpand colSpan={row.getVisibleCells().length - 1}>
                         {renderExpanded({ row })}
@@ -848,6 +889,7 @@ function TableRef(
                 height={paddingBottom}
                 position="bottom"
                 stickyColumn={stickyColumn}
+                fillLevel={fillLevel}
               />
             )}
           </Tbody>
