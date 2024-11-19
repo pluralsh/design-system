@@ -242,7 +242,7 @@ const Th = styled.th<{
         right: 0,
         bottom: 0,
         width: 10000,
-        backgroundColor: theme.colors['fill-two'],
+        backgroundColor: theme.colors['fill-two'], // TODO
         borderBottom: hideHeader
           ? 'none'
           : theme.borders[tableFillLevelToBorder[fillLevel]],

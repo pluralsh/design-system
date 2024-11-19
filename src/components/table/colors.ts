@@ -3,9 +3,9 @@ import type { FillLevel } from '../contexts/FillLevelContext'
 export type TableFillLevel = Exclude<FillLevel, 3>
 
 export const tableFillLevelToBorder = {
-  0: 'default',
-  1: 'fill-one',
-  2: 'fill-two',
+  0: 'fill-two',
+  1: 'fill-three',
+  2: 'fill-three',
 } as const satisfies Record<TableFillLevel, string>
 
 export const tableFillLevelToBorderColor = {
