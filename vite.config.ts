@@ -1,10 +1,32 @@
+import { resolve } from 'path'
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import dts from 'vite-plugin-dts'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    chunkSizeWarningLimit: 1000,
+    lib: {
+      entry: { index: resolve(__dirname, 'src/index.ts') },
+      formats: ['es', 'cjs'],
+      fileName: (format, entryName) => `${entryName}.${format}.js`,
+    },
+    rollupOptions: {
+      external: [
+        'react',
+        'react-dom',
+        'styled-components',
+        '@emotion/react',
+        '@emotion/styled',
+        'honorable',
+        'honorable-theme-default',
+        'react-transition-group',
+      ],
+      output: {
+        preserveModules: true,
+        preserveModulesRoot: 'src',
+      },
+    },
   },
   plugins: [
     react({
@@ -13,6 +35,10 @@ export default defineConfig({
         babelrc: false,
         configFile: false,
       },
+    }),
+    dts({
+      insertTypesEntry: true,
+      rollupTypes: true,
     }),
   ],
   optimizeDeps: {
