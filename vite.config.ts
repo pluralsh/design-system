@@ -7,9 +7,9 @@ import dts from 'vite-plugin-dts'
 export default defineConfig({
   build: {
     lib: {
-      entry: { index: resolve(__dirname, 'src/index.ts') },
+      entry: resolve(__dirname, 'src/index.ts'),
       formats: ['es', 'cjs'],
-      fileName: (format, entryName) => `${entryName}.${format}.js`,
+      fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
       external: [
@@ -38,7 +38,12 @@ export default defineConfig({
     }),
     dts({
       insertTypesEntry: true,
-      rollupTypes: true,
+      include: ['src'],
+      exclude: ['**/*.stories.tsx', '**/*.test.tsx'],
+      beforeWriteFile: (filePath, content) => ({
+        filePath: filePath.replace(/src/, 'dist'),
+        content,
+      }),
     }),
   ],
   optimizeDeps: {
