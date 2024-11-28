@@ -51,11 +51,6 @@ Default.args = {
   category: 'Messaging',
   description:
     'The new open-source standard to sync data from applications, APIs & databases. One click deploys for data scientists and developers.',
-
-  width: '500px',
-  trending: true,
-  featuredLabel: '',
-
   tags: [
     'Devops',
     'Deployment',
