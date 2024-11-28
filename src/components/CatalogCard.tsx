@@ -17,7 +17,7 @@ type CatalogCardProps = CardProps & {
   tags?: string[]
 }
 
-function RepositoryCardRef(
+function CatalogCardRef(
   {
     name,
     author,
@@ -112,7 +112,15 @@ function RepositoryCardRef(
               gap="xsmall"
               flexWrap="wrap"
             >
-              {!!category && <Chip size="small">{category}</Chip>}
+              {!!category && (
+                <Chip
+                  size="small"
+                  border="none"
+                  fillLevel={3}
+                >
+                  {category}
+                </Chip>
+              )}
               <div
                 style={{
                   display: 'flex',
@@ -126,6 +134,8 @@ function RepositoryCardRef(
                   .map((tag) => (
                     <Chip
                       size="small"
+                      border="none"
+                      fillLevel={3}
                       key={tag}
                       _last={{ marginRight: 0 }}
                     >
@@ -141,6 +151,6 @@ function RepositoryCardRef(
   )
 }
 
-const RepositoryCard = forwardRef(RepositoryCardRef)
+const CatalogCard = forwardRef(CatalogCardRef)
 
-export default RepositoryCard
+export default CatalogCard
