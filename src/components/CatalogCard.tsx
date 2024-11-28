@@ -107,10 +107,10 @@ function CatalogCardRef(
           <div style={{ flexGrow: 1 }} />
           {(category || tags?.length > 0) && (
             <Flex
-              marginTop={theme.spacing.medium}
-              gap="xsmall"
-              flexWrap="wrap"
+              alignItems="start"
+              gap="xxlarge"
               justifyContent="space-between"
+              marginTop={theme.spacing.medium}
             >
               {!!category && (
                 <Chip
