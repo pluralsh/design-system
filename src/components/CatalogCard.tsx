@@ -93,7 +93,7 @@ function CatalogCardRef(
               style={{
                 ...theme.partials.text.body2,
                 margin: 0,
-                marginTop: theme.spacing.xsmall,
+                marginTop: theme.spacing.small,
                 color: theme.colors['text-light'],
                 display: '-webkit-box',
                 WebkitLineClamp: '2',
@@ -109,7 +109,7 @@ function CatalogCardRef(
             <Flex
               alignItems="start"
               gap="xxlarge"
-              justifyContent="space-between"
+              justifyContent={category ? 'space-between' : 'end'}
               marginTop={theme.spacing.medium}
             >
               {!!category && (
