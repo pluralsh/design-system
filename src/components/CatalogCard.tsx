@@ -54,6 +54,7 @@ function CatalogCardRef(
           flexGrow={1}
           direction="column"
           height="100%"
+          overflow="hidden"
         >
           <Flex align="center">
             <AppIcon
@@ -127,6 +128,7 @@ function CatalogCardRef(
                 fillLevel={3}
                 values={tags ?? []}
                 limit={1}
+                truncateWidth={100}
                 wrap="nowrap"
                 emptyState={null}
               />

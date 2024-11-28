@@ -21,7 +21,11 @@ function Template(args: any) {
       <CatalogCard
         {...{
           ...args,
-          ...{ imageUrl: '/logos/plural-logomark-only-white.svg', tags: null },
+
+          ...{
+            imageUrl: '/logos/plural-logomark-only-white.svg',
+            tags: ['Loooooooooooooooooooong', 'Short'],
+          },
         }}
       />
       <CatalogCard
