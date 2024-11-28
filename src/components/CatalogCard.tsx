@@ -6,6 +6,7 @@ import { PrQueueIcon } from '../icons'
 import Chip from './Chip'
 import Card, { type CardProps } from './Card'
 import AppIcon from './AppIcon'
+import ChipList from './ChipList'
 import Flex from './Flex'
 
 type CatalogCardProps = CardProps & {
@@ -29,8 +30,6 @@ function CatalogCardRef(
   }: CatalogCardProps,
   ref: Ref<any>
 ) {
-  const maxTags = 3
-
   const theme = useTheme()
 
   return (
@@ -111,6 +110,7 @@ function CatalogCardRef(
               marginTop={theme.spacing.medium}
               gap="xsmall"
               flexWrap="wrap"
+              justifyContent="space-between"
             >
               {!!category && (
                 <Chip
@@ -121,28 +121,14 @@ function CatalogCardRef(
                   {category}
                 </Chip>
               )}
-              <div
-                style={{
-                  display: 'flex',
-                  flexGrow: 1,
-                  gap: theme.spacing.xsmall,
-                  justifyContent: 'end',
-                }}
-              >
-                {tags
-                  ?.filter((_x, i) => i < maxTags)
-                  .map((tag) => (
-                    <Chip
-                      size="small"
-                      border="none"
-                      fillLevel={3}
-                      key={tag}
-                      _last={{ marginRight: 0 }}
-                    >
-                      {tag}
-                    </Chip>
-                  ))}
-              </div>
+              <ChipList
+                size="small"
+                border="none"
+                fillLevel={3}
+                values={tags ?? []}
+                limit={2}
+                emptyState={null}
+              />
             </Flex>
           )}
         </Flex>
