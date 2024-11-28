@@ -1,4 +1,4 @@
-import { Flex } from 'honorable'
+import { Div } from 'honorable'
 
 import CatalogCard from '../components/CatalogCard'
 
@@ -9,27 +9,28 @@ export default {
 
 function Template(args: any) {
   return (
-    <Flex
-      gap="small"
-      wrap="wrap"
+    <Div
+      display="grid"
+      gap="large"
+      gridTemplateColumns="repeat(auto-fit, minmax(256px, 1fr))"
     >
       <CatalogCard {...args} />
-      <CatalogCard
-        {...{
-          ...args,
-          ...{ imageUrl: '/logos/plural-logomark-only-black.svg' },
-        }}
-      />
+      <CatalogCard {...args} />
+      <CatalogCard {...args} />
+      <CatalogCard {...args} />
       <CatalogCard {...{ ...args, ...{ tags: null } }} />
       <CatalogCard
         {...{
           ...args,
-          ...{ description: null, tags: ['tag1', 'tag2'] },
+          ...{
+            category: null,
+            description: null,
+            imageUrl: '/logos/plural-logomark-only-black.svg',
+            tags: ['Tag-1', 'Tag-2', 'Tag-3'],
+          },
         }}
       />
-      <CatalogCard {...args} />
-      <CatalogCard {...args} />
-    </Flex>
+    </Div>
   )
 }
 
