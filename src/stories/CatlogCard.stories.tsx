@@ -18,14 +18,19 @@ function Template(args: any) {
       <CatalogCard {...args} />
       <CatalogCard {...args} />
       <CatalogCard {...args} />
-      <CatalogCard {...{ ...args, ...{ tags: null } }} />
+      <CatalogCard
+        {...{
+          ...args,
+          ...{ imageUrl: '/logos/plural-logomark-only-white.svg', tags: null },
+        }}
+      />
       <CatalogCard
         {...{
           ...args,
           ...{
             category: null,
             description: null,
-            imageUrl: '/logos/plural-logomark-only-black.svg',
+            imageUrl: '/logos/plural-logomark-only-white.svg',
             tags: ['Tag-1', 'Tag-2', 'Tag-3'],
           },
         }}
