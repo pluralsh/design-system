@@ -1,4 +1,4 @@
-import { Flex, type FlexBaseProps, Span } from 'honorable'
+import { Flex, Span } from 'honorable'
 import isEmpty from 'lodash-es/isEmpty'
 import {
   type ComponentProps,
@@ -19,7 +19,6 @@ export type ChipListProps<TValue> = {
   values: TValue[]
   transformValue?: TransformFn<TValue>
   limit: number
-  wrap?: Pick<FlexBaseProps, 'wrap'>
   emptyState?: JSX.Element | null
   onClickCondition?: (value: TValue) => boolean
   onClick?: Dispatch<TValue>
@@ -29,7 +28,6 @@ function ChipList<TValue = string>({
   values = [],
   transformValue,
   limit = 4,
-  wrap = 'wrap',
   emptyState,
   onClickCondition,
   onClick,
@@ -40,7 +38,7 @@ function ChipList<TValue = string>({
   return (
     <Flex
       gap="xsmall"
-      wrap={wrap}
+      wrap="wrap"
     >
       {isEmpty(values) &&
         (emptyState !== undefined ? (

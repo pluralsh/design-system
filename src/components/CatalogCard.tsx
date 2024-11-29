@@ -129,7 +129,6 @@ function CatalogCardRef(
                 values={tags ?? []}
                 limit={1}
                 truncateWidth={100}
-                wrap="nowrap"
                 emptyState={null}
               />
             </Flex>
