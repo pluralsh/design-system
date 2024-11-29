@@ -4,10 +4,8 @@ import {
   type ComponentProps,
   type Dispatch,
   type ReactElement,
-  useState,
+  useCallback,
 } from 'react'
-
-import { HamburgerMenuCollapseIcon } from '../icons'
 
 import Chip, { type ChipProps } from './Chip'
 
@@ -33,7 +31,23 @@ function ChipList<TValue = string>({
   onClick,
   ...props
 }: ChipListProps<TValue>): ReactElement {
-  const [collapsed, setCollapsed] = useState(true)
+  const chip = useCallback(
+    (v: TValue, i: number) => {
+      const clickable = onClickCondition?.(v) ?? false
+
+      return (
+        <Chip
+          key={(v as any).key || i}
+          clickable={clickable}
+          onClick={() => clickable && onClick(v)}
+          {...props}
+        >
+          {transformValue ? transformValue(v) : `${v}`}
+        </Chip>
+      )
+    },
+    [onClick, onClickCondition, props, transformValue]
+  )
 
   return (
     <Flex
@@ -46,41 +60,19 @@ function ChipList<TValue = string>({
         ) : (
           <Span body2>There is nothing to display here.</Span>
         ))}
-      {values.slice(0, collapsed ? limit : undefined).map((v, i) => {
-        const clickable = onClickCondition?.(v) ?? false
-
-        return (
-          <Chip
-            key={(v as any).key || i}
-            clickable={clickable}
-            onClick={() => clickable && onClick(v)}
-            {...props}
-          >
-            {transformValue ? transformValue(v) : `${v}`}
-          </Chip>
-        )
-      })}
+      {values.slice(0, limit).map(chip)}
       {values.length > limit && (
-        <>
-          {collapsed && (
-            <Chip
-              onClick={() => setCollapsed(false)}
-              {...props}
-              clickable
+        <Chip
+          {...props}
+          tooltip={
+            <Flex
+              gap="xsmall"
+              wrap="wrap"
             >
-              {`+${values.length - limit}`}
-            </Chip>
-          )}
-          {!collapsed && (
-            <Chip
-              onClick={() => setCollapsed(true)}
-              {...props}
-              clickable
-            >
-              <HamburgerMenuCollapseIcon />
-            </Chip>
-          )}
-        </>
+              {values.slice(limit, values.length).map(chip)}
+            </Flex>
+          }
+        >{`+${values.length - limit}`}</Chip>
       )}
     </Flex>
   )
