@@ -1,4 +1,3 @@
-import { Flex, Span } from 'honorable'
 import isEmpty from 'lodash-es/isEmpty'
 import {
   type ComponentProps,
@@ -8,6 +7,7 @@ import {
 } from 'react'
 
 import Chip, { type ChipProps } from './Chip'
+import Flex from './Flex'
 
 type TransformFn<TValue> = (
   value: TValue
@@ -55,11 +55,9 @@ function ChipList<TValue = string>({
       wrap="wrap"
     >
       {isEmpty(values) &&
-        (emptyState !== undefined ? (
-          emptyState
-        ) : (
-          <Span body2>There is nothing to display here.</Span>
-        ))}
+        (emptyState !== undefined
+          ? emptyState
+          : 'There is nothing to display here.')}
       {values.slice(0, limit).map(chip)}
       {values.length > limit && (
         <Chip
