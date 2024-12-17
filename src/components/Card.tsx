@@ -142,6 +142,8 @@ const HeaderSC = styled.div<{
   size: 'medium' | 'large'
 }>(({ theme, fillLevel, selected, size }) => ({
   ...theme.partials.text.overline,
+  display: 'flex',
+  alignItems: 'center',
   color: theme.colors['text-xlight'],
   borderBottom: `1px solid ${theme.colors[fillToNeutralBorderC[fillLevel]]}`,
   backgroundColor: selected
