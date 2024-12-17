@@ -1,12 +1,12 @@
 import { Flex } from 'honorable'
-import { type ComponentProps } from 'react'
+import { type ComponentProps, type ReactNode } from 'react'
 
 import { useTheme } from 'styled-components'
 
 import { type FillLevel } from '../components/contexts/FillLevelContext'
 
-import { Card } from '../index'
 import type { CardProps } from '../components/Card'
+import { Card, InfoOutlineIcon, Tooltip } from '../index'
 
 export default {
   title: 'Card',
@@ -15,6 +15,13 @@ export default {
     severity: {
       options: ['neutral', 'info', 'success', 'warning', 'danger', 'critical'],
       control: { type: 'select' },
+    },
+    headerSize: {
+      options: ['medium', 'large'],
+      control: { type: 'select' },
+    },
+    headerContent: {
+      control: { type: 'text' },
     },
   },
 }
@@ -32,7 +39,14 @@ function Template({
   width,
   height,
   severity,
-}: { width: number; height: number } & CardProps) {
+  headerSize,
+  headerContent,
+}: {
+  width: number
+  height: number
+  headerSize: ComponentProps<typeof Card>['header']['size']
+  headerContent: ReactNode
+} & CardProps) {
   return (
     <Flex
       flexWrap="wrap"
@@ -52,6 +66,10 @@ function Template({
               cornerSize={cornerSize}
               fillLevel={fillLevel}
               severity={severity}
+              header={{
+                size: headerSize,
+                content: headerContent,
+              }}
             >
               <Flex
                 caption
@@ -135,6 +153,15 @@ Default.args = {
   width: 150,
   height: 150,
   severity: 'neutral',
+  headerSize: 'medium',
+  headerContent: (
+    <Flex justifyContent="space-between">
+      <p>Header</p>
+      <Tooltip label="Tooltip">
+        <InfoOutlineIcon />
+      </Tooltip>
+    </Flex>
+  ),
 }
 
 export const Clickable = Template.bind({})
