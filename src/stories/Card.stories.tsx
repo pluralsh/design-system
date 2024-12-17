@@ -1,4 +1,3 @@
-import { Flex } from 'honorable'
 import { type ComponentProps, type ReactNode } from 'react'
 
 import { useTheme } from 'styled-components'
@@ -6,7 +5,7 @@ import { useTheme } from 'styled-components'
 import { type FillLevel } from '../components/contexts/FillLevelContext'
 
 import type { CardProps } from '../components/Card'
-import { Card, InfoOutlineIcon, Tooltip } from '../index'
+import { Card, Flex, InfoOutlineIcon, Tooltip } from '../index'
 
 export default {
   title: 'Card',
@@ -72,7 +71,6 @@ function Template({
               }}
             >
               <Flex
-                caption
                 alignItems="center"
                 height={height}
                 justifyContent="center"
@@ -96,7 +94,8 @@ function FillLevelTemplate({
   disabled,
   width,
   severity,
-}: { width: number } & CardProps) {
+  headerContent,
+}: { width: number; headerContent: ReactNode } & CardProps) {
   const theme = useTheme()
 
   return (
@@ -106,8 +105,9 @@ function FillLevelTemplate({
         flexWrap="wrap"
         gap="xxlarge"
       >
-        {fillLevels.map((fillLevel) => (
+        {fillLevels.map((fillLevel, index) => (
           <Card
+            key={index}
             clickable={clickable}
             selected={selected}
             disabled={disabled}
@@ -115,6 +115,9 @@ function FillLevelTemplate({
             padding="medium"
             fillLevel={fillLevel}
             severity={severity}
+            header={{
+              content: headerContent,
+            }}
           >
             fillLevel=
             {fillLevel === undefined ? 'undefined' : `"${fillLevel}"`}
@@ -178,4 +181,13 @@ WithFillLevelContext.args = {
   clickable: false,
   disabled: false,
   width: 400,
+  headerSize: 'medium',
+  headerContent: (
+    <Flex justifyContent="space-between">
+      <p>Header</p>
+      <Tooltip label="Tooltip">
+        <InfoOutlineIcon />
+      </Tooltip>
+    </Flex>
+  ),
 }
