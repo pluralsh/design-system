@@ -9,7 +9,7 @@ import styled from 'styled-components'
 export type EmptyStateProps = ComponentProps<typeof EmptyStateSC> & {
   message: string
   description?: string
-  icon?: ReactElement
+  icon?: ReactElement<any>
 }
 
 const EmptyStateSC = styled.div(({ theme }) => ({

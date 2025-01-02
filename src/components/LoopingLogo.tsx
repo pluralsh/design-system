@@ -1,6 +1,7 @@
 import {
   type ComponentPropsWithRef,
   type HTMLAttributes,
+  type JSX,
   forwardRef,
 } from 'react'
 import { useTheme } from 'styled-components'

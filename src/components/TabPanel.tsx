@@ -1,11 +1,10 @@
-import { Div, type DivProps } from 'honorable'
-import { mergeProps, useTabPanel, useVisuallyHidden } from 'react-aria'
 import { mergeRefs } from '@react-aria/utils'
+import { Div, type DivProps } from 'honorable'
 import {
   type ComponentProps,
-  type MutableRefObject,
   type ReactElement,
   type Ref,
+  type RefObject,
   cloneElement,
   forwardRef,
   useCallback,
@@ -13,6 +12,7 @@ import {
   useReducer,
   useRef,
 } from 'react'
+import { mergeProps, useTabPanel, useVisuallyHidden } from 'react-aria'
 
 import styled from 'styled-components'
 
@@ -41,7 +41,7 @@ type Mode = 'multipanel' | 'singlepanel'
 export type WrappedTabPanelProps = DivProps & {
   stateRef: TabStateRef
   renderer?: Renderer
-  as: ReactElement & { ref?: MutableRefObject<any> }
+  as: ReactElement<any> & { ref?: RefObject<any> }
   mode?: Mode
   tabKey?: Key
 }
@@ -55,7 +55,7 @@ export const TabPanelClone = styled(
     tabRef,
     ...props
   }: ComponentProps<any> & {
-    children: ReactElement
+    children: ReactElement<any>
     tabRef: Ref<any>
   }) =>
     cloneElement(cloneAs, {
@@ -81,7 +81,7 @@ function WrappedTabPanel({
   mode,
   ...props
 }: WrappedTabPanelProps) {
-  const ref = useRef()
+  const ref = useRef(undefined)
   let { tabPanelProps } = useTabPanel(stateProps, state, ref)
   const { visuallyHiddenProps } = useVisuallyHidden()
 

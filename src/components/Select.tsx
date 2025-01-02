@@ -59,12 +59,12 @@ export type SelectProps = Exclude<SelectButtonProps, 'children'> & {
     | ReactElement<ListBoxItemBaseProps>[]
   dropdownHeaderFixed?: ReactNode
   dropdownFooterFixed?: ReactNode
-  dropdownHeader?: ReactElement
-  dropdownFooter?: ReactElement
+  dropdownHeader?: ReactElement<any>
+  dropdownFooter?: ReactElement<any>
   onHeaderClick?: () => unknown
   onFooterClick?: () => unknown
   titleContent?: ReactNode
-  triggerButton?: ReactElement
+  triggerButton?: ReactElement<any>
   placement?: Placement
   size?: Size
   width?: string | number
@@ -76,7 +76,7 @@ export type SelectProps = Exclude<SelectButtonProps, 'children'> & {
   >
 
 type TriggerProps = {
-  buttonRef: RefObject<HTMLElement>
+  buttonRef: RefObject<HTMLElement | null>
   buttonElt: any
   isOpen: boolean
 } & HTMLAttributes<HTMLElement>
@@ -258,8 +258,8 @@ export type SelectPropsMultiple = Omit<
   selectionMode: 'multiple'
 } & { onSelectionChange: (keys: Set<Key>) => any }
 
-function Select(props: SelectPropsSingle): ReactElement
-function Select(props: SelectPropsMultiple): ReactElement
+function Select(props: SelectPropsSingle): ReactElement<any>
+function Select(props: SelectPropsMultiple): ReactElement<any>
 function Select({
   children,
   selectedKey,
@@ -325,7 +325,7 @@ function Select({
   setNextFocusedKey({ nextFocusedKeyRef, state, stateRef })
 
   // Get props for the listbox element
-  const ref = useRef()
+  const ref = useRef(undefined)
   const { triggerProps, menuProps } = useSelect(selectStateProps, state, ref)
 
   label = label || ' '
@@ -372,7 +372,7 @@ function Select({
         name={name}
       />
       <Trigger
-        buttonRef={triggerRef as unknown as RefObject<HTMLElement>}
+        buttonRef={triggerRef as unknown as RefObject<HTMLElement | null>}
         buttonElt={triggerButton}
         isOpen={state.isOpen}
         {...triggerProps}

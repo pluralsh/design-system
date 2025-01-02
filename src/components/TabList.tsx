@@ -9,6 +9,7 @@ import {
   type ComponentProps,
   type ForwardedRef,
   type HTMLAttributes,
+  type JSX,
   type MutableRefObject,
   type ReactElement,
   type ReactNode,
@@ -66,7 +67,7 @@ type TabListProps = {
   stateProps?: TabListStateProps
   scrollable?: boolean
   renderer?: Renderer
-  as?: ReactElement & { ref?: MutableRefObject<any> }
+  as?: ReactElement<any> & { ref?: MutableRefObject<any> }
   children?: ChildrenType
 }
 
@@ -79,7 +80,7 @@ function TabListRef(
     scrollable,
     ...props
   }: TabListProps & FlexProps,
-  incomingRef: RefObject<HTMLElement>
+  incomingRef: RefObject<HTMLElement | null>
 ) {
   const wrappedChildren = useItemWrappedChildren(props.children)
   const finalStateProps: AriaTabListProps<object> = useMemo(
@@ -175,7 +176,7 @@ const TabClone = styled(
     tabRef,
     ...props
   }: ComponentProps<any> & {
-    children: ReactElement
+    children: ReactElement<any>
     tabRef: Ref<any>
   }) =>
     cloneElement(Children.only(children), {

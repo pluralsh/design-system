@@ -11,7 +11,7 @@ import Tooltip from './Tooltip'
 import Chip from './Chip'
 
 type ChipListProps = HTMLAttributes<HTMLDivElement> & {
-  chips: ReactElement[]
+  chips: ReactElement<any>[]
   maxVisible?: number
   showExtra?: boolean
 }

@@ -162,7 +162,7 @@ function HighlightRef(
   if (typeof children !== 'string') {
     throw new Error('Highlight component expects a string as its children')
   }
-  const codeRef = useRef()
+  const codeRef = useRef(undefined)
 
   const lines = useMemo(() => children.split(/\r?\n/), [children])
 

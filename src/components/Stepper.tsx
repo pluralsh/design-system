@@ -81,7 +81,7 @@ function StepperRef(
   }: StepperProps,
   ref: Ref<any>
 ) {
-  const eltRef = useRef<HTMLDivElement>()
+  const eltRef = useRef<HTMLDivElement>(undefined)
   const mergedRef = mergeRefs(ref, eltRef)
   const [collapseTitles, setCollapseTitles] = useState(true)
 

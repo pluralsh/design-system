@@ -158,7 +158,7 @@ function CenteringWrapper({ children, ...props }: FlexProps) {
   const [windowHeight, setWindowHeight] = useState<number | null>(
     window.innerHeight
   )
-  const ref = useRef<HTMLDivElement>()
+  const ref = useRef<HTMLDivElement>(undefined)
 
   const onSizeChange = useCallback(() => {
     const nextTop = ref.current.getBoundingClientRect().top

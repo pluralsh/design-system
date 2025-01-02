@@ -85,7 +85,7 @@ type WizardProps = {
   onResetRef?: MutableRefObject<{ onReset: Dispatch<void> }>
   ref?: Ref<HTMLDivElement>
   children?: {
-    stepper?: ReactElement
+    stepper?: ReactElement<any>
     navigation?: ReactElement<NavigationProps>
   }
 }

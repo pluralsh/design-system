@@ -157,7 +157,7 @@ function Radio(
   }, [checkedProp])
 
   const labelId = useId()
-  const inputRef = useRef<any>()
+  const inputRef = useRef<any>(undefined)
   const { isFocusVisible, focusProps } = useFocusRing()
   const { inputProps, isSelected, isDisabled } = useRadio(
     {

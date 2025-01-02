@@ -148,7 +148,7 @@ function NavLink({
   isSubSection?: boolean
   isOpen?: boolean
   activeSecondary: boolean
-  icon?: ReactElement
+  icon?: ReactElement<any>
   href?: string
   desktop: boolean
   active: boolean

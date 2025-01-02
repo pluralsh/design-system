@@ -175,7 +175,7 @@ function Checkbox(
   }
   const labelId = useId()
   const toggleState = useToggleState(toggleStateProps)
-  const inputRef = useRef<any>()
+  const inputRef = useRef<any>(undefined)
   const { isFocusVisible, focusProps } = useFocusRing()
   const { inputProps } = useCheckbox(
     {

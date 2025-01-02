@@ -2,7 +2,6 @@ import {
   type ComponentProps,
   type ComponentType,
   type ReactElement,
-  type ReactFragment,
   type ReactNode,
   type Ref,
   type RefAttributes,
@@ -35,7 +34,7 @@ import { AnimatedDiv } from './AnimatedDiv'
 type TextSwitchSize = 'small'
 type TextSwitchOption = { value: string } & (
   | {
-      label: ReactElement | ReactFragment
+      label: ReactElement<any> | Iterable<ReactNode>
       textValue: string
     }
   | { label: string }
@@ -316,7 +315,7 @@ function TextSwitchOption({
   }, [selectedProp])
 
   const labelId = useId()
-  const inputRef = useRef<any>()
+  const inputRef = useRef<any>(undefined)
   const { focusProps } = useFocusRing()
   const { inputProps, isSelected, isDisabled } = useRadio(
     {

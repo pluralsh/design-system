@@ -176,7 +176,7 @@ function LayerRef(
   ref: MutableRefObject<HTMLDivElement>
 ) {
   const theme = useTheme()
-  const internalRef = useRef<HTMLDivElement>()
+  const internalRef = useRef<HTMLDivElement>(undefined)
   const finalRef = ref || internalRef
   const [closeComplete, setCloseComplete] = useState(!open)
   const prevOpen = usePrevious(open)

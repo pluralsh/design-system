@@ -1,6 +1,6 @@
 import {
-  type MutableRefObject,
   type ReactNode,
+  type RefObject,
   forwardRef,
   useCallback,
   useContext,
@@ -223,7 +223,7 @@ function CrumbListRef(
     maxLength: number
     visibleListId?: string
   },
-  ref: MutableRefObject<any>
+  ref: RefObject<any>
 ) {
   const id = useId()
 
@@ -313,10 +313,10 @@ export function DynamicBreadcrumbs({
   wrapperRef: transitionRef,
   ...props
 }: BreadcrumbPropsBase & {
-  wrapperRef?: MutableRefObject<HTMLDivElement>
+  wrapperRef?: RefObject<HTMLDivElement>
   style: any
 }) {
-  const wrapperRef = useRef<HTMLDivElement | undefined>()
+  const wrapperRef = useRef<HTMLDivElement | undefined>(undefined)
   const [visibleListId, setVisibleListId] = useState<string>('')
   const children: ReactNode[] = []
 
@@ -408,7 +408,7 @@ export function Breadcrumbs({
 }: BreadcrumbsProps & NavProps) {
   const contextCrumbs = useContext(BreadcrumbsContext)?.breadcrumbs
   const breadcrumbs = propsCrumbs || contextCrumbs
-  const nodeRef = useRef<HTMLDivElement>()
+  const nodeRef = useRef<HTMLDivElement>(undefined)
 
   if (!breadcrumbs) {
     throw Error(

@@ -2,7 +2,7 @@ import { Div, type DivProps, Flex } from 'honorable'
 import {
   Children,
   type ReactElement,
-  type Ref,
+  type RefObject,
   forwardRef,
   useEffect,
   useState,
@@ -95,7 +95,7 @@ const transitionStyles = {
 
 function CarouselRef(
   { autoAdvanceTime = 10000, children, ...props }: CarouselProps,
-  ref: Ref<any>
+  ref: RefObject<any>
 ) {
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -122,7 +122,7 @@ function CarouselRef(
       {...props}
     >
       <Flex overflow="hidden">
-        {Children.map(children, (child: ReactElement, i: number) => (
+        {Children.map(children, (child: ReactElement<any>, i: number) => (
           <Flex
             width="100%"
             flexShrink={0}
@@ -152,7 +152,7 @@ function CarouselRef(
         marginBottom="medium"
         justifyContent="center"
       >
-        {Children.map(children, (_child: ReactElement, i: number) => (
+        {Children.map(children, (_child: ReactElement<any>, i: number) => (
           <Dot
             active={activeIndex === i}
             onClick={() => {

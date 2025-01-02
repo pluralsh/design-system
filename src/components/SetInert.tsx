@@ -4,7 +4,10 @@ import { useInert } from '../hooks/useInert'
 
 export const SetInert = forwardRef<any, any>(
   (
-    { children, inert = false }: { children: ReactElement; inert?: boolean },
+    {
+      children,
+      inert = false,
+    }: { children: ReactElement<any>; inert?: boolean },
     ref
   ) => {
     const finalRef = useInert(inert, ref)

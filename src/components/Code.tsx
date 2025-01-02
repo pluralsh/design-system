@@ -202,8 +202,8 @@ function CodeTabs() {
     selectedKey,
     onSelectionChange,
   } = useContext(TabsContext)
-  const tabsRef = useRef<HTMLDivElement>()
-  const tabsWrapRef = useRef<HTMLDivElement>()
+  const tabsRef = useRef<HTMLDivElement>(undefined)
+  const tabsWrapRef = useRef<HTMLDivElement>(undefined)
   const tabListStateProps: TabListStateProps = {
     keyboardActivation: 'manual',
     orientation: 'horizontal',
@@ -360,7 +360,7 @@ function CodeRef(
   ref: RefObject<any>
 ) {
   const parentFillLevel = useFillLevel()
-  const tabStateRef = useRef()
+  const tabStateRef = useRef(undefined)
   const [selectedTabKey, setSelectedTabKey] = useState<string>(
     tabs?.[0]?.key || ''
   )

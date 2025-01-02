@@ -43,7 +43,7 @@ const SelectItemWrap = styled.label<SelectItemWrapProps>(
 )
 
 type SelectItemProps = AriaRadioProps & {
-  icon: ReactElement
+  icon: ReactElement<any>
   label?: string
   name?: string
   className?: string
@@ -52,7 +52,7 @@ type SelectItemProps = AriaRadioProps & {
 const SelectItem = forwardRef<any, SelectItemProps>(
   ({ icon, label, value, name, className, ...props }, ref) => {
     const state = useContext(RadioContext)
-    const inputRef = useRef<any>()
+    const inputRef = useRef<any>(undefined)
     const { isFocusVisible, focusProps } = useFocusRing()
     const { inputProps, isSelected } = useRadio(
       {

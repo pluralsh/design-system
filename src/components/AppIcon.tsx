@@ -36,7 +36,7 @@ type AppIconProps = {
   hue?: AppIconHue
   clickable?: boolean
   url?: string
-  icon?: ReactElement
+  icon?: ReactElement<any>
   alt?: string
   name?: string
   initials?: string

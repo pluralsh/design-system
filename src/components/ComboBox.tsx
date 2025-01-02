@@ -52,8 +52,8 @@ type ComboBoxProps = Exclude<ComboBoxInputProps, 'children'> & {
     | ReactElement<ListBoxItemBaseProps>[]
   dropdownHeaderFixed?: ReactNode
   dropdownFooterFixed?: ReactNode
-  dropdownHeader?: ReactElement
-  dropdownFooter?: ReactElement
+  dropdownHeader?: ReactElement<any>
+  dropdownFooter?: ReactElement<any>
   onHeaderClick?: () => unknown
   onFooterClick?: () => unknown
   startIcon?: ReactNode
@@ -81,8 +81,8 @@ type ComboBoxInputProps = {
   isOpen?: boolean
   outerInputProps?: InputProps
   onInputClick?: MouseEventHandler
-  inputRef?: RefObject<HTMLInputElement>
-  buttonRef?: RefObject<HTMLDivElement>
+  inputRef?: RefObject<HTMLInputElement | null>
+  buttonRef?: RefObject<HTMLDivElement | null>
   buttonProps?: AriaButtonProps
   loading?: boolean
   hasChips?: boolean

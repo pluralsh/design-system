@@ -1,5 +1,12 @@
 // Tooltip Library docs: https://floating-ui.com/docs/react-dom
-import { type ReactNode, cloneElement, useMemo, useRef, useState } from 'react'
+import {
+  type JSX,
+  type ReactNode,
+  cloneElement,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import {
   FloatingPortal,
   type Placement,
@@ -107,7 +114,7 @@ function Tooltip({
 }: TooltipProps) {
   const theme = useTheme()
   const [open, setOpen] = useState(false)
-  const arrowRef = useRef()
+  const arrowRef = useRef(undefined)
   const isOpen =
     displayOn === 'none' ? false : displayOn === 'manual' ? manualOpen : open
 

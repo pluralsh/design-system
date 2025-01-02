@@ -90,7 +90,7 @@ type IconFrameProps = {
   clickable?: boolean
   disabled?: boolean
   textValue?: string
-  icon: ReactElement
+  icon: ReactElement<any>
   size?: Size
   tooltip?: boolean | ReactNode
   tooltipProps?: Partial<TooltipProps>

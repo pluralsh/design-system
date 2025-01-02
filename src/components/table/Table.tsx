@@ -158,7 +158,7 @@ function TableRef(
   forwardRef: Ref<any>
 ) {
   const theme = useTheme()
-  const tableContainerRef = useRef<HTMLDivElement>()
+  const tableContainerRef = useRef<HTMLDivElement>(undefined)
   const [hover, setHover] = useState(false)
   const [scrollTop, setScrollTop] = useState(0)
   const table = useReactTable({

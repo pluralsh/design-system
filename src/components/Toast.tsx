@@ -1,5 +1,6 @@
 import {
   type ComponentProps,
+  type JSX,
   type Ref,
   forwardRef,
   useCallback,

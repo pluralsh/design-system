@@ -104,7 +104,7 @@ const moreTabs = {
 }
 
 function TemplateBasic(args: any) {
-  const tabStateRef = useRef()
+  const tabStateRef = useRef(undefined)
   const [selectedKey, setSelectedKey] = useState<Key>('lions')
   const orientation = args.orientation || 'horizontal'
   const tabListStateProps: TabListStateProps = {
@@ -230,7 +230,7 @@ const MyCustomTab2 = forwardRef<any, any>(({ selectedKey, ...props }, ref) => (
 ))
 
 function TemplateComplex() {
-  const tabStateRef = useRef()
+  const tabStateRef = useRef(undefined)
   const [selectedKey, setSelectedKey] = useState<Key>('lions')
   const orientation = 'vertical'
   const tabListStateProps: TabListStateProps = {

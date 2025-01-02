@@ -31,7 +31,7 @@ export type ChipProps = Omit<FlexProps, 'size'> &
     condensed?: boolean
     severity?: ChipSeverity
     inactive?: boolean
-    icon?: ReactElement
+    icon?: ReactElement<any>
     loading?: boolean
     closeButton?: boolean
     closeButtonProps?: ComponentPropsWithRef<'div'>

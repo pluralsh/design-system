@@ -9,7 +9,7 @@ function TipCarouselRef({ children, ...props }: CarouselProps, ref: Ref<any>) {
       ref={ref}
       {...props}
     >
-      {Children.map(children, (child: ReactElement) => (
+      {Children.map(children, (child: ReactElement<any>) => (
         <Div
           width="100%"
           paddingTop="medium"
