@@ -1,14 +1,7 @@
-import { Div, type DivProps, Flex } from 'honorable'
-import {
-  Children,
-  type ReactElement,
-  type RefObject,
-  forwardRef,
-  useEffect,
-  useState,
-} from 'react'
-import { CSSTransition } from 'react-transition-group'
 import { keyframes } from '@emotion/react'
+import { Div, type DivProps, Flex } from 'honorable'
+import { Children, type ReactElement, useEffect, useState } from 'react'
+import { CSSTransition } from 'react-transition-group'
 
 type DotProps = DivProps & {
   active?: boolean
@@ -93,10 +86,11 @@ const transitionStyles = {
   },
 }
 
-function CarouselRef(
-  { autoAdvanceTime = 10000, children, ...props }: CarouselProps,
-  ref: RefObject<any>
-) {
+function Carousel({
+  autoAdvanceTime = 10000,
+  children,
+  ...props
+}: CarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0)
 
   useEffect(() => {
@@ -115,7 +109,6 @@ function CarouselRef(
 
   return (
     <Div
-      ref={ref}
       backgroundColor="fill-one"
       border="1px solid border"
       borderRadius="medium"
@@ -164,7 +157,5 @@ function CarouselRef(
     </Div>
   )
 }
-
-const Carousel = forwardRef(CarouselRef)
 
 export default Carousel

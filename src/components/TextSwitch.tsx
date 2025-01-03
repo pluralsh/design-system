@@ -1,12 +1,8 @@
 import {
   type ComponentProps,
-  type ComponentType,
   type ReactElement,
   type ReactNode,
-  type Ref,
-  type RefAttributes,
   createContext,
-  forwardRef,
   useContext,
   useEffect,
   useId,
@@ -104,25 +100,22 @@ const SwitchHandleSC = styled(AnimatedDiv)<{
   }
 })
 
-function TextSwitchRef(
-  {
-    name,
-    label,
-    labelPosition = 'start',
-    description,
-    errorMessage,
-    isDisabled = false,
-    isReadOnly = false,
-    value,
-    defaultValue,
-    onChange,
-    isRequired,
-    options,
-    size,
-    ...props
-  }: TextSwitchProps,
-  refProp: Ref<any>
-) {
+function TextSwitch({
+  name,
+  label,
+  labelPosition = 'start',
+  description,
+  errorMessage,
+  isDisabled = false,
+  isReadOnly = false,
+  value,
+  defaultValue,
+  onChange,
+  isRequired,
+  options,
+  size,
+  ...props
+}: TextSwitchProps) {
   const switchRef = useRef<HTMLDivElement>(null)
   const selectedElt = useRef<HTMLElement>(null)
 
@@ -174,7 +167,6 @@ function TextSwitchRef(
 
   return (
     <TextSwitchSC
-      ref={refProp}
       $size={size}
       {...props}
       {...radioGroupProps}
@@ -361,8 +353,5 @@ function TextSwitchOption({
     </TextSwitchOptionSC>
   )
 }
-
-const TextSwitch: ComponentType<TextSwitchProps & RefAttributes<any>> =
-  forwardRef(TextSwitchRef)
 
 export default TextSwitch

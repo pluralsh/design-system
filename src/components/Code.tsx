@@ -1,9 +1,9 @@
 import { Button, Div, Flex } from 'honorable'
 import {
   type ComponentProps,
-  type MutableRefObject,
   type PropsWithChildren,
   type ReactNode,
+  type RefObject,
   createContext,
   useCallback,
   useContext,
@@ -49,7 +49,7 @@ type TabInterfaceT = 'tabs' | 'dropdown'
 type TabsContext = {
   tabInterface: TabInterfaceT
   setTabInterface: (arg: TabInterfaceT) => void
-  tabStateRef?: MutableRefObject<any>
+  tabStateRef?: RefObject<any>
   selectedKey?: string
   onSelectionChange?: any
 } & Pick<CodeProps, 'tabs'>

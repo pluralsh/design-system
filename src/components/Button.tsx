@@ -10,10 +10,9 @@ const pulseKeyframes = keyframes`
   100% { box-shadow: 0 0 7px 2px #fff1; }
 `
 
-function Button({ ref, pulse = false, ...props }: ButtonProps) {
+function Button({ pulse = false, ...props }: ButtonProps) {
   return (
     <HonorableButton
-      ref={ref}
       animationIterationCount="infinite"
       animationDuration="4s"
       animationName={pulse ? pulseKeyframes : undefined}

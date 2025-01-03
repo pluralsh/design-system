@@ -1,32 +1,29 @@
-import { Flex, type FlexProps } from 'honorable'
-import { type AriaTabListProps } from '@react-types/tabs'
-import { useTab, useTabList } from 'react-aria'
 import { mergeRefs } from '@react-aria/utils'
-import { type TabListState, useTabListState } from 'react-stately'
 import { type Key, type Node } from '@react-types/shared'
+import { type AriaTabListProps } from '@react-types/tabs'
+import { Flex, type FlexProps } from 'honorable'
 import {
   Children,
   type ComponentProps,
-  type ForwardedRef,
   type HTMLAttributes,
   type JSX,
-  type MutableRefObject,
   type ReactElement,
   type ReactNode,
   type Ref,
   type RefObject,
   cloneElement,
-  forwardRef,
   useEffect,
   useMemo,
   useRef,
 } from 'react'
+import { useTab, useTabList } from 'react-aria'
+import { type TabListState, useTabListState } from 'react-stately'
 import styled, { useTheme } from 'styled-components'
 
 import { type Nullable } from '../types'
 
-import { useItemWrappedChildren } from './ListBox'
 import ArrowScroll from './ArrowScroll'
+import { useItemWrappedChildren } from './ListBox'
 import WrapWithIf from './WrapWithIf'
 
 export type MakeOptional<Type, Key extends keyof Type> = Omit<Type, Key> &
@@ -34,13 +31,13 @@ export type MakeOptional<Type, Key extends keyof Type> = Omit<Type, Key> &
 
 export type Renderer = (
   props: HTMLAttributes<HTMLElement>,
-  ref: ForwardedRef<any>,
+  ref: RefObject<any>,
   state: TabListState<object> | null | undefined
 ) => JSX.Element
 
 type TabBaseProps = {
   key?: Key
-  ref?: MutableRefObject<any>
+  ref?: RefObject<any>
   active?: boolean
   activeSecondary?: boolean
   vertical?: boolean
@@ -51,7 +48,7 @@ type TabBaseProps = {
 }
 
 type TabListStateProps = Omit<AriaTabListProps<object>, 'children'>
-export type TabStateRef = MutableRefObject<{
+export type TabStateRef = RefObject<{
   state: TabListState<object>
   stateProps: AriaTabListProps<object>
   tabProps: Record<Key, any>
@@ -67,21 +64,19 @@ type TabListProps = {
   stateProps?: TabListStateProps
   scrollable?: boolean
   renderer?: Renderer
-  as?: ReactElement<any> & { ref?: MutableRefObject<any> }
+  as?: ReactElement<any> & { ref?: RefObject<any> }
   children?: ChildrenType
 }
 
-function TabListRef(
-  {
-    stateRef,
-    stateProps,
-    renderer,
-    as,
-    scrollable,
-    ...props
-  }: TabListProps & FlexProps,
-  incomingRef: RefObject<HTMLElement | null>
-) {
+function TabList({
+  ref: incomingRef,
+  stateRef,
+  stateProps,
+  renderer,
+  as,
+  scrollable,
+  ...props
+}: TabListProps & FlexProps) {
   const wrappedChildren = useItemWrappedChildren(props.children)
   const finalStateProps: AriaTabListProps<object> = useMemo(
     () => ({
@@ -111,7 +106,7 @@ function TabListRef(
   })
 
   const ref = useRef<HTMLDivElement>(null)
-  const mergedRef = mergeRefs(ref, incomingRef)
+  const mergedRef = mergeRefs(ref, incomingRef) as RefObject<any>
   const { tabListProps } = useTabList(finalStateProps, state, ref)
   const tabChildren = [...state.collection].map((item) => (
     <TabRenderer
@@ -165,8 +160,6 @@ function TabListRef(
     </WrapWithIf>
   )
 }
-
-const TabList = forwardRef(TabListRef)
 
 const TabClone = styled(
   ({
@@ -252,5 +245,5 @@ function TabRenderer({ item, state, stateProps, stateRef }: TabRendererProps) {
   )
 }
 
-export type { TabListProps, TabListStateProps, TabBaseProps }
 export { TabList }
+export type { TabBaseProps, TabListProps, TabListStateProps }
