@@ -1,6 +1,9 @@
 import { ExtendTheme, Input as HonorableInput, mergeTheme } from 'honorable'
-import type { InputProps as HonorableInputProps } from 'honorable'
-import { type ComponentProps, type ReactNode, useRef } from 'react'
+import type {
+  InputProps as HonorableInputProps,
+  ThemeProviderProps,
+} from 'honorable'
+import { type ComponentProps, type FC, type ReactNode, useRef } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { mergeRefs } from 'react-merge-refs'
 import { mergeProps } from 'react-aria'
@@ -14,6 +17,8 @@ import IconFrame from './IconFrame'
 import CloseIcon from './icons/CloseIcon'
 
 import { useFormField } from './FormField'
+
+const TypedExtendTheme = ExtendTheme as FC<ThemeProviderProps>
 
 export type InputProps = HonorableInputProps & {
   suffix?: ReactNode
@@ -156,7 +161,7 @@ function Input({
   const hasStartIcon = startIcon || prefix || titleContent
 
   return (
-    <ExtendTheme theme={themeExtension}>
+    <TypedExtendTheme theme={themeExtension}>
       <HonorableInput
         ref={ref}
         endIcon={
@@ -204,7 +209,7 @@ function Input({
         inputProps={inputProps}
         {...props}
       />
-    </ExtendTheme>
+    </TypedExtendTheme>
   )
 }
 

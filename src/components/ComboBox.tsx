@@ -466,7 +466,7 @@ function ComboBox({
                   onClick={onChipClick}
                   closeButtonProps={{
                     onClick: () => {
-                      onDeleteChip?.(chipProps?.key)
+                      onDeleteChip?.(chipProps?.key?.toString())
                     },
                     'aria-label': `Remove ${chipProps.key}`,
                   }}
@@ -481,7 +481,7 @@ function ComboBox({
       ...(onDeleteChipProp
         ? {
             onDeleteInputContent: () =>
-              onDeleteChipProp?.(chips?.[chips.length - 1]?.key),
+              onDeleteChipProp?.(chips?.[chips.length - 1]?.key?.toString()),
           }
         : {}),
       ...outerInputProps,

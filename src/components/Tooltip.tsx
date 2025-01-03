@@ -213,7 +213,7 @@ function Tooltip({
           unmountOnExit
         >
           <Tip
-            ref={floating}
+            ref={floating as any}
             caption
             color="text-light"
             borderRadius="medium"
@@ -236,7 +236,7 @@ function Tooltip({
             {label}
             {showArrow && (
               <Div
-                ref={arrowRef}
+                ref={arrowRef as any}
                 style={{
                   position: 'absolute',
                   top: middlewareData?.arrow?.y || '',

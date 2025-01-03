@@ -165,8 +165,8 @@ function NavLink({
         activeSecondary={activeSecondary}
         vertical
         iconLeft={icon}
-        onClick={(e) => {
-          onClick(e as any)
+        onClick={(e: MouseEventHandler<HTMLDivElement>) => {
+          onClick(e)
         }}
         width="100%"
         innerProps={{

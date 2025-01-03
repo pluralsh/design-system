@@ -20,7 +20,7 @@ import Card, { type CardProps } from './Card'
 import Highlight from './Highlight'
 import { ListBoxItem } from './ListBoxItem'
 import { Select } from './Select'
-import { SubTab } from './SubTab'
+import SubTab from './SubTab'
 import { TabList, type TabListStateProps } from './TabList'
 import TabPanel from './TabPanel'
 import {

@@ -1,24 +1,25 @@
 import {
   type ComponentProps,
-  type ComponentPropsWithRef,
+  type ComponentPropsWithoutRef,
   type KeyboardEventHandler,
   type MouseEventHandler,
   type ReactNode,
+  type RefObject,
   useCallback,
   useRef,
 } from 'react'
-import styled, { type DefaultTheme } from 'styled-components'
-import { mergeRefs } from 'react-merge-refs'
 import { mergeProps } from 'react-aria'
+import { mergeRefs } from 'react-merge-refs'
+import styled, { type DefaultTheme } from 'styled-components'
 
-import { simulateInputChange } from '../utils/simulateInputChange'
 import { useRefResizeObserver } from '../hooks/useRefResizeObserver'
+import { simulateInputChange } from '../utils/simulateInputChange'
 
 import { useFillLevel } from './contexts/FillLevelContext'
-import { TitleContent } from './Select'
-import Tooltip from './Tooltip'
 import IconFrame from './IconFrame'
 import CloseIcon from './icons/CloseIcon'
+import { TitleContent } from './Select'
+import Tooltip from './Tooltip'
 
 import { useFormField } from './FormField'
 
@@ -51,9 +52,11 @@ export type InputProps = {
   onDeleteInputContent?: KeyboardEventHandler<HTMLInputElement>
   onClick?: MouseEventHandler<HTMLDivElement>
 }
-export type InputPropsFull = InputProps & { className?: string } & Pick<
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    ComponentPropsWithRef<'input'>,
+export type InputPropsFull = InputProps & {
+  className?: string
+  ref?: RefObject<HTMLDivElement>
+} & Pick<
+    ComponentPropsWithoutRef<'input'>,
     | 'value'
     | 'disabled'
     | 'defaultValue'
@@ -232,7 +235,7 @@ function Input2({
   onBlur,
   onKeyDown,
   ...props
-}: InputPropsFull & ComponentProps<'div'>) {
+}: InputPropsFull) {
   const inputRef = useRef<HTMLInputElement>(null)
   const inputAreaRef = useRef<HTMLDivElement>(null)
   const inputContentRef = useRef<HTMLDivElement>(null)

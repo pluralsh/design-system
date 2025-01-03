@@ -134,7 +134,6 @@ function TabListRef(
 
   if (renderer) {
     return renderer(
-      // @ts-expect-error
       { ...props, ...tabListProps, ...{ children: tabChildren } },
       mergedRef,
       state
