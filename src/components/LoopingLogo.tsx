@@ -1,9 +1,4 @@
-import {
-  type ComponentPropsWithRef,
-  type HTMLAttributes,
-  type JSX,
-  forwardRef,
-} from 'react'
+import { type ComponentPropsWithRef } from 'react'
 import { useTheme } from 'styled-components'
 
 import PluralLogomarkBottomLeft from './icons/plural-animated/PluralLogomarkBottomLeft'
@@ -22,10 +17,12 @@ export type LoopingLogoProps = ComponentPropsWithRef<'div'> & {
 export const scaling = (scale: number): { transform: string } =>
   scale ? { transform: `scale(${scale})` } : null
 
-const LoopingLogo = forwardRef<
-  HTMLDivElement,
-  LoopingLogoProps & HTMLAttributes<HTMLDivElement>
->(({ animated = true, scale, ...props }, ref): JSX.Element => {
+function LoopingLogo({
+  ref,
+  animated = true,
+  scale,
+  ...props
+}: LoopingLogoProps) {
   const theme = useTheme()
   const color = theme.colors['icon-light']
 
@@ -82,6 +79,6 @@ const LoopingLogo = forwardRef<
       </div>
     </LoopingLogoWrapper>
   )
-})
+}
 
 export default LoopingLogo

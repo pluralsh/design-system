@@ -319,7 +319,7 @@ function TableRef(
             : 'large'
         }
         overflow="auto"
-        ref={tableContainerRef}
+        ref={tableContainerRef as DivProps['ref']}
         onScroll={({ target }: { target: HTMLDivElement }) =>
           setScrollTop(target?.scrollTop)
         }

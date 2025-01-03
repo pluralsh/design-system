@@ -1,10 +1,10 @@
 import {
+  type ComponentProps,
   type HTMLAttributes,
   type ReactElement,
   type ReactNode,
   type RefObject,
   cloneElement,
-  forwardRef,
   useRef,
   useState,
 } from 'react'
@@ -188,57 +188,50 @@ const SelectButtonInner = styled.div<{
   })
 )
 
-const SelectButton = forwardRef<
-  HTMLDivElement,
-  SelectButtonProps & HTMLAttributes<HTMLDivElement>
->(
-  (
-    {
-      titleContent,
-      leftContent,
-      rightContent,
-      children,
-      showArrow = true,
-      isOpen,
-      size = 'medium',
-      transparent = false,
-      ...props
-    },
-    ref
-  ) => {
-    const parentFillLevel = useFillLevel()
+function SelectButton({
+  ref,
+  titleContent,
+  leftContent,
+  rightContent,
+  children,
+  showArrow = true,
+  isOpen,
+  size = 'medium',
+  transparent = false,
+  ...props
+}: SelectButtonProps & ComponentProps<'div'>) {
+  const parentFillLevel = useFillLevel()
 
-    return (
-      <SelectButtonInner
-        ref={ref}
-        $isOpen={isOpen}
-        $size={size}
-        $parentFillLevel={parentFillLevel}
-        $transparent={transparent}
-        {...props}
-      >
-        {titleContent && (
-          <TitleContent
-            $size={size}
-            $parentFillLevel={parentFillLevel}
-          >
-            {titleContent}
-          </TitleContent>
+  return (
+    <SelectButtonInner
+      ref={ref}
+      $isOpen={isOpen}
+      $size={size}
+      $parentFillLevel={parentFillLevel}
+      $transparent={transparent}
+      {...props}
+    >
+      {titleContent && (
+        <TitleContent
+          $size={size}
+          $parentFillLevel={parentFillLevel}
+        >
+          {titleContent}
+        </TitleContent>
+      )}
+      <div className="content">
+        {leftContent && <div className="leftContent">{leftContent}</div>}
+        <div className="children">{children}</div>
+        {rightContent && <div className="rightContent">{rightContent}</div>}
+        {showArrow && (
+          <div className="arrow">
+            <DropdownArrowIcon size={16} />
+          </div>
         )}
-        <div className="content">
-          {leftContent && <div className="leftContent">{leftContent}</div>}
-          <div className="children">{children}</div>
-          {rightContent && <div className="rightContent">{rightContent}</div>}
-          {showArrow && (
-            <div className="arrow">
-              <DropdownArrowIcon size={16} />
-            </div>
-          )}
-        </div>
-      </SelectButtonInner>
-    )
-  }
-)
+      </div>
+    </SelectButtonInner>
+  )
+}
 
 const SelectInner = styled.div((_) => ({
   position: 'relative',
