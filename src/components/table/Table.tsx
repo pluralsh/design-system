@@ -299,6 +299,7 @@ function Table({
   return (
     <Div
       position="relative"
+      maxHeight="100%"
       width={width}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
