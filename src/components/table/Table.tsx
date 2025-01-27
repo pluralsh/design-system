@@ -56,7 +56,7 @@ export type TableProps = Omit<CSSProperties, keyof TableBaseProps> &
   TableBaseProps
 
 type TableBaseProps = {
-  ref: RefObject<HTMLDivElement>
+  ref?: RefObject<HTMLDivElement>
   data: any[]
   columns: any[]
   loading?: boolean
