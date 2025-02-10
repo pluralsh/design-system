@@ -1,6 +1,8 @@
-import { ButtonBase, Flex, type FlexProps } from 'honorable'
+import { ButtonBase } from 'honorable'
 import { type ReactElement, type ReactNode, cloneElement } from 'react'
 import styled from 'styled-components'
+
+import { type ComponentPropsWithRef } from '@react-spring/web'
 
 import { type styledTheme } from '../theme'
 
@@ -92,11 +94,11 @@ type IconFrameProps = {
   type?: Type
   selected?: boolean
   background?: SemanticColorKey
-} & FlexProps & {
+} & ComponentPropsWithRef<'div'> & {
     as?: any
   }
 
-const IconFrameSC = styled(Flex)<{
+const IconFrameSC = styled.div<{
   $type: Type
   $clickable: boolean
   $selected: boolean
@@ -145,7 +147,6 @@ const IconFrameSC = styled(Flex)<{
 }))
 
 function IconFrame({
-  ref,
   icon,
   size = 'medium',
   textValue = '',
@@ -172,7 +173,6 @@ function IconFrame({
       $type={type}
       $size={size}
       $background={background}
-      ref={ref}
       aria-label={textValue}
       disabled={(clickable && disabled) || undefined}
       {...(forwardedAs ? { forwardedAs } : {})}

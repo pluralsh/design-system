@@ -231,7 +231,6 @@ function Callout({
           >
             <IconFrame
               textValue=""
-              display="flex"
               size="small"
               clickable
               {...(closeable && onClose
