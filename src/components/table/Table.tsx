@@ -41,14 +41,19 @@ import EmptyState, { type EmptyStateProps } from '../EmptyState'
 import CaretUpIcon from '../icons/CaretUpIcon'
 import { Spinner } from '../Spinner'
 
-import { tableFillLevelToBg, tableFillLevelToBorderColor } from './colors'
+import { toTableFillLevel } from '../contexts/FillLevelContext'
+import {
+  tableFillLevelToBg,
+  tableFillLevelToBorderColor,
+  tableFillLevelToHighlightedCellBg,
+} from './colors'
 import { FillerRows } from './FillerRows'
 import { useIsScrolling, useOnVirtualSliceChange } from './hooks'
 import { Skeleton } from './Skeleton'
 import { SortIndicator } from './SortIndicator'
 import { T } from './T'
 import { Tbody } from './Tbody'
-import { Td, TdExpand, TdLoading } from './Td'
+import { Td, TdBasic, TdExpand, TdLoading } from './Td'
 import { Th } from './Th'
 import { Thead } from './Thead'
 import { Tr } from './Tr'
@@ -64,6 +69,7 @@ type TableBaseProps = {
   loadingSkeletonRows?: number
   hideHeader?: boolean
   padCells?: boolean
+  expandedRowType?: 'default' | 'custom'
   fullHeightWrap?: boolean
   fillLevel?: TableFillLevel
   rowBg?: 'base' | 'raised' | 'stripes'
@@ -147,6 +153,7 @@ function Table({
   renderExpanded,
   loose = false,
   padCells = true,
+  expandedRowType = 'default',
   fullHeightWrap = false, // TODO: default this to true after regression testing
   fillLevel = 0,
   rowBg = 'stripes',
@@ -291,6 +298,11 @@ function Table({
     (i: number) => rowBg === 'raised' || (rowBg === 'stripes' && i % 2 === 1),
     [rowBg]
   )
+
+  const expanderBorder =
+    theme.borders[
+      tableFillLevelToHighlightedCellBg[toTableFillLevel(fillLevel)]
+    ]
 
   useEffect(() => {
     const lastItem = virtualRows[virtualRows.length - 1]
@@ -491,14 +503,22 @@ function Table({
                         {row?.getIsExpanded() && (
                           <Tr
                             $fillLevel={fillLevel}
-                            $raised={i % 2 === 1}
+                            $raised={isRaised(i)}
+                            $type="expander"
                           >
-                            <TdExpand />
-                            <TdExpand
-                              colSpan={row.getVisibleCells().length - 1}
-                            >
-                              {renderExpanded({ row })}
-                            </TdExpand>
+                            {expandedRowType === 'default' ? (
+                              <>
+                                <TdExpand css={{ borderTop: expanderBorder }} />
+                                <TdExpand
+                                  colSpan={row.getVisibleCells().length - 1}
+                                  css={{ borderTop: expanderBorder }}
+                                >
+                                  {renderExpanded({ row })}
+                                </TdExpand>
+                              </>
+                            ) : (
+                              <TdBasic>{renderExpanded({ row })}</TdBasic>
+                            )}
                           </Tr>
                         )}
                       </Fragment>
