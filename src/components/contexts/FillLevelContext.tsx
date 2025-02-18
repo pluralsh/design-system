@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import { TableFillLevel } from '../table/Table'
+import { TableFillLevel } from '../table/tableUtils'
 
 const MIN_FILL = 0
 const MAX_FILL = 3

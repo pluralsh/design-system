@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { tableCellColor, tableCellHoverColor } from './colors'
-import { type TableFillLevel } from './Table'
+import { type TableFillLevel } from './tableUtils'
 
 export const Tr = styled.tr<{
   $fillLevel: TableFillLevel
