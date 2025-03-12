@@ -41,6 +41,8 @@
     "node": "18.16.0"
   },
   "dependencies": {
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
     "@floating-ui/react-dom-interactions": "0.13.3",
     "@loomhq/loom-embed": "1.5.0",
     "@markdoc/markdoc": "0.4.0",
@@ -59,7 +61,9 @@
     "classnames": "2.3.2",
     "dayjs": "1.11.13",
     "highlight.js": "11.9.0",
+    "honorable": "1.0.0-beta.17",
     "honorable-recipe-mapper": "0.2.0",
+    "honorable-theme-default": "1.0.0-beta.5",
     "immer": "10.0.3",
     "lodash-es": "4.17.21",
     "react-animate-height": "3.2.3",
@@ -80,8 +84,6 @@
     "@babel/core": "7.23.6",
     "@babel/preset-env": "7.23.6",
     "@babel/preset-react": "7.23.3",
-    "@emotion/react": "11.11.1",
-    "@emotion/styled": "11.11.0",
     "@eslint/compat": "1.1.1",
     "@pluralsh/eslint-config-typescript": "2.5.147",
     "@react-types/shared": "3.22.0",
@@ -119,8 +121,6 @@
     "firebase-tools": "11.30.0",
     "fuse.js": "6.6.2",
     "globals": "15.10.0",
-    "honorable": "1.0.0-beta.17",
-    "honorable-theme-default": "1.0.0-beta.5",
     "http-server": "14.1.1",
     "husky": "9.0.10",
     "jest-mock": "29.5.0",
@@ -141,10 +141,6 @@
     "vitest": "2.1.2"
   },
   "peerDependencies": {
-    "@emotion/react": ">=11.11.0",
-    "@emotion/styled": ">=11.11.0",
-    "honorable": ">=1.0.0-beta.17",
-    "honorable-theme-default": ">=1.0.0-beta.5",
     "react": ">=19.0.0",
     "react-dom": ">=19.0.0",
     "react-transition-group": ">=4.4.5",
