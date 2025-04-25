@@ -21,6 +21,7 @@ import {
   SearchIcon,
   Select,
   SelectButton,
+  Spinner,
   WrapWithIf,
 } from '../index'
 
@@ -272,6 +273,20 @@ function Template({ onFillLevel }: { onFillLevel: any }) {
         <Select
           isDisabled={true}
           label="Disabled"
+        >
+          {items.slice(0, 4).map(({ key, label }) => (
+            <ListBoxItem
+              key={key}
+              label={label}
+              textValue={label}
+              leftContent={smallIcon}
+            />
+          ))}
+        </Select>
+        <Select
+          isDisabled={true}
+          label="Disabled & Loading"
+          rightContent={<Spinner />}
         >
           {items.slice(0, 4).map(({ key, label }) => (
             <ListBoxItem
