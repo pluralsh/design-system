@@ -344,7 +344,6 @@ function Select({
       leftContent={leftContent}
       rightContent={rightContent}
       isOpen={state.isOpen}
-      showArrow={!props.isDisabled}
       size={size}
       transparent={transparent}
       isDisabled={props.isDisabled}
