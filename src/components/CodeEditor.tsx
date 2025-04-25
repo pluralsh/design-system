@@ -63,10 +63,7 @@ export default function CodeEditor({
       id: 'remeasure-fonts',
       label: 'Remeasure Fonts',
       keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyB],
-      run: () => {
-        console.log(monaco?.editor?.remeasureFonts)
-        monaco?.editor?.remeasureFonts()
-      },
+      run: () => monaco?.editor?.remeasureFonts(),
     })
   }
 
