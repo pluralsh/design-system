@@ -58,6 +58,18 @@ export default function CodeEditor({
   const [copied, setCopied] = useState<boolean>(false)
   const changed = current !== value
 
+  const onEditorMount = (editor: any) => {
+    editor.addAction({
+      id: 'remeasure-fonts',
+      label: 'Remeasure Fonts',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyB],
+      run: () => {
+        console.log(monaco?.editor?.remeasureFonts)
+        monaco?.editor?.remeasureFonts()
+      },
+    })
+  }
+
   useEffect(() => {
     if (copied) {
       const timeout = setTimeout(() => setCopied(false), 1000)
@@ -106,6 +118,7 @@ export default function CodeEditor({
           }}
           options={merge(defaultOptions, options)}
           theme={theme.mode === 'light' ? 'plural-light' : 'plural-dark'}
+          onMount={onEditorMount}
         />
       </Div>
       {save && (
