@@ -118,7 +118,7 @@
     "eslint-plugin-react": "7.37.4",
     "eslint-plugin-react-hooks": "4.6.2",
     "eslint-plugin-storybook": "0.6.15",
-    "firebase-tools": "11.30.0",
+    "firebase-tools": "13.6.0",
     "fuse.js": "6.6.2",
     "globals": "15.10.0",
     "http-server": "14.1.1",
