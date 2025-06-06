@@ -32,7 +32,7 @@ export const spacing = {
   ...negativeSpacing,
 } as const satisfies Record<string, number>
 
-const SPACER_KEYS = [
+const SIZING_KEYS = [
   'margin',
   'marginTop',
   'marginRight',
@@ -43,11 +43,17 @@ const SPACER_KEYS = [
   'paddingRight',
   'paddingBottom',
   'paddingLeft',
+  'width',
+  'minWidth',
+  'maxWidth',
+  'height',
+  'minHeight',
+  'maxHeight',
 ] as const
-const spacerKeys = new Set<string>(SPACER_KEYS)
+const spacerKeys = new Set<string>(SIZING_KEYS)
 
-type SpacerKey = (typeof SPACER_KEYS)[number]
-export type SpacerProps<T = SemanticSpacingKey> = {
+type SpacerKey = (typeof SIZING_KEYS)[number]
+export type SpacerProps<T = SemanticSpacingKey | number> = {
   [key in SpacerKey]?: T
 }
 
@@ -59,8 +65,11 @@ export function resolveSpacersAndSanitizeCss(
   const spacerCssProps: Record<string, number> = {}
   const rest: Record<string, any> = {}
   Object.entries(props).forEach(([propKey, propValue]) => {
-    if (spacerKeys.has(propKey) && typeof propValue === 'string')
-      spacerCssProps[propKey] = spacing[propValue as SemanticSpacingKey] || 0
+    if (spacerKeys.has(propKey))
+      spacerCssProps[propKey] =
+        typeof propValue === 'string'
+          ? spacing[propValue as SemanticSpacingKey] || 0
+          : propValue
     else rest[propKey] = propValue
   })
 
