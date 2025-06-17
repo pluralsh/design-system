@@ -281,6 +281,7 @@ function Table({
                           {header.column.columnDef.meta?.tooltip && (
                             <Tooltip
                               label={header.column.columnDef.meta.tooltip}
+                              {...header.column.columnDef.meta.tooltipProps}
                             >
                               <InfoOutlineIcon />
                             </Tooltip>
