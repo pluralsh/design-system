@@ -57,6 +57,7 @@ export const semanticColorsLight = {
   // Border
   //
   border: grey[75],
+  'border-fill-one': grey[100],
   'border-fill-two': grey[100],
   'border-fill-three': grey[125],
   'border-selected': grey[800],

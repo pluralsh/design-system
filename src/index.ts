@@ -184,6 +184,7 @@ export { semanticColorCssVars, semanticColorKeys } from './theme/colors'
 export type { SemanticColorCssVar, SemanticColorKey } from './theme/colors'
 export { default as HonorableThemeProvider } from './theme/HonorableThemeProvider'
 export type { SemanticSpacingKey } from './theme/spacing'
+export type { SemanticBorderKey } from './theme/borders'
 
 // Utils
 export { default as scrollIntoContainerView } from './utils/scrollIntoContainerView'
