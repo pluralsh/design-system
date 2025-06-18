@@ -111,11 +111,7 @@ export {
 } from './components/SidebarExpandWrapper'
 export { default as SidebarItem } from './components/SidebarItem'
 export { default as SidebarSection } from './components/SidebarSection'
-export {
-  default as Sidecar,
-  SidecarButton,
-  SidecarItem,
-} from './components/Sidecar'
+export { default as Sidecar, SidecarItem } from './components/Sidecar'
 export type { SidecarProps } from './components/Sidecar'
 export { default as Slider } from './components/Slider'
 export { Spinner } from './components/Spinner'
@@ -174,7 +170,6 @@ export * from './components/TreeNavigation'
 
 // Theme
 export { default as GlobalStyle } from './GlobalStyle'
-export { default as HonorableThemeProvider } from './theme/HonorableThemeProvider'
 export {
   honorableThemeDark,
   honorableThemeLight,
@@ -187,6 +182,7 @@ export {
 } from './theme'
 export { semanticColorCssVars, semanticColorKeys } from './theme/colors'
 export type { SemanticColorCssVar, SemanticColorKey } from './theme/colors'
+export { default as HonorableThemeProvider } from './theme/HonorableThemeProvider'
 export type { SemanticSpacingKey } from './theme/spacing'
 
 // Utils
