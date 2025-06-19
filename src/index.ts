@@ -31,6 +31,8 @@ export { ChecklistItem } from './components/ChecklistItem'
 export type { ChecklistItemProps } from './components/ChecklistItem'
 export {
   default as Chip,
+  severityToColor,
+  severityToIconColor,
   type ChipProps,
   type ChipSeverity,
   type ChipSize,

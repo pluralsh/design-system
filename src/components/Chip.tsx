@@ -39,7 +39,7 @@ export type ChipProps = Omit<FlexProps, 'size'> &
     [x: string]: unknown
   } & ({ severity?: ChipSeverity } | { severity: 'error' })
 
-const severityToColor = {
+export const severityToColor = {
   neutral: 'text',
   info: 'text-primary-accent',
   success: 'text-success-light',
@@ -51,7 +51,7 @@ const severityToColor = {
   error: 'text-danger-light',
 } as const satisfies Record<ChipSeverity, string>
 
-const severityToIconColor = {
+export const severityToIconColor = {
   neutral: 'icon-default',
   info: 'icon-info',
   success: 'icon-success',
