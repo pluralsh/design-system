@@ -12,7 +12,7 @@ import {
 import { CSSProperties, styled, useTheme } from 'styled-components'
 import { resolveSpacersAndSanitizeCss, SpacerProps } from '../theme/spacing'
 import { applyNodeToRefs } from '../utils/applyNodeToRefs'
-import Flex from './Flex'
+import Flex, { FlexProps } from './Flex'
 import { Spinner } from './Spinner'
 
 type ButtonSize = 'small' | 'medium' | 'large'
@@ -30,6 +30,7 @@ export type ButtonProps = {
   loading?: Nullable<boolean>
   loadingIndicator?: ReactNode
   children?: ReactNode
+  innerFlexProps?: FlexProps
   // flags- keeping this pattern instead of using "size" and "type" for backwards compatibility
   small?: boolean
   large?: boolean
@@ -52,7 +53,13 @@ export type ButtonProps = {
   // a few commonly used css props for QOL
   Pick<
     CSSProperties,
-    'width' | 'minWidth' | 'height' | 'minHeight' | 'flex' | 'alignSelf'
+    | 'width'
+    | 'minWidth'
+    | 'height'
+    | 'minHeight'
+    | 'flex'
+    | 'alignSelf'
+    | 'alignItems'
   >
 
 const Button = memo(
@@ -77,6 +84,8 @@ const Button = memo(
     minWidth,
     flex,
     alignSelf,
+    alignItems = 'center',
+    innerFlexProps,
     ...props
   }: ButtonProps) => {
     const theme = useTheme()
@@ -141,9 +150,10 @@ const Button = memo(
           </LoadingIndicatorWrapperSC>
         )}
         <Flex
-          align="center"
+          align={alignItems}
           justify="center"
           visibility={loading ? 'hidden' : 'inherit'}
+          {...innerFlexProps}
         >
           {children}
         </Flex>
