@@ -59,7 +59,7 @@ export type ButtonProps = {
     | 'minHeight'
     | 'flex'
     | 'alignSelf'
-    | 'alignItems'
+    | 'justifyContent'
   >
 
 const Button = memo(
@@ -84,7 +84,7 @@ const Button = memo(
     minWidth,
     flex,
     alignSelf,
-    alignItems = 'center',
+    justifyContent = 'center',
     innerFlexProps,
     ...props
   }: ButtonProps) => {
@@ -122,7 +122,16 @@ const Button = memo(
         $type={buttonType}
         $noPadding={props.padding === 'none'}
         disabled={disabled}
-        css={{ width, minWidth, height, minHeight, flex, alignSelf, ...css }}
+        css={{
+          width,
+          minWidth,
+          height,
+          minHeight,
+          flex,
+          alignSelf,
+          justifyContent,
+          ...css,
+        }}
         {...(loading && { inert: true })}
         {...rest}
       >
@@ -150,9 +159,9 @@ const Button = memo(
           </LoadingIndicatorWrapperSC>
         )}
         <Flex
-          align={alignItems}
-          justify="center"
+          alignItems="center"
           visibility={loading ? 'hidden' : 'inherit'}
+          width={justifyContent === 'flex-start' ? '100%' : undefined}
           {...innerFlexProps}
         >
           {children}
