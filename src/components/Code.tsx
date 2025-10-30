@@ -1,4 +1,4 @@
-import { Div, Flex } from 'honorable'
+import { Div } from 'honorable'
 import {
   type ComponentProps,
   type PropsWithChildren,
@@ -37,6 +37,7 @@ import FileIcon from './icons/FileIcon'
 import Button from './Button'
 import { DownloadIcon } from '../icons'
 import IconFrame from './IconFrame'
+import Flex from './Flex'
 
 type CodeProps = Omit<CardProps, 'children'> & {
   children?: string
@@ -137,10 +138,13 @@ const CopyButton = styled(CopyButtonBase)<{ $verticallyCenter: boolean }>(
   })
 )
 
-const DownloadButtonSC = styled(IconFrame)(({ theme }) => ({
+const MermaidButtonsSC = styled.div(({ theme }) => ({
   position: 'absolute',
   right: theme.spacing.medium,
   top: theme.spacing.medium,
+  gap: theme.spacing.xsmall,
+  display: 'flex',
+  alignItems: 'center',
 }))
 
 type CodeTabData = {
@@ -316,6 +320,7 @@ function CodeContent({
 }) {
   const { spacing, borderRadiuses } = useTheme()
   const mermaidRef = useRef<MermaidRefHandle>(null)
+  const [mermaidError, setMermaidError] = useState<Nullable<Error>>(null)
   const [copied, setCopied] = useState(false)
   const codeString = children?.trim() || ''
   const multiLine = !!codeString.match(/\r?\n/) || hasSetHeight
@@ -337,10 +342,9 @@ function CodeContent({
   if (typeof children !== 'string')
     throw new Error('Code component expects a string as its children')
 
-  const { isLoading: mermaidLoading, error: mermaidError } =
-    mermaidRef.current ?? {}
-  const renderMermaid =
-    language === 'mermaid' && !(isStreaming || mermaidLoading || mermaidError)
+  const isMermaidDownloadable =
+    language === 'mermaid' && !isStreaming && !mermaidError
+
   return (
     <div
       css={{
@@ -349,18 +353,27 @@ function CodeContent({
         alignItems: 'center',
       }}
     >
-      {renderMermaid ? (
-        <DownloadButtonSC
-          clickable
-          onClick={() => {
-            const { svgStr } = mermaidRef.current
-            if (!svgStr) return
-            downloadMermaidSvg(svgStr)
-          }}
-          icon={<DownloadIcon />}
-          type="floating"
-          tooltip="Download as PNG"
-        />
+      {isMermaidDownloadable ? (
+        <MermaidButtonsSC>
+          <IconFrame
+            clickable
+            onClick={handleCopy}
+            icon={copied ? <CheckIcon /> : <CopyIcon />}
+            type="floating"
+            tooltip="Copy Mermaid code"
+          />
+          <IconFrame
+            clickable
+            onClick={() => {
+              const { svgStr } = mermaidRef.current
+              if (!svgStr) return
+              downloadMermaidSvg(svgStr)
+            }}
+            icon={<DownloadIcon />}
+            type="floating"
+            tooltip="Download as PNG"
+          />
+        </MermaidButtonsSC>
       ) : (
         <CopyButton
           copied={copied}
@@ -370,7 +383,7 @@ function CodeContent({
       )}
       <div
         css={{
-          ...(renderMermaid ? { backgroundColor: 'white' } : {}),
+          ...(isMermaidDownloadable ? { backgroundColor: 'white' } : {}),
           padding: `${multiLine ? spacing.medium : spacing.small}px ${
             spacing.medium
           }px`,
@@ -378,8 +391,13 @@ function CodeContent({
           borderBottomRightRadius: borderRadiuses.large,
         }}
       >
-        {renderMermaid ? (
-          <Mermaid ref={mermaidRef}>{codeString}</Mermaid>
+        {isMermaidDownloadable ? (
+          <Mermaid
+            ref={mermaidRef}
+            setError={setMermaidError}
+          >
+            {codeString}
+          </Mermaid>
         ) : (
           <Highlight
             key={codeString}
@@ -526,12 +544,12 @@ function CodeUnstyled({
 }
 
 const Code = styled(CodeUnstyled)((_) => ({
-  [`${CopyButton}, ${DownloadButtonSC}`]: {
+  [`${CopyButton}, ${MermaidButtonsSC}`]: {
     opacity: 0,
     pointerEvents: 'none',
     transition: 'opacity 0.2s ease',
   },
-  [`&:hover ${CopyButton}, &:hover ${DownloadButtonSC}`]: {
+  [`&:hover ${CopyButton}, &:hover ${MermaidButtonsSC}`]: {
     opacity: 1,
     pointerEvents: 'auto',
     transition: 'opacity 0.2s ease',

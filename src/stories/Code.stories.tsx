@@ -274,6 +274,29 @@ const ganttMermaid = `gantt
     Task 2           :a2, after a1, 20d
     section Phase 2
     Task 3           :a3, 2024-02-15, 15d`
+const bigMermaid = `flowchart LR
+    A["Developer prepares new feature branch for the upcoming release.
+    Adds unit and integration tests, reviews documentation, and ensures code quality standards are followed."]
+    --> B["A Pull Request (PR) is created and submitted.
+    Team reviews the PR for code consistency, security issues, and test coverage. Assigns reviewers as needed."]
+    --> C["Automated CI/CD pipeline is triggered.
+    Static code analysis for vulnerabilities, linting, and running all test suites before approvals are allowed."]
+    --> D["Peer review process.
+    Reviewers provide comments, suggest improvements, and may require changes before approving the PR for merge. If rejected, code is updated and resubmitted."]
+    --> E["Once PR is approved, the code is merged into the main branch.
+    Merge triggers a new, stricter pipeline that builds release artifacts, images, and runs e2e tests."]
+    --> F["The build process generates container images.
+    Container scans ensure no critical vulnerabilities exist before pushing to the image registry."]
+    --> G["CD tools update Kubernetes manifests or Helm charts.
+    Versioning and image digests are updated automatically, and change sets are prepared for deployment."]
+    --> H["Deployment to staging environment.
+    Kubernetes applies new manifests. Feature gates or canary releases may be enabled for sensitive changes."]
+    --> I["Automated smoke and regression tests run on staging.
+    If failures occur, notifications are sent, and the pipeline pauses for intervention; otherwise, approval is granted for production release."]
+    --> J["Production deployment.
+    Kubernetes deploys with rolling updates, monitoring tools check health status, and alerts are configured for error thresholds."]
+    --> K["Post-deployment checks.
+    System metrics and logs are reviewed, rollback mechanisms stay armed, and stakeholder communications are sent out."]`
 
 function MermaidTemplate({ onFillLevel, ...args }: any) {
   return (
@@ -315,6 +338,12 @@ function MermaidTemplate({ onFillLevel, ...args }: any) {
           {...args}
         >
           {ganttMermaid}
+        </Code>
+        <Code
+          language="mermaid"
+          {...args}
+        >
+          {bigMermaid}
         </Code>
       </Flex>
     </WrapWithIf>

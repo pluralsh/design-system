@@ -1,6 +1,7 @@
 import {
   ComponentPropsWithoutRef,
   Ref,
+  useCallback,
   useImperativeHandle,
   useLayoutEffect,
   useState,
@@ -17,24 +18,32 @@ const NOT_LOADED_ERROR = 'Mermaid not loaded'
 const cachedRenders: Record<string, string | Error> = {}
 
 export type MermaidRefHandle = {
-  isLoading: boolean
-  error: Nullable<Error>
   svgStr: Nullable<string>
 }
 
 export function Mermaid({
   ref,
   children,
+  setError: setErrorProp,
   ...props
 }: Omit<ComponentPropsWithoutRef<'div'>, 'children'> & {
   children: string
   ref: Ref<MermaidRefHandle>
+  setError?: (error: Nullable<Error>) => void
 }) {
   const [svgStr, setSvgStr] = useState<Nullable<string>>()
-  const [error, setError] = useState<Nullable<Error>>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setErrorState] = useState<Nullable<Error>>(null)
 
-  useImperativeHandle(ref, () => ({ isLoading, error, svgStr }))
+  const setError = useCallback(
+    (error: Nullable<Error>) => {
+      setErrorState(error)
+      setErrorProp?.(error)
+    },
+    [setErrorProp]
+  )
+
+  useImperativeHandle(ref, () => ({ svgStr }))
 
   useLayoutEffect(() => {
     const id = getMermaidId(children)
@@ -72,7 +81,7 @@ export function Mermaid({
     checkAndRender()
 
     return () => clearTimeout(pollTimeout)
-  }, [children, svgStr])
+  }, [children, setError, svgStr])
 
   if (error)
     return (
@@ -137,32 +146,55 @@ const renderMermaid = async (code: string) => {
 }
 
 export const downloadMermaidSvg = (svgStr: string) => {
+  const parser = new DOMParser()
+  const svg = parser.parseFromString(svgStr, 'text/html').querySelector('svg')
+
+  let parsed = svgStr
+  if (!svg)
+    console.warn('No SVG element found after parsing, using original string')
+  else parsed = new XMLSerializer().serializeToString(svg)
+
   const img = new Image()
-  img.src = `data:image/svg+xml,${encodeURIComponent(svgStr)}`
+
+  const utf8Bytes = new TextEncoder().encode(parsed)
+  const binaryString = Array.from(utf8Bytes, (byte) =>
+    String.fromCharCode(byte)
+  ).join('')
+  img.src = `data:image/svg+xml;base64,${btoa(binaryString)}`
+
+  img.onerror = () => {
+    console.error('Failed to convert SVG to image for download')
+  }
 
   img.onload = () => {
-    // scale up to create high-resolution image (target ~4K width)
+    // scale up to high resolution (target 4K width or 4x, whichever is larger)
     const targetWidth = 3840
     const scale = Math.max(targetWidth / img.width, 4)
+    // respect browser canvas dimension limits
+    const MAX_DIMENSION = 32767
+    const finalScale = Math.min(
+      scale,
+      MAX_DIMENSION / img.width,
+      MAX_DIMENSION / img.height
+    )
 
     const canvas = document.createElement('canvas')
-    canvas.width = img.width * scale
-    canvas.height = img.height * scale
+    canvas.width = Math.floor(img.width * finalScale)
+    canvas.height = Math.floor(img.height * finalScale)
+
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    ctx.fillStyle = 'white'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-
     canvas.toBlob((blob) => {
       if (!blob) return
-      const pngUrl = URL.createObjectURL(blob)
+      const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
-      link.href = pngUrl
+      link.href = url
       link.download = 'mermaid-diagram.png'
       link.click()
-      URL.revokeObjectURL(pngUrl)
+      URL.revokeObjectURL(url)
     }, 'image/png')
   }
 }
