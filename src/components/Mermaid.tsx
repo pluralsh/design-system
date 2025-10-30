@@ -1,20 +1,24 @@
 import {
   ComponentPropsWithoutRef,
   Ref,
-  useEffect,
   useImperativeHandle,
+  useLayoutEffect,
   useState,
 } from 'react'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 import Highlight from './Highlight'
 
 const MERMAID_CDN_URL =
   'https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.min.js'
 const NOT_LOADED_ERROR = 'Mermaid not loaded'
 
+// helps prevent flickering (and potentially expensive recalculations) in virutalized lists
+// need to do this outside of React lifecycle memoization (useMemo etc) so it can persist across component mounts/unmounts
+const cachedRenders: Record<string, string | Error> = {}
+
 export type MermaidRefHandle = {
   isLoading: boolean
-  error: Nullable<string>
+  error: Nullable<Error>
   svgStr: Nullable<string>
 }
 
@@ -26,20 +30,23 @@ export function Mermaid({
   children: string
   ref: Ref<MermaidRefHandle>
 }) {
-  const [svgStr, setSvgStr] = useState<Nullable<string>>(null)
-  const [error, setError] = useState<Nullable<string>>(null)
+  const [svgStr, setSvgStr] = useState<Nullable<string>>()
+  const [error, setError] = useState<Nullable<Error>>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const { mode } = useTheme()
 
-  useImperativeHandle(ref, () => ({
-    isLoading,
-    error,
-    svgStr,
-  }))
+  useImperativeHandle(ref, () => ({ isLoading, error, svgStr }))
 
-  useEffect(() => {
-    if (!children) return
+  useLayoutEffect(() => {
+    const id = getMermaidId(children)
+    const cached = cachedRenders[id]
+    if (cached) {
+      setIsLoading(false)
+      setSvgStr(typeof cached === 'string' ? cached : null)
+      setError(cached instanceof Error ? cached : null)
+      return
+    }
     let numRetries = 0
+    let pollTimeout: NodeJS.Timeout | null = null
     // poll for when window.mermaid becomes available
     const checkAndRender = async () => {
       try {
@@ -47,31 +54,25 @@ export function Mermaid({
         setError(null)
         setSvgStr(await renderMermaid(children))
         setIsLoading(false)
-      } catch (err) {
+      } catch (caughtErr) {
+        let err = caughtErr
+        if (!(caughtErr instanceof Error)) err = new Error(caughtErr)
         // if not loaded yet, wait and retry
-        if (
-          err instanceof Error &&
-          err.message.includes(NOT_LOADED_ERROR) &&
-          numRetries < 100
-        ) {
-          setTimeout(checkAndRender, 150)
+        if (err.message.includes(NOT_LOADED_ERROR) && numRetries < 50) {
+          pollTimeout = setTimeout(checkAndRender, 150)
           numRetries++
         } else {
-          console.error(
-            'Error rendering Mermaid diagram:',
-            err,
-            'Falling back to plain text'
-          )
+          console.error('Error parsing Mermaid (rendering plaintext):', err)
+          setError(err)
           setIsLoading(false)
+          cachedRenders[id] = err
         }
       }
     }
-
     checkAndRender()
-  }, [children, mode])
 
-  if (typeof children !== 'string')
-    throw new Error('Mermaid component expects a string as its children')
+    return () => clearTimeout(pollTimeout)
+  }, [children, svgStr])
 
   if (error)
     return (
@@ -117,7 +118,7 @@ const MermaidContainerSC = styled.div(({ theme }) => ({
 }))
 
 let initialized = false
-const initializeMermaid = () => {
+const getOrInitializeMermaid = () => {
   if (!window.mermaid) return null
   if (!initialized) {
     window.mermaid.initialize({ startOnLoad: false })
@@ -127,13 +128,11 @@ const initializeMermaid = () => {
 }
 
 const renderMermaid = async (code: string) => {
-  const mermaid = initializeMermaid()
+  const mermaid = getOrInitializeMermaid()
   if (!mermaid) throw new Error(NOT_LOADED_ERROR)
-  // generate a unique ID for each render
-  const { svg } = await mermaid.render(
-    `mermaid-${Math.trunc(Math.random() * 1000000)}`,
-    code
-  )
+  const id = getMermaidId(code)
+  const { svg } = await mermaid.render(id, code)
+  cachedRenders[id] = svg
   return svg
 }
 
@@ -166,4 +165,12 @@ export const downloadMermaidSvg = (svgStr: string) => {
       URL.revokeObjectURL(pngUrl)
     }, 'image/png')
   }
+}
+
+// simple djb2 hash to get id from mermaid string
+const getMermaidId = (str: string) => {
+  let hash = 5381
+  for (let i = 0; i < str.length; i++)
+    hash = (hash << 5) + hash + str.charCodeAt(i)
+  return `mermaid-${hash >>> 0}`
 }

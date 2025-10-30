@@ -46,6 +46,7 @@ type CodeProps = Omit<CardProps, 'children'> & {
   tabs?: CodeTabData[]
   title?: ReactNode
   onSelectedTabChange?: (key: string) => void
+  isStreaming?: boolean // currently just used to block mermaid from rendering mid-stream, but might have other uses later on
 }
 
 type TabInterfaceT = 'tabs' | 'dropdown'
@@ -307,8 +308,12 @@ function CodeContent({
   children,
   hasSetHeight,
   language,
+  isStreaming = false,
   ...props
-}: ComponentProps<typeof Highlight> & { hasSetHeight: boolean }) {
+}: ComponentProps<typeof Highlight> & {
+  hasSetHeight: boolean
+  isStreaming?: boolean
+}) {
   const { spacing, borderRadiuses } = useTheme()
   const mermaidRef = useRef<MermaidRefHandle>(null)
   const [copied, setCopied] = useState(false)
@@ -332,8 +337,10 @@ function CodeContent({
   if (typeof children !== 'string')
     throw new Error('Code component expects a string as its children')
 
-  const isMermaid = language === 'mermaid'
-
+  const { isLoading: mermaidLoading, error: mermaidError } =
+    mermaidRef.current ?? {}
+  const renderMermaid =
+    language === 'mermaid' && !(isStreaming || mermaidLoading || mermaidError)
   return (
     <div
       css={{
@@ -342,13 +349,12 @@ function CodeContent({
         alignItems: 'center',
       }}
     >
-      {isMermaid ? (
+      {renderMermaid ? (
         <DownloadButtonSC
           clickable
           onClick={() => {
-            const { isLoading, error, svgStr } = mermaidRef.current
-
-            if (isLoading || error || !svgStr) return
+            const { svgStr } = mermaidRef.current
+            if (!svgStr) return
             downloadMermaidSvg(svgStr)
           }}
           icon={<DownloadIcon />}
@@ -364,7 +370,7 @@ function CodeContent({
       )}
       <div
         css={{
-          ...(isMermaid ? { backgroundColor: 'white' } : {}),
+          ...(renderMermaid ? { backgroundColor: 'white' } : {}),
           padding: `${multiLine ? spacing.medium : spacing.small}px ${
             spacing.medium
           }px`,
@@ -372,7 +378,7 @@ function CodeContent({
           borderBottomRightRadius: borderRadiuses.large,
         }}
       >
-        {isMermaid ? (
+        {renderMermaid ? (
           <Mermaid ref={mermaidRef}>{codeString}</Mermaid>
         ) : (
           <Highlight
@@ -397,6 +403,7 @@ function CodeUnstyled({
   tabs,
   title,
   onSelectedTabChange,
+  isStreaming = false,
   ...props
 }: CodeProps) {
   const parentFillLevel = useFillLevel()
@@ -487,6 +494,7 @@ function CodeUnstyled({
                 language={tab.language}
                 showLineNumbers={showLineNumbers}
                 hasSetHeight={hasSetHeight}
+                isStreaming={isStreaming}
               >
                 {tab.content}
               </CodeContent>
@@ -502,6 +510,7 @@ function CodeUnstyled({
               language={language}
               showLineNumbers={showLineNumbers}
               hasSetHeight={hasSetHeight}
+              isStreaming={isStreaming}
             >
               {children}
             </CodeContent>
