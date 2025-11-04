@@ -9,6 +9,7 @@ import type { VirtualItem } from '@tanstack/react-virtual'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import {
   ReactElement,
+  ReactNode,
   type CSSProperties,
   type MouseEvent,
   type RefObject,
@@ -18,13 +19,18 @@ import {
 import { type FillLevel } from '../../index'
 import { type EmptyStateProps } from '../EmptyState'
 
-export type TableProps = Omit<CSSProperties, keyof TableBaseProps> &
-  TableBaseProps
+export type TableRowData = { id?: string | number }
 
-export type TableBaseProps = {
+export type TableProps<T extends TableRowData = TableRowData> = Omit<
+  CSSProperties,
+  keyof TableBaseProps<T>
+> &
+  TableBaseProps<T>
+
+export type TableBaseProps<T extends TableRowData> = {
   ref?: RefObject<HTMLDivElement>
-  data: any[]
-  columns: any[]
+  data: T[]
+  columns: ColumnDef<T, any>[]
   loading?: boolean
   loadingSkeletonRows?: number
   hideHeader?: boolean
@@ -34,8 +40,8 @@ export type TableBaseProps = {
   fillLevel?: TableFillLevel
   rowBg?: 'base' | 'raised' | 'stripes'
   highlightedRowId?: string
-  getRowCanExpand?: any
-  renderExpanded?: any
+  getRowCanExpand?: (row: Row<T>) => boolean
+  renderExpanded?: (props: { row: Row<T> }) => ReactNode
   loose?: boolean
   stickyColumn?: boolean
   scrollTopMargin?: number
@@ -46,8 +52,8 @@ export type TableBaseProps = {
     Omit<Parameters<typeof useVirtualizer>[0], 'count' | 'getScrollElement'>
   >
   reactTableOptions?: Partial<Omit<TableOptions<any>, 'data' | 'columns'>>
-  onRowClick?: (e: MouseEvent<HTMLTableRowElement>, row: Row<any>) => void
-  getRowLink?: (row: Row<unknown>) => Nullable<string | ReactElement>
+  onRowClick?: (e: MouseEvent<HTMLTableRowElement>, row: Row<T>) => void
+  getRowLink?: (row: Row<T>) => Nullable<string | ReactElement>
   emptyStateProps?: EmptyStateProps
   hasNextPage?: boolean
   fetchNextPage?: () => void
@@ -63,8 +69,8 @@ export type VirtualSlice = {
   end: VirtualItem | undefined
 }
 
-export function getGridTemplateCols(
-  columnDefs: ColumnDef<unknown>[] = []
+export function getGridTemplateCols<T extends TableRowData>(
+  columnDefs: ColumnDef<T>[] = []
 ): string {
   return columnDefs
     .reduce(

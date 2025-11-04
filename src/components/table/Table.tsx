@@ -1,4 +1,3 @@
-import type { Row } from '@tanstack/react-table'
 import {
   flexRender,
   getCoreRowModel,
@@ -47,16 +46,18 @@ import {
   isValidId,
   measureElementHeight,
   TableProps,
+  TableRowData,
 } from './tableUtils'
 import { Tbody } from './Tbody'
 import { Td, TdBasic, TdExpand, TdGhostLink, TdLoading } from './Td'
 import { Th } from './Th'
 import { Thead } from './Thead'
 import { Tr } from './Tr'
+import { isNonNullable } from '../../utils/isNonNullable'
 
 const GHOST_LINK_ID = 'ghost-link'
 
-function Table({
+function Table<T extends TableRowData>({
   ref: forwardedRef,
   data,
   columns: columnsProp,
@@ -89,7 +90,7 @@ function Table({
   onVirtualSliceChange,
   onScrollCapture,
   ...props
-}: TableProps) {
+}: TableProps<T>) {
   const theme = useTheme()
   const tableContainerRef = useRef<HTMLDivElement>(undefined)
 
@@ -100,25 +101,23 @@ function Table({
   const [scrollTop, setScrollTop] = useState(0)
   const [expanded, setExpanded] = useState({})
 
+  const filteredData = useMemo(() => data.filter(isNonNullable), [data])
   const columns = useMemo(() => {
     return [...columnsProp, ...(!!getRowLink ? [{ id: GHOST_LINK_ID }] : [])]
   }, [columnsProp, getRowLink])
 
-  const table = useReactTable({
-    data,
+  const table = useReactTable<T>({
+    data: filteredData,
     columns,
     getRowCanExpand,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
-    getRowId: (originalRow, i, parent) => {
-      if (isValidId(originalRow.id)) {
-        return originalRow.id
-      }
-
-      return (parent?.id ? `${parent.id}.` : '') + i
-    },
+    getRowId: (originalRow, i, parent) =>
+      isValidId(originalRow.id)
+        ? originalRow.id.toString()
+        : (parent?.id ? `${parent.id.toString()}.` : '') + i,
     globalFilterFn: defaultGlobalFilterFn,
     defaultColumn: {
       enableColumnFilter: false,
@@ -129,10 +128,7 @@ function Table({
     enableRowSelection: false,
     onExpandedChange: setExpanded,
     ...reactTableOptions,
-    state: {
-      expanded,
-      ...reactTableOptions?.state,
-    },
+    state: { expanded, ...reactTableOptions?.state },
   })
 
   const [fixedGridTemplateColumns, setFixedGridTemplateColumns] = useState<
@@ -353,7 +349,7 @@ function Table({
                   {rows.map((maybeRow) => {
                     const i = maybeRow.index
                     const isLoaderRow = i > tableRows.length - 1
-                    const tableRow: Row<unknown> | null = isRow(maybeRow)
+                    const tableRow = isRow(maybeRow)
                       ? maybeRow
                       : isLoaderRow
                       ? null
