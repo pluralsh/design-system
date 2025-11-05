@@ -48,6 +48,7 @@ type CodeProps = Omit<CardProps, 'children'> & {
   title?: ReactNode
   onSelectedTabChange?: (key: string) => void
   isStreaming?: boolean // currently just used to block mermaid from rendering mid-stream, but might have other uses later on
+  setMermaidError?: (error: Nullable<Error>) => void
 }
 
 type TabInterfaceT = 'tabs' | 'dropdown'
@@ -313,15 +314,26 @@ function CodeContent({
   hasSetHeight,
   language,
   isStreaming = false,
+  setMermaidError: setMermaidErrorProp,
   ...props
 }: ComponentProps<typeof Highlight> & {
   hasSetHeight: boolean
   isStreaming?: boolean
+  setMermaidError?: (error: Nullable<Error>) => void
 }) {
   const { spacing, borderRadiuses } = useTheme()
   const mermaidRef = useRef<MermaidRefHandle>(null)
-  const [mermaidError, setMermaidError] = useState<Nullable<Error>>(null)
   const [copied, setCopied] = useState(false)
+
+  const [mermaidError, setMermaidErrorState] = useState<Nullable<Error>>(null)
+  const setMermaidError = useCallback(
+    (error: Nullable<Error>) => {
+      setMermaidErrorState(error)
+      setMermaidErrorProp?.(error)
+    },
+    [setMermaidErrorProp]
+  )
+
   const codeString = children?.trim() || ''
   const multiLine = !!codeString.match(/\r?\n/) || hasSetHeight
   const handleCopy = useCallback(
@@ -421,6 +433,7 @@ function CodeUnstyled({
   title,
   onSelectedTabChange,
   isStreaming = false,
+  setMermaidError,
   ...props
 }: CodeProps) {
   const parentFillLevel = useFillLevel()
@@ -512,6 +525,7 @@ function CodeUnstyled({
                 showLineNumbers={showLineNumbers}
                 hasSetHeight={hasSetHeight}
                 isStreaming={isStreaming}
+                setMermaidError={setMermaidError}
               >
                 {tab.content}
               </CodeContent>
@@ -528,6 +542,7 @@ function CodeUnstyled({
               showLineNumbers={showLineNumbers}
               hasSetHeight={hasSetHeight}
               isStreaming={isStreaming}
+              setMermaidError={setMermaidError}
             >
               {children}
             </CodeContent>
