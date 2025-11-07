@@ -85,6 +85,8 @@ export function Mermaid({
       return
     }
 
+    // need to keep track of this since we're dealing with async ops, helps avoid race condition
+    let isMounted = true
     const renderDiagram = async () => {
       try {
         setIsLoading(true)
@@ -92,10 +94,13 @@ export function Mermaid({
         // initialize mermaid if not already done
         const mermaid = await initializeMermaid()
         const { svg } = await mermaid.render(id, diagram)
+        if (!isMounted) return
+
         cachedRenders[id] = svg
         setSvgStr(svg)
         setIsLoading(false)
       } catch (caughtErr) {
+        if (!isMounted) return
         const err =
           caughtErr instanceof Error ? caughtErr : new Error(String(caughtErr))
         console.error('Error parsing Mermaid (rendering plaintext):', err)
@@ -104,8 +109,11 @@ export function Mermaid({
         cachedRenders[id] = err
       }
     }
-
     renderDiagram()
+
+    return () => {
+      isMounted = false
+    }
   }, [diagram, setError])
 
   if (error)
